@@ -1,4 +1,3 @@
-import "@skylib/config/src/jest-globals";
 import * as functionsTestUtils from "@skylib/functions/dist/testUtils";
 import type { ReadonlyPartialRecord } from "@skylib/functions/dist/types/core";
 import type { LocaleName } from "@skylib/functions/dist/types/locales";
@@ -160,7 +159,7 @@ beforeEach(() => {
   testUtils.jestReset.dictionary("en-US", definitions);
 });
 
-if (TEST_ENV === "jsdom") {
+if (JEST_ENV === "jsdom") {
   functionsTestUtils.jestSetup.dom();
   testUtils.jestSetup.dom();
   beforeEach(functionsTestUtils.jestReset.dom);
