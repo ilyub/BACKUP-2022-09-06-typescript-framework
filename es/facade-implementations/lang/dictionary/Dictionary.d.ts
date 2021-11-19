@@ -1,4 +1,4 @@
-import type { Context, Dictionary as DictionaryInterface, Transforms, Words } from "@skylib/facades/es/lang";
+import type { Context, Dictionary as DictionaryInterface, Facade, Transforms, Word } from "@skylib/facades/es/lang";
 import type { NumStr, ReadonlyPartialRecord } from "@skylib/functions/es/types/core";
 import type { LocaleName } from "@skylib/functions/es/types/locales";
 import type { Definitions } from ".";
@@ -25,23 +25,23 @@ export declare class Dictionary implements DictionaryInterface {
      * @param count - Count for plural form.
      * @returns Dictionary.
      */
-    static create(definitions: ReadonlyPartialRecord<LocaleName, Definitions>, context?: Context, count?: number): Dictionary & Words;
+    static create(definitions: ReadonlyPartialRecord<LocaleName, Definitions>, context?: Context, count?: number): Facade;
     /**
      * Returns plugin configuration.
      *
      * @returns Plugin configuration.
      */
     static getConfiguration(): Dictionary.Configuration;
-    context(context: Context): Dictionary & Words;
+    context(context: Context): Facade;
     get(key: string): string;
-    has(key: string): key is Transforms;
-    plural(count: number): Dictionary & Words;
-    with(search: string, replace: NumStr): Dictionary & Words;
+    has(key: string): key is Transforms<Word>;
+    plural(count: number): Facade;
+    with(search: string, replace: NumStr): Facade;
     protected _context: Context | undefined;
     protected count: number;
     protected definitions: ReadonlyPartialRecord<LocaleName, Definitions>;
-    protected proxified: Dictionary & Words;
-    protected subsPool: Map<NumStr, Dictionary & Readonly<Record<Transforms, string>>>;
+    protected proxified: Facade;
+    protected subsPool: Map<NumStr, Facade>;
     /**
      * Creates class instance.
      *

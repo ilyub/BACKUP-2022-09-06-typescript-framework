@@ -72,19 +72,19 @@ ___
 
 ### proxified
 
-• `Protected` **proxified**: [`Dictionary`](facade_implementations_lang_dictionary_Dictionary.Dictionary-1.md) & `Readonly`<`Record`<`Transforms`, `string`\>\>
+• `Protected` **proxified**: `Facade`
 
 ___
 
 ### subsPool
 
-• `Protected` **subsPool**: `Map`<`NumStr`, [`Dictionary`](facade_implementations_lang_dictionary_Dictionary.Dictionary-1.md) & `Readonly`<`Record`<`Transforms`, `string`\>\>\>
+• `Protected` **subsPool**: `Map`<`NumStr`, `Facade`\>
 
 ## Methods
 
 ### context
 
-▸ **context**(`context`): [`Dictionary`](facade_implementations_lang_dictionary_Dictionary.Dictionary-1.md) & `Readonly`<`Record`<`Transforms`, `string`\>\>
+▸ **context**(`context`): `Facade`
 
 #### Parameters
 
@@ -94,7 +94,7 @@ ___
 
 #### Returns
 
-[`Dictionary`](facade_implementations_lang_dictionary_Dictionary.Dictionary-1.md) & `Readonly`<`Record`<`Transforms`, `string`\>\>
+`Facade`
 
 #### Implementation of
 
@@ -124,7 +124,7 @@ ___
 
 ### has
 
-▸ **has**(`key`): key is Transforms
+▸ **has**(`key`): key is Transforms<keyof Word\>
 
 #### Parameters
 
@@ -134,7 +134,7 @@ ___
 
 #### Returns
 
-key is Transforms
+key is Transforms<keyof Word\>
 
 #### Implementation of
 
@@ -144,7 +144,7 @@ ___
 
 ### plural
 
-▸ **plural**(`count`): [`Dictionary`](facade_implementations_lang_dictionary_Dictionary.Dictionary-1.md) & `Readonly`<`Record`<`Transforms`, `string`\>\>
+▸ **plural**(`count`): `Facade`
 
 #### Parameters
 
@@ -154,7 +154,7 @@ ___
 
 #### Returns
 
-[`Dictionary`](facade_implementations_lang_dictionary_Dictionary.Dictionary-1.md) & `Readonly`<`Record`<`Transforms`, `string`\>\>
+`Facade`
 
 #### Implementation of
 
@@ -184,7 +184,7 @@ ___
 
 ### with
 
-▸ **with**(`search`, `replace`): [`Dictionary`](facade_implementations_lang_dictionary_Dictionary.Dictionary-1.md) & `Readonly`<`Record`<`Transforms`, `string`\>\>
+▸ **with**(`search`, `replace`): `Facade`
 
 #### Parameters
 
@@ -195,7 +195,7 @@ ___
 
 #### Returns
 
-[`Dictionary`](facade_implementations_lang_dictionary_Dictionary.Dictionary-1.md) & `Readonly`<`Record`<`Transforms`, `string`\>\>
+`Facade`
 
 #### Implementation of
 
@@ -229,7 +229,7 @@ ___
 
 ### create
 
-▸ `Static` **create**(`definitions`, `context?`, `count?`): [`Dictionary`](facade_implementations_lang_dictionary_Dictionary.Dictionary-1.md) & `Readonly`<`Record`<`Transforms`, `string`\>\>
+▸ `Static` **create**(`definitions`, `context?`, `count?`): `Facade`
 
 Creates class instance.
 
@@ -243,7 +243,7 @@ Creates class instance.
 
 #### Returns
 
-[`Dictionary`](facade_implementations_lang_dictionary_Dictionary.Dictionary-1.md) & `Readonly`<`Record`<`Transforms`, `string`\>\>
+`Facade`
 
 Dictionary.
 

@@ -1,4 +1,4 @@
-import type { Context, Transforms } from "@skylib/facades/es/lang";
+import type { Context, Transforms, Word } from "@skylib/facades/es/lang";
 import type { ReadonlyIndexedObject } from "@skylib/functions/es/types/core";
 import { Definition } from ".";
 import type { PluralReduce, RawLanguage, WordInfo } from "./types";
@@ -27,7 +27,7 @@ export declare class Definitions {
      * @param key - Word ID.
      * @returns _True_ if dictionary has word, _false_ otherwise.
      */
-    has(key: string): key is Transforms;
+    has(key: string): key is Transforms<Word>;
     protected wordForms: ReadonlyIndexedObject<readonly string[]>;
     protected words: ReadonlyIndexedObject<Definition>;
 }
