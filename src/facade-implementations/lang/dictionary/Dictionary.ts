@@ -1,8 +1,9 @@
 import type {
   Context,
   Dictionary as DictionaryInterface,
+  Facade,
   Transforms,
-  Words
+  Word
 } from "@skylib/facades/dist/lang";
 import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
 import * as assert from "@skylib/functions/dist/assertions";
@@ -54,7 +55,7 @@ export class Dictionary implements DictionaryInterface {
     definitions: ReadonlyPartialRecord<LocaleName, Definitions>,
     context?: Context,
     count?: number
-  ): Dictionary & Words {
+  ): Facade {
     return new Dictionary(definitions, context, count).proxified;
   }
 
@@ -67,7 +68,7 @@ export class Dictionary implements DictionaryInterface {
     return o.clone(moduleConfig);
   }
 
-  public context(context: Context): Dictionary & Words {
+  public context(context: Context): Facade {
     if (context === this._context) return this.proxified;
 
     let sub = this.subsPool.get(context);
@@ -94,7 +95,7 @@ export class Dictionary implements DictionaryInterface {
       .value;
   }
 
-  public has(key: string): key is Transforms {
+  public has(key: string): key is Transforms<Word> {
     const definitions = this.definitions[moduleConfig.localeName];
 
     assert.not.empty(
@@ -105,7 +106,7 @@ export class Dictionary implements DictionaryInterface {
     return definitions.has(key);
   }
 
-  public plural(count: number): Dictionary & Words {
+  public plural(count: number): Facade {
     count = this.pluralReduce(count);
 
     if (count === this.count) return this.proxified;
@@ -122,7 +123,7 @@ export class Dictionary implements DictionaryInterface {
     return sub;
   }
 
-  public with(search: string, replace: NumStr): Dictionary & Words {
+  public with(search: string, replace: NumStr): Facade {
     switch (typeof replace) {
       case "number":
         replacementsPool.set(search.toUpperCase(), cast.string(replace));
@@ -154,9 +155,9 @@ export class Dictionary implements DictionaryInterface {
   |*****************************************************************************
   |*/
 
-  protected proxified: Dictionary & Words;
+  protected proxified: Facade;
 
-  protected subsPool = new Map<NumStr, Dictionary & Words>();
+  protected subsPool = new Map<NumStr, Facade>();
 
   /**
    * Creates class instance.
@@ -185,7 +186,7 @@ export class Dictionary implements DictionaryInterface {
         }
       });
 
-      return new Proxy(this, handler) as Dictionary & Words;
+      return new Proxy(this, handler) as unknown as Facade;
     });
   }
 

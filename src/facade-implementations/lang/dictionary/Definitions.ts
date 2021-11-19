@@ -1,4 +1,4 @@
-import type { Context, Transforms } from "@skylib/facades/dist/lang";
+import type { Context, Transforms, Word } from "@skylib/facades/dist/lang";
 import * as assert from "@skylib/functions/dist/assertions";
 import * as is from "@skylib/functions/dist/guards";
 import * as o from "@skylib/functions/dist/object";
@@ -68,7 +68,7 @@ export class Definitions {
    * @param key - Word ID.
    * @returns _True_ if dictionary has word, _false_ otherwise.
    */
-  public has(key: string): key is Transforms {
+  public has(key: string): key is Transforms<Word> {
     return is.not.empty(this.words[key]);
   }
 
