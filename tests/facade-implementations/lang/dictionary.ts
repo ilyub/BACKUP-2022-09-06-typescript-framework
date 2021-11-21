@@ -17,6 +17,19 @@ it("context", () => {
   expect(lang.context("InXDays").context("InXDays").day).toStrictEqual("дня");
 });
 
+it("create", () => {
+  const expected = {
+    configurable: true,
+    enumerable: true,
+    value: 1,
+    writable: true
+  };
+
+  expect(Object.getOwnPropertyDescriptor(lang, "count")).toStrictEqual(
+    expected
+  );
+});
+
 it("get", () => {
   Dictionary.configure({ localeName: "ru-RU" });
   expect(lang.get("Day")).toStrictEqual("День");
