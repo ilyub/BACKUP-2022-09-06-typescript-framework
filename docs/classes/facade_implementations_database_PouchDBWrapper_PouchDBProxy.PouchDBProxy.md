@@ -151,13 +151,13 @@ ___
 
 ### getDb
 
-▸ **getDb**(): `Promise`<`Object`\>
+▸ **getDb**(): `Promise`<{}\>
 
 Returns original PouchDB database.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 Original PouchDB database.
 
@@ -223,7 +223,7 @@ ___
 
 ### query
 
-▸ **query**(`mapReduce`, `options`): `Promise`<`Object`\>
+▸ **query**(`mapReduce`, `options`): `Promise`<{}\>
 
 Queries database.
 
@@ -236,6 +236,6 @@ Queries database.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 Query response.

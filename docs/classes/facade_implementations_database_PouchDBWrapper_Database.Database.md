@@ -324,13 +324,13 @@ ___
 
 ### getRawDb
 
-▸ **getRawDb**(): `Promise`<`Object`\>
+▸ **getRawDb**(): `Promise`<{}\>
 
 Returns original PouchDB database.
 
 #### Returns
 
-`Promise`<`Object`\>
+`Promise`<{}\>
 
 Original PouchDB database.
 

@@ -54,7 +54,7 @@ export class Dictionary {
         this.count = count;
         this.definitions = definitions;
         this.proxified = fn.run(() => {
-            const handler = wrapProxyHandler({
+            const handler = wrapProxyHandler("Dictionary", {
                 get(target, key) {
                     assert.string(key, "Expecting string key");
                     return target.has(key) ? target.get(key) : reflect.get(target, key);

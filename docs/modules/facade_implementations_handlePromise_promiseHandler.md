@@ -38,7 +38,7 @@
 
 ### handlers
 
-• **handlers**: `Readonly`<`Object`\>
+• **handlers**: `Readonly`<{ `error`: (`error`: `unknown`) => `void`  }\>
 
 ___
 

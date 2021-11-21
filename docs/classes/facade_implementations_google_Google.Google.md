@@ -48,7 +48,7 @@ ___
 
 ### sdk
 
-• `Protected` **sdk**: `undefined` \| `Promise`<`Object`\> = `undefined`
+• `Protected` **sdk**: `undefined` \| `Promise`<{}\> = `undefined`
 
 ## Methods
 
