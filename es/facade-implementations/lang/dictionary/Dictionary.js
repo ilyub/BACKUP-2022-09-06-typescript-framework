@@ -58,6 +58,9 @@ export class Dictionary {
                 get(target, key) {
                     assert.string(key, "Expecting string key");
                     return target.has(key) ? target.get(key) : reflect.get(target, key);
+                },
+                getOwnPropertyDescriptor(target, key) {
+                    return Object.getOwnPropertyDescriptor(target, key);
                 }
             });
             return new Proxy(this, handler);
