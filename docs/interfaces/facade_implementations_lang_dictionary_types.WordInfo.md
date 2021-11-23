@@ -18,7 +18,7 @@
 
 ### context
 
-• `Readonly` **context**: `undefined` \| keyof `Context`
+• `Readonly` **context**: `undefined` \| ``"InXDays"``
 
 ___
 

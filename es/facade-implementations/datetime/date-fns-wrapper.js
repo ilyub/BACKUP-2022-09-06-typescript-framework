@@ -1,5 +1,5 @@
 import { add, format, getDate, getDay, getHours, getMinutes, getMonth, getYear, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameYear, isValid, parseISO, setDate, setDay, setHours, setMinutes, setMonth, setYear, sub } from "date-fns"; // eslint-disable-line import/no-duplicates
-import enGB from "date-fns/locale/en-GB"; // eslint-disable-line import/no-duplicates
+import enUS from "date-fns/locale/en-US"; // eslint-disable-line import/no-duplicates
 import { reactiveStorage } from "@skylib/facades/es/reactiveStorage";
 import * as is from "@skylib/functions/es/guards";
 import { onDemand } from "@skylib/functions/es/helpers";
@@ -222,7 +222,7 @@ export class DateTime {
 |*/
 const moduleConfig = onDemand(() => reactiveStorage({
     firstDayOfWeek: 0,
-    locale: enGB,
+    locale: enUS,
     pm: true
 }));
 //# sourceMappingURL=date-fns-wrapper.js.map

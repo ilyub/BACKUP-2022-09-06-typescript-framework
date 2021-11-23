@@ -1,4 +1,4 @@
-import enGB from "date-fns/locale/en-GB";
+import enUS from "date-fns/locale/en-US";
 import { database } from "@skylib/facades/es/database";
 import { datetime } from "@skylib/facades/es/datetime";
 import { facebook } from "@skylib/facades/es/facebook";
@@ -43,7 +43,7 @@ export function jestReset() {
     {
         const config = {
             firstDayOfWeek: 0,
-            locale: enGB,
+            locale: enUS,
             pm: true
         };
         dateFnsWrapper.configure(config);

@@ -46,15 +46,15 @@ Creates class instance.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `definitions` | `Readonly`<`Partial`<`Record`<`LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\>\>\> | `undefined` | Language definitions. |
-| `context?` | keyof `Context` | `undefined` | Context. |
+| `definitions` | `Readonly`<`Record`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\>\> | `undefined` | Language definitions. |
+| `context?` | ``"InXDays"`` | `undefined` | Context. |
 | `count` | `number` | `1` | Count for plural form. |
 
 ## Properties
 
 ### \_context
 
-• `Protected` **\_context**: `undefined` \| keyof `Context`
+• `Protected` **\_context**: `undefined` \| ``"InXDays"``
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 ### definitions
 
-• `Protected` **definitions**: `Readonly`<`Partial`<`Record`<`LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\>\>\>
+• `Protected` **definitions**: `Readonly`<`Record`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\>\>
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `context` | keyof `Context` |
+| `context` | ``"InXDays"`` |
 
 #### Returns
 
@@ -237,8 +237,8 @@ Creates class instance.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `definitions` | `Readonly`<`Partial`<`Record`<`LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\>\>\> | Language definitions. |
-| `context?` | keyof `Context` | Context. |
+| `definitions` | `Readonly`<`Record`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\>\> | Language definitions. |
+| `context?` | ``"InXDays"`` | Context. |
 | `count?` | `number` | Count for plural form. |
 
 #### Returns

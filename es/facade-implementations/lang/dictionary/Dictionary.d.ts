@@ -1,5 +1,5 @@
 import type { Context, Dictionary as DictionaryInterface, Facade, Transforms, Word } from "@skylib/facades/es/lang";
-import type { NumStr, ReadonlyPartialRecord } from "@skylib/functions/es/types/core";
+import type { NumStr, ReadonlyRecord } from "@skylib/functions/es/types/core";
 import type { LocaleName } from "@skylib/functions/es/types/locales";
 import type { Definitions } from ".";
 export declare namespace Dictionary {
@@ -25,7 +25,7 @@ export declare class Dictionary implements DictionaryInterface {
      * @param count - Count for plural form.
      * @returns Dictionary.
      */
-    static create(definitions: ReadonlyPartialRecord<LocaleName, Definitions>, context?: Context, count?: number): Facade;
+    static create(definitions: ReadonlyRecord<LocaleName, Definitions>, context?: Context, count?: number): Facade;
     /**
      * Returns plugin configuration.
      *
@@ -39,7 +39,7 @@ export declare class Dictionary implements DictionaryInterface {
     with(search: string, replace: NumStr): Facade;
     protected _context: Context | undefined;
     protected count: number;
-    protected definitions: ReadonlyPartialRecord<LocaleName, Definitions>;
+    protected definitions: ReadonlyRecord<LocaleName, Definitions>;
     protected proxified: Facade;
     protected subsPool: Map<NumStr, Facade>;
     /**
@@ -49,7 +49,7 @@ export declare class Dictionary implements DictionaryInterface {
      * @param context - Context.
      * @param count - Count for plural form.
      */
-    protected constructor(definitions: ReadonlyPartialRecord<LocaleName, Definitions>, context?: Context, count?: number);
+    protected constructor(definitions: ReadonlyRecord<LocaleName, Definitions>, context?: Context, count?: number);
     /**
      * Reduces count for plural word form.
      *

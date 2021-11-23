@@ -14,4 +14,4 @@
 
 ### localeName
 
-• `Readonly` **localeName**: `LocaleName`
+• `Readonly` **localeName**: keyof `LocaleName`

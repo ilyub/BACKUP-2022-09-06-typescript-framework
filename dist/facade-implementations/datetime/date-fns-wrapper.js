@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DateTime = exports.implementation = exports.getConfiguration = exports.configure = void 0;
 const tslib_1 = require("tslib");
 const date_fns_1 = require("date-fns"); // eslint-disable-line import/no-duplicates
-const en_GB_1 = (0, tslib_1.__importDefault)(require("date-fns/locale/en-GB")); // eslint-disable-line import/no-duplicates
+const en_US_1 = (0, tslib_1.__importDefault)(require("date-fns/locale/en-US")); // eslint-disable-line import/no-duplicates
 const reactiveStorage_1 = require("@skylib/facades/dist/reactiveStorage");
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const helpers_1 = require("@skylib/functions/dist/helpers");
@@ -229,7 +229,7 @@ exports.DateTime = DateTime;
 |*/
 const moduleConfig = (0, helpers_1.onDemand)(() => (0, reactiveStorage_1.reactiveStorage)({
     firstDayOfWeek: 0,
-    locale: en_GB_1.default,
+    locale: en_US_1.default,
     pm: true
 }));
 //# sourceMappingURL=date-fns-wrapper.js.map

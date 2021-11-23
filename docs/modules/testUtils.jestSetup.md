@@ -15,7 +15,7 @@
 
 ### dictionary
 
-• **dictionary**: (`localeName`: `LocaleName`, `definitions`: `Readonly`<`Partial`<`Record`<`LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\>\>\>) => `void`
+• **dictionary**: (`localeName`: keyof `LocaleName`, `definitions`: `Readonly`<`Record`<keyof `LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\>\>) => `void`
 
 #### Type declaration
 
@@ -27,8 +27,8 @@ Jest setup.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `localeName` | `LocaleName` | Locale name. |
-| `definitions` | `Readonly`<`Partial`<`Record`<`LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\>\>\> | Language definitions. |
+| `localeName` | keyof `LocaleName` | Locale name. |
+| `definitions` | `Readonly`<`Record`<keyof `LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\>\> | Language definitions. |
 
 ##### Returns
 

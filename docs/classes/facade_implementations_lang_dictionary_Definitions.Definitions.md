@@ -66,7 +66,7 @@ Gets word based on context, count, and replacements.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `key` | `string` | Word ID. |
-| `context` | `undefined` \| keyof `Context` | Context. |
+| `context` | `undefined` \| ``"InXDays"`` | Context. |
 | `forms` | `string` \| readonly `string`[] | Word forms or reference to wordForms. |
 | `count` | `number` | Count for plural form. |
 | `replacements` | `ReadonlyMap`<`string`, `string`\> | Replacements. |

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.datetimeToEqual = exports.jestSetupDom = exports.jestSetupDictionary = exports.jestSetup = exports.jestResetDom = exports.jestResetDictionary = exports.jestReset = void 0;
 const tslib_1 = require("tslib");
-const en_GB_1 = (0, tslib_1.__importDefault)(require("date-fns/locale/en-GB"));
+const en_US_1 = (0, tslib_1.__importDefault)(require("date-fns/locale/en-US"));
 const database_1 = require("@skylib/facades/dist/database");
 const datetime_1 = require("@skylib/facades/dist/datetime");
 const facebook_1 = require("@skylib/facades/dist/facebook");
@@ -47,7 +47,7 @@ function jestReset() {
     {
         const config = {
             firstDayOfWeek: 0,
-            locale: en_GB_1.default,
+            locale: en_US_1.default,
             pm: true
         };
         dateFnsWrapper.configure(config);

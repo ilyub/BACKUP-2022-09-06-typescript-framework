@@ -254,7 +254,7 @@ Applies replacements.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `owner` | [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md) | Parent object. |
-| `context` | `undefined` \| keyof `Context` | Context. |
+| `context` | `undefined` \| ``"InXDays"`` | Context. |
 | `forms` | readonly `string`[] | Word form. |
 | `count` | `number` | Count for plural form. |
 | `replacements` | `ReadonlyMap`<`string`, `string`\> | Replacements. |
