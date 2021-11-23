@@ -53,7 +53,6 @@ module.exports = [
   "vue-decorators",
   "vue-mixins",
   "vue-plugins",
-  "vueStorage",
   "uniqueId",
   "uuidWrapper"
 ];
