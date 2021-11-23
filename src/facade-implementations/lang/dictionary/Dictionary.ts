@@ -13,10 +13,7 @@ import { onDemand, wrapProxyHandler } from "@skylib/functions/dist/helpers";
 import * as o from "@skylib/functions/dist/object";
 import * as reflect from "@skylib/functions/dist/reflect";
 import * as s from "@skylib/functions/dist/string";
-import type {
-  NumStr,
-  ReadonlyPartialRecord
-} from "@skylib/functions/dist/types/core";
+import type { NumStr, ReadonlyRecord } from "@skylib/functions/dist/types/core";
 import type { LocaleName } from "@skylib/functions/dist/types/locales";
 
 import type { Definitions } from ".";
@@ -52,7 +49,7 @@ export class Dictionary implements DictionaryInterface {
    * @returns Dictionary.
    */
   public static create(
-    definitions: ReadonlyPartialRecord<LocaleName, Definitions>,
+    definitions: ReadonlyRecord<LocaleName, Definitions>,
     context?: Context,
     count?: number
   ): Facade {
@@ -147,7 +144,7 @@ export class Dictionary implements DictionaryInterface {
 
   protected count: number;
 
-  protected definitions: ReadonlyPartialRecord<LocaleName, Definitions>;
+  protected definitions: ReadonlyRecord<LocaleName, Definitions>;
 
   /*
   |*****************************************************************************
@@ -167,7 +164,7 @@ export class Dictionary implements DictionaryInterface {
    * @param count - Count for plural form.
    */
   protected constructor(
-    definitions: ReadonlyPartialRecord<LocaleName, Definitions>,
+    definitions: ReadonlyRecord<LocaleName, Definitions>,
     context?: Context,
     count = 1
   ) {

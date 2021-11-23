@@ -22,7 +22,7 @@ import {
   setYear,
   sub
 } from "date-fns"; // eslint-disable-line import/no-duplicates
-import enGB from "date-fns/locale/en-GB"; // eslint-disable-line import/no-duplicates
+import enUS from "date-fns/locale/en-US"; // eslint-disable-line import/no-duplicates
 
 import type {
   DateTime as DateTimeInterface,
@@ -333,7 +333,7 @@ export class DateTime implements DateTimeInterface {
 const moduleConfig = onDemand(() =>
   reactiveStorage<Configuration>({
     firstDayOfWeek: 0,
-    locale: enGB,
+    locale: enUS,
     pm: true
   })
 );

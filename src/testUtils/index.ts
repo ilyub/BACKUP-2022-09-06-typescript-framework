@@ -1,4 +1,4 @@
-import enGB from "date-fns/locale/en-GB";
+import enUS from "date-fns/locale/en-US";
 
 import { database } from "@skylib/facades/dist/database";
 import { datetime } from "@skylib/facades/dist/datetime";
@@ -16,7 +16,7 @@ import { testDelay } from "@skylib/facades/dist/testDelay";
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
 import * as assert from "@skylib/functions/dist/assertions";
 import type * as testUtils from "@skylib/functions/dist/testUtils";
-import type { ReadonlyPartialRecord } from "@skylib/functions/dist/types/core";
+import type { ReadonlyRecord } from "@skylib/functions/dist/types/core";
 import type { LocaleName } from "@skylib/functions/dist/types/locales";
 
 import { PouchDBWrapper } from "../facade-implementations/database/PouchDBWrapper";
@@ -66,7 +66,7 @@ export function jestReset(): void {
   {
     const config: dateFnsWrapper.Configuration = {
       firstDayOfWeek: 0,
-      locale: enGB,
+      locale: enUS,
       pm: true
     };
 
@@ -115,7 +115,7 @@ export function jestReset(): void {
  */
 export function jestResetDictionary(
   localeName: LocaleName,
-  definitions: ReadonlyPartialRecord<LocaleName, Definitions>
+  definitions: ReadonlyRecord<LocaleName, Definitions>
 ): void {
   const config: Dictionary.Configuration = { localeName };
 
@@ -173,7 +173,7 @@ export function jestSetup(): void {
  */
 export function jestSetupDictionary(
   localeName: LocaleName,
-  definitions: ReadonlyPartialRecord<LocaleName, Definitions>
+  definitions: ReadonlyRecord<LocaleName, Definitions>
 ): void {
   jestReset.dictionary(localeName, definitions);
 }

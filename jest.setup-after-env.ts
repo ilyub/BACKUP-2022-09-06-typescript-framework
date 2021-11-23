@@ -1,11 +1,18 @@
 import * as functionsTestUtils from "@skylib/functions/dist/testUtils";
-import type { ReadonlyPartialRecord } from "@skylib/functions/dist/types/core";
+import type { ReadonlyRecord } from "@skylib/functions/dist/types/core";
 import type { LocaleName } from "@skylib/functions/dist/types/locales";
 
 import { Definitions } from "./src/facade-implementations/lang/dictionary";
 import * as testUtils from "./src/testUtils";
 
 declare global {
+  namespace configurable {
+    interface LocaleName {
+      readonly "en-US": true;
+      readonly "ru-RU": true;
+    }
+  }
+
   namespace facades {
     namespace lang {
       interface Context {
@@ -29,7 +36,7 @@ declare global {
   }
 }
 
-const definitions: ReadonlyPartialRecord<LocaleName, Definitions> = {
+const definitions: ReadonlyRecord<LocaleName, Definitions> = {
   "en-US": new Definitions({
     pluralReduce(count): number {
       count = Math.abs(count);
@@ -51,7 +58,6 @@ const definitions: ReadonlyPartialRecord<LocaleName, Definitions> = {
       MustBeValidField: "Must be valid <field>",
       MustBeValidString: "Must be valid string",
       Password: "Password",
-      SampleWord: "-",
       String: "String"
     }
   }),
@@ -130,7 +136,6 @@ const definitions: ReadonlyPartialRecord<LocaleName, Definitions> = {
           "кто-что-он": "Пароль"
         }
       ],
-      SampleWord: "-",
       String: [
         "кто-что-она",
         {

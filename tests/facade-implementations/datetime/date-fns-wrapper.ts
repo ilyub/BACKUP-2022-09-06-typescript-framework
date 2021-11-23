@@ -1,4 +1,4 @@
-import enGB from "date-fns/locale/en-GB"; // eslint-disable-line import/no-duplicates
+import enUS from "date-fns/locale/en-US"; // eslint-disable-line import/no-duplicates
 import ru from "date-fns/locale/ru"; // eslint-disable-line import/no-duplicates
 
 import type { DateTime } from "@skylib/facades/dist/datetime";
@@ -123,7 +123,7 @@ it("DateTime.dayOfWeek", () => {
 
 it("DateTime.format: English", () => {
   dateFnsWrapper.configure({
-    locale: enGB,
+    locale: enUS,
     pm: true
   });
   expect(d().format("d MMM yyyy")).toStrictEqual("1 Jan 1950");
