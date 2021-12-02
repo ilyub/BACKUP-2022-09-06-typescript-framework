@@ -22,6 +22,7 @@ module.exports = [
   "database",
   "decorators",
   "decorators.errors",
+  "dev",
   "dictionary",
   "dictionary.Definition",
   "dictionary.Definitions",

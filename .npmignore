@@ -1,3 +1,5 @@
 *
 !dist/**
 !es/**
+dist/dev/**
+es/dev/**
