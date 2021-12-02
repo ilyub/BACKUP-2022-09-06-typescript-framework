@@ -2,6 +2,7 @@ import type { Context, Word } from "@skylib/facades/dist/lang";
 import type {
   NumStr,
   ReadonlyIndexedObject,
+  ReadonlyPartialRecord,
   ReadonlyRecord
 } from "@skylib/functions/dist/types/core";
 
@@ -11,7 +12,7 @@ export type RawDefinition =
   | string
   | RawDefinitions
   | readonly [NumStr, RawDefinitions]
-  | readonly [NumStr, RawDefinitions, ReadonlyIndexedObject<NumStr>];
+  | readonly [NumStr, RawDefinitions, ReadonlyPartialRecord<Context, NumStr>];
 
 // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 export interface RawDefinitions {
