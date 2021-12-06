@@ -2,16 +2,15 @@ import * as functionsTestUtils from "@skylib/functions/dist/testUtils";
 import type { ReadonlyRecord } from "@skylib/functions/dist/types/core";
 import type { LocaleName } from "@skylib/functions/dist/types/locales";
 
-import { Definitions } from "./src/facade-implementations/lang/dictionary";
+import {
+  Definitions,
+  pluralReduce
+} from "./src/facade-implementations/lang/dictionary";
 import * as testUtils from "./src/testUtils";
 
 const definitions: ReadonlyRecord<LocaleName, Definitions> = {
   "en-US": new Definitions({
-    pluralReduce(count): number {
-      count = Math.abs(count);
-
-      return count === 1 ? 1 : 2;
-    },
+    pluralReduce,
     wordForms: {},
     words: {
       Confirm: "Password confirm",
@@ -31,21 +30,7 @@ const definitions: ReadonlyRecord<LocaleName, Definitions> = {
     }
   }),
   "ru-RU": new Definitions({
-    pluralReduce(count): number {
-      count = Math.abs(count);
-
-      if (count >= 10 && count <= 19) return 5;
-
-      if (count % 10 === 1) return 1;
-
-      if (count % 10 === 2) return 2;
-
-      if (count % 10 === 3) return 2;
-
-      if (count % 10 === 4) return 2;
-
-      return 5;
-    },
+    pluralReduce: pluralReduce.ru,
     wordForms: {
       "кем-чем": ["кем-чем-им", "кем-чем-ей", "кем-чем-им-ср"],
       "кого-чего": ["кого-чего-его", "кого-чего-ее", "кого-чего-его-ср"],
