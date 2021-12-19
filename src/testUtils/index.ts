@@ -130,6 +130,7 @@ jestReset.dictionary = jestResetDictionary;
  */
 export function jestResetDom(): void {
   const config: progressBar.Configuration = {
+    activeClass: "progress-bar-active",
     enabled: true,
     finalEasing: false,
     finalEasingSpeed: 500,

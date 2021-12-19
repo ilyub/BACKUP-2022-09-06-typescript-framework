@@ -12,7 +12,9 @@ import * as progressBar from "@/facade-implementations/progressReporter/progress
 function expectProgressToEqual(progress: number): void {
   if (progress) {
     expect(progressReporter.getProgress()).toStrictEqual(progress);
-    expect($("#progressBar").attr("class")).toStrictEqual("x-active");
+    expect($("#progressBar").attr("class")).toStrictEqual(
+      "progress-bar-active"
+    );
     expect($("#progressBar").attr("style")).toStrictEqual(
       `width: ${100 * progressReporter.getProgress()}%;`
     );

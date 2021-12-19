@@ -10,6 +10,7 @@ import * as timer from "@skylib/functions/dist/timer";
 import type { Timeout } from "@skylib/functions/dist/types/core";
 
 export interface Configuration {
+  readonly activeClass: string;
   readonly enabled: boolean;
   readonly finalEasing: boolean;
   readonly finalEasingSpeed: number;
@@ -54,7 +55,9 @@ export const implementation: Facade = {
     processesPool.clear();
     progress = 0;
     timer.removeTimeout(timeout);
-    $(moduleConfig.selector).removeClass("x-active").css("width", "");
+    $(moduleConfig.selector)
+      .removeClass(moduleConfig.activeClass)
+      .css("width", "");
   },
   spawn() {
     return new Process();
@@ -168,7 +171,7 @@ export class Process implements ProcessInterface {
 
       if (progress)
         $(moduleConfig.selector)
-          .addClass("x-active")
+          .addClass(moduleConfig.activeClass)
           .css("width", `${100 * implementation.getProgress()}%`);
     } else if (anyUnfinished) {
       // Keep waiting
@@ -204,6 +207,7 @@ export class Process implements ProcessInterface {
 let lastEasingUpdate = 0;
 
 const moduleConfig: Configuration = {
+  activeClass: "progress-bar-active",
   enabled: false,
   finalEasing: false,
   finalEasingSpeed: 500,
