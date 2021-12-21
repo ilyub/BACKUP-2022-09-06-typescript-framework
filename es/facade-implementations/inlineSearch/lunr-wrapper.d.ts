@@ -1,5 +1,5 @@
-import MiniSearch from "minisearch";
-import type { Engine as EngineInterface, Facade } from "@skylib/facades/dist/inlineSearch";
+import lunr from "lunr";
+import type { Engine as EngineInterface, Facade } from "@skylib/facades/es/inlineSearch";
 export declare const implementation: Facade;
 export declare class Engine<T extends object> implements EngineInterface<T> {
     /**
@@ -12,7 +12,7 @@ export declare class Engine<T extends object> implements EngineInterface<T> {
     constructor(idField: keyof T & string, fields: ReadonlyArray<keyof T & string>, items: readonly T[]);
     search(query: string): readonly T[];
     protected idField: keyof T & string;
-    protected index: Readonly<MiniSearch>;
+    protected index: lunr.Index;
     protected items: readonly T[];
 }
-//# sourceMappingURL=minisearch-wrapper.d.ts.map
+//# sourceMappingURL=lunr-wrapper.d.ts.map

@@ -20,7 +20,7 @@ import { Facebook } from "../facade-implementations/facebook/Facebook";
 import { Google } from "../facade-implementations/google/Google";
 import * as promiseHandler from "../facade-implementations/handlePromise/promiseHandler";
 import * as axiosWrapper from "../facade-implementations/httpRequest/axios-wrapper";
-import * as minisearchWrapper from "../facade-implementations/inlineSearch/minisearch-wrapper";
+import * as lunrWrapper from "../facade-implementations/inlineSearch/lunr-wrapper";
 import { Dictionary } from "../facade-implementations/lang/dictionary";
 import * as progressBar from "../facade-implementations/progressReporter/progressBar";
 import * as dummyStorage from "../facade-implementations/reactiveStorage/dummyStorage";
@@ -35,7 +35,7 @@ export function jestReset() {
     database.setImplementation(new PouchDBWrapper());
     facebook.setImplementation(new Facebook(undefined, "10.0"));
     google.setImplementation(new Google(undefined));
-    inlineSearch.setImplementation(minisearchWrapper.implementation);
+    inlineSearch.setImplementation(lunrWrapper.implementation);
     reactiveStorage.setImplementation(dummyStorage.implementation);
     showAlert.setImplementation(jsAlert.implementation);
     showConfirm.setImplementation(jsConfirm.implementation);
@@ -93,6 +93,7 @@ jestReset.dictionary = jestResetDictionary;
  */
 export function jestResetDom() {
     const config = {
+        activeClass: "progress-bar-active",
         enabled: true,
         finalEasing: false,
         finalEasingSpeed: 500,

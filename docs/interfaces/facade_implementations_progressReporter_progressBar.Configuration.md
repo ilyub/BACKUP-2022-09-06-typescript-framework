@@ -8,6 +8,7 @@
 
 ### Properties
 
+- [activeClass](facade_implementations_progressReporter_progressBar.Configuration.md#activeclass)
 - [enabled](facade_implementations_progressReporter_progressBar.Configuration.md#enabled)
 - [finalEasing](facade_implementations_progressReporter_progressBar.Configuration.md#finaleasing)
 - [finalEasingSpeed](facade_implementations_progressReporter_progressBar.Configuration.md#finaleasingspeed)
@@ -17,6 +18,12 @@
 - [updateInterval](facade_implementations_progressReporter_progressBar.Configuration.md#updateinterval)
 
 ## Properties
+
+### activeClass
+
+• `Readonly` **activeClass**: `string`
+
+___
 
 ### enabled
 

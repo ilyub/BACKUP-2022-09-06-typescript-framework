@@ -1,8 +1,8 @@
-[Typescript framework](../index.md) / [Exports](../modules.md) / [facade-implementations/inlineSearch/minisearch-wrapper](../modules/facade_implementations_inlineSearch_minisearch_wrapper.md) / Engine
+[Typescript framework](../index.md) / [Exports](../modules.md) / [facade-implementations/inlineSearch/lunr-wrapper](../modules/facade_implementations_inlineSearch_lunr_wrapper.md) / Engine
 
 # Class: Engine<T\>
 
-[facade-implementations/inlineSearch/minisearch-wrapper](../modules/facade_implementations_inlineSearch_minisearch_wrapper.md).Engine
+[facade-implementations/inlineSearch/lunr-wrapper](../modules/facade_implementations_inlineSearch_lunr_wrapper.md).Engine
 
 ## Type parameters
 
@@ -18,17 +18,17 @@
 
 ### Constructors
 
-- [constructor](facade_implementations_inlineSearch_minisearch_wrapper.Engine.md#constructor)
+- [constructor](facade_implementations_inlineSearch_lunr_wrapper.Engine.md#constructor)
 
 ### Properties
 
-- [idField](facade_implementations_inlineSearch_minisearch_wrapper.Engine.md#idfield)
-- [index](facade_implementations_inlineSearch_minisearch_wrapper.Engine.md#index)
-- [items](facade_implementations_inlineSearch_minisearch_wrapper.Engine.md#items)
+- [idField](facade_implementations_inlineSearch_lunr_wrapper.Engine.md#idfield)
+- [index](facade_implementations_inlineSearch_lunr_wrapper.Engine.md#index)
+- [items](facade_implementations_inlineSearch_lunr_wrapper.Engine.md#items)
 
 ### Methods
 
-- [search](facade_implementations_inlineSearch_minisearch_wrapper.Engine.md#search)
+- [search](facade_implementations_inlineSearch_lunr_wrapper.Engine.md#search)
 
 ## Constructors
 
@@ -62,7 +62,7 @@ ___
 
 ### index
 
-• `Protected` **index**: `Readonly`<`MiniSearch`<`any`\>\>
+• `Protected` **index**: `Index`
 
 ___
 

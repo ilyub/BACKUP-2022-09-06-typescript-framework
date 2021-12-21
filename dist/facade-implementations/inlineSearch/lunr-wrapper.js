@@ -1,11 +1,14 @@
-import MiniSearch from "minisearch";
-import * as a from "@skylib/functions/es/array";
-export const implementation = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Engine = exports.implementation = void 0;
+const tslib_1 = require("tslib");
+const lunr_1 = (0, tslib_1.__importDefault)(require("lunr"));
+exports.implementation = {
     create(idField, fields, items) {
         return new Engine(idField, fields, items);
     }
 };
-export class Engine {
+class Engine {
     /**
      * Creates class instance.
      *
@@ -39,12 +42,19 @@ export class Engine {
         });
         this.idField = idField;
         this.items = items;
-        this.index = new MiniSearch({ fields: a.clone(fields), idField });
-        this.index.addAll(a.clone(items));
+        this.index = (0, lunr_1.default)(configFunction);
+        function configFunction(builder) {
+            builder.ref(idField);
+            for (const field of fields)
+                builder.field(field);
+            for (const item of items)
+                builder.add(item);
+        }
     }
     search(query) {
-        const ids = new Set(this.index.search(query).map(result => result.id));
-        return this.items.filter(item => ids.has(item[this.idField]));
+        const refs = new Set(this.index.search(query).map(result => result.ref));
+        return this.items.filter(item => refs.has(item[this.idField]));
     }
 }
-//# sourceMappingURL=minisearch-wrapper.js.map
+exports.Engine = Engine;
+//# sourceMappingURL=lunr-wrapper.js.map

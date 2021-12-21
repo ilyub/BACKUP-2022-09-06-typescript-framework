@@ -16,6 +16,8 @@ Typescript framework / [Exports](modules.md)
     - errors
       - [MustBeDefinedError](https://ilyub.github.io/typescript-framework/modules/decorators_errors_MustBeDefinedError.html) - MustBeDefinedError class.
   - facade-implementations
+    - compare
+      - [natural-compare-wrapper](https://ilyub.github.io/typescript-framework/modules/facade_implementations_compare_natural_compare_wrapper.html) - Implements compare facade.
     - datetime
       - [date-fns-wrapper](https://ilyub.github.io/typescript-framework/modules/facade_implementations_datetime_date_fns_wrapper.html) - Implements datetime facade.
     - facebook
@@ -27,6 +29,7 @@ Typescript framework / [Exports](modules.md)
     - httpRequest
       - [axios-wrapper](https://ilyub.github.io/typescript-framework/modules/facade_implementations_httpRequest_axios_wrapper.html) - Implements httpRequest facade.
     - inlineSearch
+      - [lunr-wrapper](https://ilyub.github.io/typescript-framework/modules/facade_implementations_inlineSearch_lunr_wrapper.html) - Implements inlineSearch facade.
       - [minisearch-wrapper](https://ilyub.github.io/typescript-framework/modules/facade_implementations_inlineSearch_minisearch_wrapper.html) - Implements inlineSearch facade.
     - lang
       - [dictionary](https://ilyub.github.io/typescript-framework/modules/facade_implementations_lang_dictionary.html) - Implements lang facade.

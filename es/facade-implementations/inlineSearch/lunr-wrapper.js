@@ -1,5 +1,4 @@
-import MiniSearch from "minisearch";
-import * as a from "@skylib/functions/es/array";
+import lunr from "lunr";
 export const implementation = {
     create(idField, fields, items) {
         return new Engine(idField, fields, items);
@@ -39,12 +38,18 @@ export class Engine {
         });
         this.idField = idField;
         this.items = items;
-        this.index = new MiniSearch({ fields: a.clone(fields), idField });
-        this.index.addAll(a.clone(items));
+        this.index = lunr(configFunction);
+        function configFunction(builder) {
+            builder.ref(idField);
+            for (const field of fields)
+                builder.field(field);
+            for (const item of items)
+                builder.add(item);
+        }
     }
     search(query) {
-        const ids = new Set(this.index.search(query).map(result => result.id));
-        return this.items.filter(item => ids.has(item[this.idField]));
+        const refs = new Set(this.index.search(query).map(result => result.ref));
+        return this.items.filter(item => refs.has(item[this.idField]));
     }
 }
-//# sourceMappingURL=minisearch-wrapper.js.map
+//# sourceMappingURL=lunr-wrapper.js.map

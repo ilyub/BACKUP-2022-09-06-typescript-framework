@@ -24,7 +24,7 @@ const Facebook_1 = require("../facade-implementations/facebook/Facebook");
 const Google_1 = require("../facade-implementations/google/Google");
 const promiseHandler = (0, tslib_1.__importStar)(require("../facade-implementations/handlePromise/promiseHandler"));
 const axiosWrapper = (0, tslib_1.__importStar)(require("../facade-implementations/httpRequest/axios-wrapper"));
-const minisearchWrapper = (0, tslib_1.__importStar)(require("../facade-implementations/inlineSearch/minisearch-wrapper"));
+const lunrWrapper = (0, tslib_1.__importStar)(require("../facade-implementations/inlineSearch/lunr-wrapper"));
 const dictionary_1 = require("../facade-implementations/lang/dictionary");
 const progressBar = (0, tslib_1.__importStar)(require("../facade-implementations/progressReporter/progressBar"));
 const dummyStorage = (0, tslib_1.__importStar)(require("../facade-implementations/reactiveStorage/dummyStorage"));
@@ -39,7 +39,7 @@ function jestReset() {
     database_1.database.setImplementation(new PouchDBWrapper_1.PouchDBWrapper());
     facebook_1.facebook.setImplementation(new Facebook_1.Facebook(undefined, "10.0"));
     google_1.google.setImplementation(new Google_1.Google(undefined));
-    inlineSearch_1.inlineSearch.setImplementation(minisearchWrapper.implementation);
+    inlineSearch_1.inlineSearch.setImplementation(lunrWrapper.implementation);
     reactiveStorage_1.reactiveStorage.setImplementation(dummyStorage.implementation);
     showAlert_1.showAlert.setImplementation(jsAlert.implementation);
     showConfirm_1.showConfirm.setImplementation(jsConfirm.implementation);
@@ -99,6 +99,7 @@ jestReset.dictionary = jestResetDictionary;
  */
 function jestResetDom() {
     const config = {
+        activeClass: "progress-bar-active",
         enabled: true,
         finalEasing: false,
         finalEasingSpeed: 500,

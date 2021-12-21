@@ -1,5 +1,6 @@
 import type { Facade, Process as ProcessInterface } from "@skylib/facades/dist/progressReporter";
 export interface Configuration {
+    readonly activeClass: string;
     readonly enabled: boolean;
     readonly finalEasing: boolean;
     readonly finalEasingSpeed: number;

@@ -23,17 +23,32 @@ class Engine {
         |* Protected
         |*****************************************************************************
         |*/
-        Object.defineProperty(this, "minisearch", {
+        Object.defineProperty(this, "idField", {
             enumerable: true,
             configurable: true,
             writable: true,
             value: void 0
         });
-        this.minisearch = new minisearch_1.default({ fields: a.clone(fields), idField });
-        this.minisearch.addAll(a.clone(items));
+        Object.defineProperty(this, "index", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "items", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        this.idField = idField;
+        this.items = items;
+        this.index = new minisearch_1.default({ fields: a.clone(fields), idField });
+        this.index.addAll(a.clone(items));
     }
     search(query) {
-        return this.minisearch.search(query).map(result => result.id);
+        const ids = new Set(this.index.search(query).map(result => result.id));
+        return this.items.filter(item => ids.has(item[this.idField]));
     }
 }
 exports.Engine = Engine;

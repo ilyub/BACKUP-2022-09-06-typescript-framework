@@ -33,7 +33,9 @@ exports.implementation = {
         processesPool.clear();
         progress = 0;
         timer.removeTimeout(timeout);
-        (0, jquery_1.default)(moduleConfig.selector).removeClass("x-active").css("width", "");
+        (0, jquery_1.default)(moduleConfig.selector)
+            .removeClass(moduleConfig.activeClass)
+            .css("width", "");
     },
     spawn() {
         return new Process();
@@ -163,7 +165,7 @@ class Process {
                 exports.implementation.reset();
             if (progress)
                 (0, jquery_1.default)(moduleConfig.selector)
-                    .addClass("x-active")
+                    .addClass(moduleConfig.activeClass)
                     .css("width", `${100 * exports.implementation.getProgress()}%`);
         }
         else if (anyUnfinished) {
@@ -185,6 +187,7 @@ exports.Process = Process;
 |*/
 let lastEasingUpdate = 0;
 const moduleConfig = {
+    activeClass: "progress-bar-active",
     enabled: false,
     finalEasing: false,
     finalEasingSpeed: 500,
