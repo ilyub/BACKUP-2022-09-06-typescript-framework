@@ -1,46 +1,10 @@
 import lunr from "lunr";
 
-import type {
-  Engine as EngineInterface,
-  Facade
-} from "@skylib/facades/dist/inlineSearch";
+import type { Facade } from "@skylib/facades/dist/inlineSearch";
 
-export const implementation: Facade = {
-  create<T extends object>(
-    idField: keyof T & string,
-    fields: ReadonlyArray<keyof T & string>,
-    items: readonly T[]
-  ): Engine<T> {
-    return new Engine(idField, fields, items);
-  }
-};
+import { createImplementation, Engine as BaseEngine } from "./api/template";
 
-export class Engine<T extends object> implements EngineInterface<T> {
-  /**
-   * Creates class instance.
-   *
-   * @param idField - ID field.
-   * @param fields - Searchable fields.
-   * @param items - Items.
-   */
-  public constructor(
-    idField: keyof T & string,
-    fields: ReadonlyArray<keyof T & string>,
-    items: readonly T[]
-  ) {
-    this.idField = idField;
-    this.items = items;
-    this.index = lunr(configFunction);
-
-    function configFunction(builder: lunr.Builder): void {
-      builder.ref(idField);
-
-      for (const field of fields) builder.field(field);
-
-      for (const item of items) builder.add(item);
-    }
-  }
-
+export class Engine<T extends object> extends BaseEngine<T, lunr.Index> {
   public search(query: string): readonly T[] {
     const refs = new Set<unknown>(
       this.index.search(query).map(result => result.ref)
@@ -55,9 +19,22 @@ export class Engine<T extends object> implements EngineInterface<T> {
   |*****************************************************************************
   |*/
 
-  protected idField: keyof T & string;
+  // eslint-disable-next-line @skylib/require-jsdoc
+  protected buildIndex(
+    idField: keyof T & string,
+    fields: ReadonlyArray<keyof T & string>,
+    items: readonly T[]
+  ): lunr.Index {
+    return lunr(configFunction);
 
-  protected index: lunr.Index;
+    function configFunction(builder: lunr.Builder): void {
+      builder.ref(idField);
 
-  protected items: readonly T[];
+      for (const field of fields) builder.field(field);
+
+      for (const item of items) builder.add(item);
+    }
+  }
 }
+
+export const implementation: Facade = createImplementation(Engine);
