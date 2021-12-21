@@ -40,6 +40,7 @@ module.exports = [
   "lang",
   "lunr-wrapper",
   "minisearch-wrapper",
+  "natural-compare-wrapper",
   "plugins",
   "progressBar",
   "progressReporter",

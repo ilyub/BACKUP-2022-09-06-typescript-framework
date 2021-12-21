@@ -14,6 +14,8 @@
     - errors
       - [MustBeDefinedError](https://ilyub.github.io/typescript-framework/modules/decorators_errors_MustBeDefinedError.html) - MustBeDefinedError class.
   - facade-implementations
+    - compare
+      - [natural-compare-wrapper](https://ilyub.github.io/typescript-framework/modules/facade_implementations_compare_natural_compare_wrapper.html) - Implements compare facade.
     - datetime
       - [date-fns-wrapper](https://ilyub.github.io/typescript-framework/modules/facade_implementations_datetime_date_fns_wrapper.html) - Implements datetime facade.
     - facebook
