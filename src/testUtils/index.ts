@@ -25,7 +25,7 @@ import { Facebook } from "../facade-implementations/facebook/Facebook";
 import { Google } from "../facade-implementations/google/Google";
 import * as promiseHandler from "../facade-implementations/handlePromise/promiseHandler";
 import * as axiosWrapper from "../facade-implementations/httpRequest/axios-wrapper";
-import * as minisearchWrapper from "../facade-implementations/inlineSearch/minisearch-wrapper";
+import * as lunrWrapper from "../facade-implementations/inlineSearch/lunr-wrapper";
 import type { Definitions } from "../facade-implementations/lang/dictionary";
 import { Dictionary } from "../facade-implementations/lang/dictionary";
 import * as progressBar from "../facade-implementations/progressReporter/progressBar";
@@ -57,7 +57,7 @@ export function jestReset(): void {
   database.setImplementation(new PouchDBWrapper());
   facebook.setImplementation(new Facebook(undefined, "10.0"));
   google.setImplementation(new Google(undefined));
-  inlineSearch.setImplementation(minisearchWrapper.implementation);
+  inlineSearch.setImplementation(lunrWrapper.implementation);
   reactiveStorage.setImplementation(dummyStorage.implementation);
   showAlert.setImplementation(jsAlert.implementation);
   showConfirm.setImplementation(jsConfirm.implementation);

@@ -38,6 +38,7 @@ module.exports = [
   "jsAlert",
   "jsConfirm",
   "lang",
+  "lunr-wrapper",
   "minisearch-wrapper",
   "plugins",
   "progressBar",
