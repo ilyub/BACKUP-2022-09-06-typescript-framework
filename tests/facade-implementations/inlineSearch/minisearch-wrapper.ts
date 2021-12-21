@@ -1,49 +1,49 @@
-import { inlineSearch } from "@skylib/facades/dist/inlineSearch";
-import * as a from "@skylib/functions/dist/array";
-import * as cast from "@skylib/functions/dist/converters";
-
 import * as minisearchWrapper from "@/facade-implementations/inlineSearch/minisearch-wrapper";
 
-it("implementation.create", () => {
-  const engine = inlineSearch.create("id", ["value"], []);
+it.each([
+  { ids: ["a"], searchString: "n1" },
+  { ids: ["a", "b"], searchString: "n2" },
+  { ids: ["b", "c"], searchString: "n3" },
+  { ids: ["c"], searchString: "n4" },
+  { ids: ["a"], searchString: "d1" },
+  { ids: ["a", "b"], searchString: "d2" },
+  { ids: ["a", "b", "c"], searchString: "d3" },
+  { ids: ["b", "c"], searchString: "d4" },
+  { ids: ["c"], searchString: "d5" }
+])("Engine.search", ({ ids, searchString }) => {
+  interface Item {
+    readonly description: string;
+    readonly id: string;
+    readonly name: string;
+  }
 
-  expect(engine).toBeInstanceOf(minisearchWrapper.Engine);
-});
+  type Items = readonly Item[];
 
-it("Engine.search", () => {
-  const engine = inlineSearch.create(
+  const items: Items = [
+    {
+      description: "D1 d2 d3",
+      id: "a",
+      name: "N1 n2"
+    },
+    {
+      description: "D2 d3 d4",
+      id: "b",
+      name: "N2 n3"
+    },
+    {
+      description: "D3 d4 d5",
+      id: "c",
+      name: "N3 n4"
+    }
+  ];
+
+  const engine = minisearchWrapper.implementation.create(
     "id",
     ["name", "description"],
-    [
-      {
-        description: "D1 d2 d3",
-        id: "a",
-        name: "N1 n2"
-      },
-      {
-        description: "D2 d3 d4",
-        id: "b",
-        name: "N2 n3"
-      },
-      {
-        description: "D3 d4 d5",
-        id: "c",
-        name: "N3 n4"
-      }
-    ]
+    items
   );
 
-  expect(a.sort(engine.search("n1"), sort)).toStrictEqual(["a"]);
-  expect(a.sort(engine.search("n2"), sort)).toStrictEqual(["a", "b"]);
-  expect(a.sort(engine.search("n3"), sort)).toStrictEqual(["b", "c"]);
-  expect(a.sort(engine.search("n4"), sort)).toStrictEqual(["c"]);
-  expect(a.sort(engine.search("d1"), sort)).toStrictEqual(["a"]);
-  expect(a.sort(engine.search("d2"), sort)).toStrictEqual(["a", "b"]);
-  expect(a.sort(engine.search("d3"), sort)).toStrictEqual(["a", "b", "c"]);
-  expect(a.sort(engine.search("d4"), sort)).toStrictEqual(["b", "c"]);
-  expect(a.sort(engine.search("d5"), sort)).toStrictEqual(["c"]);
+  const expected = items.filter(item => ids.includes(item.id));
 
-  function sort(x: unknown, y: unknown): number {
-    return cast.string(x).localeCompare(cast.string(y));
-  }
+  expect(engine.search(searchString)).toStrictEqual(expected);
 });

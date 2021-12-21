@@ -8,15 +8,15 @@ import * as a from "@skylib/functions/dist/array";
 
 export const implementation: Facade = {
   create<T extends object>(
-    idField: string,
-    fields: readonly string[],
+    idField: keyof T & string,
+    fields: ReadonlyArray<keyof T & string>,
     items: readonly T[]
   ): Engine<T> {
     return new Engine(idField, fields, items);
   }
 };
 
-export class Engine<T extends object> implements EngineInterface {
+export class Engine<T extends object> implements EngineInterface<T> {
   /**
    * Creates class instance.
    *
@@ -25,16 +25,22 @@ export class Engine<T extends object> implements EngineInterface {
    * @param items - Items.
    */
   public constructor(
-    idField: string,
-    fields: readonly string[],
+    idField: keyof T & string,
+    fields: ReadonlyArray<keyof T & string>,
     items: readonly T[]
   ) {
-    this.minisearch = new MiniSearch({ fields: a.clone(fields), idField });
-    this.minisearch.addAll(a.clone(items));
+    this.idField = idField;
+    this.items = items;
+    this.index = new MiniSearch({ fields: a.clone(fields), idField });
+    this.index.addAll(a.clone(items));
   }
 
-  public search(query: string): readonly unknown[] {
-    return this.minisearch.search(query).map(result => result.id as unknown);
+  public search(query: string): readonly T[] {
+    const ids = new Set(
+      this.index.search(query).map(result => result.id as unknown)
+    );
+
+    return this.items.filter(item => ids.has(item[this.idField]));
   }
 
   /*
@@ -43,5 +49,9 @@ export class Engine<T extends object> implements EngineInterface {
   |*****************************************************************************
   |*/
 
-  protected minisearch: Readonly<MiniSearch>;
+  protected idField: keyof T & string;
+
+  protected index: Readonly<MiniSearch>;
+
+  protected items: readonly T[];
 }
