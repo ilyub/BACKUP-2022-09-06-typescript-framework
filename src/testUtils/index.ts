@@ -1,5 +1,6 @@
 import enUS from "date-fns/locale/en-US";
 
+import { compare } from "@skylib/facades/dist/compare";
 import { database } from "@skylib/facades/dist/database";
 import { datetime } from "@skylib/facades/dist/datetime";
 import { facebook } from "@skylib/facades/dist/facebook";
@@ -19,6 +20,7 @@ import type * as testUtils from "@skylib/functions/dist/testUtils";
 import type { ReadonlyRecord } from "@skylib/functions/dist/types/core";
 import type { LocaleName } from "@skylib/functions/dist/types/locales";
 
+import * as naturalCompareWrapper from "../facade-implementations/compare/natural-compare-wrapper";
 import { PouchDBWrapper } from "../facade-implementations/database/PouchDBWrapper";
 import * as dateFnsWrapper from "../facade-implementations/datetime/date-fns-wrapper";
 import { Facebook } from "../facade-implementations/facebook/Facebook";
@@ -54,6 +56,7 @@ declare global {
  * Jest reset.
  */
 export function jestReset(): void {
+  compare.setImplementation(naturalCompareWrapper.implementation);
   database.setImplementation(new PouchDBWrapper());
   facebook.setImplementation(new Facebook(undefined, "10.0"));
   google.setImplementation(new Google(undefined));
