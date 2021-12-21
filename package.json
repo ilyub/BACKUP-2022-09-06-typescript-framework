@@ -42,7 +42,7 @@
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
     "@jest/test-sequencer": "^27.4.5",
-    "@skylib/config": "^0.1.25",
+    "@skylib/config": "^0.1.27",
     "@skylib/eslint-plugin": "^0.1.8",
     "@types/eslint": "^8.2.1",
     "@types/jest": "^27.0.3",
