@@ -1,4 +1,5 @@
 import enUS from "date-fns/locale/en-US";
+import { compare } from "@skylib/facades/es/compare";
 import { database } from "@skylib/facades/es/database";
 import { datetime } from "@skylib/facades/es/datetime";
 import { facebook } from "@skylib/facades/es/facebook";
@@ -14,6 +15,7 @@ import { showConfirm } from "@skylib/facades/es/showConfirm";
 import { testDelay } from "@skylib/facades/es/testDelay";
 import { uniqueId } from "@skylib/facades/es/uniqueId";
 import * as assert from "@skylib/functions/es/assertions";
+import * as naturalCompareWrapper from "../facade-implementations/compare/natural-compare-wrapper";
 import { PouchDBWrapper } from "../facade-implementations/database/PouchDBWrapper";
 import * as dateFnsWrapper from "../facade-implementations/datetime/date-fns-wrapper";
 import { Facebook } from "../facade-implementations/facebook/Facebook";
@@ -32,6 +34,7 @@ import * as uuidWrapper from "../facade-implementations/uniqueId/uuidWrapper";
  * Jest reset.
  */
 export function jestReset() {
+    compare.setImplementation(naturalCompareWrapper.implementation);
     database.setImplementation(new PouchDBWrapper());
     facebook.setImplementation(new Facebook(undefined, "10.0"));
     google.setImplementation(new Google(undefined));

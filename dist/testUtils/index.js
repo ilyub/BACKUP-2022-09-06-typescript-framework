@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.datetimeToEqual = exports.jestSetupDom = exports.jestSetupDictionary = exports.jestSetup = exports.jestResetDom = exports.jestResetDictionary = exports.jestReset = void 0;
 const tslib_1 = require("tslib");
 const en_US_1 = (0, tslib_1.__importDefault)(require("date-fns/locale/en-US"));
+const compare_1 = require("@skylib/facades/dist/compare");
 const database_1 = require("@skylib/facades/dist/database");
 const datetime_1 = require("@skylib/facades/dist/datetime");
 const facebook_1 = require("@skylib/facades/dist/facebook");
@@ -18,6 +19,7 @@ const showConfirm_1 = require("@skylib/facades/dist/showConfirm");
 const testDelay_1 = require("@skylib/facades/dist/testDelay");
 const uniqueId_1 = require("@skylib/facades/dist/uniqueId");
 const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
+const naturalCompareWrapper = (0, tslib_1.__importStar)(require("../facade-implementations/compare/natural-compare-wrapper"));
 const PouchDBWrapper_1 = require("../facade-implementations/database/PouchDBWrapper");
 const dateFnsWrapper = (0, tslib_1.__importStar)(require("../facade-implementations/datetime/date-fns-wrapper"));
 const Facebook_1 = require("../facade-implementations/facebook/Facebook");
@@ -36,6 +38,7 @@ const uuidWrapper = (0, tslib_1.__importStar)(require("../facade-implementations
  * Jest reset.
  */
 function jestReset() {
+    compare_1.compare.setImplementation(naturalCompareWrapper.implementation);
     database_1.database.setImplementation(new PouchDBWrapper_1.PouchDBWrapper());
     facebook_1.facebook.setImplementation(new Facebook_1.Facebook(undefined, "10.0"));
     google_1.google.setImplementation(new Google_1.Google(undefined));
