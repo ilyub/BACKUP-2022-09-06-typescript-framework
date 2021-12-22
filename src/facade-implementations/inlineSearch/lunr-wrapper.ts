@@ -19,7 +19,6 @@ export class Engine<T extends object> extends BaseEngine<T, lunr.Index> {
   |*****************************************************************************
   |*/
 
-  // eslint-disable-next-line @skylib/require-jsdoc
   protected buildIndex(
     idField: keyof T & string,
     fields: ReadonlyArray<keyof T & string>,
