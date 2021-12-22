@@ -4,8 +4,8 @@
 import type {
   Conditions,
   Database as DatabaseInterface,
+  ExistingAttachedDocument,
   ExistingDocument,
-  ExistingDocumentAttached,
   PutDocument
 } from "@skylib/facades/dist/database";
 import { database } from "@skylib/facades/dist/database";
@@ -63,7 +63,7 @@ it("create: options.caseSensitiveSorting", async () => {
   ): Promise<void> {
     const got = await fn.run(
       async (): Promise<
-        ReadonlyArray<ExistingDocument | ExistingDocumentAttached>
+        ReadonlyArray<ExistingDocument | ExistingAttachedDocument>
       > => {
         switch (method) {
           case "query1":

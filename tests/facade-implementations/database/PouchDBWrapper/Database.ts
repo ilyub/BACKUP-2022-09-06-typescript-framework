@@ -101,7 +101,7 @@ it("get|getIfExists", async () => {
   }
 });
 
-it("getAttached|getIfExistsAttached", async () => {
+it("getAttached|getAttachedIfExists", async () => {
   const db = database.create(uniqueId());
 
   const { id: parentId } = await db.put({ value: 1 });
@@ -110,7 +110,7 @@ it("getAttached|getIfExistsAttached", async () => {
     const error = new PouchNotFoundError("Missing attached document");
 
     await expect(db.getAttached(0, parentId)).rejects.toStrictEqual(error);
-    await expect(db.getIfExistsAttached(0, parentId)).resolves.toBeUndefined();
+    await expect(db.getAttachedIfExists(0, parentId)).resolves.toBeUndefined();
   }
 
   const { parentRev } = await db.putAttached(parentId, { value: 2 });
@@ -132,7 +132,7 @@ it("getAttached|getIfExistsAttached", async () => {
     await expect(
       Promise.all([
         db.getAttached(0, parentId),
-        db.getIfExistsAttached(0, parentId)
+        db.getAttachedIfExists(0, parentId)
       ])
     ).resolves.toStrictEqual([expected, expected]);
   }
@@ -141,7 +141,7 @@ it("getAttached|getIfExistsAttached", async () => {
     const error = new PouchNotFoundError("Missing attached document");
 
     await expect(db.getAttached(1, parentId)).rejects.toStrictEqual(error);
-    await expect(db.getIfExistsAttached(1, parentId)).resolves.toBeUndefined();
+    await expect(db.getAttachedIfExists(1, parentId)).resolves.toBeUndefined();
   }
 
   {
@@ -149,7 +149,7 @@ it("getAttached|getIfExistsAttached", async () => {
 
     await db.putAttached(parentId, { _deleted: true, _id: 0, _rev: 1 });
     await expect(db.getAttached(0, parentId)).rejects.toStrictEqual(error);
-    await expect(db.getIfExistsAttached(0, parentId)).resolves.toBeUndefined();
+    await expect(db.getAttachedIfExists(0, parentId)).resolves.toBeUndefined();
   }
 
   {
@@ -157,7 +157,7 @@ it("getAttached|getIfExistsAttached", async () => {
 
     await expect(db.getAttached(0, uniqueId())).rejects.toStrictEqual(error);
     await expect(
-      db.getIfExistsAttached(0, uniqueId())
+      db.getAttachedIfExists(0, uniqueId())
     ).resolves.toBeUndefined();
   }
 });
@@ -382,12 +382,12 @@ it("putIfNotExists", async () => {
   expect(response3).toBeUndefined();
 });
 
-it("putIfNotExistsAttached", async () => {
+it("putAttachedIfNotExists", async () => {
   const db = database.create(uniqueId());
 
   const { id: parentId } = await db.put({});
 
-  const response1 = await db.putIfNotExistsAttached(parentId, {});
+  const response1 = await db.putAttachedIfNotExists(parentId, {});
 
   assert.not.empty(response1);
   expect(response1).toContainAllKeys(["id", "parentId", "parentRev", "rev"]);
@@ -395,7 +395,7 @@ it("putIfNotExistsAttached", async () => {
   expect(response1.parentId).toStrictEqual(parentId);
   expect(response1.rev).toStrictEqual(1);
 
-  const response2 = await db.putIfNotExistsAttached(parentId, {
+  const response2 = await db.putAttachedIfNotExists(parentId, {
     _id: 0,
     _rev: 1
   });
@@ -406,7 +406,7 @@ it("putIfNotExistsAttached", async () => {
   expect(response2.parentId).toStrictEqual(parentId);
   expect(response2.rev).toStrictEqual(2);
 
-  const response3 = await db.putIfNotExistsAttached(parentId, { _id: 0 });
+  const response3 = await db.putAttachedIfNotExists(parentId, { _id: 0 });
 
   expect(response3).toBeUndefined();
 });

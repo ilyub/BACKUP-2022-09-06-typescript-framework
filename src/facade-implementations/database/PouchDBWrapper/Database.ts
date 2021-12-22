@@ -3,20 +3,24 @@ import { collate } from "pouchdb-collate";
 import sha256 from "sha256";
 
 import type {
+  AttachedChangesHandler,
   ChangesHandler,
-  ChangesHandlerAttached,
   Conditions,
   Database as DatabaseInterface,
   DatabaseOptions,
+  ExistingAttachedDocument,
+  ExistingAttachedDocuments,
   ExistingDocument,
-  ExistingDocumentAttached,
+  ExistingDocuments,
+  PutAttachedDocument,
+  PutAttachedResponse,
   PutDocument,
-  PutDocumentAttached,
+  PutDocuments,
   PutResponse,
-  PutResponseAttached,
+  PutResponses,
   QueryOptions,
   ResetCallback,
-  StoredDocumentAttached
+  StoredAttachedDocument
 } from "@skylib/facades/dist/database";
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
 import * as a from "@skylib/functions/dist/array";
@@ -107,7 +111,7 @@ export class Database implements DatabaseInterface {
     this.pouchConfig = pouchConfig;
   }
 
-  public async bulkDocs(docs: readonly PutDocument[]): Promise<PutResponse[]> {
+  public async bulkDocs(docs: PutDocuments): Promise<PutResponses> {
     for (const doc of docs) validatePutDocument(doc);
 
     docs = docs.map(doc => o.omit(doc, "lastAttachedDoc"));
@@ -157,7 +161,7 @@ export class Database implements DatabaseInterface {
   }
 
   public async existsAttached(id: number, parentId: string): Promise<boolean> {
-    const doc = await this.getIfExistsAttached(id, parentId);
+    const doc = await this.getAttachedIfExists(id, parentId);
 
     return is.not.empty(doc);
   }
@@ -173,7 +177,7 @@ export class Database implements DatabaseInterface {
   public async getAttached(
     id: number,
     parentId: string
-  ): Promise<ExistingDocumentAttached> {
+  ): Promise<ExistingAttachedDocument> {
     const db = await this.getDb();
 
     const doc = await db.get(parentId);
@@ -181,9 +185,12 @@ export class Database implements DatabaseInterface {
     return extractDocAttached(doc, id);
   }
 
-  public async getIfExists(id: string): Promise<ExistingDocument | undefined> {
+  public async getAttachedIfExists(
+    id: number,
+    parentId: string
+  ): Promise<ExistingAttachedDocument | undefined> {
     try {
-      return await this.get(id);
+      return await this.getAttached(id, parentId);
     } catch (e) {
       assert.instance(e, PouchNotFoundError, assert.toErrorArg(e));
 
@@ -191,12 +198,9 @@ export class Database implements DatabaseInterface {
     }
   }
 
-  public async getIfExistsAttached(
-    id: number,
-    parentId: string
-  ): Promise<ExistingDocumentAttached | undefined> {
+  public async getIfExists(id: string): Promise<ExistingDocument | undefined> {
     try {
-      return await this.getAttached(id, parentId);
+      return await this.get(id);
     } catch (e) {
       assert.instance(e, PouchNotFoundError, assert.toErrorArg(e));
 
@@ -242,8 +246,8 @@ export class Database implements DatabaseInterface {
 
   public async putAttached(
     parentId: string,
-    doc: PutDocumentAttached
-  ): Promise<PutResponseAttached> {
+    doc: PutAttachedDocument
+  ): Promise<PutAttachedResponse> {
     const db = await this.getDb();
 
     const { _id, _rev, parentDoc: omitParentDoc, ...content } = doc;
@@ -257,7 +261,7 @@ export class Database implements DatabaseInterface {
 
     throw new PouchRetryError(`Failed after ${this.options.retries} retries`);
 
-    async function attempt(): Promise<PutResponseAttached | "retry"> {
+    async function attempt(): Promise<PutAttachedResponse | "retry"> {
       const parentDoc = await db.get(parentId);
 
       const attachedDocs = parentDoc.attachedDocs ?? [];
@@ -297,6 +301,19 @@ export class Database implements DatabaseInterface {
     }
   }
 
+  public async putAttachedIfNotExists(
+    parentId: string,
+    doc: PutAttachedDocument
+  ): Promise<PutAttachedResponse | undefined> {
+    try {
+      return await this.putAttached(parentId, doc);
+    } catch (e) {
+      assert.instance(e, PouchConflictError, assert.toErrorArg(e));
+
+      return undefined;
+    }
+  }
+
   public async putIfNotExists(
     doc: PutDocument
   ): Promise<PutResponse | undefined> {
@@ -309,23 +326,10 @@ export class Database implements DatabaseInterface {
     }
   }
 
-  public async putIfNotExistsAttached(
-    parentId: string,
-    doc: PutDocumentAttached
-  ): Promise<PutResponseAttached | undefined> {
-    try {
-      return await this.putAttached(parentId, doc);
-    } catch (e) {
-      assert.instance(e, PouchConflictError, assert.toErrorArg(e));
-
-      return undefined;
-    }
-  }
-
   public async query(
     conditions: Conditions,
     options: QueryOptions = {}
-  ): Promise<readonly ExistingDocument[]> {
+  ): Promise<ExistingDocuments> {
     const response = await this.rawQuery(options, {
       conditions,
       docs: true
@@ -340,7 +344,7 @@ export class Database implements DatabaseInterface {
     conditions: Conditions,
     parentConditions: Conditions = {},
     options: QueryOptions = {}
-  ): Promise<readonly ExistingDocumentAttached[]> {
+  ): Promise<ExistingAttachedDocuments> {
     const response = await this.rawQuery(options, {
       conditions,
       docs: true,
@@ -372,9 +376,9 @@ export class Database implements DatabaseInterface {
   }
 
   public async subscribeAttached(
-    handler: ChangesHandlerAttached
+    handler: AttachedChangesHandler
   ): Promise<Symbol> {
-    const id = Symbol("ChangesHandlerAttached");
+    const id = Symbol("AttachedChangesHandler");
 
     this.changesHandlersAttachedPool.set(id, handler);
     await this.refreshSubscription();
@@ -430,7 +434,7 @@ export class Database implements DatabaseInterface {
 
   protected changesHandlersAttachedPool = new Map<
     Symbol,
-    ChangesHandlerAttached
+    AttachedChangesHandler
   >();
 
   protected changesHandlersPool = new Map<Symbol, ChangesHandler>();
@@ -937,6 +941,8 @@ interface DocResponse {
   readonly key: unknown;
 }
 
+type DocResponses = readonly DocResponse[];
+
 const isDocResponse: is.Guard<DocResponse> = is.factory(
   is.object.of,
   { doc: is.unknown, key: is.unknown },
@@ -947,7 +953,7 @@ const isDocResponses = is.factory(is.array.of, isDocResponse);
 
 interface DocsResponse {
   readonly count: number;
-  readonly docs: readonly DocResponse[];
+  readonly docs: DocResponses;
   readonly settled: boolean;
 }
 
@@ -963,7 +969,7 @@ interface StrConds {
   readonly toSettle: string;
 }
 
-const isStoredDocumentAttached: is.Guard<StoredDocumentAttached> = is.factory(
+const isStoredDocumentAttached: is.Guard<StoredAttachedDocument> = is.factory(
   is.object.of,
   { _id: is.number, _rev: is.number },
   { _deleted: is.true }
@@ -987,7 +993,7 @@ const isExistingDocument: is.Guard<ExistingDocument> = is.factory(
   }
 );
 
-const isExistingDocumentAttached: is.Guard<ExistingDocumentAttached> =
+const isExistingDocumentAttached: is.Guard<ExistingAttachedDocument> =
   is.factory(
     is.object.of,
     {
@@ -1152,7 +1158,7 @@ function extractDoc(rawDoc: ExistingDocument): ExistingDocument {
 function extractDocAttached(
   rawDoc: ExistingDocument,
   id: number
-): ExistingDocumentAttached {
+): ExistingAttachedDocument {
   const { attachedDocs, ...parentDoc } = rawDoc;
 
   assert.not.empty(

@@ -1,4 +1,4 @@
-import type { StoredDocumentAttached } from "@skylib/facades/dist/database";
+import type { StoredAttachedDocument } from "@skylib/facades/dist/database";
 import { testDelay } from "@skylib/facades/dist/testDelay";
 import * as fn from "@skylib/functions/dist/function";
 import * as is from "@skylib/functions/dist/guards";
@@ -17,7 +17,7 @@ export interface Changes {
 
 export interface Content {
   readonly [key: string]: unknown;
-  readonly attachedDocs?: readonly StoredDocumentAttached[];
+  readonly attachedDocs?: readonly StoredAttachedDocument[];
   readonly lastAttachedDoc?: number;
 }
 
