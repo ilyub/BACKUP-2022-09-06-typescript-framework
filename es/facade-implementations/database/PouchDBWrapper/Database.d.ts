@@ -1,4 +1,4 @@
-import type { ChangesHandler, ChangesHandlerAttached, Conditions, Database as DatabaseInterface, DatabaseOptions, ExistingDocument, ExistingDocumentAttached, PutDocument, PutDocumentAttached, PutResponse, PutResponseAttached, QueryOptions, ResetCallback } from "@skylib/facades/es/database";
+import type { AttachedChangesHandler, ChangesHandler, Conditions, Database as DatabaseInterface, DatabaseOptions, ExistingAttachedDocument, ExistingAttachedDocuments, ExistingDocument, ExistingDocuments, PutAttachedDocument, PutAttachedResponse, PutDocument, PutDocuments, PutResponse, PutResponses, QueryOptions, ResetCallback } from "@skylib/facades/es/database";
 import type { Changes, PouchDatabase, PouchDatabaseConfiguration } from "./PouchDBProxy";
 import { PouchDBProxy } from "./PouchDBProxy";
 export interface Configuration {
@@ -40,15 +40,15 @@ export declare class Database implements DatabaseInterface {
      * @param pouchConfig - PouchDB configuration.
      */
     constructor(name: string, options?: DatabaseOptions, config?: Configuration, pouchConfig?: PouchDatabaseConfiguration);
-    bulkDocs(docs: readonly PutDocument[]): Promise<PutResponse[]>;
+    bulkDocs(docs: PutDocuments): Promise<PutResponses>;
     count(conditions: Conditions): Promise<number>;
     countAttached(conditions: Conditions, parentConditions?: Conditions): Promise<number>;
     exists(id: string): Promise<boolean>;
     existsAttached(id: number, parentId: string): Promise<boolean>;
     get(id: string): Promise<ExistingDocument>;
-    getAttached(id: number, parentId: string): Promise<ExistingDocumentAttached>;
+    getAttached(id: number, parentId: string): Promise<ExistingAttachedDocument>;
+    getAttachedIfExists(id: number, parentId: string): Promise<ExistingAttachedDocument | undefined>;
     getIfExists(id: string): Promise<ExistingDocument | undefined>;
-    getIfExistsAttached(id: number, parentId: string): Promise<ExistingDocumentAttached | undefined>;
     /**
      * Returns original PouchDB database.
      *
@@ -56,20 +56,20 @@ export declare class Database implements DatabaseInterface {
      */
     getRawDb(): Promise<PouchDatabase>;
     put(doc: PutDocument): Promise<PutResponse>;
-    putAttached(parentId: string, doc: PutDocumentAttached): Promise<PutResponseAttached>;
+    putAttached(parentId: string, doc: PutAttachedDocument): Promise<PutAttachedResponse>;
+    putAttachedIfNotExists(parentId: string, doc: PutAttachedDocument): Promise<PutAttachedResponse | undefined>;
     putIfNotExists(doc: PutDocument): Promise<PutResponse | undefined>;
-    putIfNotExistsAttached(parentId: string, doc: PutDocumentAttached): Promise<PutResponseAttached | undefined>;
-    query(conditions: Conditions, options?: QueryOptions): Promise<readonly ExistingDocument[]>;
-    queryAttached(conditions: Conditions, parentConditions?: Conditions, options?: QueryOptions): Promise<readonly ExistingDocumentAttached[]>;
+    query(conditions: Conditions, options?: QueryOptions): Promise<ExistingDocuments>;
+    queryAttached(conditions: Conditions, parentConditions?: Conditions, options?: QueryOptions): Promise<ExistingAttachedDocuments>;
     reset(callback?: ResetCallback): Promise<void>;
     subscribe(handler: ChangesHandler): Promise<Symbol>;
-    subscribeAttached(handler: ChangesHandlerAttached): Promise<Symbol>;
+    subscribeAttached(handler: AttachedChangesHandler): Promise<Symbol>;
     unsettled(conditions: Conditions, options?: QueryOptions): Promise<number>;
     unsettledAttached(conditions: Conditions, parentConditions?: Conditions, options?: QueryOptions): Promise<number>;
     unsubscribe(id: Symbol): Promise<void>;
     unsubscribeAttached(id: Symbol): Promise<void>;
     protected changes: Changes | undefined;
-    protected changesHandlersAttachedPool: Map<Symbol, ChangesHandlerAttached>;
+    protected changesHandlersAttachedPool: Map<Symbol, AttachedChangesHandler>;
     protected changesHandlersPool: Map<Symbol, ChangesHandler>;
     protected config: Required<Configuration>;
     protected db: PouchDBProxy | undefined;

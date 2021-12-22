@@ -1,18 +1,9 @@
 import MiniSearch from "minisearch";
-import type { Engine as EngineInterface, Facade } from "@skylib/facades/dist/inlineSearch";
-export declare const implementation: Facade;
-export declare class Engine<T extends object> implements EngineInterface<T> {
-    /**
-     * Creates class instance.
-     *
-     * @param idField - ID field.
-     * @param fields - Searchable fields.
-     * @param items - Items.
-     */
-    constructor(idField: keyof T & string, fields: ReadonlyArray<keyof T & string>, items: readonly T[]);
+import type { Facade } from "@skylib/facades/dist/inlineSearch";
+import { Engine as BaseEngine } from "./api/template";
+export declare class Engine<T extends object> extends BaseEngine<T, Readonly<MiniSearch>> {
     search(query: string): readonly T[];
-    protected idField: keyof T & string;
-    protected index: Readonly<MiniSearch>;
-    protected items: readonly T[];
+    protected buildIndex(idField: keyof T & string, fields: ReadonlyArray<keyof T & string>, items: readonly T[]): Readonly<MiniSearch>;
 }
+export declare const implementation: Facade;
 //# sourceMappingURL=minisearch-wrapper.d.ts.map

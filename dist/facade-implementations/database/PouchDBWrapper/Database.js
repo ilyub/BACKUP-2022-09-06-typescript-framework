@@ -121,7 +121,7 @@ class Database {
         return is.not.empty(doc);
     }
     async existsAttached(id, parentId) {
-        const doc = await this.getIfExistsAttached(id, parentId);
+        const doc = await this.getAttachedIfExists(id, parentId);
         return is.not.empty(doc);
     }
     async get(id) {
@@ -134,18 +134,18 @@ class Database {
         const doc = await db.get(parentId);
         return extractDocAttached(doc, id);
     }
-    async getIfExists(id) {
+    async getAttachedIfExists(id, parentId) {
         try {
-            return await this.get(id);
+            return await this.getAttached(id, parentId);
         }
         catch (e) {
             assert.instance(e, PouchNotFoundError_1.PouchNotFoundError, assert.toErrorArg(e));
             return undefined;
         }
     }
-    async getIfExistsAttached(id, parentId) {
+    async getIfExists(id) {
         try {
-            return await this.getAttached(id, parentId);
+            return await this.get(id);
         }
         catch (e) {
             assert.instance(e, PouchNotFoundError_1.PouchNotFoundError, assert.toErrorArg(e));
@@ -215,18 +215,18 @@ class Database {
             }
         }
     }
-    async putIfNotExists(doc) {
+    async putAttachedIfNotExists(parentId, doc) {
         try {
-            return await this.put(doc);
+            return await this.putAttached(parentId, doc);
         }
         catch (e) {
             assert.instance(e, PouchConflictError_1.PouchConflictError, assert.toErrorArg(e));
             return undefined;
         }
     }
-    async putIfNotExistsAttached(parentId, doc) {
+    async putIfNotExists(doc) {
         try {
-            return await this.putAttached(parentId, doc);
+            return await this.put(doc);
         }
         catch (e) {
             assert.instance(e, PouchConflictError_1.PouchConflictError, assert.toErrorArg(e));
@@ -265,7 +265,7 @@ class Database {
         return id;
     }
     async subscribeAttached(handler) {
-        const id = Symbol("ChangesHandlerAttached");
+        const id = Symbol("AttachedChangesHandler");
         this.changesHandlersAttachedPool.set(id, handler);
         await this.refreshSubscription();
         return id;

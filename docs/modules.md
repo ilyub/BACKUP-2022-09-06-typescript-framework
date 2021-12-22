@@ -25,6 +25,7 @@
 - [facade-implementations/google/Google](modules/facade_implementations_google_Google.md)
 - [facade-implementations/handlePromise/promiseHandler](modules/facade_implementations_handlePromise_promiseHandler.md)
 - [facade-implementations/httpRequest/axios-wrapper](modules/facade_implementations_httpRequest_axios_wrapper.md)
+- [facade-implementations/inlineSearch/api/template](modules/facade_implementations_inlineSearch_api_template.md)
 - [facade-implementations/inlineSearch/lunr-wrapper](modules/facade_implementations_inlineSearch_lunr_wrapper.md)
 - [facade-implementations/inlineSearch/minisearch-wrapper](modules/facade_implementations_inlineSearch_minisearch_wrapper.md)
 - [facade-implementations/lang/dictionary](modules/facade_implementations_lang_dictionary.md)

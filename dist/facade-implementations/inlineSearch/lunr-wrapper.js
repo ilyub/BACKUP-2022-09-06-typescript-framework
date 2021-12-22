@@ -1,48 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Engine = exports.implementation = void 0;
+exports.implementation = exports.Engine = void 0;
 const tslib_1 = require("tslib");
 const lunr_1 = (0, tslib_1.__importDefault)(require("lunr"));
-exports.implementation = {
-    create(idField, fields, items) {
-        return new Engine(idField, fields, items);
+const template_1 = require("./api/template");
+class Engine extends template_1.Engine {
+    search(query) {
+        const refs = new Set(this.index.search(query).map(result => result.ref));
+        return this.items.filter(item => refs.has(item[this.idField]));
     }
-};
-class Engine {
-    /**
-     * Creates class instance.
-     *
-     * @param idField - ID field.
-     * @param fields - Searchable fields.
-     * @param items - Items.
-     */
-    constructor(idField, fields, items) {
-        /*
-        |*****************************************************************************
-        |* Protected
-        |*****************************************************************************
-        |*/
-        Object.defineProperty(this, "idField", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: void 0
-        });
-        Object.defineProperty(this, "index", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: void 0
-        });
-        Object.defineProperty(this, "items", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: void 0
-        });
-        this.idField = idField;
-        this.items = items;
-        this.index = (0, lunr_1.default)(configFunction);
+    /*
+    |*****************************************************************************
+    |* Protected
+    |*****************************************************************************
+    |*/
+    buildIndex(idField, fields, items) {
+        return (0, lunr_1.default)(configFunction);
         function configFunction(builder) {
             builder.ref(idField);
             for (const field of fields)
@@ -51,10 +24,7 @@ class Engine {
                 builder.add(item);
         }
     }
-    search(query) {
-        const refs = new Set(this.index.search(query).map(result => result.ref));
-        return this.items.filter(item => refs.has(item[this.idField]));
-    }
 }
 exports.Engine = Engine;
+exports.implementation = (0, template_1.createImplementation)(Engine);
 //# sourceMappingURL=lunr-wrapper.js.map

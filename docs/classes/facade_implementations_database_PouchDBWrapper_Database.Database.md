@@ -34,17 +34,17 @@
 - [existsAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#existsattached)
 - [get](facade_implementations_database_PouchDBWrapper_Database.Database.md#get)
 - [getAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#getattached)
+- [getAttachedIfExists](facade_implementations_database_PouchDBWrapper_Database.Database.md#getattachedifexists)
 - [getDb](facade_implementations_database_PouchDBWrapper_Database.Database.md#getdb)
 - [getIfExists](facade_implementations_database_PouchDBWrapper_Database.Database.md#getifexists)
-- [getIfExistsAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#getifexistsattached)
 - [getRawDb](facade_implementations_database_PouchDBWrapper_Database.Database.md#getrawdb)
 - [mapReduce](facade_implementations_database_PouchDBWrapper_Database.Database.md#mapreduce)
 - [mapReduceAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#mapreduceattached)
 - [migrate](facade_implementations_database_PouchDBWrapper_Database.Database.md#migrate)
 - [put](facade_implementations_database_PouchDBWrapper_Database.Database.md#put)
 - [putAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#putattached)
+- [putAttachedIfNotExists](facade_implementations_database_PouchDBWrapper_Database.Database.md#putattachedifnotexists)
 - [putIfNotExists](facade_implementations_database_PouchDBWrapper_Database.Database.md#putifnotexists)
-- [putIfNotExistsAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#putifnotexistsattached)
 - [query](facade_implementations_database_PouchDBWrapper_Database.Database.md#query)
 - [queryAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#queryattached)
 - [rawQuery](facade_implementations_database_PouchDBWrapper_Database.Database.md#rawquery)
@@ -84,7 +84,7 @@ ___
 
 ### changesHandlersAttachedPool
 
-• `Protected` **changesHandlersAttachedPool**: `Map`<`Symbol`, `ChangesHandlerAttached`\>
+• `Protected` **changesHandlersAttachedPool**: `Map`<`Symbol`, `AttachedChangesHandler`\>
 
 ___
 
@@ -126,17 +126,17 @@ ___
 
 ### bulkDocs
 
-▸ **bulkDocs**(`docs`): `Promise`<`PutResponse`[]\>
+▸ **bulkDocs**(`docs`): `Promise`<`PutResponses`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `docs` | readonly `PutDocument`[] |
+| `docs` | `PutDocuments` |
 
 #### Returns
 
-`Promise`<`PutResponse`[]\>
+`Promise`<`PutResponses`\>
 
 #### Implementation of
 
@@ -248,7 +248,7 @@ ___
 
 ### getAttached
 
-▸ **getAttached**(`id`, `parentId`): `Promise`<`ExistingDocumentAttached`\>
+▸ **getAttached**(`id`, `parentId`): `Promise`<`ExistingAttachedDocument`\>
 
 #### Parameters
 
@@ -259,11 +259,32 @@ ___
 
 #### Returns
 
-`Promise`<`ExistingDocumentAttached`\>
+`Promise`<`ExistingAttachedDocument`\>
 
 #### Implementation of
 
 DatabaseInterface.getAttached
+
+___
+
+### getAttachedIfExists
+
+▸ **getAttachedIfExists**(`id`, `parentId`): `Promise`<`undefined` \| `ExistingAttachedDocument`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+| `parentId` | `string` |
+
+#### Returns
+
+`Promise`<`undefined` \| `ExistingAttachedDocument`\>
+
+#### Implementation of
+
+DatabaseInterface.getAttachedIfExists
 
 ___
 
@@ -298,27 +319,6 @@ ___
 #### Implementation of
 
 DatabaseInterface.getIfExists
-
-___
-
-### getIfExistsAttached
-
-▸ **getIfExistsAttached**(`id`, `parentId`): `Promise`<`undefined` \| `ExistingDocumentAttached`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `id` | `number` |
-| `parentId` | `string` |
-
-#### Returns
-
-`Promise`<`undefined` \| `ExistingDocumentAttached`\>
-
-#### Implementation of
-
-DatabaseInterface.getIfExistsAttached
 
 ___
 
@@ -412,22 +412,43 @@ ___
 
 ### putAttached
 
-▸ **putAttached**(`parentId`, `doc`): `Promise`<`PutResponseAttached`\>
+▸ **putAttached**(`parentId`, `doc`): `Promise`<`PutAttachedResponse`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `parentId` | `string` |
-| `doc` | `PutDocumentAttached` |
+| `doc` | `PutAttachedDocument` |
 
 #### Returns
 
-`Promise`<`PutResponseAttached`\>
+`Promise`<`PutAttachedResponse`\>
 
 #### Implementation of
 
 DatabaseInterface.putAttached
+
+___
+
+### putAttachedIfNotExists
+
+▸ **putAttachedIfNotExists**(`parentId`, `doc`): `Promise`<`undefined` \| `PutAttachedResponse`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `parentId` | `string` |
+| `doc` | `PutAttachedDocument` |
+
+#### Returns
+
+`Promise`<`undefined` \| `PutAttachedResponse`\>
+
+#### Implementation of
+
+DatabaseInterface.putAttachedIfNotExists
 
 ___
 
@@ -451,30 +472,9 @@ DatabaseInterface.putIfNotExists
 
 ___
 
-### putIfNotExistsAttached
-
-▸ **putIfNotExistsAttached**(`parentId`, `doc`): `Promise`<`undefined` \| `PutResponseAttached`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `parentId` | `string` |
-| `doc` | `PutDocumentAttached` |
-
-#### Returns
-
-`Promise`<`undefined` \| `PutResponseAttached`\>
-
-#### Implementation of
-
-DatabaseInterface.putIfNotExistsAttached
-
-___
-
 ### query
 
-▸ **query**(`conditions`, `options?`): `Promise`<readonly `ExistingDocument`[]\>
+▸ **query**(`conditions`, `options?`): `Promise`<`ExistingDocuments`\>
 
 #### Parameters
 
@@ -485,7 +485,7 @@ ___
 
 #### Returns
 
-`Promise`<readonly `ExistingDocument`[]\>
+`Promise`<`ExistingDocuments`\>
 
 #### Implementation of
 
@@ -495,7 +495,7 @@ ___
 
 ### queryAttached
 
-▸ **queryAttached**(`conditions`, `parentConditions?`, `options?`): `Promise`<readonly `ExistingDocumentAttached`[]\>
+▸ **queryAttached**(`conditions`, `parentConditions?`, `options?`): `Promise`<`ExistingAttachedDocuments`\>
 
 #### Parameters
 
@@ -507,7 +507,7 @@ ___
 
 #### Returns
 
-`Promise`<readonly `ExistingDocumentAttached`[]\>
+`Promise`<`ExistingAttachedDocuments`\>
 
 #### Implementation of
 
@@ -596,7 +596,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `handler` | `ChangesHandlerAttached` |
+| `handler` | `AttachedChangesHandler` |
 
 #### Returns
 

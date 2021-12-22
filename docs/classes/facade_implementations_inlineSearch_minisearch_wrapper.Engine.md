@@ -10,9 +10,11 @@
 | :------ | :------ |
 | `T` | extends `object` |
 
-## Implements
+## Hierarchy
 
-- `EngineInterface`<`T`\>
+- [`Engine`](facade_implementations_inlineSearch_api_template.Engine.md)<`T`, `Readonly`<`MiniSearch`\>\>
+
+  ↳ **`Engine`**
 
 ## Table of contents
 
@@ -28,6 +30,7 @@
 
 ### Methods
 
+- [buildIndex](facade_implementations_inlineSearch_minisearch_wrapper.Engine.md#buildindex)
 - [search](facade_implementations_inlineSearch_minisearch_wrapper.Engine.md#search)
 
 ## Constructors
@@ -52,11 +55,19 @@ Creates class instance.
 | `fields` | readonly keyof `T` & `string`[] | Searchable fields. |
 | `items` | readonly `T`[] | Items. |
 
+#### Inherited from
+
+[Engine](facade_implementations_inlineSearch_api_template.Engine.md).[constructor](facade_implementations_inlineSearch_api_template.Engine.md#constructor)
+
 ## Properties
 
 ### idField
 
 • `Protected` **idField**: keyof `T` & `string`
+
+#### Inherited from
+
+[Engine](facade_implementations_inlineSearch_api_template.Engine.md).[idField](facade_implementations_inlineSearch_api_template.Engine.md#idfield)
 
 ___
 
@@ -64,13 +75,47 @@ ___
 
 • `Protected` **index**: `Readonly`<`MiniSearch`<`any`\>\>
 
+#### Inherited from
+
+[Engine](facade_implementations_inlineSearch_api_template.Engine.md).[index](facade_implementations_inlineSearch_api_template.Engine.md#index)
+
 ___
 
 ### items
 
 • `Protected` **items**: readonly `T`[]
 
+#### Inherited from
+
+[Engine](facade_implementations_inlineSearch_api_template.Engine.md).[items](facade_implementations_inlineSearch_api_template.Engine.md#items)
+
 ## Methods
+
+### buildIndex
+
+▸ `Protected` **buildIndex**(`idField`, `fields`, `items`): `Readonly`<`MiniSearch`<`any`\>\>
+
+Builds index.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `idField` | keyof `T` & `string` |
+| `fields` | readonly keyof `T` & `string`[] |
+| `items` | readonly `T`[] |
+
+#### Returns
+
+`Readonly`<`MiniSearch`<`any`\>\>
+
+Index.
+
+#### Overrides
+
+[Engine](facade_implementations_inlineSearch_api_template.Engine.md).[buildIndex](facade_implementations_inlineSearch_api_template.Engine.md#buildindex)
+
+___
 
 ### search
 
@@ -86,6 +131,6 @@ ___
 
 readonly `T`[]
 
-#### Implementation of
+#### Overrides
 
-EngineInterface.search
+[Engine](facade_implementations_inlineSearch_api_template.Engine.md).[search](facade_implementations_inlineSearch_api_template.Engine.md#search)

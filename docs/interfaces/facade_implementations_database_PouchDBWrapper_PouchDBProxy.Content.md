@@ -19,7 +19,7 @@
 
 ### attachedDocs
 
-• `Optional` `Readonly` **attachedDocs**: readonly `StoredDocumentAttached`[]
+• `Optional` `Readonly` **attachedDocs**: readonly `StoredAttachedDocument`[]
 
 ___
 
