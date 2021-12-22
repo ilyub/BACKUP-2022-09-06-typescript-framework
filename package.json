@@ -80,7 +80,7 @@
     "vue-eslint-parser": "^8.0.1"
   },
   "peerDependencies": {
-    "@skylib/facades": "^0.1.8",
+    "@skylib/facades": "^0.1.10",
     "@skylib/functions": "^0.1.9",
     "@skylib/typescript-types": "^0.1.1",
     "@types/facebook-js-sdk": "^3.3.5",
@@ -102,7 +102,7 @@
     "lunr": "^2.3.9",
     "minisearch": "^3.2.0",
     "natural-compare": "^1.4.0",
-    "pouchdb": "^7.2.2",
+    "pouchdb": "npm:@skylib/fix-pouchdb@^0.1.0",
     "pouchdb-adapter-memory": "^7.2.2",
     "pouchdb-collate": "^7.2.2",
     "sha256": "^0.2.0",
