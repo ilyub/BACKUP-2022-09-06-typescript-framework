@@ -3,7 +3,7 @@ import type {
   Facade
 } from "@skylib/facades/dist/inlineSearch";
 
-type Constructor = new <T extends object>(
+export type Constructor = new <T extends object>(
   idField: keyof T & string,
   fields: ReadonlyArray<keyof T & string>,
   items: readonly T[]

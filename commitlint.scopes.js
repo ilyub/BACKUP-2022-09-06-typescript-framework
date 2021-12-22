@@ -34,6 +34,7 @@ module.exports = [
   "handlePromise",
   "httpRequest",
   "inlineSearch",
+  "inlineSearch.api.template",
   "isActive",
   "jsAlert",
   "jsConfirm",
