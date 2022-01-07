@@ -19,9 +19,16 @@ import type {
   PutResponse,
   PutResponses,
   QueryOptions,
+  ReactiveCountAttachedConfig,
+  ReactiveCountConfig,
+  ReactiveQueryAttachedConfig,
+  ReactiveQueryConfig,
+  ReactiveResponse,
   ResetCallback,
   StoredAttachedDocument
 } from "@skylib/facades/dist/database";
+import { handlePromise } from "@skylib/facades/dist/handlePromise";
+import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
 import * as a from "@skylib/functions/dist/array";
 import * as assert from "@skylib/functions/dist/assertions";
@@ -31,6 +38,8 @@ import * as is from "@skylib/functions/dist/guards";
 import * as json from "@skylib/functions/dist/json";
 import * as num from "@skylib/functions/dist/number";
 import * as o from "@skylib/functions/dist/object";
+import * as timer from "@skylib/functions/dist/timer";
+import type { Writable } from "@skylib/functions/dist/types/core";
 
 import { PouchConflictError } from "./errors/PouchConflictError";
 import { PouchNotFoundError } from "./errors/PouchNotFoundError";
@@ -354,6 +363,129 @@ export class Database implements DatabaseInterface {
     assert.array.of(response.docs, isExistingDocumentAttached);
 
     return response.docs;
+  }
+
+  public async reactiveCount(
+    config: ReactiveCountConfig
+  ): Promise<ReactiveResponse<number>> {
+    return this.reactive2(
+      async (): Promise<number> => this.count(config.conditions),
+      config
+    );
+  }
+
+  public async reactiveCountAttached(
+    config: ReactiveCountAttachedConfig
+  ): Promise<ReactiveResponse<number>> {
+    return this.reactiveAttached2(
+      async (): Promise<number> =>
+        this.countAttached(config.conditions, config.parentConditions),
+      config
+    );
+  }
+
+  public async reactiveExists(id: string): Promise<ReactiveResponse<boolean>> {
+    return this.reactive1(this.exists(id), (doc, mutableResult) => {
+      if (doc._id === id) mutableResult.value = !doc._deleted;
+    });
+  }
+
+  public async reactiveExistsAttached(
+    id: number,
+    parentId: string
+  ): Promise<ReactiveResponse<boolean>> {
+    return this.reactiveAttached1(
+      this.existsAttached(id, parentId),
+      (doc, mutableResult) => {
+        if (doc._id === id && doc.parentDoc._id === parentId)
+          mutableResult.value = !doc._deleted;
+      }
+    );
+  }
+
+  public async reactiveGet(
+    id: string
+  ): Promise<ReactiveResponse<ExistingDocument>> {
+    return this.reactive1(this.get(id), (doc, mutableResult) => {
+      if (doc._id === id) mutableResult.value = doc;
+    });
+  }
+
+  public async reactiveGetAttached(
+    id: number,
+    parentId: string
+  ): Promise<ReactiveResponse<ExistingAttachedDocument>> {
+    return this.reactiveAttached1(
+      this.getAttached(id, parentId),
+      (doc, mutableResult) => {
+        if (doc._id === id && doc.parentDoc._id === parentId)
+          mutableResult.value = doc;
+      }
+    );
+  }
+
+  public async reactiveGetAttachedIfExists(
+    id: number,
+    parentId: string
+  ): Promise<ReactiveResponse<ExistingAttachedDocument | undefined>> {
+    return this.reactiveAttached1(
+      this.getAttachedIfExists(id, parentId),
+      (doc, mutableResult) => {
+        if (doc._id === id && doc.parentDoc._id === parentId)
+          mutableResult.value = doc;
+      }
+    );
+  }
+
+  public async reactiveGetIfExists(
+    id: string
+  ): Promise<ReactiveResponse<ExistingDocument | undefined>> {
+    return this.reactive1(this.getIfExists(id), (doc, mutableResult) => {
+      if (doc._id === id) mutableResult.value = doc;
+    });
+  }
+
+  public async reactiveQuery(
+    config: ReactiveQueryConfig
+  ): Promise<ReactiveResponse<ExistingDocuments>> {
+    return this.reactive2(
+      async (): Promise<ExistingDocuments> =>
+        this.query(config.conditions, config.options),
+      config
+    );
+  }
+
+  public async reactiveQueryAttached(
+    config: ReactiveQueryAttachedConfig
+  ): Promise<ReactiveResponse<ExistingAttachedDocuments>> {
+    return this.reactiveAttached2(
+      async (): Promise<ExistingAttachedDocuments> =>
+        this.queryAttached(
+          config.conditions,
+          config.parentConditions,
+          config.options
+        ),
+      config
+    );
+  }
+
+  public async reactiveUnsettled(
+    config: ReactiveCountConfig
+  ): Promise<ReactiveResponse<number>> {
+    return this.reactive2(
+      async (): Promise<number> => this.unsettled(config.conditions),
+      config
+    );
+  }
+
+  public async reactiveUnsettledAttached(
+    config: ReactiveCountAttachedConfig
+  ): Promise<ReactiveResponse<number>> {
+    return this.reactiveAttached2(
+      async (): Promise<number> =>
+        this.unsettledAttached(config.conditions, config.parentConditions),
+      config
+    );
   }
 
   public async reset(callback?: ResetCallback): Promise<void> {
@@ -881,6 +1013,146 @@ export class Database implements DatabaseInterface {
   }
 
   /**
+   * Reactive factory.
+   *
+   * @param request - Request.
+   * @param handler - Subscription handler.
+   * @returns Reactive response.
+   */
+  protected async reactive1<T>(
+    request: Promise<T>,
+    handler: (
+      doc: ExistingDocument,
+      mutableResult: Writable<ReactiveResponse<T>>
+    ) => void
+  ): Promise<ReactiveResponse<T>> {
+    const result = reactiveStorage({
+      unsubscribe: async (): Promise<void> => {
+        await this.unsubscribe(subscription);
+      },
+      value: await request
+    });
+
+    const subscription = await this.subscribe(doc => {
+      handler(doc, result);
+    });
+
+    return result;
+  }
+
+  /**
+   * Reactive factory.
+   *
+   * @param request - Request.
+   * @param config - Configuration.
+   * @returns Reactive response.
+   */
+  protected async reactive2<T>(
+    request: () => Promise<T>,
+    config: ReactiveConfig
+  ): Promise<ReactiveResponse<T>> {
+    const result = reactiveStorage({
+      unsubscribe: async (): Promise<void> => {
+        await this.unsubscribe(subscription);
+        timer.removeTimeout(timeout);
+      },
+      value: await request()
+    });
+
+    const refreshAsync = fn.doNotRunParallel(async () => {
+      result.value = await request();
+      timer.removeTimeout(timeout);
+      timeout = is.not.empty(config.updateInterval)
+        ? timer.addTimeout(refresh, config.updateInterval)
+        : undefined;
+    });
+
+    const subscription = await this.subscribe(doc => {
+      if (config.updateFn && config.updateFn(doc)) refresh();
+    });
+
+    let timeout = is.not.empty(config.updateInterval)
+      ? timer.addTimeout(refresh, config.updateInterval)
+      : undefined;
+
+    return result;
+
+    function refresh(): void {
+      handlePromise.verbose(refreshAsync, "dbRequest");
+    }
+  }
+
+  /**
+   * Reactive factory.
+   *
+   * @param request - Request.
+   * @param handler - Subscription handler.
+   * @returns Reactive response.
+   */
+  protected async reactiveAttached1<T>(
+    request: Promise<T>,
+    handler: (
+      doc: ExistingAttachedDocument,
+      mutableResult: Writable<ReactiveResponse<T>>
+    ) => void
+  ): Promise<ReactiveResponse<T>> {
+    const result = reactiveStorage({
+      unsubscribe: async (): Promise<void> => {
+        await this.unsubscribeAttached(subscription);
+      },
+      value: await request
+    });
+
+    const subscription = await this.subscribeAttached(doc => {
+      handler(doc, result);
+    });
+
+    return result;
+  }
+
+  /**
+   * Reactive factory.
+   *
+   * @param request - Request.
+   * @param config - Configuration.
+   * @returns Reactive response.
+   */
+  protected async reactiveAttached2<T>(
+    request: () => Promise<T>,
+    config: ReactiveAttachedConfig
+  ): Promise<ReactiveResponse<T>> {
+    const result = reactiveStorage({
+      unsubscribe: async (): Promise<void> => {
+        await this.unsubscribeAttached(subscription);
+        timer.removeTimeout(timeout);
+      },
+      value: await request()
+    });
+
+    const refreshAsync = fn.doNotRunParallel(async () => {
+      result.value = await request();
+      timer.removeTimeout(timeout);
+      timeout = is.not.empty(config.updateInterval)
+        ? timer.addTimeout(refresh, config.updateInterval)
+        : undefined;
+    });
+
+    const subscription = await this.subscribeAttached(doc => {
+      if (config.updateFn && config.updateFn(doc)) refresh();
+    });
+
+    let timeout = is.not.empty(config.updateInterval)
+      ? timer.addTimeout(refresh, config.updateInterval)
+      : undefined;
+
+    return result;
+
+    function refresh(): void {
+      handlePromise.verbose(refreshAsync, "dbRequest");
+    }
+  }
+
+  /**
    * Refreshes subscriptions.
    */
   protected async refreshSubscription(): Promise<void> {
@@ -942,6 +1214,28 @@ interface DocResponse {
 }
 
 type DocResponses = readonly DocResponse[];
+
+interface ReactiveAttachedConfig {
+  /**
+   * Triggers update on new doc.
+   *
+   * @param doc - New doc.
+   * @returns _True_ to trigger update, _false_ otherwise.
+   */
+  readonly updateFn?: (doc: ExistingAttachedDocument) => boolean;
+  readonly updateInterval?: number;
+}
+
+interface ReactiveConfig {
+  /**
+   * Triggers update on new doc.
+   *
+   * @param doc - New doc.
+   * @returns _True_ to trigger update, _false_ otherwise.
+   */
+  readonly updateFn?: (doc: ExistingDocument) => boolean;
+  readonly updateInterval?: number;
+}
 
 const isDocResponse: is.Guard<DocResponse> = is.factory(
   is.object.of,
