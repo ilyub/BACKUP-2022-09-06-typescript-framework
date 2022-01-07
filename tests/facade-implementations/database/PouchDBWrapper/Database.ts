@@ -438,66 +438,68 @@ it("reset", async () => {
 });
 
 it("subscribe|subscribeAttached|unsubscribe|unsubscribeAttached", async () => {
-  const db = database.create(uniqueId());
+  await testUtils.run(async () => {
+    const db = database.create(uniqueId());
 
-  const handler = jest.fn();
+    const handler = jest.fn();
 
-  const handlerAttached = jest.fn();
+    const handlerAttached = jest.fn();
 
-  const subscription = await db.subscribe(handler);
+    const subscription = await db.subscribe(handler);
 
-  const subscriptionAttached = await db.subscribeAttached(handlerAttached);
+    const subscriptionAttached = await db.subscribeAttached(handlerAttached);
 
-  const { id, rev } = await db.put({ value: 1 });
+    const { id, rev } = await db.put({ value: 1 });
 
-  {
-    const expected = {
-      _id: id,
-      _rev: rev,
-      value: 1
-    };
+    {
+      const expected = {
+        _id: id,
+        _rev: rev,
+        value: 1
+      };
 
-    await wait(1000);
-    expect(handler).toBeCalledTimes(1);
-    expect(handler).toBeCalledWith(expected);
-    expect(handlerAttached).not.toBeCalled();
-    handler.mockClear();
-  }
+      await wait(1000);
+      expect(handler).toBeCalledTimes(1);
+      expect(handler).toBeCalledWith(expected);
+      expect(handlerAttached).not.toBeCalled();
+      handler.mockClear();
+    }
 
-  const { parentId, parentRev } = await db.putAttached(id, { value: 2 });
+    const { parentId, parentRev } = await db.putAttached(id, { value: 2 });
 
-  {
-    const expected = {
-      _id: parentId,
-      _rev: parentRev,
-      attachedDocs: [],
-      lastAttachedDoc: 0,
-      value: 1
-    };
+    {
+      const expected = {
+        _id: parentId,
+        _rev: parentRev,
+        attachedDocs: [],
+        lastAttachedDoc: 0,
+        value: 1
+      };
 
-    const expectedAttached = {
-      _id: 0,
-      _rev: 1,
-      parentDoc: expected,
-      value: 2
-    };
+      const expectedAttached = {
+        _id: 0,
+        _rev: 1,
+        parentDoc: expected,
+        value: 2
+      };
 
-    await wait(1000);
-    expect(handler).toBeCalledTimes(1);
-    expect(handler).toBeCalledWith(expected);
-    expect(handlerAttached).toBeCalledTimes(1);
-    expect(handlerAttached).toBeCalledWith(expectedAttached);
-    handler.mockClear();
-    handlerAttached.mockClear();
-  }
+      await wait(1000);
+      expect(handler).toBeCalledTimes(1);
+      expect(handler).toBeCalledWith(expected);
+      expect(handlerAttached).toBeCalledTimes(1);
+      expect(handlerAttached).toBeCalledWith(expectedAttached);
+      handler.mockClear();
+      handlerAttached.mockClear();
+    }
 
-  {
-    await db.unsubscribe(subscription);
-    await db.unsubscribeAttached(subscriptionAttached);
-    await db.put({ value: 1 });
-    await db.putAttached(id, { value: 2 });
-    await wait(1000);
-    expect(handler).not.toBeCalled();
-    expect(handlerAttached).not.toBeCalled();
-  }
+    {
+      await db.unsubscribe(subscription);
+      await db.unsubscribeAttached(subscriptionAttached);
+      await db.put({ value: 1 });
+      await db.putAttached(id, { value: 2 });
+      await wait(1000);
+      expect(handler).not.toBeCalled();
+      expect(handlerAttached).not.toBeCalled();
+    }
+  });
 });
