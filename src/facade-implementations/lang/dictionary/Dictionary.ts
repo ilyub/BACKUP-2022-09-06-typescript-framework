@@ -175,7 +175,7 @@ export class Dictionary implements DictionaryInterface {
     this.definitions = definitions;
 
     this.proxified = fn.run(() => {
-      const handler = wrapProxyHandler<Dictionary>("Dictionary", {
+      const handler = wrapProxyHandler<Dictionary>("Dictionary", "throw", {
         get(target, key) {
           assert.string(key, "Expecting string key");
 
