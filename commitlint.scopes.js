@@ -47,6 +47,7 @@ module.exports = [
   "progressReporter",
   "promiseHandler",
   "reactiveStorage",
+  "reflectStorage",
   "ref",
   "shortcuts",
   "showAlert",

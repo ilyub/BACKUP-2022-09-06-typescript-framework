@@ -38,7 +38,7 @@
     - progressReporter
       - [progressBar](https://ilyub.github.io/typescript-framework/modules/facade_implementations_progressReporter_progressBar.html) - Implements progressReporter facade.
     - reactiveStorage
-      - [dummyStorage](https://ilyub.github.io/typescript-framework/modules/facade_implementations_reactiveStorage_dummyStorage.html) - Dummy reactiveStorage facade implementation.
+      - [reflectStorage](https://ilyub.github.io/typescript-framework/modules/facade_implementations_reactiveStorage_reflectStorage.html) - Implements reactiveStorage facade.
     - showAlert
       - [jsAlert](https://ilyub.github.io/typescript-framework/modules/facade_implementations_showAlert_jsAlert.html) - Implements showAlert facade.
     - showConfirm

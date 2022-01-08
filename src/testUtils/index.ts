@@ -31,7 +31,7 @@ import * as lunrWrapper from "../facade-implementations/inlineSearch/lunr-wrappe
 import type { Definitions } from "../facade-implementations/lang/dictionary";
 import { Dictionary } from "../facade-implementations/lang/dictionary";
 import * as progressBar from "../facade-implementations/progressReporter/progressBar";
-import * as dummyStorage from "../facade-implementations/reactiveStorage/dummyStorage";
+import * as reflectStorage from "../facade-implementations/reactiveStorage/reflectStorage";
 import * as jsAlert from "../facade-implementations/showAlert/jsAlert";
 import * as jsConfirm from "../facade-implementations/showConfirm/jsConfirm";
 import * as configurableTestDelay from "../facade-implementations/testDelay/configurableTestDelay";
@@ -61,7 +61,7 @@ export function jestReset(): void {
   facebook.setImplementation(new Facebook(undefined, "10.0"));
   google.setImplementation(new Google(undefined));
   inlineSearch.setImplementation(lunrWrapper.implementation);
-  reactiveStorage.setImplementation(dummyStorage.implementation);
+  reactiveStorage.setImplementation(reflectStorage.implementation);
   showAlert.setImplementation(jsAlert.implementation);
   showConfirm.setImplementation(jsConfirm.implementation);
   uniqueId.setImplementation(uuidWrapper.implementation);
