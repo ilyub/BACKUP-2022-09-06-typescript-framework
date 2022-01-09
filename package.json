@@ -39,7 +39,7 @@
     "update-package-force-skylib": "ncu --dep peer --filter @skylib/* --upgrade"
   },
   "devDependencies": {
-    "@commitlint/cli": "^16.0.1",
+    "@commitlint/cli": "^16.0.2",
     "@commitlint/config-conventional": "^16.0.0",
     "@jest/test-sequencer": "^27.4.6",
     "@skylib/config": "^0.1.30",
@@ -80,7 +80,7 @@
     "vue-eslint-parser": "^8.0.1"
   },
   "peerDependencies": {
-    "@skylib/facades": "^0.1.14",
+    "@skylib/facades": "^0.1.15",
     "@skylib/functions": "^0.1.16",
     "@skylib/typescript-types": "^0.1.1",
     "@types/facebook-js-sdk": "^3.3.5",
