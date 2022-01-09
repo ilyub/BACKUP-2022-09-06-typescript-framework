@@ -19,11 +19,10 @@ import type {
   PutResponse,
   PutResponses,
   QueryOptions,
-  ReactiveCountAttachedConfig,
-  ReactiveCountConfig,
-  ReactiveQueryAttachedConfig,
-  ReactiveQueryConfig,
+  ReactiveConfig,
+  ReactiveConfigAttached,
   ReactiveResponse,
+  ReactiveResponseAttached,
   ResetCallback,
   StoredAttachedDocument
 } from "@skylib/facades/dist/database";
@@ -141,14 +140,14 @@ export class Database implements DatabaseInterface {
       .filter(is.not.empty);
   }
 
-  public async count(conditions: Conditions): Promise<number> {
+  public async count(conditions: Conditions = {}): Promise<number> {
     const response = await this.rawQuery({}, { conditions, count: true });
 
     return response.count;
   }
 
   public async countAttached(
-    conditions: Conditions,
+    conditions: Conditions = {},
     parentConditions: Conditions = {}
   ): Promise<number> {
     const response = await this.rawQuery(
@@ -336,7 +335,7 @@ export class Database implements DatabaseInterface {
   }
 
   public async query(
-    conditions: Conditions,
+    conditions: Conditions = {},
     options: QueryOptions = {}
   ): Promise<ExistingDocuments> {
     const response = await this.rawQuery(options, {
@@ -350,7 +349,7 @@ export class Database implements DatabaseInterface {
   }
 
   public async queryAttached(
-    conditions: Conditions,
+    conditions: Conditions = {},
     parentConditions: Conditions = {},
     options: QueryOptions = {}
   ): Promise<ExistingAttachedDocuments> {
@@ -366,22 +365,15 @@ export class Database implements DatabaseInterface {
   }
 
   public async reactiveCount(
-    config: ReactiveCountConfig
+    config: ReactiveConfig
   ): Promise<ReactiveResponse<number>> {
-    return this.reactive2(
-      async (): Promise<number> => this.count(config.conditions),
-      config
-    );
+    return this.reactive2(this.count.bind(this), config);
   }
 
   public async reactiveCountAttached(
-    config: ReactiveCountAttachedConfig
-  ): Promise<ReactiveResponse<number>> {
-    return this.reactiveAttached2(
-      async (): Promise<number> =>
-        this.countAttached(config.conditions, config.parentConditions),
-      config
-    );
+    config: ReactiveConfigAttached
+  ): Promise<ReactiveResponseAttached<number>> {
+    return this.reactiveAttached2(this.countAttached.bind(this), config);
   }
 
   public async reactiveExists(id: string): Promise<ReactiveResponse<boolean>> {
@@ -407,7 +399,9 @@ export class Database implements DatabaseInterface {
     id: string
   ): Promise<ReactiveResponse<ExistingDocument>> {
     return this.reactive1(this.get(id), (doc, mutableResult) => {
-      if (doc._id === id) mutableResult.value = doc;
+      if (doc._id === id)
+        if (doc._deleted) throw new PouchNotFoundError("Missing document");
+        else mutableResult.value = doc;
     });
   }
 
@@ -419,7 +413,9 @@ export class Database implements DatabaseInterface {
       this.getAttached(id, parentId),
       (doc, mutableResult) => {
         if (doc._id === id && doc.parentDoc._id === parentId)
-          mutableResult.value = doc;
+          if (doc._deleted)
+            throw new PouchNotFoundError("Missing attached document");
+          else mutableResult.value = doc;
       }
     );
   }
@@ -432,7 +428,7 @@ export class Database implements DatabaseInterface {
       this.getAttachedIfExists(id, parentId),
       (doc, mutableResult) => {
         if (doc._id === id && doc.parentDoc._id === parentId)
-          mutableResult.value = doc;
+          mutableResult.value = doc._deleted ? undefined : doc;
       }
     );
   }
@@ -441,51 +437,32 @@ export class Database implements DatabaseInterface {
     id: string
   ): Promise<ReactiveResponse<ExistingDocument | undefined>> {
     return this.reactive1(this.getIfExists(id), (doc, mutableResult) => {
-      if (doc._id === id) mutableResult.value = doc;
+      if (doc._id === id) mutableResult.value = doc._deleted ? undefined : doc;
     });
   }
 
   public async reactiveQuery(
-    config: ReactiveQueryConfig
+    config: ReactiveConfig
   ): Promise<ReactiveResponse<ExistingDocuments>> {
-    return this.reactive2(
-      async (): Promise<ExistingDocuments> =>
-        this.query(config.conditions, config.options),
-      config
-    );
+    return this.reactive2(this.query.bind(this), config);
   }
 
   public async reactiveQueryAttached(
-    config: ReactiveQueryAttachedConfig
-  ): Promise<ReactiveResponse<ExistingAttachedDocuments>> {
-    return this.reactiveAttached2(
-      async (): Promise<ExistingAttachedDocuments> =>
-        this.queryAttached(
-          config.conditions,
-          config.parentConditions,
-          config.options
-        ),
-      config
-    );
+    config: ReactiveConfigAttached
+  ): Promise<ReactiveResponseAttached<ExistingAttachedDocuments>> {
+    return this.reactiveAttached2(this.queryAttached.bind(this), config);
   }
 
   public async reactiveUnsettled(
-    config: ReactiveCountConfig
+    config: ReactiveConfig
   ): Promise<ReactiveResponse<number>> {
-    return this.reactive2(
-      async (): Promise<number> => this.unsettled(config.conditions),
-      config
-    );
+    return this.reactive2(this.unsettled.bind(this), config);
   }
 
   public async reactiveUnsettledAttached(
-    config: ReactiveCountAttachedConfig
-  ): Promise<ReactiveResponse<number>> {
-    return this.reactiveAttached2(
-      async (): Promise<number> =>
-        this.unsettledAttached(config.conditions, config.parentConditions),
-      config
-    );
+    config: ReactiveConfigAttached
+  ): Promise<ReactiveResponseAttached<number>> {
+    return this.reactiveAttached2(this.unsettledAttached.bind(this), config);
   }
 
   public async reset(callback?: ResetCallback): Promise<void> {
@@ -519,7 +496,7 @@ export class Database implements DatabaseInterface {
   }
 
   public async unsettled(
-    conditions: Conditions,
+    conditions: Conditions = {},
     options: QueryOptions = {}
   ): Promise<number> {
     const response = await this.rawQuery(options, {
@@ -531,7 +508,7 @@ export class Database implements DatabaseInterface {
   }
 
   public async unsettledAttached(
-    conditions: Conditions,
+    conditions: Conditions = {},
     parentConditions: Conditions = {},
     options: QueryOptions = {}
   ): Promise<number> {
@@ -1016,7 +993,7 @@ export class Database implements DatabaseInterface {
    * Reactive factory.
    *
    * @param request - Request.
-   * @param handler - Subscription handler.
+   * @param handler - Handler.
    * @returns Reactive response.
    */
   protected async reactive1<T>(
@@ -1027,9 +1004,13 @@ export class Database implements DatabaseInterface {
     ) => void
   ): Promise<ReactiveResponse<T>> {
     const result = reactiveStorage({
+      conditions: {},
+      options: {},
       unsubscribe: async (): Promise<void> => {
         await this.unsubscribe(subscription);
       },
+      updateFn: undefined,
+      updateInterval: undefined,
       value: await request
     });
 
@@ -1048,37 +1029,58 @@ export class Database implements DatabaseInterface {
    * @returns Reactive response.
    */
   protected async reactive2<T>(
-    request: () => Promise<T>,
+    request: (conditions?: Conditions, options?: QueryOptions) => Promise<T>,
     config: ReactiveConfig
   ): Promise<ReactiveResponse<T>> {
-    const result = reactiveStorage({
-      unsubscribe: async (): Promise<void> => {
-        await this.unsubscribe(subscription);
-        timer.removeTimeout(timeout);
+    const result = reactiveStorage.withChangesHandler(
+      {
+        conditions: config.conditions ?? {},
+        options: config.options ?? {},
+        unsubscribe: async (): Promise<void> => {
+          await this.unsubscribe(subscription);
+          timer.removeTimeout(timeout);
+        },
+        updateFn: config.updateFn,
+        updateInterval: config.updateInterval,
+        value: await request(config.conditions, config.options)
       },
-      value: await request()
-    });
+      () => {
+        const conditions = result.conditions;
 
-    const refreshAsync = fn.doNotRunParallel(async () => {
-      result.value = await request();
-      timer.removeTimeout(timeout);
-      timeout = is.not.empty(config.updateInterval)
-        ? timer.addTimeout(refresh, config.updateInterval)
-        : undefined;
-    });
+        const options = result.options;
+
+        handlePromise.verbose(async (): Promise<void> => {
+          result.value = await request(conditions, options);
+        }, "dbRequest");
+      },
+      data => json.encode([data.conditions, data.options])
+    );
+
+    const refreshAsync = fn.doNotRunParallel(
+      async (conditions: Conditions, options?: QueryOptions) => {
+        result.value = await request(conditions, options);
+        timer.removeTimeout(timeout);
+        timeout = is.not.empty(result.updateInterval)
+          ? timer.addTimeout(refresh, result.updateInterval)
+          : undefined;
+      }
+    );
 
     const subscription = await this.subscribe(doc => {
-      if (config.updateFn && config.updateFn(doc)) refresh();
+      if (result.updateFn && result.updateFn(doc)) refresh();
     });
 
-    let timeout = is.not.empty(config.updateInterval)
-      ? timer.addTimeout(refresh, config.updateInterval)
+    let timeout = is.not.empty(result.updateInterval)
+      ? timer.addTimeout(refresh, result.updateInterval)
       : undefined;
 
     return result;
 
     function refresh(): void {
-      handlePromise.verbose(refreshAsync, "dbRequest");
+      handlePromise.verbose(
+        refreshAsync(result.conditions, result.options),
+        "dbRequest"
+      );
     }
   }
 
@@ -1086,7 +1088,7 @@ export class Database implements DatabaseInterface {
    * Reactive factory.
    *
    * @param request - Request.
-   * @param handler - Subscription handler.
+   * @param handler - Handler.
    * @returns Reactive response.
    */
   protected async reactiveAttached1<T>(
@@ -1097,9 +1099,14 @@ export class Database implements DatabaseInterface {
     ) => void
   ): Promise<ReactiveResponse<T>> {
     const result = reactiveStorage({
+      conditions: {},
+      options: {},
+      parentConditions: {},
       unsubscribe: async (): Promise<void> => {
         await this.unsubscribeAttached(subscription);
       },
+      updateFn: undefined,
+      updateInterval: undefined,
       value: await request
     });
 
@@ -1118,37 +1125,80 @@ export class Database implements DatabaseInterface {
    * @returns Reactive response.
    */
   protected async reactiveAttached2<T>(
-    request: () => Promise<T>,
-    config: ReactiveAttachedConfig
-  ): Promise<ReactiveResponse<T>> {
-    const result = reactiveStorage({
-      unsubscribe: async (): Promise<void> => {
-        await this.unsubscribeAttached(subscription);
-        timer.removeTimeout(timeout);
+    request: (
+      conditions?: Conditions,
+      parentConditions?: Conditions,
+      options?: QueryOptions
+    ) => Promise<T>,
+    config: ReactiveConfigAttached
+  ): Promise<ReactiveResponseAttached<T>> {
+    const result = reactiveStorage.withChangesHandler(
+      {
+        conditions: config.conditions ?? {},
+        options: config.options ?? {},
+        parentConditions: config.parentConditions ?? {},
+        unsubscribe: async (): Promise<void> => {
+          await this.unsubscribeAttached(subscription);
+          timer.removeTimeout(timeout);
+        },
+        updateFn: config.updateFn,
+        updateInterval: config.updateInterval,
+        value: await request(
+          config.conditions,
+          config.parentConditions,
+          config.options
+        )
       },
-      value: await request()
-    });
+      () => {
+        const conditions = result.conditions;
 
-    const refreshAsync = fn.doNotRunParallel(async () => {
-      result.value = await request();
-      timer.removeTimeout(timeout);
-      timeout = is.not.empty(config.updateInterval)
-        ? timer.addTimeout(refresh, config.updateInterval)
-        : undefined;
-    });
+        const parentConditions = result.parentConditions;
+
+        const options = result.options;
+
+        handlePromise.verbose(async (): Promise<void> => {
+          result.value = await request(conditions, parentConditions, options);
+        }, "dbRequest");
+      },
+      data =>
+        json.encode([data.conditions, data.parentConditions, data.options])
+    );
+
+    const refreshAsync = fn.doNotRunParallel(
+      async (
+        conditions: Conditions,
+        parentConditions?: Conditions,
+        options?: QueryOptions
+      ) => {
+        result.value = await request(conditions, parentConditions, options);
+        timer.removeTimeout(timeout);
+        timeout = is.not.empty(result.updateInterval)
+          ? timer.addTimeout(refresh, result.updateInterval)
+          : undefined;
+      }
+    );
 
     const subscription = await this.subscribeAttached(doc => {
-      if (config.updateFn && config.updateFn(doc)) refresh();
+      if (result.updateFn && result.updateFn(doc)) refresh();
     });
 
-    let timeout = is.not.empty(config.updateInterval)
-      ? timer.addTimeout(refresh, config.updateInterval)
+    let timeout = is.not.empty(result.updateInterval)
+      ? timer.addTimeout(refresh, result.updateInterval)
       : undefined;
 
     return result;
 
     function refresh(): void {
-      handlePromise.verbose(refreshAsync, "dbRequest");
+      const conditions = result.conditions;
+
+      const parentConditions = result.parentConditions;
+
+      const options = result.options;
+
+      handlePromise.verbose(
+        refreshAsync(conditions, parentConditions, options),
+        "dbRequest"
+      );
     }
   }
 
@@ -1214,28 +1264,6 @@ interface DocResponse {
 }
 
 type DocResponses = readonly DocResponse[];
-
-interface ReactiveAttachedConfig {
-  /**
-   * Triggers update on new doc.
-   *
-   * @param doc - New doc.
-   * @returns _True_ to trigger update, _false_ otherwise.
-   */
-  readonly updateFn?: (doc: ExistingAttachedDocument) => boolean;
-  readonly updateInterval?: number;
-}
-
-interface ReactiveConfig {
-  /**
-   * Triggers update on new doc.
-   *
-   * @param doc - New doc.
-   * @returns _True_ to trigger update, _false_ otherwise.
-   */
-  readonly updateFn?: (doc: ExistingDocument) => boolean;
-  readonly updateInterval?: number;
-}
 
 const isDocResponse: is.Guard<DocResponse> = is.factory(
   is.object.of,

@@ -24,6 +24,9 @@ it("reactiveCount", async () => {
     await db.put({ type: "a" });
     await wait(1000);
     expect(result.value).toStrictEqual(1);
+    result.conditions = { type: { eq: "b" } };
+    await wait(1000);
+    expect(result.value).toStrictEqual(0);
   });
 });
 
@@ -44,6 +47,9 @@ it("reactiveCountAttached", async () => {
     await db.putAttached(parentId, { type: "a" });
     await wait(1000);
     expect(result.value).toStrictEqual(1);
+    result.conditions = { type: { eq: "b" } };
+    await wait(1000);
+    expect(result.value).toStrictEqual(0);
   });
 });
 
