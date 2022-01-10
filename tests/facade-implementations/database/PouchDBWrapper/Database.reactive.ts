@@ -1,30 +1,40 @@
 /**
  * @jest-environment @skylib/config/src/jest-env-jsdom
  */
+import type {
+  ExistingAttachedDocument,
+  ExistingDocument,
+  ReactiveConfig,
+  ReactiveConfigAttached
+} from "@skylib/facades/dist/database";
 import { database } from "@skylib/facades/dist/database";
 import { datetime } from "@skylib/facades/dist/datetime";
+import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
 import { wait } from "@skylib/functions/dist/helpers";
 import * as testUtils from "@skylib/functions/dist/testUtils";
+import type { Writable } from "@skylib/functions/dist/types/core";
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
 it("reactiveCount", async () => {
   await testUtils.run(async () => {
-    const db = database.create(uniqueId());
-
-    const result = await db.reactiveCount({
+    const config = reactiveStorage<Writable<ReactiveConfig>>({
       conditions: { type: { eq: "a" } },
-      updateFn(doc) {
+      updateFn(doc: ExistingDocument): boolean {
         return doc["type"] === "a";
       }
     });
+
+    const db = database.create(uniqueId());
+
+    const result = await db.reactiveCount(config);
 
     expect(result.value).toStrictEqual(0);
     await db.put({ type: "a" });
     await wait(1000);
     expect(result.value).toStrictEqual(1);
-    result.conditions = { type: { eq: "b" } };
+    config.conditions = { type: { eq: "b" } };
     await wait(1000);
     expect(result.value).toStrictEqual(0);
   });
@@ -32,22 +42,24 @@ it("reactiveCount", async () => {
 
 it("reactiveCountAttached", async () => {
   await testUtils.run(async () => {
-    const db = database.create(uniqueId());
-
-    const { id: parentId } = await db.put({});
-
-    const result = await db.reactiveCountAttached({
+    const config = reactiveStorage<Writable<ReactiveConfigAttached>>({
       conditions: { type: { eq: "a" } },
-      updateFn(doc) {
+      updateFn(doc: ExistingAttachedDocument): boolean {
         return doc["type"] === "a";
       }
     });
+
+    const db = database.create(uniqueId());
+
+    const result = await db.reactiveCountAttached(config);
+
+    const { id: parentId } = await db.put({});
 
     expect(result.value).toStrictEqual(0);
     await db.putAttached(parentId, { type: "a" });
     await wait(1000);
     expect(result.value).toStrictEqual(1);
-    result.conditions = { type: { eq: "b" } };
+    config.conditions = { type: { eq: "b" } };
     await wait(1000);
     expect(result.value).toStrictEqual(0);
   });
@@ -208,12 +220,14 @@ it("reactiveQuery", async () => {
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
-    const result = await db.reactiveQuery({
-      conditions: { type: { eq: "a" } },
-      updateFn(doc) {
-        return doc["type"] === "a";
-      }
-    });
+    const result = await db.reactiveQuery(
+      reactiveStorage<ReactiveConfig>({
+        conditions: { type: { eq: "a" } },
+        updateFn(doc) {
+          return doc["type"] === "a";
+        }
+      })
+    );
 
     expect(result.value).toStrictEqual([]);
 
@@ -230,12 +244,14 @@ it("reactiveQueryAttached", async () => {
 
     const { id: parentId } = await db.put({});
 
-    const result = await db.reactiveQueryAttached({
-      conditions: { type: { eq: "a" } },
-      updateFn(doc) {
-        return doc["type"] === "a";
-      }
-    });
+    const result = await db.reactiveQueryAttached(
+      reactiveStorage<ReactiveConfigAttached>({
+        conditions: { type: { eq: "a" } },
+        updateFn(doc) {
+          return doc["type"] === "a";
+        }
+      })
+    );
 
     expect(result.value).toStrictEqual([]);
 
@@ -265,10 +281,12 @@ it("reactiveUnsettled", async () => {
 
     await db.put({ d: datetime.create().toString() });
 
-    const result = await db.reactiveUnsettled({
-      conditions: { d: { dgt: 24.5 * 3600 } },
-      updateInterval: 3600 * 1000
-    });
+    const result = await db.reactiveUnsettled(
+      reactiveStorage<ReactiveConfig>({
+        conditions: { d: { dgt: 24.5 * 3600 } },
+        updateInterval: 3600 * 1000
+      })
+    );
 
     expect(result.value).toStrictEqual(1);
     await wait(2.5 * 3600 * 1000);
@@ -285,10 +303,12 @@ it("reactiveUnsettledAttached", async () => {
 
     await db.putAttached(parentId, { d: datetime.create().toString() });
 
-    const result = await db.reactiveUnsettledAttached({
-      conditions: { d: { dgt: 24.5 * 3600 } },
-      updateInterval: 3600 * 1000
-    });
+    const result = await db.reactiveUnsettledAttached(
+      reactiveStorage<ReactiveConfigAttached>({
+        conditions: { d: { dgt: 24.5 * 3600 } },
+        updateInterval: 3600 * 1000
+      })
+    );
 
     expect(result.value).toStrictEqual(1);
     await wait(2.5 * 3600 * 1000);

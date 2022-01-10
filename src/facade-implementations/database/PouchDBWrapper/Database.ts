@@ -22,7 +22,6 @@ import type {
   ReactiveConfig,
   ReactiveConfigAttached,
   ReactiveResponse,
-  ReactiveResponseAttached,
   ResetCallback,
   StoredAttachedDocument
 } from "@skylib/facades/dist/database";
@@ -38,7 +37,7 @@ import * as json from "@skylib/functions/dist/json";
 import * as num from "@skylib/functions/dist/number";
 import * as o from "@skylib/functions/dist/object";
 import * as timer from "@skylib/functions/dist/timer";
-import type { Writable } from "@skylib/functions/dist/types/core";
+import type { Timeout, Writable } from "@skylib/functions/dist/types/core";
 
 import { PouchConflictError } from "./errors/PouchConflictError";
 import { PouchNotFoundError } from "./errors/PouchNotFoundError";
@@ -372,7 +371,7 @@ export class Database implements DatabaseInterface {
 
   public async reactiveCountAttached(
     config: ReactiveConfigAttached
-  ): Promise<ReactiveResponseAttached<number>> {
+  ): Promise<ReactiveResponse<number>> {
     return this.reactiveAttached2(this.countAttached.bind(this), config);
   }
 
@@ -449,7 +448,7 @@ export class Database implements DatabaseInterface {
 
   public async reactiveQueryAttached(
     config: ReactiveConfigAttached
-  ): Promise<ReactiveResponseAttached<ExistingAttachedDocuments>> {
+  ): Promise<ReactiveResponse<ExistingAttachedDocuments>> {
     return this.reactiveAttached2(this.queryAttached.bind(this), config);
   }
 
@@ -461,7 +460,7 @@ export class Database implements DatabaseInterface {
 
   public async reactiveUnsettledAttached(
     config: ReactiveConfigAttached
-  ): Promise<ReactiveResponseAttached<number>> {
+  ): Promise<ReactiveResponse<number>> {
     return this.reactiveAttached2(this.unsettledAttached.bind(this), config);
   }
 
@@ -1004,13 +1003,9 @@ export class Database implements DatabaseInterface {
     ) => void
   ): Promise<ReactiveResponse<T>> {
     const result = reactiveStorage({
-      conditions: {},
-      options: {},
       unsubscribe: async (): Promise<void> => {
         await this.unsubscribe(subscription);
       },
-      updateFn: undefined,
-      updateInterval: undefined,
       value: await request
     });
 
@@ -1032,55 +1027,44 @@ export class Database implements DatabaseInterface {
     request: (conditions?: Conditions, options?: QueryOptions) => Promise<T>,
     config: ReactiveConfig
   ): Promise<ReactiveResponse<T>> {
-    const result = reactiveStorage.withChangesHandler(
-      {
-        conditions: config.conditions ?? {},
-        options: config.options ?? {},
-        unsubscribe: async (): Promise<void> => {
-          await this.unsubscribe(subscription);
-          timer.removeTimeout(timeout);
-        },
-        updateFn: config.updateFn,
-        updateInterval: config.updateInterval,
-        value: await request(config.conditions, config.options)
-      },
-      () => {
-        const conditions = result.conditions;
-
-        const options = result.options;
-
-        handlePromise.verbose(async (): Promise<void> => {
-          result.value = await request(conditions, options);
-        }, "dbRequest");
-      },
-      data => json.encode([data.conditions, data.options])
-    );
-
-    const refreshAsync = fn.doNotRunParallel(
-      async (conditions: Conditions, options?: QueryOptions) => {
-        result.value = await request(conditions, options);
+    const result = reactiveStorage({
+      unsubscribe: async (): Promise<void> => {
+        reactiveStorage.unwatch(config, observer);
+        await this.unsubscribe(subscription);
         timer.removeTimeout(timeout);
-        timeout = is.not.empty(result.updateInterval)
-          ? timer.addTimeout(refresh, result.updateInterval)
-          : undefined;
-      }
-    );
-
-    const subscription = await this.subscribe(doc => {
-      if (result.updateFn && result.updateFn(doc)) refresh();
+      },
+      value: await request(config.conditions, config.options)
     });
 
-    let timeout = is.not.empty(result.updateInterval)
-      ? timer.addTimeout(refresh, result.updateInterval)
-      : undefined;
+    const observer = reactiveStorage.watch(config, refresh);
+
+    const subscription = await this.subscribe(doc => {
+      if (config.updateFn && config.updateFn(doc)) refresh();
+    });
+
+    let timeout: Timeout | undefined = undefined;
+
+    updateTimeout();
 
     return result;
 
     function refresh(): void {
       handlePromise.verbose(
-        refreshAsync(result.conditions, result.options),
+        fn.doNotRunParallel(async () => {
+          const newValue = await request(config.conditions, config.options);
+
+          result.value = newValue;
+          updateTimeout();
+        }),
         "dbRequest"
       );
+    }
+
+    function updateTimeout(): void {
+      timer.removeTimeout(timeout);
+      timeout = is.not.empty(config.updateInterval)
+        ? timer.addTimeout(refresh, config.updateInterval)
+        : undefined;
     }
   }
 
@@ -1099,14 +1083,9 @@ export class Database implements DatabaseInterface {
     ) => void
   ): Promise<ReactiveResponse<T>> {
     const result = reactiveStorage({
-      conditions: {},
-      options: {},
-      parentConditions: {},
       unsubscribe: async (): Promise<void> => {
         await this.unsubscribeAttached(subscription);
       },
-      updateFn: undefined,
-      updateInterval: undefined,
       value: await request
     });
 
@@ -1131,74 +1110,53 @@ export class Database implements DatabaseInterface {
       options?: QueryOptions
     ) => Promise<T>,
     config: ReactiveConfigAttached
-  ): Promise<ReactiveResponseAttached<T>> {
-    const result = reactiveStorage.withChangesHandler(
-      {
-        conditions: config.conditions ?? {},
-        options: config.options ?? {},
-        parentConditions: config.parentConditions ?? {},
-        unsubscribe: async (): Promise<void> => {
-          await this.unsubscribeAttached(subscription);
-          timer.removeTimeout(timeout);
-        },
-        updateFn: config.updateFn,
-        updateInterval: config.updateInterval,
-        value: await request(
-          config.conditions,
-          config.parentConditions,
-          config.options
-        )
-      },
-      () => {
-        const conditions = result.conditions;
-
-        const parentConditions = result.parentConditions;
-
-        const options = result.options;
-
-        handlePromise.verbose(async (): Promise<void> => {
-          result.value = await request(conditions, parentConditions, options);
-        }, "dbRequest");
-      },
-      data =>
-        json.encode([data.conditions, data.parentConditions, data.options])
-    );
-
-    const refreshAsync = fn.doNotRunParallel(
-      async (
-        conditions: Conditions,
-        parentConditions?: Conditions,
-        options?: QueryOptions
-      ) => {
-        result.value = await request(conditions, parentConditions, options);
+  ): Promise<ReactiveResponse<T>> {
+    const result = reactiveStorage({
+      unsubscribe: async (): Promise<void> => {
+        reactiveStorage.unwatch(config, observer);
+        await this.unsubscribeAttached(subscription);
         timer.removeTimeout(timeout);
-        timeout = is.not.empty(result.updateInterval)
-          ? timer.addTimeout(refresh, result.updateInterval)
-          : undefined;
-      }
-    );
-
-    const subscription = await this.subscribeAttached(doc => {
-      if (result.updateFn && result.updateFn(doc)) refresh();
+      },
+      value: await request(
+        config.conditions,
+        config.parentConditions,
+        config.options
+      )
     });
 
-    let timeout = is.not.empty(result.updateInterval)
-      ? timer.addTimeout(refresh, result.updateInterval)
-      : undefined;
+    const observer = reactiveStorage.watch(config, refresh);
+
+    const subscription = await this.subscribeAttached(doc => {
+      if (config.updateFn && config.updateFn(doc)) refresh();
+    });
+
+    let timeout: Timeout | undefined = undefined;
+
+    updateTimeout();
 
     return result;
 
     function refresh(): void {
-      const conditions = result.conditions;
-
-      const parentConditions = result.parentConditions;
-
-      const options = result.options;
-
       handlePromise.verbose(
-        refreshAsync(conditions, parentConditions, options),
+        fn.doNotRunParallel(async () => {
+          const newValue = await request(
+            config.conditions,
+            config.parentConditions,
+            config.options
+          );
+
+          result.value = newValue;
+          updateTimeout();
+        }),
         "dbRequest"
       );
+    }
+
+    function updateTimeout(): void {
+      timer.removeTimeout(timeout);
+      timeout = is.not.empty(config.updateInterval)
+        ? timer.addTimeout(refresh, config.updateInterval)
+        : undefined;
     }
   }
 
