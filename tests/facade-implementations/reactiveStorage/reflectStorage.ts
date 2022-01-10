@@ -1,53 +1,79 @@
 import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
 
-interface Data {
-  value: number;
-}
-
 it("reactiveStorage", () => {
-  const x: Data = { value: 0 };
+  const callback = jest.fn();
 
-  const y: Data = reactiveStorage(x);
+  const obj = reactiveStorage(reactiveStorage({ x: 0, y: { z: 0 } }));
+
+  const observer = reactiveStorage.watch(obj, callback);
 
   {
-    y.value = 1;
-    expect(x.value).toStrictEqual(1);
+    obj.x = 1;
+    expect(callback).toBeCalledTimes(1);
+    expect(callback).toBeCalledWith({ x: 1, y: { z: 0 } });
+    callback.mockClear();
+  }
+
+  {
+    obj.y.z = 1;
+    expect(callback).toBeCalledTimes(1);
+    expect(callback).toBeCalledWith({ x: 1, y: { z: 1 } });
+    callback.mockClear();
+  }
+
+  {
+    reactiveStorage.unwatch(obj, observer);
+    obj.x = 2;
+    obj.y.z = 2;
+    expect(callback).not.toBeCalled();
+  }
+
+  {
+    Object.freeze(obj);
+
+    expect(() => {
+      obj.x = 3;
+      obj.y.z = 3;
+    }).toThrow(
+      new Error("'set' on proxy: trap returned falsish for property 'x'")
+    );
   }
 });
 
-it("reactiveStorage.withChangesHandler", () => {
-  const onChange = jest.fn();
+it("reactiveStorage: reducer", () => {
+  const callback = jest.fn();
 
-  const x: Data = { value: 0 };
+  const obj = reactiveStorage(reactiveStorage({ x: 0, y: { z: 0 } }));
 
-  const y: Data = reactiveStorage.withChangesHandler(x, onChange, reduce);
+  const observer = reactiveStorage.watch(obj, callback, value => value.x);
 
   {
-    y.value = 1;
-    expect(x.value).toStrictEqual(1);
-    expect(onChange).toBeCalledTimes(1);
-    expect(onChange).toBeCalledWith(1);
-    onChange.mockClear();
+    obj.x = 1;
+    expect(callback).toBeCalledTimes(1);
+    expect(callback).toBeCalledWith({ x: 1, y: { z: 0 } });
+    callback.mockClear();
   }
 
   {
-    y.value = 3;
-    expect(x.value).toStrictEqual(3);
-    expect(onChange).not.toBeCalled();
+    obj.y.z = 1;
+    expect(callback).not.toBeCalled();
   }
 
   {
-    const error = new Error(
-      "'set' on proxy: trap returned falsish for property 'value'"
-    );
+    reactiveStorage.unwatch(obj, observer);
+    obj.x = 2;
+    obj.y.z = 2;
+    expect(callback).not.toBeCalled();
+  }
 
-    Object.freeze(y);
+  {
+    Object.freeze(obj);
+
     expect(() => {
-      y.value = 4;
-    }).toThrow(error);
-  }
-
-  function reduce(data: Data): number {
-    return data.value % 2;
+      obj.x = 3;
+      obj.y.z = 3;
+    }).toThrow(
+      new Error("'set' on proxy: trap returned falsish for property 'x'")
+    );
   }
 });
