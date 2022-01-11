@@ -21,6 +21,7 @@ it("count", async () => {
   ]);
 
   await Promise.all([
+    subtest(undefined, 8),
     subtest({ b: { eq: true } }, 1),
     subtest({ b: { eq: false } }, 1),
     subtest({ d: { dgt: -10 * 60 } }, 4),
@@ -32,7 +33,7 @@ it("count", async () => {
   ]);
 
   async function subtest(
-    conditions: Conditions,
+    conditions: Conditions | undefined,
     expected: number
   ): Promise<void> {
     await expect(db.count(conditions)).resolves.toStrictEqual(expected);
@@ -62,6 +63,7 @@ it("countAttached", async () => {
   ]);
 
   await Promise.all([
+    subtest(undefined, undefined, 6),
     subtest({ b: { eq: true } }, undefined, 1),
     subtest({ b: { eq: true } }, { b: { eq: true } }, 1),
     subtest({ b: { eq: true } }, { b: { eq: false } }, 0),
@@ -83,7 +85,7 @@ it("countAttached", async () => {
   ]);
 
   async function subtest(
-    conditions: Conditions,
+    conditions: Conditions | undefined,
     parentConditions: Conditions | undefined,
     expected: number
   ): Promise<void> {

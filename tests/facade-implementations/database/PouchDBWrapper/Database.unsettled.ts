@@ -22,6 +22,7 @@ it("unsettled", async () => {
     ]);
 
     await Promise.all([
+      subtest(undefined, 0),
       subtest({ d: { dgt: 0 } }, 3),
       subtest({ d: { dlt: 0 } }, 3)
     ]);
@@ -29,6 +30,7 @@ it("unsettled", async () => {
     await wait(24.5 * 3600 * 1000);
 
     await Promise.all([
+      subtest(undefined, 0),
       subtest({ d: { dgt: 0 } }, 2),
       subtest({ d: { dlt: 0 } }, 2)
     ]);
@@ -36,12 +38,13 @@ it("unsettled", async () => {
     await wait(2 * 3600 * 1000);
 
     await Promise.all([
+      subtest(undefined, 0),
       subtest({ d: { dgt: 0 } }, 1),
       subtest({ d: { dlt: 0 } }, 1)
     ]);
 
     async function subtest(
-      conditions: Conditions,
+      conditions: Conditions | undefined,
       expected: number
     ): Promise<void> {
       await db.query(conditions);
@@ -78,6 +81,7 @@ it("unsettledAttached", async () => {
     ]);
 
     await Promise.all([
+      subtest(undefined, 0),
       subtest({ d: { dgt: 0 } }, 3),
       subtest({ d: { dlt: 0 } }, 3)
     ]);
@@ -85,6 +89,7 @@ it("unsettledAttached", async () => {
     await wait(24.5 * 3600 * 1000);
 
     await Promise.all([
+      subtest(undefined, 0),
       subtest({ d: { dgt: 0 } }, 2),
       subtest({ d: { dlt: 0 } }, 2)
     ]);
@@ -92,12 +97,13 @@ it("unsettledAttached", async () => {
     await wait(2 * 3600 * 1000);
 
     await Promise.all([
+      subtest(undefined, 0),
       subtest({ d: { dgt: 0 } }, 1),
       subtest({ d: { dlt: 0 } }, 1)
     ]);
 
     async function subtest(
-      conditions: Conditions,
+      conditions: Conditions | undefined,
       expected: number
     ): Promise<void> {
       await db.queryAttached(conditions);

@@ -85,6 +85,12 @@ export interface RawQueryResponse {
   readonly unsettledCount: number;
 }
 
+export const handlers = o.freeze({
+  error(error: unknown): void {
+    throw error;
+  }
+});
+
 export class Database implements DatabaseInterface {
   /**
    * Creates class instance.
@@ -399,7 +405,8 @@ export class Database implements DatabaseInterface {
   ): Promise<ReactiveResponse<ExistingDocument>> {
     return this.reactive1(this.get(id), (doc, mutableResult) => {
       if (doc._id === id)
-        if (doc._deleted) throw new PouchNotFoundError("Missing document");
+        if (doc._deleted)
+          handlers.error(new PouchNotFoundError("Missing document"));
         else mutableResult.value = doc;
     });
   }
@@ -413,7 +420,7 @@ export class Database implements DatabaseInterface {
       (doc, mutableResult) => {
         if (doc._id === id && doc.parentDoc._id === parentId)
           if (doc._deleted)
-            throw new PouchNotFoundError("Missing attached document");
+            handlers.error(new PouchNotFoundError("Missing attached document"));
           else mutableResult.value = doc;
       }
     );
@@ -1188,7 +1195,8 @@ export class Database implements DatabaseInterface {
             ) {
               const attachedDoc = extractDocAttached(
                 value.doc,
-                value.doc.lastAttachedDoc
+                value.doc.lastAttachedDoc,
+                true
               );
 
               for (const handler of this.changesHandlersAttachedPool.values())
@@ -1433,11 +1441,13 @@ function extractDoc(rawDoc: ExistingDocument): ExistingDocument {
  *
  * @param rawDoc - Document.
  * @param id - Attached document ID.
+ * @param extractDeleted - Extract deleted documents.
  * @returns Attached document.
  */
 function extractDocAttached(
   rawDoc: ExistingDocument,
-  id: number
+  id: number,
+  extractDeleted = false
 ): ExistingAttachedDocument {
   const { attachedDocs, ...parentDoc } = rawDoc;
 
@@ -1453,8 +1463,8 @@ function extractDocAttached(
     () => new PouchNotFoundError("Missing attached document")
   );
 
-  assert.empty(
-    attachedDoc._deleted,
+  assert.toBeTrue(
+    extractDeleted || is.empty(attachedDoc._deleted),
     () => new PouchNotFoundError("Missing attached document")
   );
 

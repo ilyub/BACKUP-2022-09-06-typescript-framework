@@ -49,6 +49,20 @@ it("queryAttached", async () => {
   ]);
 
   await Promise.all([
+    subtest(undefined, [
+      "b1",
+      "b2",
+      "d1",
+      "d2",
+      "d3",
+      "d4",
+      "n1",
+      "n2",
+      "n3",
+      "s1",
+      "s2",
+      "s3"
+    ]),
     subtest({ b: { eq: true } }, ["b1"]),
     subtest({ b: { eq: false } }, ["b2"]),
     subtest({ d: { dgt: -15 * 60 } }, ["d2", "d3", "d4"]),
@@ -65,7 +79,7 @@ it("queryAttached", async () => {
   ]);
 
   async function subtest(
-    conditions: Conditions,
+    conditions: Conditions | undefined,
     expected: unknown[]
   ): Promise<void> {
     const docs = await db.queryAttached(conditions);

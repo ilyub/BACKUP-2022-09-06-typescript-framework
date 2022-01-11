@@ -15,9 +15,14 @@ import { wait } from "@skylib/functions/dist/helpers";
 import * as testUtils from "@skylib/functions/dist/testUtils";
 import type { Writable } from "@skylib/functions/dist/types/core";
 
+import { handlers } from "@/facade-implementations/database/PouchDBWrapper/Database";
+import { PouchNotFoundError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchNotFoundError";
+
+const errorHandler = jest.spyOn(handlers, "error");
+
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
-it("reactiveCount", async () => {
+it("Database.reactiveCount", async () => {
   await testUtils.run(async () => {
     const config = reactiveStorage<Writable<ReactiveConfig>>({
       conditions: { type: { eq: "a" } },
@@ -40,7 +45,7 @@ it("reactiveCount", async () => {
   });
 });
 
-it("reactiveCountAttached", async () => {
+it("Database.reactiveCountAttached", async () => {
   await testUtils.run(async () => {
     const config = reactiveStorage<Writable<ReactiveConfigAttached>>({
       conditions: { type: { eq: "a" } },
@@ -65,7 +70,7 @@ it("reactiveCountAttached", async () => {
   });
 });
 
-it("reactiveExists", async () => {
+it("Database.reactiveExists", async () => {
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -80,7 +85,7 @@ it("reactiveExists", async () => {
   });
 });
 
-it("reactiveExistsAttached", async () => {
+it("Database.reactiveExistsAttached", async () => {
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -117,6 +122,17 @@ it.each([false, true])("reactiveGet", async unsubscribe => {
 
     await wait(1000);
     expect(result.value).toStrictEqual(unsubscribe ? expected1 : expected2);
+
+    if (!unsubscribe) {
+      const error = new PouchNotFoundError("Missing document");
+
+      errorHandler.mockImplementationOnce(() => {});
+      await db.put({ _deleted: true, _id: id, _rev: rev2 });
+      await wait(1000);
+      expect(errorHandler).toBeCalledTimes(1);
+      expect(errorHandler).toBeCalledWith(error);
+      errorHandler.mockClear();
+    }
   });
 });
 
@@ -154,8 +170,6 @@ it.each([false, true])("reactiveGetAttached", async unsubscribe => {
       value: 2
     });
 
-    await wait(1000);
-
     const expected2 = {
       _id: 0,
       _rev: 2,
@@ -168,11 +182,23 @@ it.each([false, true])("reactiveGetAttached", async unsubscribe => {
       value: 2
     };
 
+    await wait(1000);
     expect(result.value).toStrictEqual(unsubscribe ? expected1 : expected2);
+
+    if (!unsubscribe) {
+      const error = new PouchNotFoundError("Missing attached document");
+
+      errorHandler.mockImplementationOnce(() => {});
+      await db.putAttached(parentId, { _deleted: true, _id: 0, _rev: 2 });
+      await wait(1000);
+      expect(errorHandler).toBeCalledTimes(1);
+      expect(errorHandler).toBeCalledWith(error);
+      errorHandler.mockClear();
+    }
   });
 });
 
-it("reactiveGetAttachedIfExists", async () => {
+it("Database.reactiveGetAttachedIfExists", async () => {
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -184,22 +210,31 @@ it("reactiveGetAttachedIfExists", async () => {
 
     const { parentRev } = await db.putAttached(parentId, {});
 
-    await wait(1000);
+    {
+      const expected = {
+        _id: 0,
+        _rev: 1,
+        parentDoc: {
+          _id: parentId,
+          _rev: parentRev,
+          attachedDocs: [],
+          lastAttachedDoc: 0
+        }
+      };
 
-    expect(result.value).toStrictEqual({
-      _id: 0,
-      _rev: 1,
-      parentDoc: {
-        _id: parentId,
-        _rev: parentRev,
-        attachedDocs: [],
-        lastAttachedDoc: 0
-      }
-    });
+      await wait(1000);
+      expect(result.value).toStrictEqual(expected);
+    }
+
+    {
+      await db.putAttached(parentId, { _deleted: true, _id: 0, _rev: 1 });
+      await wait(1000);
+      expect(result.value).toBeUndefined();
+    }
   });
 });
 
-it("reactiveGetIfExists", async () => {
+it("Database.reactiveGetIfExists", async () => {
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -211,12 +246,20 @@ it("reactiveGetIfExists", async () => {
 
     const { rev } = await db.put({ _id: id });
 
-    await wait(1000);
-    expect(result.value).toStrictEqual({ _id: id, _rev: rev });
+    {
+      await wait(1000);
+      expect(result.value).toStrictEqual({ _id: id, _rev: rev });
+    }
+
+    {
+      await db.put({ _deleted: true, _id: id, _rev: rev, z: 1 });
+      await wait(1000);
+      expect(result.value).toBeUndefined();
+    }
   });
 });
 
-it("reactiveQuery", async () => {
+it("Database.reactiveQuery", async () => {
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -238,7 +281,7 @@ it("reactiveQuery", async () => {
   });
 });
 
-it("reactiveQueryAttached", async () => {
+it("Database.reactiveQueryAttached", async () => {
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -275,7 +318,7 @@ it("reactiveQueryAttached", async () => {
   });
 });
 
-it("reactiveUnsettled", async () => {
+it("Database.reactiveUnsettled", async () => {
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -295,7 +338,7 @@ it("reactiveUnsettled", async () => {
   });
 });
 
-it("reactiveUnsettledAttached", async () => {
+it("Database.reactiveUnsettledAttached", async () => {
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -315,4 +358,12 @@ it("reactiveUnsettledAttached", async () => {
     expect(result.value).toStrictEqual(0);
     await result.unsubscribe();
   });
+});
+
+it("handlers.error", () => {
+  const error = new Error("Sample error");
+
+  expect(() => {
+    handlers.error(error);
+  }).toThrow(error);
 });
