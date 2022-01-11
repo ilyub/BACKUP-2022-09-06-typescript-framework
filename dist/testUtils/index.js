@@ -29,7 +29,7 @@ const axiosWrapper = (0, tslib_1.__importStar)(require("../facade-implementation
 const lunrWrapper = (0, tslib_1.__importStar)(require("../facade-implementations/inlineSearch/lunr-wrapper"));
 const dictionary_1 = require("../facade-implementations/lang/dictionary");
 const progressBar = (0, tslib_1.__importStar)(require("../facade-implementations/progressReporter/progressBar"));
-const dummyStorage = (0, tslib_1.__importStar)(require("../facade-implementations/reactiveStorage/dummyStorage"));
+const reflectStorage = (0, tslib_1.__importStar)(require("../facade-implementations/reactiveStorage/reflectStorage"));
 const jsAlert = (0, tslib_1.__importStar)(require("../facade-implementations/showAlert/jsAlert"));
 const jsConfirm = (0, tslib_1.__importStar)(require("../facade-implementations/showConfirm/jsConfirm"));
 const configurableTestDelay = (0, tslib_1.__importStar)(require("../facade-implementations/testDelay/configurableTestDelay"));
@@ -43,7 +43,7 @@ function jestReset() {
     facebook_1.facebook.setImplementation(new Facebook_1.Facebook(undefined, "10.0"));
     google_1.google.setImplementation(new Google_1.Google(undefined));
     inlineSearch_1.inlineSearch.setImplementation(lunrWrapper.implementation);
-    reactiveStorage_1.reactiveStorage.setImplementation(dummyStorage.implementation);
+    reactiveStorage_1.reactiveStorage.setImplementation(reflectStorage.implementation);
     showAlert_1.showAlert.setImplementation(jsAlert.implementation);
     showConfirm_1.showConfirm.setImplementation(jsConfirm.implementation);
     uniqueId_1.uniqueId.setImplementation(uuidWrapper.implementation);

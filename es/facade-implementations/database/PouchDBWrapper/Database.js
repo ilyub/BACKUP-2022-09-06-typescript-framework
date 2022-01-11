@@ -2,6 +2,8 @@ import { __rest } from "tslib";
 import * as _ from "lodash-es";
 import { collate } from "pouchdb-collate";
 import sha256 from "sha256";
+import { handlePromise } from "@skylib/facades/es/handlePromise";
+import { reactiveStorage } from "@skylib/facades/es/reactiveStorage";
 import { uniqueId } from "@skylib/facades/es/uniqueId";
 import * as a from "@skylib/functions/es/array";
 import * as assert from "@skylib/functions/es/assertions";
@@ -11,10 +13,16 @@ import * as is from "@skylib/functions/es/guards";
 import * as json from "@skylib/functions/es/json";
 import * as num from "@skylib/functions/es/number";
 import * as o from "@skylib/functions/es/object";
+import * as timer from "@skylib/functions/es/timer";
 import { PouchConflictError } from "./errors/PouchConflictError";
 import { PouchNotFoundError } from "./errors/PouchNotFoundError";
 import { PouchRetryError } from "./errors/PouchRetryError";
 import { PouchDBProxy } from "./PouchDBProxy";
+export const handlers = o.freeze({
+    error(error) {
+        throw error;
+    }
+});
 export class Database {
     /**
      * Creates class instance.
@@ -101,11 +109,11 @@ export class Database {
             : undefined)
             .filter(is.not.empty);
     }
-    async count(conditions) {
+    async count(conditions = {}) {
         const response = await this.rawQuery({}, { conditions, count: true });
         return response.count;
     }
-    async countAttached(conditions, parentConditions = {}) {
+    async countAttached(conditions = {}, parentConditions = {}) {
         const response = await this.rawQuery({}, {
             conditions,
             count: true,
@@ -230,7 +238,7 @@ export class Database {
             return undefined;
         }
     }
-    async query(conditions, options = {}) {
+    async query(conditions = {}, options = {}) {
         const response = await this.rawQuery(options, {
             conditions,
             docs: true
@@ -238,7 +246,7 @@ export class Database {
         assert.array.of(response.docs, isExistingDocument);
         return response.docs;
     }
-    async queryAttached(conditions, parentConditions = {}, options = {}) {
+    async queryAttached(conditions = {}, parentConditions = {}, options = {}) {
         const response = await this.rawQuery(options, {
             conditions,
             docs: true,
@@ -246,6 +254,66 @@ export class Database {
         });
         assert.array.of(response.docs, isExistingDocumentAttached);
         return response.docs;
+    }
+    async reactiveCount(config) {
+        return this.reactive2(this.count.bind(this), config);
+    }
+    async reactiveCountAttached(config) {
+        return this.reactiveAttached2(this.countAttached.bind(this), config);
+    }
+    async reactiveExists(id) {
+        return this.reactive1(this.exists(id), (doc, mutableResult) => {
+            if (doc._id === id)
+                mutableResult.value = !doc._deleted;
+        });
+    }
+    async reactiveExistsAttached(id, parentId) {
+        return this.reactiveAttached1(this.existsAttached(id, parentId), (doc, mutableResult) => {
+            if (doc._id === id && doc.parentDoc._id === parentId)
+                mutableResult.value = !doc._deleted;
+        });
+    }
+    async reactiveGet(id) {
+        return this.reactive1(this.get(id), (doc, mutableResult) => {
+            if (doc._id === id)
+                if (doc._deleted)
+                    handlers.error(new PouchNotFoundError("Missing document"));
+                else
+                    mutableResult.value = doc;
+        });
+    }
+    async reactiveGetAttached(id, parentId) {
+        return this.reactiveAttached1(this.getAttached(id, parentId), (doc, mutableResult) => {
+            if (doc._id === id && doc.parentDoc._id === parentId)
+                if (doc._deleted)
+                    handlers.error(new PouchNotFoundError("Missing attached document"));
+                else
+                    mutableResult.value = doc;
+        });
+    }
+    async reactiveGetAttachedIfExists(id, parentId) {
+        return this.reactiveAttached1(this.getAttachedIfExists(id, parentId), (doc, mutableResult) => {
+            if (doc._id === id && doc.parentDoc._id === parentId)
+                mutableResult.value = doc._deleted ? undefined : doc;
+        });
+    }
+    async reactiveGetIfExists(id) {
+        return this.reactive1(this.getIfExists(id), (doc, mutableResult) => {
+            if (doc._id === id)
+                mutableResult.value = doc._deleted ? undefined : doc;
+        });
+    }
+    async reactiveQuery(config) {
+        return this.reactive2(this.query.bind(this), config);
+    }
+    async reactiveQueryAttached(config) {
+        return this.reactiveAttached2(this.queryAttached.bind(this), config);
+    }
+    async reactiveUnsettled(config) {
+        return this.reactive2(this.unsettled.bind(this), config);
+    }
+    async reactiveUnsettledAttached(config) {
+        return this.reactiveAttached2(this.unsettledAttached.bind(this), config);
     }
     async reset(callback) {
         const db = await this.getDb();
@@ -267,14 +335,14 @@ export class Database {
         await this.refreshSubscription();
         return id;
     }
-    async unsettled(conditions, options = {}) {
+    async unsettled(conditions = {}, options = {}) {
         const response = await this.rawQuery(options, {
             conditions,
             unsettledCount: true
         });
         return response.unsettledCount;
     }
-    async unsettledAttached(conditions, parentConditions = {}, options = {}) {
+    async unsettledAttached(conditions = {}, parentConditions = {}, options = {}) {
         const response = await this.rawQuery(options, {
             conditions,
             parentConditions,
@@ -639,6 +707,120 @@ export class Database {
         }
     }
     /**
+     * Reactive factory.
+     *
+     * @param request - Request.
+     * @param handler - Handler.
+     * @returns Reactive response.
+     */
+    async reactive1(request, handler) {
+        const result = reactiveStorage({
+            unsubscribe: async () => {
+                await this.unsubscribe(subscription);
+            },
+            value: await request
+        });
+        const subscription = await this.subscribe(doc => {
+            handler(doc, result);
+        });
+        return result;
+    }
+    /**
+     * Reactive factory.
+     *
+     * @param request - Request.
+     * @param config - Configuration.
+     * @returns Reactive response.
+     */
+    async reactive2(request, config) {
+        const result = reactiveStorage({
+            unsubscribe: async () => {
+                reactiveStorage.unwatch(config, observer);
+                await this.unsubscribe(subscription);
+                timer.removeTimeout(timeout);
+            },
+            value: await request(config.conditions, config.options)
+        });
+        const observer = reactiveStorage.watch(config, refresh);
+        const subscription = await this.subscribe(doc => {
+            if (config.updateFn && config.updateFn(doc))
+                refresh();
+        });
+        let timeout = undefined;
+        updateTimeout();
+        return result;
+        function refresh() {
+            handlePromise.verbose(fn.doNotRunParallel(async () => {
+                const newValue = await request(config.conditions, config.options);
+                result.value = newValue;
+                updateTimeout();
+            }), "dbRequest");
+        }
+        function updateTimeout() {
+            timer.removeTimeout(timeout);
+            timeout = is.not.empty(config.updateInterval)
+                ? timer.addTimeout(refresh, config.updateInterval)
+                : undefined;
+        }
+    }
+    /**
+     * Reactive factory.
+     *
+     * @param request - Request.
+     * @param handler - Handler.
+     * @returns Reactive response.
+     */
+    async reactiveAttached1(request, handler) {
+        const result = reactiveStorage({
+            unsubscribe: async () => {
+                await this.unsubscribeAttached(subscription);
+            },
+            value: await request
+        });
+        const subscription = await this.subscribeAttached(doc => {
+            handler(doc, result);
+        });
+        return result;
+    }
+    /**
+     * Reactive factory.
+     *
+     * @param request - Request.
+     * @param config - Configuration.
+     * @returns Reactive response.
+     */
+    async reactiveAttached2(request, config) {
+        const result = reactiveStorage({
+            unsubscribe: async () => {
+                reactiveStorage.unwatch(config, observer);
+                await this.unsubscribeAttached(subscription);
+                timer.removeTimeout(timeout);
+            },
+            value: await request(config.conditions, config.parentConditions, config.options)
+        });
+        const observer = reactiveStorage.watch(config, refresh);
+        const subscription = await this.subscribeAttached(doc => {
+            if (config.updateFn && config.updateFn(doc))
+                refresh();
+        });
+        let timeout = undefined;
+        updateTimeout();
+        return result;
+        function refresh() {
+            handlePromise.verbose(fn.doNotRunParallel(async () => {
+                const newValue = await request(config.conditions, config.parentConditions, config.options);
+                result.value = newValue;
+                updateTimeout();
+            }), "dbRequest");
+        }
+        function updateTimeout() {
+            timer.removeTimeout(timeout);
+            timeout = is.not.empty(config.updateInterval)
+                ? timer.addTimeout(refresh, config.updateInterval)
+                : undefined;
+        }
+    }
+    /**
      * Refreshes subscriptions.
      */
     async refreshSubscription() {
@@ -657,7 +839,7 @@ export class Database {
                     }
                     if (this.changesHandlersAttachedPool.size &&
                         is.not.empty(value.doc.lastAttachedDoc)) {
-                        const attachedDoc = extractDocAttached(value.doc, value.doc.lastAttachedDoc);
+                        const attachedDoc = extractDocAttached(value.doc, value.doc.lastAttachedDoc, true);
                         for (const handler of this.changesHandlersAttachedPool.values())
                             handler(attachedDoc);
                     }
@@ -797,14 +979,15 @@ function extractDoc(rawDoc) {
  *
  * @param rawDoc - Document.
  * @param id - Attached document ID.
+ * @param extractDeleted - Extract deleted documents.
  * @returns Attached document.
  */
-function extractDocAttached(rawDoc, id) {
+function extractDocAttached(rawDoc, id, extractDeleted = false) {
     const { attachedDocs } = rawDoc, parentDoc = __rest(rawDoc, ["attachedDocs"]);
     assert.not.empty(attachedDocs, () => new PouchNotFoundError("Missing attached document"));
     const attachedDoc = attachedDocs[id];
     assert.not.empty(attachedDoc, () => new PouchNotFoundError("Missing attached document"));
-    assert.empty(attachedDoc._deleted, () => new PouchNotFoundError("Missing attached document"));
+    assert.toBeTrue(extractDeleted || is.empty(attachedDoc._deleted), () => new PouchNotFoundError("Missing attached document"));
     return Object.assign(Object.assign({}, attachedDoc), { parentDoc: Object.assign(Object.assign({}, parentDoc), { attachedDocs: [] }) });
 }
 /**

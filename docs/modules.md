@@ -34,7 +34,7 @@
 - [facade-implementations/lang/dictionary/Dictionary](modules/facade_implementations_lang_dictionary_Dictionary.md)
 - [facade-implementations/lang/dictionary/types](modules/facade_implementations_lang_dictionary_types.md)
 - [facade-implementations/progressReporter/progressBar](modules/facade_implementations_progressReporter_progressBar.md)
-- [facade-implementations/reactiveStorage/dummyStorage](modules/facade_implementations_reactiveStorage_dummyStorage.md)
+- [facade-implementations/reactiveStorage/reflectStorage](modules/facade_implementations_reactiveStorage_reflectStorage.md)
 - [facade-implementations/showAlert/jsAlert](modules/facade_implementations_showAlert_jsAlert.md)
 - [facade-implementations/showConfirm/jsConfirm](modules/facade_implementations_showConfirm_jsConfirm.md)
 - [facade-implementations/testDelay/configurableTestDelay](modules/facade_implementations_testDelay_configurableTestDelay.md)

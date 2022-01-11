@@ -20,6 +20,10 @@
 
 - [Filter](facade_implementations_database_PouchDBWrapper_Database.md#filter)
 
+### Variables
+
+- [handlers](facade_implementations_database_PouchDBWrapper_Database.md#handlers)
+
 ## Type aliases
 
 ### Filter
@@ -39,3 +43,9 @@
 ##### Returns
 
 `boolean`
+
+## Variables
+
+### handlers
+
+• **handlers**: `Readonly`<{ `error`: (`error`: `unknown`) => `void`  }\>
