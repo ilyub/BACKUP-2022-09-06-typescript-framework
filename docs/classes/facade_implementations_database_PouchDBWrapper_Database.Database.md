@@ -48,22 +48,44 @@
 - [query](facade_implementations_database_PouchDBWrapper_Database.Database.md#query)
 - [queryAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#queryattached)
 - [rawQuery](facade_implementations_database_PouchDBWrapper_Database.Database.md#rawquery)
-- [reactive1](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactive1)
-- [reactive2](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactive2)
-- [reactiveAttached1](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactiveattached1)
-- [reactiveAttached2](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactiveattached2)
 - [reactiveCount](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivecount)
+- [reactiveCountAsync](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivecountasync)
 - [reactiveCountAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivecountattached)
+- [reactiveCountAttachedAsync](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivecountattachedasync)
 - [reactiveExists](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactiveexists)
+- [reactiveExistsAsync](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactiveexistsasync)
 - [reactiveExistsAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactiveexistsattached)
+- [reactiveExistsAttachedAsync](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactiveexistsattachedasync)
+- [reactiveFactoryGet](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivefactoryget)
+- [reactiveFactoryGetAsync](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivefactorygetasync)
+- [reactiveFactoryGetAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivefactorygetattached)
+- [reactiveFactoryGetAttachedAsync](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivefactorygetattachedasync)
+- [reactiveFactoryQuery](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivefactoryquery)
+- [reactiveFactoryQueryAsync](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivefactoryqueryasync)
+- [reactiveFactoryQueryAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivefactoryqueryattached)
+- [reactiveFactoryQueryAttachedAsync](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivefactoryqueryattachedasync)
 - [reactiveGet](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactiveget)
+- [reactiveGetAsync](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivegetasync)
 - [reactiveGetAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivegetattached)
+- [reactiveGetAttachedAsync](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivegetattachedasync)
 - [reactiveGetAttachedIfExists](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivegetattachedifexists)
+- [reactiveGetAttachedIfExistsAsync](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivegetattachedifexistsasync)
 - [reactiveGetIfExists](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivegetifexists)
+- [reactiveGetIfExistsAsync](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivegetifexistsasync)
+- [reactiveHandlerExists](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivehandlerexists)
+- [reactiveHandlerExistsAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivehandlerexistsattached)
+- [reactiveHandlerGet](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivehandlerget)
+- [reactiveHandlerGetAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivehandlergetattached)
+- [reactiveHandlerGetAttachedIfExists](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivehandlergetattachedifexists)
+- [reactiveHandlerGetIfExists](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivehandlergetifexists)
 - [reactiveQuery](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivequery)
+- [reactiveQueryAsync](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivequeryasync)
 - [reactiveQueryAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivequeryattached)
+- [reactiveQueryAttachedAsync](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactivequeryattachedasync)
 - [reactiveUnsettled](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactiveunsettled)
+- [reactiveUnsettledAsync](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactiveunsettledasync)
 - [reactiveUnsettledAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactiveunsettledattached)
+- [reactiveUnsettledAttachedAsync](facade_implementations_database_PouchDBWrapper_Database.Database.md#reactiveunsettledattachedasync)
 - [refreshSubscription](facade_implementations_database_PouchDBWrapper_Database.Database.md#refreshsubscription)
 - [reset](facade_implementations_database_PouchDBWrapper_Database.Database.md#reset)
 - [subscribe](facade_implementations_database_PouchDBWrapper_Database.Database.md#subscribe)
@@ -552,117 +574,9 @@ Documents.
 
 ___
 
-### reactive1
-
-▸ `Protected` **reactive1**<`T`\>(`request`, `handler`): `Promise`<`ReactiveResponse`<`T`\>\>
-
-Reactive factory.
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `request` | `Promise`<`T`\> | Request. |
-| `handler` | (`doc`: `ExistingDocument`, `mutableResult`: `Writable`<`ReactiveResponse`<`T`\>\>) => `void` | Handler. |
-
-#### Returns
-
-`Promise`<`ReactiveResponse`<`T`\>\>
-
-Reactive response.
-
-___
-
-### reactive2
-
-▸ `Protected` **reactive2**<`T`\>(`request`, `config`): `Promise`<`ReactiveResponse`<`T`\>\>
-
-Reactive factory.
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `request` | (`conditions?`: `Readonly`<`Record`<`string`, `Condition`\>\>, `options?`: `QueryOptions`) => `Promise`<`T`\> | Request. |
-| `config` | `ReactiveConfig` | Configuration. |
-
-#### Returns
-
-`Promise`<`ReactiveResponse`<`T`\>\>
-
-Reactive response.
-
-___
-
-### reactiveAttached1
-
-▸ `Protected` **reactiveAttached1**<`T`\>(`request`, `handler`): `Promise`<`ReactiveResponse`<`T`\>\>
-
-Reactive factory.
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `request` | `Promise`<`T`\> | Request. |
-| `handler` | (`doc`: `ExistingAttachedDocument`, `mutableResult`: `Writable`<`ReactiveResponse`<`T`\>\>) => `void` | Handler. |
-
-#### Returns
-
-`Promise`<`ReactiveResponse`<`T`\>\>
-
-Reactive response.
-
-___
-
-### reactiveAttached2
-
-▸ `Protected` **reactiveAttached2**<`T`\>(`request`, `config`): `Promise`<`ReactiveResponse`<`T`\>\>
-
-Reactive factory.
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `request` | (`conditions?`: `Readonly`<`Record`<`string`, `Condition`\>\>, `parentConditions?`: `Readonly`<`Record`<`string`, `Condition`\>\>, `options?`: `QueryOptions`) => `Promise`<`T`\> | Request. |
-| `config` | `ReactiveConfigAttached` | Configuration. |
-
-#### Returns
-
-`Promise`<`ReactiveResponse`<`T`\>\>
-
-Reactive response.
-
-___
-
 ### reactiveCount
 
-▸ **reactiveCount**(`config`): `Promise`<`ReactiveResponse`<`number`\>\>
+▸ **reactiveCount**(`config`): `ReactiveResponse`<`number`\>
 
 #### Parameters
 
@@ -672,7 +586,7 @@ ___
 
 #### Returns
 
-`Promise`<`ReactiveResponse`<`number`\>\>
+`ReactiveResponse`<`number`\>
 
 #### Implementation of
 
@@ -680,9 +594,29 @@ DatabaseInterface.reactiveCount
 
 ___
 
+### reactiveCountAsync
+
+▸ **reactiveCountAsync**(`config`): `Promise`<`ReactiveResponseAsync`<`number`\>\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `config` | `ReactiveConfig` |
+
+#### Returns
+
+`Promise`<`ReactiveResponseAsync`<`number`\>\>
+
+#### Implementation of
+
+DatabaseInterface.reactiveCountAsync
+
+___
+
 ### reactiveCountAttached
 
-▸ **reactiveCountAttached**(`config`): `Promise`<`ReactiveResponse`<`number`\>\>
+▸ **reactiveCountAttached**(`config`): `ReactiveResponse`<`number`\>
 
 #### Parameters
 
@@ -692,7 +626,7 @@ ___
 
 #### Returns
 
-`Promise`<`ReactiveResponse`<`number`\>\>
+`ReactiveResponse`<`number`\>
 
 #### Implementation of
 
@@ -700,9 +634,29 @@ DatabaseInterface.reactiveCountAttached
 
 ___
 
+### reactiveCountAttachedAsync
+
+▸ **reactiveCountAttachedAsync**(`config`): `Promise`<`ReactiveResponseAsync`<`number`\>\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `config` | `ReactiveConfigAttached` |
+
+#### Returns
+
+`Promise`<`ReactiveResponseAsync`<`number`\>\>
+
+#### Implementation of
+
+DatabaseInterface.reactiveCountAttachedAsync
+
+___
+
 ### reactiveExists
 
-▸ **reactiveExists**(`id`): `Promise`<`ReactiveResponse`<`boolean`\>\>
+▸ **reactiveExists**(`id`): `ReactiveResponse`<`boolean`\>
 
 #### Parameters
 
@@ -712,7 +666,7 @@ ___
 
 #### Returns
 
-`Promise`<`ReactiveResponse`<`boolean`\>\>
+`ReactiveResponse`<`boolean`\>
 
 #### Implementation of
 
@@ -720,9 +674,29 @@ DatabaseInterface.reactiveExists
 
 ___
 
+### reactiveExistsAsync
+
+▸ **reactiveExistsAsync**(`id`): `Promise`<`ReactiveResponseAsync`<`boolean`\>\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `string` |
+
+#### Returns
+
+`Promise`<`ReactiveResponseAsync`<`boolean`\>\>
+
+#### Implementation of
+
+DatabaseInterface.reactiveExistsAsync
+
+___
+
 ### reactiveExistsAttached
 
-▸ **reactiveExistsAttached**(`id`, `parentId`): `Promise`<`ReactiveResponse`<`boolean`\>\>
+▸ **reactiveExistsAttached**(`id`, `parentId`): `ReactiveResponse`<`boolean`\>
 
 #### Parameters
 
@@ -733,7 +707,7 @@ ___
 
 #### Returns
 
-`Promise`<`ReactiveResponse`<`boolean`\>\>
+`ReactiveResponse`<`boolean`\>
 
 #### Implementation of
 
@@ -741,9 +715,250 @@ DatabaseInterface.reactiveExistsAttached
 
 ___
 
+### reactiveExistsAttachedAsync
+
+▸ **reactiveExistsAttachedAsync**(`id`, `parentId`): `Promise`<`ReactiveResponseAsync`<`boolean`\>\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+| `parentId` | `string` |
+
+#### Returns
+
+`Promise`<`ReactiveResponseAsync`<`boolean`\>\>
+
+#### Implementation of
+
+DatabaseInterface.reactiveExistsAttachedAsync
+
+___
+
+### reactiveFactoryGet
+
+▸ `Protected` **reactiveFactoryGet**<`T`\>(`request`, `handler`): `ReactiveResponse`<`T`\>
+
+Reactive factory.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `request` | `Promise`<`T`\> | Request. |
+| `handler` | [`ReactiveHandler`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)<`T`\> | Handler. |
+
+#### Returns
+
+`ReactiveResponse`<`T`\>
+
+Reactive response.
+
+___
+
+### reactiveFactoryGetAsync
+
+▸ `Protected` **reactiveFactoryGetAsync**<`T`\>(`request`, `handler`, `result?`): `Promise`<`ReactiveResponseAsync`<`T`\>\>
+
+Reactive factory.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `request` | `Promise`<`T`\> | Request. |
+| `handler` | [`ReactiveHandler`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)<`T`\> | Handler. |
+| `result?` | `Writable`<`ReactiveResponse`<`T`\>\> | Reactive result. |
+
+#### Returns
+
+`Promise`<`ReactiveResponseAsync`<`T`\>\>
+
+Reactive response.
+
+___
+
+### reactiveFactoryGetAttached
+
+▸ `Protected` **reactiveFactoryGetAttached**<`T`\>(`request`, `handler`): `ReactiveResponse`<`T`\>
+
+Reactive factory.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `request` | `Promise`<`T`\> | Request. |
+| `handler` | [`ReactiveHandlerAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)<`T`\> | Handler. |
+
+#### Returns
+
+`ReactiveResponse`<`T`\>
+
+Reactive response.
+
+___
+
+### reactiveFactoryGetAttachedAsync
+
+▸ `Protected` **reactiveFactoryGetAttachedAsync**<`T`\>(`request`, `handler`, `result?`): `Promise`<`ReactiveResponseAsync`<`T`\>\>
+
+Reactive factory.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `request` | `Promise`<`T`\> | Request. |
+| `handler` | [`ReactiveHandlerAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)<`T`\> | Handler. |
+| `result?` | `Writable`<`ReactiveResponse`<`T`\>\> | Reactive result. |
+
+#### Returns
+
+`Promise`<`ReactiveResponseAsync`<`T`\>\>
+
+Reactive response.
+
+___
+
+### reactiveFactoryQuery
+
+▸ `Protected` **reactiveFactoryQuery**<`T`\>(`request`, `config`): `ReactiveResponse`<`T`\>
+
+Reactive factory.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `request` | [`ReactiveRequest`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactiverequest)<`T`\> | Request. |
+| `config` | `ReactiveConfig` | Configuration. |
+
+#### Returns
+
+`ReactiveResponse`<`T`\>
+
+Reactive response.
+
+___
+
+### reactiveFactoryQueryAsync
+
+▸ `Protected` **reactiveFactoryQueryAsync**<`T`\>(`request`, `config`, `result?`): `Promise`<`ReactiveResponseAsync`<`T`\>\>
+
+Reactive factory.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `request` | [`ReactiveRequest`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactiverequest)<`T`\> | Request. |
+| `config` | `ReactiveConfig` | Configuration. |
+| `result?` | `Writable`<`ReactiveResponse`<`T`\>\> | Reactive result. |
+
+#### Returns
+
+`Promise`<`ReactiveResponseAsync`<`T`\>\>
+
+Reactive response.
+
+___
+
+### reactiveFactoryQueryAttached
+
+▸ `Protected` **reactiveFactoryQueryAttached**<`T`\>(`request`, `config`): `ReactiveResponse`<`T`\>
+
+Reactive factory.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `request` | [`ReactiveRequestAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactiverequestattached)<`T`\> | Request. |
+| `config` | `ReactiveConfigAttached` | Configuration. |
+
+#### Returns
+
+`ReactiveResponse`<`T`\>
+
+Reactive response.
+
+___
+
+### reactiveFactoryQueryAttachedAsync
+
+▸ `Protected` **reactiveFactoryQueryAttachedAsync**<`T`\>(`request`, `config`, `result?`): `Promise`<`ReactiveResponseAsync`<`T`\>\>
+
+Reactive factory.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `request` | [`ReactiveRequestAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactiverequestattached)<`T`\> | Request. |
+| `config` | `ReactiveConfigAttached` | Configuration. |
+| `result?` | `Writable`<`ReactiveResponse`<`T`\>\> | Reactive result. |
+
+#### Returns
+
+`Promise`<`ReactiveResponseAsync`<`T`\>\>
+
+Reactive response.
+
+___
+
 ### reactiveGet
 
-▸ **reactiveGet**(`id`): `Promise`<`ReactiveResponse`<`ExistingDocument`\>\>
+▸ **reactiveGet**(`id`): `ReactiveResponse`<`ExistingDocument`\>
 
 #### Parameters
 
@@ -753,7 +968,7 @@ ___
 
 #### Returns
 
-`Promise`<`ReactiveResponse`<`ExistingDocument`\>\>
+`ReactiveResponse`<`ExistingDocument`\>
 
 #### Implementation of
 
@@ -761,51 +976,9 @@ DatabaseInterface.reactiveGet
 
 ___
 
-### reactiveGetAttached
+### reactiveGetAsync
 
-▸ **reactiveGetAttached**(`id`, `parentId`): `Promise`<`ReactiveResponse`<`ExistingAttachedDocument`\>\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `id` | `number` |
-| `parentId` | `string` |
-
-#### Returns
-
-`Promise`<`ReactiveResponse`<`ExistingAttachedDocument`\>\>
-
-#### Implementation of
-
-DatabaseInterface.reactiveGetAttached
-
-___
-
-### reactiveGetAttachedIfExists
-
-▸ **reactiveGetAttachedIfExists**(`id`, `parentId`): `Promise`<`ReactiveResponse`<`undefined` \| `ExistingAttachedDocument`\>\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `id` | `number` |
-| `parentId` | `string` |
-
-#### Returns
-
-`Promise`<`ReactiveResponse`<`undefined` \| `ExistingAttachedDocument`\>\>
-
-#### Implementation of
-
-DatabaseInterface.reactiveGetAttachedIfExists
-
-___
-
-### reactiveGetIfExists
-
-▸ **reactiveGetIfExists**(`id`): `Promise`<`ReactiveResponse`<`undefined` \| `ExistingDocument`\>\>
+▸ **reactiveGetAsync**(`id`): `Promise`<`ReactiveResponseAsync`<`ExistingDocument`\>\>
 
 #### Parameters
 
@@ -815,7 +988,111 @@ ___
 
 #### Returns
 
-`Promise`<`ReactiveResponse`<`undefined` \| `ExistingDocument`\>\>
+`Promise`<`ReactiveResponseAsync`<`ExistingDocument`\>\>
+
+#### Implementation of
+
+DatabaseInterface.reactiveGetAsync
+
+___
+
+### reactiveGetAttached
+
+▸ **reactiveGetAttached**(`id`, `parentId`): `ReactiveResponse`<`ExistingAttachedDocument`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+| `parentId` | `string` |
+
+#### Returns
+
+`ReactiveResponse`<`ExistingAttachedDocument`\>
+
+#### Implementation of
+
+DatabaseInterface.reactiveGetAttached
+
+___
+
+### reactiveGetAttachedAsync
+
+▸ **reactiveGetAttachedAsync**(`id`, `parentId`): `Promise`<`ReactiveResponseAsync`<`ExistingAttachedDocument`\>\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+| `parentId` | `string` |
+
+#### Returns
+
+`Promise`<`ReactiveResponseAsync`<`ExistingAttachedDocument`\>\>
+
+#### Implementation of
+
+DatabaseInterface.reactiveGetAttachedAsync
+
+___
+
+### reactiveGetAttachedIfExists
+
+▸ **reactiveGetAttachedIfExists**(`id`, `parentId`): `ReactiveResponse`<`undefined` \| `ExistingAttachedDocument`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+| `parentId` | `string` |
+
+#### Returns
+
+`ReactiveResponse`<`undefined` \| `ExistingAttachedDocument`\>
+
+#### Implementation of
+
+DatabaseInterface.reactiveGetAttachedIfExists
+
+___
+
+### reactiveGetAttachedIfExistsAsync
+
+▸ **reactiveGetAttachedIfExistsAsync**(`id`, `parentId`): `Promise`<`ReactiveResponseAsync`<`undefined` \| `ExistingAttachedDocument`\>\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+| `parentId` | `string` |
+
+#### Returns
+
+`Promise`<`ReactiveResponseAsync`<`undefined` \| `ExistingAttachedDocument`\>\>
+
+#### Implementation of
+
+DatabaseInterface.reactiveGetAttachedIfExistsAsync
+
+___
+
+### reactiveGetIfExists
+
+▸ **reactiveGetIfExists**(`id`): `ReactiveResponse`<`undefined` \| `ExistingDocument`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `string` |
+
+#### Returns
+
+`ReactiveResponse`<`undefined` \| `ExistingDocument`\>
 
 #### Implementation of
 
@@ -823,9 +1100,152 @@ DatabaseInterface.reactiveGetIfExists
 
 ___
 
+### reactiveGetIfExistsAsync
+
+▸ **reactiveGetIfExistsAsync**(`id`): `Promise`<`ReactiveResponseAsync`<`undefined` \| `ExistingDocument`\>\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `string` |
+
+#### Returns
+
+`Promise`<`ReactiveResponseAsync`<`undefined` \| `ExistingDocument`\>\>
+
+#### Implementation of
+
+DatabaseInterface.reactiveGetIfExistsAsync
+
+___
+
+### reactiveHandlerExists
+
+▸ `Protected` **reactiveHandlerExists**(`id`): [`ReactiveHandler`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)<`boolean`\>
+
+Reactive handler factory.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `id` | `string` | ID. |
+
+#### Returns
+
+[`ReactiveHandler`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)<`boolean`\>
+
+Reactive handler.
+
+___
+
+### reactiveHandlerExistsAttached
+
+▸ `Protected` **reactiveHandlerExistsAttached**(`id`, `parentId`): [`ReactiveHandlerAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)<`boolean`\>
+
+Reactive handler factory.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `id` | `number` | ID. |
+| `parentId` | `string` | Parent ID. |
+
+#### Returns
+
+[`ReactiveHandlerAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)<`boolean`\>
+
+Reactive handler.
+
+___
+
+### reactiveHandlerGet
+
+▸ `Protected` **reactiveHandlerGet**(`id`): [`ReactiveHandler`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)<`ExistingDocument`\>
+
+Reactive handler factory.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `id` | `string` | ID. |
+
+#### Returns
+
+[`ReactiveHandler`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)<`ExistingDocument`\>
+
+Reactive handler.
+
+___
+
+### reactiveHandlerGetAttached
+
+▸ `Protected` **reactiveHandlerGetAttached**(`id`, `parentId`): [`ReactiveHandlerAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)<`ExistingAttachedDocument`\>
+
+Reactive handler factory.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `id` | `number` | ID. |
+| `parentId` | `string` | Parent ID. |
+
+#### Returns
+
+[`ReactiveHandlerAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)<`ExistingAttachedDocument`\>
+
+Reactive handler.
+
+___
+
+### reactiveHandlerGetAttachedIfExists
+
+▸ `Protected` **reactiveHandlerGetAttachedIfExists**(`id`, `parentId`): [`ReactiveHandlerAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)<`undefined` \| `ExistingAttachedDocument`\>
+
+Reactive handler factory.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `id` | `number` | ID. |
+| `parentId` | `string` | Parent ID. |
+
+#### Returns
+
+[`ReactiveHandlerAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)<`undefined` \| `ExistingAttachedDocument`\>
+
+Reactive handler.
+
+___
+
+### reactiveHandlerGetIfExists
+
+▸ `Protected` **reactiveHandlerGetIfExists**(`id`): [`ReactiveHandler`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)<`undefined` \| `ExistingDocument`\>
+
+Reactive handler factory.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `id` | `string` | ID. |
+
+#### Returns
+
+[`ReactiveHandler`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)<`undefined` \| `ExistingDocument`\>
+
+Reactive handler.
+
+___
+
 ### reactiveQuery
 
-▸ **reactiveQuery**(`config`): `Promise`<`ReactiveResponse`<`ExistingDocuments`\>\>
+▸ **reactiveQuery**(`config`): `ReactiveResponse`<`ExistingDocuments`\>
 
 #### Parameters
 
@@ -835,7 +1255,7 @@ ___
 
 #### Returns
 
-`Promise`<`ReactiveResponse`<`ExistingDocuments`\>\>
+`ReactiveResponse`<`ExistingDocuments`\>
 
 #### Implementation of
 
@@ -843,29 +1263,9 @@ DatabaseInterface.reactiveQuery
 
 ___
 
-### reactiveQueryAttached
+### reactiveQueryAsync
 
-▸ **reactiveQueryAttached**(`config`): `Promise`<`ReactiveResponse`<`ExistingAttachedDocuments`\>\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `config` | `ReactiveConfigAttached` |
-
-#### Returns
-
-`Promise`<`ReactiveResponse`<`ExistingAttachedDocuments`\>\>
-
-#### Implementation of
-
-DatabaseInterface.reactiveQueryAttached
-
-___
-
-### reactiveUnsettled
-
-▸ **reactiveUnsettled**(`config`): `Promise`<`ReactiveResponse`<`number`\>\>
+▸ **reactiveQueryAsync**(`config`): `Promise`<`ReactiveResponseAsync`<`ExistingDocuments`\>\>
 
 #### Parameters
 
@@ -875,17 +1275,17 @@ ___
 
 #### Returns
 
-`Promise`<`ReactiveResponse`<`number`\>\>
+`Promise`<`ReactiveResponseAsync`<`ExistingDocuments`\>\>
 
 #### Implementation of
 
-DatabaseInterface.reactiveUnsettled
+DatabaseInterface.reactiveQueryAsync
 
 ___
 
-### reactiveUnsettledAttached
+### reactiveQueryAttached
 
-▸ **reactiveUnsettledAttached**(`config`): `Promise`<`ReactiveResponse`<`number`\>\>
+▸ **reactiveQueryAttached**(`config`): `ReactiveResponse`<`ExistingAttachedDocuments`\>
 
 #### Parameters
 
@@ -895,11 +1295,111 @@ ___
 
 #### Returns
 
-`Promise`<`ReactiveResponse`<`number`\>\>
+`ReactiveResponse`<`ExistingAttachedDocuments`\>
+
+#### Implementation of
+
+DatabaseInterface.reactiveQueryAttached
+
+___
+
+### reactiveQueryAttachedAsync
+
+▸ **reactiveQueryAttachedAsync**(`config`): `Promise`<`ReactiveResponseAsync`<`ExistingAttachedDocuments`\>\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `config` | `ReactiveConfigAttached` |
+
+#### Returns
+
+`Promise`<`ReactiveResponseAsync`<`ExistingAttachedDocuments`\>\>
+
+#### Implementation of
+
+DatabaseInterface.reactiveQueryAttachedAsync
+
+___
+
+### reactiveUnsettled
+
+▸ **reactiveUnsettled**(`config`): `ReactiveResponse`<`number`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `config` | `ReactiveConfig` |
+
+#### Returns
+
+`ReactiveResponse`<`number`\>
+
+#### Implementation of
+
+DatabaseInterface.reactiveUnsettled
+
+___
+
+### reactiveUnsettledAsync
+
+▸ **reactiveUnsettledAsync**(`config`): `Promise`<`ReactiveResponseAsync`<`number`\>\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `config` | `ReactiveConfig` |
+
+#### Returns
+
+`Promise`<`ReactiveResponseAsync`<`number`\>\>
+
+#### Implementation of
+
+DatabaseInterface.reactiveUnsettledAsync
+
+___
+
+### reactiveUnsettledAttached
+
+▸ **reactiveUnsettledAttached**(`config`): `ReactiveResponse`<`number`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `config` | `ReactiveConfigAttached` |
+
+#### Returns
+
+`ReactiveResponse`<`number`\>
 
 #### Implementation of
 
 DatabaseInterface.reactiveUnsettledAttached
+
+___
+
+### reactiveUnsettledAttachedAsync
+
+▸ **reactiveUnsettledAttachedAsync**(`config`): `Promise`<`ReactiveResponseAsync`<`number`\>\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `config` | `ReactiveConfigAttached` |
+
+#### Returns
+
+`Promise`<`ReactiveResponseAsync`<`number`\>\>
+
+#### Implementation of
+
+DatabaseInterface.reactiveUnsettledAttachedAsync
 
 ___
 

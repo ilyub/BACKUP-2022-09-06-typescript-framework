@@ -1,4 +1,4 @@
-import type { AttachedChangesHandler, ChangesHandler, Conditions, Database as DatabaseInterface, DatabaseOptions, ExistingAttachedDocument, ExistingAttachedDocuments, ExistingDocument, ExistingDocuments, PutAttachedDocument, PutAttachedResponse, PutDocument, PutDocuments, PutResponse, PutResponses, QueryOptions, ReactiveConfig, ReactiveConfigAttached, ReactiveResponse, ResetCallback } from "@skylib/facades/es/database";
+import type { AttachedChangesHandler, ChangesHandler, Conditions, Database as DatabaseInterface, DatabaseOptions, ExistingAttachedDocument, ExistingAttachedDocuments, ExistingDocument, ExistingDocuments, PutAttachedDocument, PutAttachedResponse, PutDocument, PutDocuments, PutResponse, PutResponses, QueryOptions, ReactiveConfig, ReactiveConfigAttached, ReactiveResponse, ReactiveResponseAsync, ResetCallback } from "@skylib/facades/es/database";
 import type { Writable } from "@skylib/functions/es/types/core";
 import type { Changes, PouchDatabase, PouchDatabaseConfiguration } from "./PouchDBProxy";
 import { PouchDBProxy } from "./PouchDBProxy";
@@ -31,6 +31,10 @@ export interface RawQueryResponse {
     readonly mapReduce: MapReduce;
     readonly unsettledCount: number;
 }
+export declare type ReactiveRequest<T> = (conditions?: Conditions, options?: QueryOptions) => Promise<T>;
+export declare type ReactiveRequestAttached<T> = (conditions?: Conditions, parentConditions?: Conditions, options?: QueryOptions) => Promise<T>;
+export declare type ReactiveHandler<T> = (doc: ExistingDocument, mutableResult: Writable<ReactiveResponseAsync<T>>) => void;
+export declare type ReactiveHandlerAttached<T> = (doc: ExistingAttachedDocument, mutableResult: Writable<ReactiveResponseAsync<T>>) => void;
 export declare const handlers: Readonly<{
     error(error: unknown): void;
 }>;
@@ -65,18 +69,30 @@ export declare class Database implements DatabaseInterface {
     putIfNotExists(doc: PutDocument): Promise<PutResponse | undefined>;
     query(conditions?: Conditions, options?: QueryOptions): Promise<ExistingDocuments>;
     queryAttached(conditions?: Conditions, parentConditions?: Conditions, options?: QueryOptions): Promise<ExistingAttachedDocuments>;
-    reactiveCount(config: ReactiveConfig): Promise<ReactiveResponse<number>>;
-    reactiveCountAttached(config: ReactiveConfigAttached): Promise<ReactiveResponse<number>>;
-    reactiveExists(id: string): Promise<ReactiveResponse<boolean>>;
-    reactiveExistsAttached(id: number, parentId: string): Promise<ReactiveResponse<boolean>>;
-    reactiveGet(id: string): Promise<ReactiveResponse<ExistingDocument>>;
-    reactiveGetAttached(id: number, parentId: string): Promise<ReactiveResponse<ExistingAttachedDocument>>;
-    reactiveGetAttachedIfExists(id: number, parentId: string): Promise<ReactiveResponse<ExistingAttachedDocument | undefined>>;
-    reactiveGetIfExists(id: string): Promise<ReactiveResponse<ExistingDocument | undefined>>;
-    reactiveQuery(config: ReactiveConfig): Promise<ReactiveResponse<ExistingDocuments>>;
-    reactiveQueryAttached(config: ReactiveConfigAttached): Promise<ReactiveResponse<ExistingAttachedDocuments>>;
-    reactiveUnsettled(config: ReactiveConfig): Promise<ReactiveResponse<number>>;
-    reactiveUnsettledAttached(config: ReactiveConfigAttached): Promise<ReactiveResponse<number>>;
+    reactiveCount(config: ReactiveConfig): ReactiveResponse<number>;
+    reactiveCountAsync(config: ReactiveConfig): Promise<ReactiveResponseAsync<number>>;
+    reactiveCountAttached(config: ReactiveConfigAttached): ReactiveResponse<number>;
+    reactiveCountAttachedAsync(config: ReactiveConfigAttached): Promise<ReactiveResponseAsync<number>>;
+    reactiveExists(id: string): ReactiveResponse<boolean>;
+    reactiveExistsAsync(id: string): Promise<ReactiveResponseAsync<boolean>>;
+    reactiveExistsAttached(id: number, parentId: string): ReactiveResponse<boolean>;
+    reactiveExistsAttachedAsync(id: number, parentId: string): Promise<ReactiveResponseAsync<boolean>>;
+    reactiveGet(id: string): ReactiveResponse<ExistingDocument>;
+    reactiveGetAsync(id: string): Promise<ReactiveResponseAsync<ExistingDocument>>;
+    reactiveGetAttached(id: number, parentId: string): ReactiveResponse<ExistingAttachedDocument>;
+    reactiveGetAttachedAsync(id: number, parentId: string): Promise<ReactiveResponseAsync<ExistingAttachedDocument>>;
+    reactiveGetAttachedIfExists(id: number, parentId: string): ReactiveResponse<ExistingAttachedDocument | undefined>;
+    reactiveGetAttachedIfExistsAsync(id: number, parentId: string): Promise<ReactiveResponseAsync<ExistingAttachedDocument | undefined>>;
+    reactiveGetIfExists(id: string): ReactiveResponse<ExistingDocument | undefined>;
+    reactiveGetIfExistsAsync(id: string): Promise<ReactiveResponseAsync<ExistingDocument | undefined>>;
+    reactiveQuery(config: ReactiveConfig): ReactiveResponse<ExistingDocuments>;
+    reactiveQueryAsync(config: ReactiveConfig): Promise<ReactiveResponseAsync<ExistingDocuments>>;
+    reactiveQueryAttached(config: ReactiveConfigAttached): ReactiveResponse<ExistingAttachedDocuments>;
+    reactiveQueryAttachedAsync(config: ReactiveConfigAttached): Promise<ReactiveResponseAsync<ExistingAttachedDocuments>>;
+    reactiveUnsettled(config: ReactiveConfig): ReactiveResponse<number>;
+    reactiveUnsettledAsync(config: ReactiveConfig): Promise<ReactiveResponseAsync<number>>;
+    reactiveUnsettledAttached(config: ReactiveConfigAttached): ReactiveResponse<number>;
+    reactiveUnsettledAttachedAsync(config: ReactiveConfigAttached): Promise<ReactiveResponseAsync<number>>;
     reset(callback?: ResetCallback): Promise<void>;
     subscribe(handler: ChangesHandler): Promise<Symbol>;
     subscribeAttached(handler: AttachedChangesHandler): Promise<Symbol>;
@@ -133,15 +149,16 @@ export declare class Database implements DatabaseInterface {
      * @param handler - Handler.
      * @returns Reactive response.
      */
-    protected reactive1<T>(request: Promise<T>, handler: (doc: ExistingDocument, mutableResult: Writable<ReactiveResponse<T>>) => void): Promise<ReactiveResponse<T>>;
+    protected reactiveFactoryGet<T>(request: Promise<T>, handler: ReactiveHandler<T>): ReactiveResponse<T>;
     /**
      * Reactive factory.
      *
      * @param request - Request.
-     * @param config - Configuration.
+     * @param handler - Handler.
+     * @param result - Reactive result.
      * @returns Reactive response.
      */
-    protected reactive2<T>(request: (conditions?: Conditions, options?: QueryOptions) => Promise<T>, config: ReactiveConfig): Promise<ReactiveResponse<T>>;
+    protected reactiveFactoryGetAsync<T>(request: Promise<T>, handler: ReactiveHandler<T>, result?: Writable<ReactiveResponse<T>>): Promise<ReactiveResponseAsync<T>>;
     /**
      * Reactive factory.
      *
@@ -149,7 +166,16 @@ export declare class Database implements DatabaseInterface {
      * @param handler - Handler.
      * @returns Reactive response.
      */
-    protected reactiveAttached1<T>(request: Promise<T>, handler: (doc: ExistingAttachedDocument, mutableResult: Writable<ReactiveResponse<T>>) => void): Promise<ReactiveResponse<T>>;
+    protected reactiveFactoryGetAttached<T>(request: Promise<T>, handler: ReactiveHandlerAttached<T>): ReactiveResponse<T>;
+    /**
+     * Reactive factory.
+     *
+     * @param request - Request.
+     * @param handler - Handler.
+     * @param result - Reactive result.
+     * @returns Reactive response.
+     */
+    protected reactiveFactoryGetAttachedAsync<T>(request: Promise<T>, handler: ReactiveHandlerAttached<T>, result?: Writable<ReactiveResponse<T>>): Promise<ReactiveResponseAsync<T>>;
     /**
      * Reactive factory.
      *
@@ -157,7 +183,78 @@ export declare class Database implements DatabaseInterface {
      * @param config - Configuration.
      * @returns Reactive response.
      */
-    protected reactiveAttached2<T>(request: (conditions?: Conditions, parentConditions?: Conditions, options?: QueryOptions) => Promise<T>, config: ReactiveConfigAttached): Promise<ReactiveResponse<T>>;
+    protected reactiveFactoryQuery<T>(request: ReactiveRequest<T>, config: ReactiveConfig): ReactiveResponse<T>;
+    /**
+     * Reactive factory.
+     *
+     * @param request - Request.
+     * @param config - Configuration.
+     * @param result - Reactive result.
+     * @returns Reactive response.
+     */
+    protected reactiveFactoryQueryAsync<T>(request: ReactiveRequest<T>, config: ReactiveConfig, result?: Writable<ReactiveResponse<T>>): Promise<ReactiveResponseAsync<T>>;
+    /**
+     * Reactive factory.
+     *
+     * @param request - Request.
+     * @param config - Configuration.
+     * @returns Reactive response.
+     */
+    protected reactiveFactoryQueryAttached<T>(request: ReactiveRequestAttached<T>, config: ReactiveConfigAttached): ReactiveResponse<T>;
+    /**
+     * Reactive factory.
+     *
+     * @param request - Request.
+     * @param config - Configuration.
+     * @param result - Reactive result.
+     * @returns Reactive response.
+     */
+    protected reactiveFactoryQueryAttachedAsync<T>(request: ReactiveRequestAttached<T>, config: ReactiveConfigAttached, result?: Writable<ReactiveResponse<T>>): Promise<ReactiveResponseAsync<T>>;
+    /**
+     * Reactive handler factory.
+     *
+     * @param id - ID.
+     * @returns Reactive handler.
+     */
+    protected reactiveHandlerExists(id: string): ReactiveHandler<boolean>;
+    /**
+     * Reactive handler factory.
+     *
+     * @param id - ID.
+     * @param parentId - Parent ID.
+     * @returns Reactive handler.
+     */
+    protected reactiveHandlerExistsAttached(id: number, parentId: string): ReactiveHandlerAttached<boolean>;
+    /**
+     * Reactive handler factory.
+     *
+     * @param id - ID.
+     * @returns Reactive handler.
+     */
+    protected reactiveHandlerGet(id: string): ReactiveHandler<ExistingDocument>;
+    /**
+     * Reactive handler factory.
+     *
+     * @param id - ID.
+     * @param parentId - Parent ID.
+     * @returns Reactive handler.
+     */
+    protected reactiveHandlerGetAttached(id: number, parentId: string): ReactiveHandlerAttached<ExistingAttachedDocument>;
+    /**
+     * Reactive handler factory.
+     *
+     * @param id - ID.
+     * @param parentId - Parent ID.
+     * @returns Reactive handler.
+     */
+    protected reactiveHandlerGetAttachedIfExists(id: number, parentId: string): ReactiveHandlerAttached<ExistingAttachedDocument | undefined>;
+    /**
+     * Reactive handler factory.
+     *
+     * @param id - ID.
+     * @returns Reactive handler.
+     */
+    protected reactiveHandlerGetIfExists(id: string): ReactiveHandler<ExistingDocument | undefined>;
     /**
      * Refreshes subscriptions.
      */

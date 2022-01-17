@@ -19,6 +19,10 @@
 ### Type aliases
 
 - [Filter](facade_implementations_database_PouchDBWrapper_Database.md#filter)
+- [ReactiveHandler](facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)
+- [ReactiveHandlerAttached](facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)
+- [ReactiveRequest](facade_implementations_database_PouchDBWrapper_Database.md#reactiverequest)
+- [ReactiveRequestAttached](facade_implementations_database_PouchDBWrapper_Database.md#reactiverequestattached)
 
 ### Variables
 
@@ -43,6 +47,115 @@
 ##### Returns
 
 `boolean`
+
+___
+
+### ReactiveHandler
+
+Ƭ **ReactiveHandler**<`T`\>: (`doc`: `ExistingDocument`, `mutableResult`: `Writable`<`ReactiveResponseAsync`<`T`\>\>) => `void`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Type declaration
+
+▸ (`doc`, `mutableResult`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `doc` | `ExistingDocument` |
+| `mutableResult` | `Writable`<`ReactiveResponseAsync`<`T`\>\> |
+
+##### Returns
+
+`void`
+
+___
+
+### ReactiveHandlerAttached
+
+Ƭ **ReactiveHandlerAttached**<`T`\>: (`doc`: `ExistingAttachedDocument`, `mutableResult`: `Writable`<`ReactiveResponseAsync`<`T`\>\>) => `void`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Type declaration
+
+▸ (`doc`, `mutableResult`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `doc` | `ExistingAttachedDocument` |
+| `mutableResult` | `Writable`<`ReactiveResponseAsync`<`T`\>\> |
+
+##### Returns
+
+`void`
+
+___
+
+### ReactiveRequest
+
+Ƭ **ReactiveRequest**<`T`\>: (`conditions?`: `Conditions`, `options?`: `QueryOptions`) => `Promise`<`T`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Type declaration
+
+▸ (`conditions?`, `options?`): `Promise`<`T`\>
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `conditions?` | `Conditions` |
+| `options?` | `QueryOptions` |
+
+##### Returns
+
+`Promise`<`T`\>
+
+___
+
+### ReactiveRequestAttached
+
+Ƭ **ReactiveRequestAttached**<`T`\>: (`conditions?`: `Conditions`, `parentConditions?`: `Conditions`, `options?`: `QueryOptions`) => `Promise`<`T`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Type declaration
+
+▸ (`conditions?`, `parentConditions?`, `options?`): `Promise`<`T`\>
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `conditions?` | `Conditions` |
+| `parentConditions?` | `Conditions` |
+| `options?` | `QueryOptions` |
+
+##### Returns
+
+`Promise`<`T`\>
 
 ## Variables
 
