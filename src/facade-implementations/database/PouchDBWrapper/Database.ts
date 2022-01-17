@@ -22,6 +22,7 @@ import type {
   ReactiveConfig,
   ReactiveConfigAttached,
   ReactiveResponse,
+  ReactiveResponseAsync,
   ResetCallback,
   StoredAttachedDocument
 } from "@skylib/facades/dist/database";
@@ -84,6 +85,27 @@ export interface RawQueryResponse {
   readonly mapReduce: MapReduce;
   readonly unsettledCount: number;
 }
+
+export type ReactiveRequest<T> = (
+  conditions?: Conditions,
+  options?: QueryOptions
+) => Promise<T>;
+
+export type ReactiveRequestAttached<T> = (
+  conditions?: Conditions,
+  parentConditions?: Conditions,
+  options?: QueryOptions
+) => Promise<T>;
+
+export type ReactiveHandler<T> = (
+  doc: ExistingDocument,
+  mutableResult: Writable<ReactiveResponseAsync<T>>
+) => void;
+
+export type ReactiveHandlerAttached<T> = (
+  doc: ExistingAttachedDocument,
+  mutableResult: Writable<ReactiveResponseAsync<T>>
+) => void;
 
 export const handlers = o.freeze({
   error(error: unknown): void {
@@ -369,106 +391,197 @@ export class Database implements DatabaseInterface {
     return response.docs;
   }
 
-  public async reactiveCount(
+  public reactiveCount(config: ReactiveConfig): ReactiveResponse<number> {
+    return this.reactiveFactoryQuery(this.count.bind(this), config);
+  }
+
+  public async reactiveCountAsync(
     config: ReactiveConfig
-  ): Promise<ReactiveResponse<number>> {
-    return this.reactive2(this.count.bind(this), config);
+  ): Promise<ReactiveResponseAsync<number>> {
+    return this.reactiveFactoryQueryAsync(this.count.bind(this), config);
   }
 
-  public async reactiveCountAttached(
+  public reactiveCountAttached(
     config: ReactiveConfigAttached
-  ): Promise<ReactiveResponse<number>> {
-    return this.reactiveAttached2(this.countAttached.bind(this), config);
+  ): ReactiveResponse<number> {
+    return this.reactiveFactoryQueryAttached(
+      this.countAttached.bind(this),
+      config
+    );
   }
 
-  public async reactiveExists(id: string): Promise<ReactiveResponse<boolean>> {
-    return this.reactive1(this.exists(id), (doc, mutableResult) => {
-      if (doc._id === id) mutableResult.value = !doc._deleted;
-    });
+  public async reactiveCountAttachedAsync(
+    config: ReactiveConfigAttached
+  ): Promise<ReactiveResponseAsync<number>> {
+    return this.reactiveFactoryQueryAttachedAsync(
+      this.countAttached.bind(this),
+      config
+    );
   }
 
-  public async reactiveExistsAttached(
+  public reactiveExists(id: string): ReactiveResponse<boolean> {
+    return this.reactiveFactoryGet(
+      this.exists(id),
+      this.reactiveHandlerExists(id)
+    );
+  }
+
+  public async reactiveExistsAsync(
+    id: string
+  ): Promise<ReactiveResponseAsync<boolean>> {
+    return this.reactiveFactoryGetAsync(
+      this.exists(id),
+      this.reactiveHandlerExists(id)
+    );
+  }
+
+  public reactiveExistsAttached(
     id: number,
     parentId: string
-  ): Promise<ReactiveResponse<boolean>> {
-    return this.reactiveAttached1(
+  ): ReactiveResponse<boolean> {
+    return this.reactiveFactoryGetAttached(
       this.existsAttached(id, parentId),
-      (doc, mutableResult) => {
-        if (doc._id === id && doc.parentDoc._id === parentId)
-          mutableResult.value = !doc._deleted;
-      }
+      this.reactiveHandlerExistsAttached(id, parentId)
     );
   }
 
-  public async reactiveGet(
-    id: string
-  ): Promise<ReactiveResponse<ExistingDocument>> {
-    return this.reactive1(this.get(id), (doc, mutableResult) => {
-      if (doc._id === id)
-        if (doc._deleted)
-          handlers.error(new PouchNotFoundError("Missing document"));
-        else mutableResult.value = doc;
-    });
-  }
-
-  public async reactiveGetAttached(
+  public async reactiveExistsAttachedAsync(
     id: number,
     parentId: string
-  ): Promise<ReactiveResponse<ExistingAttachedDocument>> {
-    return this.reactiveAttached1(
+  ): Promise<ReactiveResponseAsync<boolean>> {
+    return this.reactiveFactoryGetAttachedAsync(
+      this.existsAttached(id, parentId),
+      this.reactiveHandlerExistsAttached(id, parentId)
+    );
+  }
+
+  public reactiveGet(id: string): ReactiveResponse<ExistingDocument> {
+    return this.reactiveFactoryGet(this.get(id), this.reactiveHandlerGet(id));
+  }
+
+  public async reactiveGetAsync(
+    id: string
+  ): Promise<ReactiveResponseAsync<ExistingDocument>> {
+    return this.reactiveFactoryGetAsync(
+      this.get(id),
+      this.reactiveHandlerGet(id)
+    );
+  }
+
+  public reactiveGetAttached(
+    id: number,
+    parentId: string
+  ): ReactiveResponse<ExistingAttachedDocument> {
+    return this.reactiveFactoryGetAttached(
       this.getAttached(id, parentId),
-      (doc, mutableResult) => {
-        if (doc._id === id && doc.parentDoc._id === parentId)
-          if (doc._deleted)
-            handlers.error(new PouchNotFoundError("Missing attached document"));
-          else mutableResult.value = doc;
-      }
+      this.reactiveHandlerGetAttached(id, parentId)
     );
   }
 
-  public async reactiveGetAttachedIfExists(
+  public async reactiveGetAttachedAsync(
     id: number,
     parentId: string
-  ): Promise<ReactiveResponse<ExistingAttachedDocument | undefined>> {
-    return this.reactiveAttached1(
-      this.getAttachedIfExists(id, parentId),
-      (doc, mutableResult) => {
-        if (doc._id === id && doc.parentDoc._id === parentId)
-          mutableResult.value = doc._deleted ? undefined : doc;
-      }
+  ): Promise<ReactiveResponseAsync<ExistingAttachedDocument>> {
+    return this.reactiveFactoryGetAttachedAsync(
+      this.getAttached(id, parentId),
+      this.reactiveHandlerGetAttached(id, parentId)
     );
   }
 
-  public async reactiveGetIfExists(
+  public reactiveGetAttachedIfExists(
+    id: number,
+    parentId: string
+  ): ReactiveResponse<ExistingAttachedDocument | undefined> {
+    return this.reactiveFactoryGetAttached(
+      this.getAttachedIfExists(id, parentId),
+      this.reactiveHandlerGetAttachedIfExists(id, parentId)
+    );
+  }
+
+  public async reactiveGetAttachedIfExistsAsync(
+    id: number,
+    parentId: string
+  ): Promise<ReactiveResponseAsync<ExistingAttachedDocument | undefined>> {
+    return this.reactiveFactoryGetAttachedAsync(
+      this.getAttachedIfExists(id, parentId),
+      this.reactiveHandlerGetAttachedIfExists(id, parentId)
+    );
+  }
+
+  public reactiveGetIfExists(
     id: string
-  ): Promise<ReactiveResponse<ExistingDocument | undefined>> {
-    return this.reactive1(this.getIfExists(id), (doc, mutableResult) => {
-      if (doc._id === id) mutableResult.value = doc._deleted ? undefined : doc;
-    });
+  ): ReactiveResponse<ExistingDocument | undefined> {
+    return this.reactiveFactoryGet(
+      this.getIfExists(id),
+      this.reactiveHandlerGetIfExists(id)
+    );
   }
 
-  public async reactiveQuery(
+  public async reactiveGetIfExistsAsync(
+    id: string
+  ): Promise<ReactiveResponseAsync<ExistingDocument | undefined>> {
+    return this.reactiveFactoryGetAsync(
+      this.getIfExists(id),
+      this.reactiveHandlerGetIfExists(id)
+    );
+  }
+
+  public reactiveQuery(
     config: ReactiveConfig
-  ): Promise<ReactiveResponse<ExistingDocuments>> {
-    return this.reactive2(this.query.bind(this), config);
+  ): ReactiveResponse<ExistingDocuments> {
+    return this.reactiveFactoryQuery(this.query.bind(this), config);
   }
 
-  public async reactiveQueryAttached(
-    config: ReactiveConfigAttached
-  ): Promise<ReactiveResponse<ExistingAttachedDocuments>> {
-    return this.reactiveAttached2(this.queryAttached.bind(this), config);
-  }
-
-  public async reactiveUnsettled(
+  public async reactiveQueryAsync(
     config: ReactiveConfig
-  ): Promise<ReactiveResponse<number>> {
-    return this.reactive2(this.unsettled.bind(this), config);
+  ): Promise<ReactiveResponseAsync<ExistingDocuments>> {
+    return this.reactiveFactoryQueryAsync(this.query.bind(this), config);
   }
 
-  public async reactiveUnsettledAttached(
+  public reactiveQueryAttached(
     config: ReactiveConfigAttached
-  ): Promise<ReactiveResponse<number>> {
-    return this.reactiveAttached2(this.unsettledAttached.bind(this), config);
+  ): ReactiveResponse<ExistingAttachedDocuments> {
+    return this.reactiveFactoryQueryAttached(
+      this.queryAttached.bind(this),
+      config
+    );
+  }
+
+  public async reactiveQueryAttachedAsync(
+    config: ReactiveConfigAttached
+  ): Promise<ReactiveResponseAsync<ExistingAttachedDocuments>> {
+    return this.reactiveFactoryQueryAttachedAsync(
+      this.queryAttached.bind(this),
+      config
+    );
+  }
+
+  public reactiveUnsettled(config: ReactiveConfig): ReactiveResponse<number> {
+    return this.reactiveFactoryQuery(this.unsettled.bind(this), config);
+  }
+
+  public async reactiveUnsettledAsync(
+    config: ReactiveConfig
+  ): Promise<ReactiveResponseAsync<number>> {
+    return this.reactiveFactoryQueryAsync(this.unsettled.bind(this), config);
+  }
+
+  public reactiveUnsettledAttached(
+    config: ReactiveConfigAttached
+  ): ReactiveResponse<number> {
+    return this.reactiveFactoryQueryAttached(
+      this.unsettledAttached.bind(this),
+      config
+    );
+  }
+
+  public async reactiveUnsettledAttachedAsync(
+    config: ReactiveConfigAttached
+  ): Promise<ReactiveResponseAsync<number>> {
+    return this.reactiveFactoryQueryAttachedAsync(
+      this.unsettledAttached.bind(this),
+      config
+    );
   }
 
   public async reset(callback?: ResetCallback): Promise<void> {
@@ -1002,21 +1115,115 @@ export class Database implements DatabaseInterface {
    * @param handler - Handler.
    * @returns Reactive response.
    */
-  protected async reactive1<T>(
+  protected reactiveFactoryGet<T>(
     request: Promise<T>,
-    handler: (
-      doc: ExistingDocument,
-      mutableResult: Writable<ReactiveResponse<T>>
-    ) => void
-  ): Promise<ReactiveResponse<T>> {
-    const result = reactiveStorage({
+    handler: ReactiveHandler<T>
+  ): ReactiveResponse<T> {
+    const result = reactiveStorage<ReactiveResponse<T>>({
+      loaded: false
+    });
+
+    handlePromise.verbose(
+      this.reactiveFactoryGetAsync(request, handler, result),
+      "dbRequest"
+    );
+
+    return result;
+  }
+
+  /**
+   * Reactive factory.
+   *
+   * @param request - Request.
+   * @param handler - Handler.
+   * @param result - Reactive result.
+   * @returns Reactive response.
+   */
+  protected async reactiveFactoryGetAsync<T>(
+    request: Promise<T>,
+    handler: ReactiveHandler<T>,
+    result?: Writable<ReactiveResponse<T>>
+  ): Promise<ReactiveResponseAsync<T>> {
+    result =
+      result ??
+      reactiveStorage<ReactiveResponse<T>>({
+        loaded: false
+      });
+
+    o.assign(result, {
+      loaded: true,
       unsubscribe: async (): Promise<void> => {
         await this.unsubscribe(subscription);
       },
       value: await request
     });
 
+    assert.toBeTrue(result.loaded);
+
     const subscription = await this.subscribe(doc => {
+      assert.not.undefined(result);
+      assert.toBeTrue(result.loaded);
+      handler(doc, result);
+    });
+
+    return result;
+  }
+
+  /**
+   * Reactive factory.
+   *
+   * @param request - Request.
+   * @param handler - Handler.
+   * @returns Reactive response.
+   */
+  protected reactiveFactoryGetAttached<T>(
+    request: Promise<T>,
+    handler: ReactiveHandlerAttached<T>
+  ): ReactiveResponse<T> {
+    const result = reactiveStorage<ReactiveResponse<T>>({
+      loaded: false
+    });
+
+    handlePromise.verbose(
+      this.reactiveFactoryGetAttachedAsync(request, handler, result),
+      "dbRequest"
+    );
+
+    return result;
+  }
+
+  /**
+   * Reactive factory.
+   *
+   * @param request - Request.
+   * @param handler - Handler.
+   * @param result - Reactive result.
+   * @returns Reactive response.
+   */
+  protected async reactiveFactoryGetAttachedAsync<T>(
+    request: Promise<T>,
+    handler: ReactiveHandlerAttached<T>,
+    result?: Writable<ReactiveResponse<T>>
+  ): Promise<ReactiveResponseAsync<T>> {
+    result =
+      result ??
+      reactiveStorage<ReactiveResponse<T>>({
+        loaded: false
+      });
+
+    o.assign(result, {
+      loaded: true,
+      unsubscribe: async (): Promise<void> => {
+        await this.unsubscribeAttached(subscription);
+      },
+      value: await request
+    });
+
+    assert.toBeTrue(result.loaded);
+
+    const subscription = await this.subscribeAttached(doc => {
+      assert.not.undefined(result);
+      assert.toBeTrue(result.loaded);
       handler(doc, result);
     });
 
@@ -1030,11 +1237,45 @@ export class Database implements DatabaseInterface {
    * @param config - Configuration.
    * @returns Reactive response.
    */
-  protected async reactive2<T>(
-    request: (conditions?: Conditions, options?: QueryOptions) => Promise<T>,
+  protected reactiveFactoryQuery<T>(
+    request: ReactiveRequest<T>,
     config: ReactiveConfig
-  ): Promise<ReactiveResponse<T>> {
-    const result = reactiveStorage({
+  ): ReactiveResponse<T> {
+    const result = reactiveStorage<ReactiveResponse<T>>({
+      loaded: false
+    });
+
+    handlePromise.verbose(
+      this.reactiveFactoryQueryAsync(request, config, result),
+      "dbRequest"
+    );
+
+    return result;
+  }
+
+  /**
+   * Reactive factory.
+   *
+   * @param request - Request.
+   * @param config - Configuration.
+   * @param result - Reactive result.
+   * @returns Reactive response.
+   */
+  protected async reactiveFactoryQueryAsync<T>(
+    request: ReactiveRequest<T>,
+    config: ReactiveConfig,
+    result?: Writable<ReactiveResponse<T>>
+  ): Promise<ReactiveResponseAsync<T>> {
+    config = reactiveStorage(config);
+
+    result =
+      result ??
+      reactiveStorage<ReactiveResponse<T>>({
+        loaded: false
+      });
+
+    o.assign(result, {
+      loaded: true,
       unsubscribe: async (): Promise<void> => {
         reactiveStorage.unwatch(config, observer);
         await this.unsubscribe(subscription);
@@ -1042,6 +1283,8 @@ export class Database implements DatabaseInterface {
       },
       value: await request(config.conditions, config.options)
     });
+
+    assert.toBeTrue(result.loaded);
 
     const observer = reactiveStorage.watch(config, refresh);
 
@@ -1060,6 +1303,8 @@ export class Database implements DatabaseInterface {
         fn.doNotRunParallel(async () => {
           const newValue = await request(config.conditions, config.options);
 
+          assert.not.undefined(result);
+          assert.toBeTrue(result.loaded);
           result.value = newValue;
           updateTimeout();
         }),
@@ -1079,26 +1324,21 @@ export class Database implements DatabaseInterface {
    * Reactive factory.
    *
    * @param request - Request.
-   * @param handler - Handler.
+   * @param config - Configuration.
    * @returns Reactive response.
    */
-  protected async reactiveAttached1<T>(
-    request: Promise<T>,
-    handler: (
-      doc: ExistingAttachedDocument,
-      mutableResult: Writable<ReactiveResponse<T>>
-    ) => void
-  ): Promise<ReactiveResponse<T>> {
-    const result = reactiveStorage({
-      unsubscribe: async (): Promise<void> => {
-        await this.unsubscribeAttached(subscription);
-      },
-      value: await request
+  protected reactiveFactoryQueryAttached<T>(
+    request: ReactiveRequestAttached<T>,
+    config: ReactiveConfigAttached
+  ): ReactiveResponse<T> {
+    const result = reactiveStorage<ReactiveResponse<T>>({
+      loaded: false
     });
 
-    const subscription = await this.subscribeAttached(doc => {
-      handler(doc, result);
-    });
+    handlePromise.verbose(
+      this.reactiveFactoryQueryAttachedAsync(request, config, result),
+      "dbRequest"
+    );
 
     return result;
   }
@@ -1108,17 +1348,24 @@ export class Database implements DatabaseInterface {
    *
    * @param request - Request.
    * @param config - Configuration.
+   * @param result - Reactive result.
    * @returns Reactive response.
    */
-  protected async reactiveAttached2<T>(
-    request: (
-      conditions?: Conditions,
-      parentConditions?: Conditions,
-      options?: QueryOptions
-    ) => Promise<T>,
-    config: ReactiveConfigAttached
-  ): Promise<ReactiveResponse<T>> {
-    const result = reactiveStorage({
+  protected async reactiveFactoryQueryAttachedAsync<T>(
+    request: ReactiveRequestAttached<T>,
+    config: ReactiveConfigAttached,
+    result?: Writable<ReactiveResponse<T>>
+  ): Promise<ReactiveResponseAsync<T>> {
+    config = reactiveStorage(config);
+
+    result =
+      result ??
+      reactiveStorage<ReactiveResponse<T>>({
+        loaded: false
+      });
+
+    o.assign(result, {
+      loaded: true,
       unsubscribe: async (): Promise<void> => {
         reactiveStorage.unwatch(config, observer);
         await this.unsubscribeAttached(subscription);
@@ -1130,6 +1377,8 @@ export class Database implements DatabaseInterface {
         config.options
       )
     });
+
+    assert.toBeTrue(result.loaded);
 
     const observer = reactiveStorage.watch(config, refresh);
 
@@ -1152,6 +1401,8 @@ export class Database implements DatabaseInterface {
             config.options
           );
 
+          assert.not.undefined(result);
+          assert.toBeTrue(result.loaded);
           result.value = newValue;
           updateTimeout();
         }),
@@ -1165,6 +1416,100 @@ export class Database implements DatabaseInterface {
         ? timer.addTimeout(refresh, config.updateInterval)
         : undefined;
     }
+  }
+
+  /**
+   * Reactive handler factory.
+   *
+   * @param id - ID.
+   * @returns Reactive handler.
+   */
+  protected reactiveHandlerExists(id: string): ReactiveHandler<boolean> {
+    return (doc, mutableResult): void => {
+      if (doc._id === id) mutableResult.value = !doc._deleted;
+    };
+  }
+
+  /**
+   * Reactive handler factory.
+   *
+   * @param id - ID.
+   * @param parentId - Parent ID.
+   * @returns Reactive handler.
+   */
+  protected reactiveHandlerExistsAttached(
+    id: number,
+    parentId: string
+  ): ReactiveHandlerAttached<boolean> {
+    return (doc, mutableResult): void => {
+      if (doc._id === id && doc.parentDoc._id === parentId)
+        mutableResult.value = !doc._deleted;
+    };
+  }
+
+  /**
+   * Reactive handler factory.
+   *
+   * @param id - ID.
+   * @returns Reactive handler.
+   */
+  protected reactiveHandlerGet(id: string): ReactiveHandler<ExistingDocument> {
+    return (doc, mutableResult): void => {
+      if (doc._id === id)
+        if (doc._deleted)
+          handlers.error(new PouchNotFoundError("Missing document"));
+        else mutableResult.value = doc;
+    };
+  }
+
+  /**
+   * Reactive handler factory.
+   *
+   * @param id - ID.
+   * @param parentId - Parent ID.
+   * @returns Reactive handler.
+   */
+  protected reactiveHandlerGetAttached(
+    id: number,
+    parentId: string
+  ): ReactiveHandlerAttached<ExistingAttachedDocument> {
+    return (doc, mutableResult): void => {
+      if (doc._id === id && doc.parentDoc._id === parentId)
+        if (doc._deleted)
+          handlers.error(new PouchNotFoundError("Missing attached document"));
+        else mutableResult.value = doc;
+    };
+  }
+
+  /**
+   * Reactive handler factory.
+   *
+   * @param id - ID.
+   * @param parentId - Parent ID.
+   * @returns Reactive handler.
+   */
+  protected reactiveHandlerGetAttachedIfExists(
+    id: number,
+    parentId: string
+  ): ReactiveHandlerAttached<ExistingAttachedDocument | undefined> {
+    return (doc, mutableResult): void => {
+      if (doc._id === id && doc.parentDoc._id === parentId)
+        mutableResult.value = doc._deleted ? undefined : doc;
+    };
+  }
+
+  /**
+   * Reactive handler factory.
+   *
+   * @param id - ID.
+   * @returns Reactive handler.
+   */
+  protected reactiveHandlerGetIfExists(
+    id: string
+  ): ReactiveHandler<ExistingDocument | undefined> {
+    return (doc, mutableResult): void => {
+      if (doc._id === id) mutableResult.value = doc._deleted ? undefined : doc;
+    };
   }
 
   /**
