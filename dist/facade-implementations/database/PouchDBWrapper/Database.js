@@ -730,7 +730,8 @@ class Database {
      */
     reactiveFactoryGet(request, handler) {
         const result = (0, reactiveStorage_1.reactiveStorage)({
-            loaded: false
+            loaded: false,
+            loading: true
         });
         handlePromise_1.handlePromise.verbose(this.reactiveFactoryGetAsync(request, handler, result), "dbRequest");
         return result;
@@ -746,10 +747,12 @@ class Database {
     async reactiveFactoryGetAsync(request, handler, result) {
         result =
             result !== null && result !== void 0 ? result : (0, reactiveStorage_1.reactiveStorage)({
-                loaded: false
+                loaded: false,
+                loading: true
             });
         o.assign(result, {
             loaded: true,
+            loading: false,
             unsubscribe: async () => {
                 await this.unsubscribe(subscription);
             },
@@ -772,7 +775,8 @@ class Database {
      */
     reactiveFactoryGetAttached(request, handler) {
         const result = (0, reactiveStorage_1.reactiveStorage)({
-            loaded: false
+            loaded: false,
+            loading: true
         });
         handlePromise_1.handlePromise.verbose(this.reactiveFactoryGetAttachedAsync(request, handler, result), "dbRequest");
         return result;
@@ -788,10 +792,12 @@ class Database {
     async reactiveFactoryGetAttachedAsync(request, handler, result) {
         result =
             result !== null && result !== void 0 ? result : (0, reactiveStorage_1.reactiveStorage)({
-                loaded: false
+                loaded: false,
+                loading: true
             });
         o.assign(result, {
             loaded: true,
+            loading: false,
             unsubscribe: async () => {
                 await this.unsubscribeAttached(subscription);
             },
@@ -814,7 +820,8 @@ class Database {
      */
     reactiveFactoryQuery(request, config) {
         const result = (0, reactiveStorage_1.reactiveStorage)({
-            loaded: false
+            loaded: false,
+            loading: true
         });
         handlePromise_1.handlePromise.verbose(this.reactiveFactoryQueryAsync(request, config, result), "dbRequest");
         return result;
@@ -831,10 +838,12 @@ class Database {
         config = (0, reactiveStorage_1.reactiveStorage)(config);
         result =
             result !== null && result !== void 0 ? result : (0, reactiveStorage_1.reactiveStorage)({
-                loaded: false
+                loaded: false,
+                loading: true
             });
         o.assign(result, {
             loaded: true,
+            loading: false,
             unsubscribe: async () => {
                 reactiveStorage_1.reactiveStorage.unwatch(config, observer);
                 await this.unsubscribe(subscription);
@@ -853,9 +862,13 @@ class Database {
         return result;
         function refresh() {
             handlePromise_1.handlePromise.verbose(fn.doNotRunParallel(async () => {
+                assert.not.undefined(result);
+                assert.toBeTrue(result.loaded);
+                result.loading = true;
                 const newValue = await request(config.conditions, config.options);
                 assert.not.undefined(result);
                 assert.toBeTrue(result.loaded);
+                result.loading = false;
                 result.value = newValue;
                 updateTimeout();
             }), "dbRequest");
@@ -876,7 +889,8 @@ class Database {
      */
     reactiveFactoryQueryAttached(request, config) {
         const result = (0, reactiveStorage_1.reactiveStorage)({
-            loaded: false
+            loaded: false,
+            loading: true
         });
         handlePromise_1.handlePromise.verbose(this.reactiveFactoryQueryAttachedAsync(request, config, result), "dbRequest");
         return result;
@@ -893,10 +907,12 @@ class Database {
         config = (0, reactiveStorage_1.reactiveStorage)(config);
         result =
             result !== null && result !== void 0 ? result : (0, reactiveStorage_1.reactiveStorage)({
-                loaded: false
+                loaded: false,
+                loading: true
             });
         o.assign(result, {
             loaded: true,
+            loading: false,
             unsubscribe: async () => {
                 reactiveStorage_1.reactiveStorage.unwatch(config, observer);
                 await this.unsubscribeAttached(subscription);
@@ -915,9 +931,13 @@ class Database {
         return result;
         function refresh() {
             handlePromise_1.handlePromise.verbose(fn.doNotRunParallel(async () => {
+                assert.not.undefined(result);
+                assert.toBeTrue(result.loaded);
+                result.loading = true;
                 const newValue = await request(config.conditions, config.parentConditions, config.options);
                 assert.not.undefined(result);
                 assert.toBeTrue(result.loaded);
+                result.loading = false;
                 result.value = newValue;
                 updateTimeout();
             }), "dbRequest");
@@ -1131,6 +1151,8 @@ function condsToStr(source, conditions) {
                 case "lte":
                     toEmit.push(`(${source}.${property} <= ${escapeForJs(value)})`);
                     break;
+                case "neq":
+                    toEmit.push(`(${source}.${property} !== ${escapeForJs(value)})`);
             }
     return {
         toEmit: and(toEmit),
