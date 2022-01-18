@@ -75,7 +75,7 @@ const getScript = jest
                   }
                 } as gapi.auth2.GoogleAuth);
             }
-          } as gapi.auth2.GoogleAuth;
+          } as unknown as gapi.auth2.GoogleAuth;
         }
       },
       load(apiName, callback) {
