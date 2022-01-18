@@ -29,7 +29,9 @@ it("count", async () => {
     subtest({ d: { dgt: 0 } }, 3),
     subtest({ d: { dlt: 0 } }, 3),
     subtest({ d: { dgt: 10 * 60 } }, 2),
-    subtest({ d: { dlt: 10 * 60 } }, 4)
+    subtest({ d: { dlt: 10 * 60 } }, 4),
+    subtest({ b: { neq: true } }, 7),
+    subtest({ b: { neq: false } }, 7)
   ]);
 
   async function subtest(

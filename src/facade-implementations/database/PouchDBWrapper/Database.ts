@@ -1740,6 +1740,9 @@ function condsToStr(
           toEmit.push(`(${source}.${property} <= ${escapeForJs(value)})`);
 
           break;
+
+        case "neq":
+          toEmit.push(`(${source}.${property} !== ${escapeForJs(value)})`);
       }
 
   return {
