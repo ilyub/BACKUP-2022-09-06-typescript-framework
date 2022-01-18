@@ -1120,7 +1120,8 @@ export class Database implements DatabaseInterface {
     handler: ReactiveHandler<T>
   ): ReactiveResponse<T> {
     const result = reactiveStorage<ReactiveResponse<T>>({
-      loaded: false
+      loaded: false,
+      loading: true
     });
 
     handlePromise.verbose(
@@ -1147,11 +1148,13 @@ export class Database implements DatabaseInterface {
     result =
       result ??
       reactiveStorage<ReactiveResponse<T>>({
-        loaded: false
+        loaded: false,
+        loading: true
       });
 
     o.assign(result, {
       loaded: true,
+      loading: false,
       unsubscribe: async (): Promise<void> => {
         await this.unsubscribe(subscription);
       },
@@ -1181,7 +1184,8 @@ export class Database implements DatabaseInterface {
     handler: ReactiveHandlerAttached<T>
   ): ReactiveResponse<T> {
     const result = reactiveStorage<ReactiveResponse<T>>({
-      loaded: false
+      loaded: false,
+      loading: true
     });
 
     handlePromise.verbose(
@@ -1208,11 +1212,13 @@ export class Database implements DatabaseInterface {
     result =
       result ??
       reactiveStorage<ReactiveResponse<T>>({
-        loaded: false
+        loaded: false,
+        loading: true
       });
 
     o.assign(result, {
       loaded: true,
+      loading: false,
       unsubscribe: async (): Promise<void> => {
         await this.unsubscribeAttached(subscription);
       },
@@ -1242,7 +1248,8 @@ export class Database implements DatabaseInterface {
     config: ReactiveConfig
   ): ReactiveResponse<T> {
     const result = reactiveStorage<ReactiveResponse<T>>({
-      loaded: false
+      loaded: false,
+      loading: true
     });
 
     handlePromise.verbose(
@@ -1271,11 +1278,13 @@ export class Database implements DatabaseInterface {
     result =
       result ??
       reactiveStorage<ReactiveResponse<T>>({
-        loaded: false
+        loaded: false,
+        loading: true
       });
 
     o.assign(result, {
       loaded: true,
+      loading: false,
       unsubscribe: async (): Promise<void> => {
         reactiveStorage.unwatch(config, observer);
         await this.unsubscribe(subscription);
@@ -1301,10 +1310,15 @@ export class Database implements DatabaseInterface {
     function refresh(): void {
       handlePromise.verbose(
         fn.doNotRunParallel(async () => {
+          assert.not.undefined(result);
+          assert.toBeTrue(result.loaded);
+          result.loading = true;
+
           const newValue = await request(config.conditions, config.options);
 
           assert.not.undefined(result);
           assert.toBeTrue(result.loaded);
+          result.loading = false;
           result.value = newValue;
           updateTimeout();
         }),
@@ -1332,7 +1346,8 @@ export class Database implements DatabaseInterface {
     config: ReactiveConfigAttached
   ): ReactiveResponse<T> {
     const result = reactiveStorage<ReactiveResponse<T>>({
-      loaded: false
+      loaded: false,
+      loading: true
     });
 
     handlePromise.verbose(
@@ -1361,11 +1376,13 @@ export class Database implements DatabaseInterface {
     result =
       result ??
       reactiveStorage<ReactiveResponse<T>>({
-        loaded: false
+        loaded: false,
+        loading: true
       });
 
     o.assign(result, {
       loaded: true,
+      loading: false,
       unsubscribe: async (): Promise<void> => {
         reactiveStorage.unwatch(config, observer);
         await this.unsubscribeAttached(subscription);
@@ -1395,6 +1412,10 @@ export class Database implements DatabaseInterface {
     function refresh(): void {
       handlePromise.verbose(
         fn.doNotRunParallel(async () => {
+          assert.not.undefined(result);
+          assert.toBeTrue(result.loaded);
+          result.loading = true;
+
           const newValue = await request(
             config.conditions,
             config.parentConditions,
@@ -1403,6 +1424,7 @@ export class Database implements DatabaseInterface {
 
           assert.not.undefined(result);
           assert.toBeTrue(result.loaded);
+          result.loading = false;
           result.value = newValue;
           updateTimeout();
         }),

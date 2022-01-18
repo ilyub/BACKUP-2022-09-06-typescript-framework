@@ -54,7 +54,9 @@ it.each([false, true])("Database.reactiveCount", async async => {
 
     {
       config.conditions = { type: { eq: "b" } };
+      expect(result.loading).toBeTrue();
       await wait(1000);
+      expect(result.loading).toBeFalse();
       expect(result.value).toStrictEqual(0);
     }
 
@@ -65,6 +67,7 @@ it.each([false, true])("Database.reactiveCount", async async => {
 
     {
       config.conditions = { type: { eq: "a" } };
+      expect(result.loading).toBeFalse();
       await wait(1000);
       expect(result.value).toStrictEqual(0);
     }
@@ -103,7 +106,9 @@ it.each([false, true])("Database.reactiveCountAttached", async async => {
 
     {
       config.conditions = { type: { eq: "b" } };
+      expect(result.loading).toBeTrue();
       await wait(1000);
+      expect(result.loading).toBeFalse();
       expect(result.value).toStrictEqual(0);
     }
 
@@ -114,6 +119,7 @@ it.each([false, true])("Database.reactiveCountAttached", async async => {
 
     {
       config.conditions = { type: { eq: "a" } };
+      expect(result.loading).toBeFalse();
       await wait(1000);
       expect(result.value).toStrictEqual(0);
     }
