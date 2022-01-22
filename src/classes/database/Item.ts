@@ -15,6 +15,8 @@ export interface ItemDoc {
 
 export type ItemDocs = readonly ItemDoc[];
 
+export type Items = readonly Items[];
+
 export const isItemDoc: is.Guard<ItemDoc> = is.factory(
   is.object.of,
   {},
@@ -74,3 +76,7 @@ export class Item {
 
   protected readonly lastAttachedDoc: numberU;
 }
+
+export const isItem = is.factory(is.instance, Item);
+
+export const isItems = is.factory(is.array.of, isItem);
