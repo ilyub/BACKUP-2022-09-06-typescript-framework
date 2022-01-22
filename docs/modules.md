@@ -8,6 +8,7 @@
 
 - [actions/Action](modules/actions_Action.md)
 - [actions/Confirmable](modules/actions_Confirmable.md)
+- [classes/database/Item](modules/classes_database_Item.md)
 - [decorators/Enumerable](modules/decorators_Enumerable.md)
 - [decorators/MustBeDefined](modules/decorators_MustBeDefined.md)
 - [decorators/OwnProperty](modules/decorators_OwnProperty.md)

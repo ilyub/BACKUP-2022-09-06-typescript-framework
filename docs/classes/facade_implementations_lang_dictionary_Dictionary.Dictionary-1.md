@@ -6,7 +6,7 @@
 
 ## Implements
 
-- `DictionaryInterface`
+- `Dictionary`
 
 ## Table of contents
 

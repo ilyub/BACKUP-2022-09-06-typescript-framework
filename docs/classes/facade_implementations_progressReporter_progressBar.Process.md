@@ -6,7 +6,7 @@
 
 ## Implements
 
-- `ProcessInterface`
+- `Process`
 
 ## Table of contents
 

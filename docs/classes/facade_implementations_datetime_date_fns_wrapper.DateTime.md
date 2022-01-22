@@ -6,7 +6,7 @@
 
 ## Implements
 
-- `DateTimeInterface`
+- `DateTime`
 
 ## Table of contents
 

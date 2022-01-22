@@ -21,7 +21,7 @@
 
 ## Implements
 
-- `EngineInterface`<`T`\>
+- `Engine`<`T`\>
 
 ## Table of contents
 

@@ -6,7 +6,7 @@
 
 ## Implements
 
-- `DatabaseInterface`
+- `Database`
 
 ## Table of contents
 
