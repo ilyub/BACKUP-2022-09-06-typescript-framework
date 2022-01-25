@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Item = exports.isItemDocs = exports.isItemDoc = void 0;
+exports.isItems = exports.isItem = exports.Item = exports.isItemDocs = exports.isItemDoc = void 0;
 const tslib_1 = require("tslib");
 const database_1 = require("@skylib/facades/dist/database");
 const uniqueId_1 = require("@skylib/facades/dist/uniqueId");
@@ -79,4 +79,6 @@ class Item {
     }
 }
 exports.Item = Item;
+exports.isItem = is.factory(is.instance, Item);
+exports.isItems = is.factory(is.array.of, exports.isItem);
 //# sourceMappingURL=Item.js.map

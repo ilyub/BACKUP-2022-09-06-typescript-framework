@@ -74,4 +74,6 @@ export class Item {
         });
     }
 }
+export const isItem = is.factory(is.instance, Item);
+export const isItems = is.factory(is.array.of, isItem);
 //# sourceMappingURL=Item.js.map

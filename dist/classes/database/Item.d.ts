@@ -9,6 +9,7 @@ export interface ItemDoc {
     readonly lastAttachedDoc?: number;
 }
 export declare type ItemDocs = readonly ItemDoc[];
+export declare type Items = readonly Items[];
 export declare const isItemDoc: is.Guard<ItemDoc>;
 export declare const isItemDocs: is.Guard<readonly ItemDoc[]>;
 export declare class Item {
@@ -30,4 +31,6 @@ export declare class Item {
     protected readonly attachedDocs: StoredAttachedDocuments | undefined;
     protected readonly lastAttachedDoc: numberU;
 }
+export declare const isItem: is.Guard<Item>;
+export declare const isItems: is.Guard<readonly Item[]>;
 //# sourceMappingURL=Item.d.ts.map

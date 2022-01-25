@@ -37,7 +37,8 @@ exports.implementation = {
         return Date.now() / 1000;
     },
     validate(dt) {
-        return (0, date_fns_1.isValid)((0, date_fns_1.parseISO)(dt));
+        const now = Date.now();
+        return formatStrings.some(formatString => (0, date_fns_1.isValid)((0, date_fns_1.parse)(dt, formatString, now)));
     }
 };
 class DateTime {
@@ -61,7 +62,7 @@ class DateTime {
         if (dt instanceof DateTime)
             this.value = new Date(dt.value);
         else if (is.string(dt))
-            this.value = new Date(dt);
+            this.value = parseString(dt);
         else
             this.value = new Date();
     }
@@ -212,7 +213,7 @@ class DateTime {
         return this.value;
     }
     toString() {
-        return (0, date_fns_1.format)(this.value, "yyyy-MM-dd HH:mm:ss");
+        return (0, date_fns_1.format)(this.value, "yyyy-MM-dd HH:mm");
     }
     toTime() {
         return this.value.getTime() / 1000;
@@ -227,9 +228,31 @@ exports.DateTime = DateTime;
 |* Private
 |*******************************************************************************
 |*/
+const formatStrings = [
+    "yyyy-M-d h:m:s a",
+    "yyyy-M-d H:m:s",
+    "yyyy-M-d h:m a",
+    "yyyy-M-d H:m",
+    "yyyy-M-d"
+];
 const moduleConfig = (0, helpers_1.onDemand)(() => (0, reactiveStorage_1.reactiveStorage)({
     firstDayOfWeek: 0,
     locale: en_US_1.default,
     pm: true
 }));
+/**
+ * Parses string.
+ *
+ * @param dt - Date/time.
+ * @returns Date object.
+ */
+function parseString(dt) {
+    const now = Date.now();
+    for (const formatString of formatStrings) {
+        const result = (0, date_fns_1.parse)(dt, formatString, now);
+        if ((0, date_fns_1.isValid)(result))
+            return result;
+    }
+    throw new Error(`Invalid date: ${dt}`);
+}
 //# sourceMappingURL=date-fns-wrapper.js.map
