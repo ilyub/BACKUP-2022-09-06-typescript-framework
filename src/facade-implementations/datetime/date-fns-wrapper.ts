@@ -13,7 +13,7 @@ import {
   isSameMonth,
   isSameYear,
   isValid,
-  parseISO,
+  parse,
   setDate,
   setDay,
   setHours,
@@ -78,7 +78,11 @@ export const implementation: Facade = {
     return Date.now() / 1000;
   },
   validate(dt: string) {
-    return isValid(parseISO(dt));
+    const now = Date.now();
+
+    return formatStrings.some(formatString =>
+      isValid(parse(dt, formatString, now))
+    );
   }
 };
 
@@ -90,7 +94,7 @@ export class DateTime implements DateTimeInterface {
    */
   public constructor(dt?: string | DateTimeInterface) {
     if (dt instanceof DateTime) this.value = new Date(dt.value);
-    else if (is.string(dt)) this.value = new Date(dt);
+    else if (is.string(dt)) this.value = parseString(dt);
     else this.value = new Date();
   }
 
@@ -304,7 +308,7 @@ export class DateTime implements DateTimeInterface {
   }
 
   public toString(): string {
-    return format(this.value, "yyyy-MM-dd HH:mm:ss");
+    return format(this.value, "yyyy-MM-dd HH:mm");
   }
 
   public toTime(): number {
@@ -330,6 +334,14 @@ export class DateTime implements DateTimeInterface {
 |*******************************************************************************
 |*/
 
+const formatStrings: readonly string[] = [
+  "yyyy-M-d h:m:s a",
+  "yyyy-M-d H:m:s",
+  "yyyy-M-d h:m a",
+  "yyyy-M-d H:m",
+  "yyyy-M-d"
+];
+
 const moduleConfig = onDemand(() =>
   reactiveStorage<Configuration>({
     firstDayOfWeek: 0,
@@ -337,3 +349,21 @@ const moduleConfig = onDemand(() =>
     pm: true
   })
 );
+
+/**
+ * Parses string.
+ *
+ * @param dt - Date/time.
+ * @returns Date object.
+ */
+function parseString(dt: string): Date {
+  const now = Date.now();
+
+  for (const formatString of formatStrings) {
+    const result = parse(dt, formatString, now);
+
+    if (isValid(result)) return result;
+  }
+
+  throw new Error(`Invalid date: ${dt}`);
+}

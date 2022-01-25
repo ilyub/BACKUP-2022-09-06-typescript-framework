@@ -54,6 +54,12 @@ it("implementation.create", () => {
     expect(dt1).datetimeToEqual("1950-01-01 14:31");
     expect(dt2).datetimeToEqual("1950-01-01 15:30");
   }
+
+  {
+    const error = new Error("Invalid date: invalid");
+
+    expect(() => datetime.create("invalid")).toThrow(error);
+  }
 });
 
 it("implementation.now", () => {
@@ -288,7 +294,7 @@ it("DateTime.toDate", () => {
 it("DateTime.toString", () => {
   for (const pm of pmOptions) {
     dateFnsWrapper.configure({ pm });
-    expect(d().toString()).toStrictEqual("1950-01-01 14:30:00");
+    expect(d().toString()).toStrictEqual("1950-01-01 14:30");
   }
 });
 

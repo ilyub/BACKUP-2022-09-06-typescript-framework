@@ -23,7 +23,7 @@ it("executionTimeToEqual", () => {
 
     expect(result.pass).toBeFalse();
     expect(result.message()).toStrictEqual(
-      'Expected date to be "1950-01-01 14:31", got "1950-01-01 14:30:00"'
+      'Expected date to be "1950-01-01 14:31", got "1950-01-01 14:30"'
     );
   }
 });
