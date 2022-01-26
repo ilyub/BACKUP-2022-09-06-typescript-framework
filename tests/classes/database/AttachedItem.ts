@@ -4,37 +4,40 @@ import { Item } from "@/classes/database/Item";
 
 it.each<AttachedItemDoc>([
   {
+    _id: 0,
+    _rev: 1,
     parentDoc: {
-      _id: "test-id"
+      _id: "test-id",
+      _rev: "test-rev"
     }
   },
   {
     _deleted: true,
+    _id: 0,
+    _rev: 1,
     parentDoc: {
-      _id: "test-id"
+      _id: "test-id",
+      _rev: "test-rev"
     }
   }
 ])("AttachedItem", doc => {
-  const item = new AttachedItem(doc);
+  {
+    const item = new AttachedItem(doc);
 
-  expect(item.doc()).toStrictEqual(doc);
-});
-
-it("AttachedItem.getParent", () => {
-  const item = new AttachedItem({ parentDoc: { _id: "test-id" } });
-
-  expect(() => item.parent).toThrow(new Error("Not implemented"));
-});
-
-it("AttachedItem.parent", () => {
-  class TestAttachedItem extends AttachedItem {
-    protected override getParent(): Item {
-      return new Item(this._parentDoc);
-    }
+    expect(item.doc()).toStrictEqual(doc);
+    expect(() => item.parent).toThrow(new Error("Not implemented"));
   }
 
-  const item = new TestAttachedItem({ parentDoc: { _id: "test-id" } });
+  {
+    class TestAttachedItem extends AttachedItem {
+      protected override getParent(): Item {
+        return new Item(this._parentDoc);
+      }
+    }
 
-  expect(item.parent.doc()).toStrictEqual({ _id: "test-id" });
-  expect(item.parent.doc()).toStrictEqual({ _id: "test-id" });
+    const item = new TestAttachedItem(doc);
+
+    expect(item.parent.doc()).toStrictEqual(doc.parentDoc);
+    expect(item.parent.doc()).toStrictEqual(doc.parentDoc);
+  }
 });

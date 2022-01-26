@@ -1,30 +1,34 @@
 import * as is from "@skylib/functions/dist/guards";
 import * as o from "@skylib/functions/dist/object";
-import type { numberU } from "@skylib/functions/dist/types/core";
 
 import type { Item, ItemDoc } from "./Item";
 import { isItemDoc } from "./Item";
 
-export interface AttachedItemDoc {
-  readonly _deleted?: true;
-  readonly _id?: number;
-  readonly _rev?: number;
-  readonly parentDoc: ItemDoc;
+export interface AttachedItemDoc extends PutAttachedItemDoc {
+  readonly _id: number;
+  readonly _rev: number;
 }
 
 export type AttachedItemDocs = readonly AttachedItemDoc[];
 
 export type AttachedItems = readonly AttachedItems[];
 
+export interface PutAttachedItemDoc {
+  readonly _deleted?: true;
+  readonly _id?: number;
+  readonly _rev?: number;
+  readonly parentDoc: ItemDoc;
+}
+
 export const isAttachedItemDoc: is.Guard<AttachedItemDoc> = is.factory(
   is.object.of,
   {
+    _id: is.number,
+    _rev: is.number,
     parentDoc: isItemDoc
   },
   {
-    _deleted: is.true,
-    _id: is.number,
-    _rev: is.number
+    _deleted: is.true
   }
 );
 
@@ -33,9 +37,9 @@ export const isAttachedItemDocs = is.factory(is.array.of, isAttachedItemDoc);
 export class AttachedItem<T extends Item = Item> {
   public readonly _deleted: boolean;
 
-  public readonly _id: numberU;
+  public readonly _id: number;
 
-  public readonly _rev: numberU;
+  public readonly _rev: number;
 
   /**
    * Returns parent item.
@@ -89,7 +93,3 @@ export class AttachedItem<T extends Item = Item> {
     throw new Error("Not implemented");
   }
 }
-
-export const isAttachedItem = is.factory(is.instance, AttachedItem);
-
-export const isAttachedItems = is.factory(is.array.of, isAttachedItem);

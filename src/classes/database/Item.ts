@@ -1,11 +1,19 @@
 import type { StoredAttachedDocuments } from "@skylib/facades/dist/database";
 import { isStoredAttachedDocuments } from "@skylib/facades/dist/database";
-import { uniqueId } from "@skylib/facades/dist/uniqueId";
 import * as is from "@skylib/functions/dist/guards";
 import * as o from "@skylib/functions/dist/object";
-import type { numberU, stringU } from "@skylib/functions/dist/types/core";
+import type { numberU } from "@skylib/functions/dist/types/core";
 
-export interface ItemDoc {
+export interface ItemDoc extends PutItemDoc {
+  readonly _id: string;
+  readonly _rev: string;
+}
+
+export type ItemDocs = readonly ItemDoc[];
+
+export type Items = readonly Items[];
+
+export interface PutItemDoc {
   readonly _deleted?: true;
   readonly _id?: string;
   readonly _rev?: string;
@@ -13,17 +21,14 @@ export interface ItemDoc {
   readonly lastAttachedDoc?: number;
 }
 
-export type ItemDocs = readonly ItemDoc[];
-
-export type Items = readonly Items[];
-
 export const isItemDoc: is.Guard<ItemDoc> = is.factory(
   is.object.of,
-  {},
+  {
+    _id: is.string,
+    _rev: is.string
+  },
   {
     _deleted: is.true,
-    _id: is.string,
-    _rev: is.string,
     attachedDocs: isStoredAttachedDocuments,
     lastAttachedDoc: is.number
   }
@@ -36,7 +41,7 @@ export class Item {
 
   public readonly _id: string;
 
-  public readonly _rev: stringU;
+  public readonly _rev: string;
 
   /**
    * Creates class instance.
@@ -45,7 +50,7 @@ export class Item {
    */
   public constructor(source: ItemDoc) {
     this._deleted = source._deleted ?? false;
-    this._id = source._id ?? uniqueId();
+    this._id = source._id;
     this._rev = source._rev;
     this.attachedDocs = source.attachedDocs;
     this.lastAttachedDoc = source.lastAttachedDoc;
@@ -76,7 +81,3 @@ export class Item {
 
   protected readonly lastAttachedDoc: numberU;
 }
-
-export const isItem = is.factory(is.instance, Item);
-
-export const isItems = is.factory(is.array.of, isItem);
