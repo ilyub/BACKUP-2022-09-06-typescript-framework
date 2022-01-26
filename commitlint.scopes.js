@@ -23,6 +23,7 @@ module.exports = [
   "axios-wrapper",
   "backup",
   "bind",
+  "classes.database.AttachedItem",
   "classes.database.Item",
   "configurableTestDelay",
   "date-fns-wrapper",
