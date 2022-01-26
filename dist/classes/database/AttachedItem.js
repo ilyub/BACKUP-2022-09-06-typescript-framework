@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isAttachedItems = exports.isAttachedItem = exports.AttachedItem = exports.isAttachedItemDocs = exports.isAttachedItemDoc = void 0;
+exports.AttachedItem = exports.isAttachedItemDocs = exports.isAttachedItemDoc = void 0;
 const tslib_1 = require("tslib");
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
 const Item_1 = require("./Item");
 exports.isAttachedItemDoc = is.factory(is.object.of, {
+    _id: is.number,
+    _rev: is.number,
     parentDoc: Item_1.isItemDoc
 }, {
-    _deleted: is.true,
-    _id: is.number,
-    _rev: is.number
+    _deleted: is.true
 });
 exports.isAttachedItemDocs = is.factory(is.array.of, exports.isAttachedItemDoc);
 class AttachedItem {
@@ -90,6 +90,4 @@ class AttachedItem {
     }
 }
 exports.AttachedItem = AttachedItem;
-exports.isAttachedItem = is.factory(is.instance, AttachedItem);
-exports.isAttachedItems = is.factory(is.array.of, exports.isAttachedItem);
 //# sourceMappingURL=AttachedItem.js.map

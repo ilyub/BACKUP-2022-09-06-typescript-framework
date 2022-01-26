@@ -52,7 +52,7 @@ ___
 
 ### \_rev
 
-• `Readonly` **\_rev**: `stringU`
+• `Readonly` **\_rev**: `string`
 
 ___
 

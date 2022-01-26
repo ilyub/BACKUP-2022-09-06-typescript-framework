@@ -11,6 +11,7 @@
 ### Interfaces
 
 - [ItemDoc](../interfaces/classes_database_Item.ItemDoc.md)
+- [PutItemDoc](../interfaces/classes_database_Item.PutItemDoc.md)
 
 ### Type aliases
 
@@ -19,10 +20,8 @@
 
 ### Functions
 
-- [isItem](classes_database_Item.md#isitem)
 - [isItemDoc](classes_database_Item.md#isitemdoc)
 - [isItemDocs](classes_database_Item.md#isitemdocs)
-- [isItems](classes_database_Item.md#isitems)
 
 ## Type aliases
 
@@ -37,22 +36,6 @@ ___
 Ƭ **Items**: readonly [`Items`](classes_database_Item.md#items)[]
 
 ## Functions
-
-### isItem
-
-▸ `Const` **isItem**(`value`): value is Item
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
-
-#### Returns
-
-value is Item
-
-___
 
 ### isItemDoc
 
@@ -83,19 +66,3 @@ ___
 #### Returns
 
 value is readonly ItemDoc[]
-
-___
-
-### isItems
-
-▸ `Const` **isItems**(`value`): value is readonly Item[]
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
-
-#### Returns
-
-value is readonly Item[]

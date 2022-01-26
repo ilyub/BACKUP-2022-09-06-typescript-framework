@@ -11,6 +11,7 @@
 ### Interfaces
 
 - [AttachedItemDoc](../interfaces/classes_database_AttachedItem.AttachedItemDoc.md)
+- [PutAttachedItemDoc](../interfaces/classes_database_AttachedItem.PutAttachedItemDoc.md)
 
 ### Type aliases
 
@@ -19,10 +20,8 @@
 
 ### Functions
 
-- [isAttachedItem](classes_database_AttachedItem.md#isattacheditem)
 - [isAttachedItemDoc](classes_database_AttachedItem.md#isattacheditemdoc)
 - [isAttachedItemDocs](classes_database_AttachedItem.md#isattacheditemdocs)
-- [isAttachedItems](classes_database_AttachedItem.md#isattacheditems)
 
 ## Type aliases
 
@@ -37,22 +36,6 @@ ___
 Ƭ **AttachedItems**: readonly [`AttachedItems`](classes_database_AttachedItem.md#attacheditems)[]
 
 ## Functions
-
-### isAttachedItem
-
-▸ `Const` **isAttachedItem**(`value`): value is AttachedItem<Item\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
-
-#### Returns
-
-value is AttachedItem<Item\>
-
-___
 
 ### isAttachedItemDoc
 
@@ -83,19 +66,3 @@ ___
 #### Returns
 
 value is readonly AttachedItemDoc[]
-
-___
-
-### isAttachedItems
-
-▸ `Const` **isAttachedItems**(`value`): value is readonly AttachedItem<Item\>[]
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
-
-#### Returns
-
-value is readonly AttachedItem<Item\>[]

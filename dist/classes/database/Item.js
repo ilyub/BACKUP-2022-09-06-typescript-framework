@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isItems = exports.isItem = exports.Item = exports.isItemDocs = exports.isItemDoc = void 0;
+exports.Item = exports.isItemDocs = exports.isItemDoc = void 0;
 const tslib_1 = require("tslib");
 const database_1 = require("@skylib/facades/dist/database");
-const uniqueId_1 = require("@skylib/facades/dist/uniqueId");
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
-exports.isItemDoc = is.factory(is.object.of, {}, {
-    _deleted: is.true,
+exports.isItemDoc = is.factory(is.object.of, {
     _id: is.string,
-    _rev: is.string,
+    _rev: is.string
+}, {
+    _deleted: is.true,
     attachedDocs: database_1.isStoredAttachedDocuments,
     lastAttachedDoc: is.number
 });
@@ -21,7 +21,7 @@ class Item {
      * @param source - Source.
      */
     constructor(source) {
-        var _a, _b;
+        var _a;
         Object.defineProperty(this, "_deleted", {
             enumerable: true,
             configurable: true,
@@ -58,7 +58,7 @@ class Item {
             value: void 0
         });
         this._deleted = (_a = source._deleted) !== null && _a !== void 0 ? _a : false;
-        this._id = (_b = source._id) !== null && _b !== void 0 ? _b : (0, uniqueId_1.uniqueId)();
+        this._id = source._id;
         this._rev = source._rev;
         this.attachedDocs = source.attachedDocs;
         this.lastAttachedDoc = source.lastAttachedDoc;
@@ -79,6 +79,4 @@ class Item {
     }
 }
 exports.Item = Item;
-exports.isItem = is.factory(is.instance, Item);
-exports.isItems = is.factory(is.array.of, exports.isItem);
 //# sourceMappingURL=Item.js.map

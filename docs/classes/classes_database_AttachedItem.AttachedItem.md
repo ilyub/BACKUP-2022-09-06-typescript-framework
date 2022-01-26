@@ -63,7 +63,7 @@ ___
 
 ### \_id
 
-• `Readonly` **\_id**: `numberU`
+• `Readonly` **\_id**: `number`
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 ### \_rev
 
-• `Readonly` **\_rev**: `numberU`
+• `Readonly` **\_rev**: `number`
 
 ## Accessors
 

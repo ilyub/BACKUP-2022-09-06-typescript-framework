@@ -2,11 +2,11 @@ import * as is from "@skylib/functions/es/guards";
 import * as o from "@skylib/functions/es/object";
 import { isItemDoc } from "./Item";
 export const isAttachedItemDoc = is.factory(is.object.of, {
+    _id: is.number,
+    _rev: is.number,
     parentDoc: isItemDoc
 }, {
-    _deleted: is.true,
-    _id: is.number,
-    _rev: is.number
+    _deleted: is.true
 });
 export const isAttachedItemDocs = is.factory(is.array.of, isAttachedItemDoc);
 export class AttachedItem {
@@ -85,6 +85,4 @@ export class AttachedItem {
         throw new Error("Not implemented");
     }
 }
-export const isAttachedItem = is.factory(is.instance, AttachedItem);
-export const isAttachedItems = is.factory(is.array.of, isAttachedItem);
 //# sourceMappingURL=AttachedItem.js.map

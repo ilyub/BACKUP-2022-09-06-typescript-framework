@@ -1,21 +1,25 @@
 import type { StoredAttachedDocuments } from "@skylib/facades/es/database";
 import * as is from "@skylib/functions/es/guards";
-import type { numberU, stringU } from "@skylib/functions/es/types/core";
-export interface ItemDoc {
+import type { numberU } from "@skylib/functions/es/types/core";
+export interface ItemDoc extends PutItemDoc {
+    readonly _id: string;
+    readonly _rev: string;
+}
+export declare type ItemDocs = readonly ItemDoc[];
+export declare type Items = readonly Items[];
+export interface PutItemDoc {
     readonly _deleted?: true;
     readonly _id?: string;
     readonly _rev?: string;
     readonly attachedDocs?: StoredAttachedDocuments;
     readonly lastAttachedDoc?: number;
 }
-export declare type ItemDocs = readonly ItemDoc[];
-export declare type Items = readonly Items[];
 export declare const isItemDoc: is.Guard<ItemDoc>;
 export declare const isItemDocs: is.Guard<readonly ItemDoc[]>;
 export declare class Item {
     readonly _deleted: boolean;
     readonly _id: string;
-    readonly _rev: stringU;
+    readonly _rev: string;
     /**
      * Creates class instance.
      *
@@ -31,6 +35,4 @@ export declare class Item {
     protected readonly attachedDocs: StoredAttachedDocuments | undefined;
     protected readonly lastAttachedDoc: numberU;
 }
-export declare const isItem: is.Guard<Item>;
-export declare const isItems: is.Guard<readonly Item[]>;
 //# sourceMappingURL=Item.d.ts.map
