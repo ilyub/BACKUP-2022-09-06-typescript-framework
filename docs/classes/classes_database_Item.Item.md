@@ -16,7 +16,11 @@
 - [\_id](classes_database_Item.Item.md#_id)
 - [\_rev](classes_database_Item.Item.md#_rev)
 - [attachedDocs](classes_database_Item.Item.md#attacheddocs)
+- [createdAt](classes_database_Item.Item.md#createdat)
+- [deletedAt](classes_database_Item.Item.md#deletedat)
 - [lastAttachedDoc](classes_database_Item.Item.md#lastattacheddoc)
+- [softDeleted](classes_database_Item.Item.md#softdeleted)
+- [updatedAt](classes_database_Item.Item.md#updatedat)
 
 ### Methods
 
@@ -62,9 +66,33 @@ ___
 
 ___
 
+### createdAt
+
+• `Readonly` **createdAt**: `stringU`
+
+___
+
+### deletedAt
+
+• `Readonly` **deletedAt**: `stringU`
+
+___
+
 ### lastAttachedDoc
 
 • `Protected` `Readonly` **lastAttachedDoc**: `numberU`
+
+___
+
+### softDeleted
+
+• `Readonly` **softDeleted**: `boolean`
+
+___
+
+### updatedAt
+
+• `Readonly` **updatedAt**: `stringU`
 
 ## Methods
 

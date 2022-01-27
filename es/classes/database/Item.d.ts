@@ -1,28 +1,36 @@
 import type { StoredAttachedDocuments } from "@skylib/facades/es/database";
 import * as is from "@skylib/functions/es/guards";
-import type { numberU } from "@skylib/functions/es/types/core";
+import type { numberU, stringU } from "@skylib/functions/es/types/core";
+export interface PutItemDoc {
+    readonly _deleted?: true;
+    readonly _id?: string;
+    readonly _rev?: string;
+    readonly attachedDocs?: StoredAttachedDocuments;
+    readonly createdAt?: string;
+    readonly deletedAt?: string;
+    readonly lastAttachedDoc?: number;
+    readonly softDeleted?: true;
+    readonly updatedAt?: string;
+}
+export declare type PutItemDocs = readonly ItemDoc[];
 export interface ItemDoc extends PutItemDoc {
     readonly _id: string;
     readonly _rev: string;
 }
 export declare type ItemDocs = readonly ItemDoc[];
 export declare type Items = readonly Items[];
-export interface PutItemDoc {
-    readonly _deleted?: true;
-    readonly _id?: string;
-    readonly _rev?: string;
-    readonly attachedDocs?: StoredAttachedDocuments;
-    readonly lastAttachedDoc?: number;
-}
-export declare type PutItemDocs = readonly ItemDoc[];
-export declare const isItemDoc: is.Guard<ItemDoc>;
-export declare const isItemDocs: is.Guard<readonly ItemDoc[]>;
 export declare const isPutItemDoc: is.Guard<PutItemDoc>;
 export declare const isPutItemDocs: is.Guard<readonly PutItemDoc[]>;
+export declare const isItemDoc: is.Guard<ItemDoc>;
+export declare const isItemDocs: is.Guard<readonly ItemDoc[]>;
 export declare class Item {
     readonly _deleted: boolean;
     readonly _id: string;
     readonly _rev: string;
+    readonly createdAt: stringU;
+    readonly deletedAt: stringU;
+    readonly softDeleted: boolean;
+    readonly updatedAt: stringU;
     /**
      * Creates class instance.
      *

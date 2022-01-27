@@ -18,7 +18,11 @@
 - [\_id](classes_database_Item.PutItemDoc.md#_id)
 - [\_rev](classes_database_Item.PutItemDoc.md#_rev)
 - [attachedDocs](classes_database_Item.PutItemDoc.md#attacheddocs)
+- [createdAt](classes_database_Item.PutItemDoc.md#createdat)
+- [deletedAt](classes_database_Item.PutItemDoc.md#deletedat)
 - [lastAttachedDoc](classes_database_Item.PutItemDoc.md#lastattacheddoc)
+- [softDeleted](classes_database_Item.PutItemDoc.md#softdeleted)
+- [updatedAt](classes_database_Item.PutItemDoc.md#updatedat)
 
 ## Properties
 
@@ -46,6 +50,30 @@ ___
 
 ___
 
+### createdAt
+
+• `Optional` `Readonly` **createdAt**: `string`
+
+___
+
+### deletedAt
+
+• `Optional` `Readonly` **deletedAt**: `string`
+
+___
+
 ### lastAttachedDoc
 
 • `Optional` `Readonly` **lastAttachedDoc**: `number`
+
+___
+
+### softDeleted
+
+• `Optional` `Readonly` **softDeleted**: ``true``
+
+___
+
+### updatedAt
+
+• `Optional` `Readonly` **updatedAt**: `string`

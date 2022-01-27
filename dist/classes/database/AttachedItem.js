@@ -1,26 +1,34 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AttachedItem = exports.isPutAttachedItemDocs = exports.isPutAttachedItemDoc = exports.isAttachedItemDocs = exports.isAttachedItemDoc = void 0;
+exports.AttachedItem = exports.isAttachedItemDocs = exports.isAttachedItemDoc = exports.isPutAttachedItemDocs = exports.isPutAttachedItemDoc = void 0;
 const tslib_1 = require("tslib");
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
 const Item_1 = require("./Item");
-exports.isAttachedItemDoc = is.factory(is.object.of, {
-    _id: is.number,
-    _rev: is.number,
-    parentDoc: Item_1.isItemDoc
-}, {
-    _deleted: is.true
-});
-exports.isAttachedItemDocs = is.factory(is.array.of, exports.isAttachedItemDoc);
 exports.isPutAttachedItemDoc = is.factory(is.object.of, {
     parentDoc: Item_1.isItemDoc
 }, {
     _deleted: is.true,
     _id: is.number,
-    _rev: is.number
+    _rev: is.number,
+    createdAt: is.string,
+    deletedAt: is.string,
+    softDeleted: is.true,
+    updatedAt: is.string
 });
 exports.isPutAttachedItemDocs = is.factory(is.array.of, exports.isPutAttachedItemDoc);
+exports.isAttachedItemDoc = is.factory(is.object.of, {
+    _id: is.number,
+    _rev: is.number,
+    parentDoc: Item_1.isItemDoc
+}, {
+    _deleted: is.true,
+    createdAt: is.string,
+    deletedAt: is.string,
+    softDeleted: is.true,
+    updatedAt: is.string
+});
+exports.isAttachedItemDocs = is.factory(is.array.of, exports.isAttachedItemDoc);
 class AttachedItem {
     /**
      * Creates class instance.
@@ -28,7 +36,7 @@ class AttachedItem {
      * @param source - Source.
      */
     constructor(source) {
-        var _a;
+        var _a, _b;
         Object.defineProperty(this, "_deleted", {
             enumerable: true,
             configurable: true,
@@ -42,6 +50,30 @@ class AttachedItem {
             value: void 0
         });
         Object.defineProperty(this, "_rev", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "createdAt", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "deletedAt", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "softDeleted", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "updatedAt", {
             enumerable: true,
             configurable: true,
             writable: true,
@@ -67,7 +99,11 @@ class AttachedItem {
         this._deleted = (_a = source._deleted) !== null && _a !== void 0 ? _a : false;
         this._id = source._id;
         this._rev = source._rev;
+        this.createdAt = source.createdAt;
+        this.deletedAt = source.deletedAt;
         this._parentDoc = source.parentDoc;
+        this.softDeleted = (_b = source.softDeleted) !== null && _b !== void 0 ? _b : false;
+        this.updatedAt = source.updatedAt;
     }
     /**
      * Returns parent item.
@@ -87,7 +123,11 @@ class AttachedItem {
             _deleted: this._deleted ? true : undefined,
             _id: this._id,
             _rev: this._rev,
-            parentDoc: this._parentDoc
+            createdAt: this.createdAt,
+            deletedAt: this.deletedAt,
+            parentDoc: this._parentDoc,
+            softDeleted: this.softDeleted ? true : undefined,
+            updatedAt: this.updatedAt
         });
     }
     /**

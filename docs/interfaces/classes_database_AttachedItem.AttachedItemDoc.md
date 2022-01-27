@@ -17,7 +17,11 @@
 - [\_deleted](classes_database_AttachedItem.AttachedItemDoc.md#_deleted)
 - [\_id](classes_database_AttachedItem.AttachedItemDoc.md#_id)
 - [\_rev](classes_database_AttachedItem.AttachedItemDoc.md#_rev)
+- [createdAt](classes_database_AttachedItem.AttachedItemDoc.md#createdat)
+- [deletedAt](classes_database_AttachedItem.AttachedItemDoc.md#deletedat)
 - [parentDoc](classes_database_AttachedItem.AttachedItemDoc.md#parentdoc)
+- [softDeleted](classes_database_AttachedItem.AttachedItemDoc.md#softdeleted)
+- [updatedAt](classes_database_AttachedItem.AttachedItemDoc.md#updatedat)
 
 ## Properties
 
@@ -51,6 +55,26 @@ ___
 
 ___
 
+### createdAt
+
+• `Optional` `Readonly` **createdAt**: `string`
+
+#### Inherited from
+
+[PutAttachedItemDoc](classes_database_AttachedItem.PutAttachedItemDoc.md).[createdAt](classes_database_AttachedItem.PutAttachedItemDoc.md#createdat)
+
+___
+
+### deletedAt
+
+• `Optional` `Readonly` **deletedAt**: `string`
+
+#### Inherited from
+
+[PutAttachedItemDoc](classes_database_AttachedItem.PutAttachedItemDoc.md).[deletedAt](classes_database_AttachedItem.PutAttachedItemDoc.md#deletedat)
+
+___
+
 ### parentDoc
 
 • `Readonly` **parentDoc**: [`ItemDoc`](classes_database_Item.ItemDoc.md)
@@ -58,3 +82,23 @@ ___
 #### Inherited from
 
 [PutAttachedItemDoc](classes_database_AttachedItem.PutAttachedItemDoc.md).[parentDoc](classes_database_AttachedItem.PutAttachedItemDoc.md#parentdoc)
+
+___
+
+### softDeleted
+
+• `Optional` `Readonly` **softDeleted**: ``true``
+
+#### Inherited from
+
+[PutAttachedItemDoc](classes_database_AttachedItem.PutAttachedItemDoc.md).[softDeleted](classes_database_AttachedItem.PutAttachedItemDoc.md#softdeleted)
+
+___
+
+### updatedAt
+
+• `Optional` `Readonly` **updatedAt**: `string`
+
+#### Inherited from
+
+[PutAttachedItemDoc](classes_database_AttachedItem.PutAttachedItemDoc.md).[updatedAt](classes_database_AttachedItem.PutAttachedItemDoc.md#updatedat)

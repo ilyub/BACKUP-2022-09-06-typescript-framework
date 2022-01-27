@@ -1,23 +1,31 @@
 import { isStoredAttachedDocuments } from "@skylib/facades/es/database";
 import * as is from "@skylib/functions/es/guards";
 import * as o from "@skylib/functions/es/object";
+export const isPutItemDoc = is.factory(is.object.of, {}, {
+    _deleted: is.true,
+    _id: is.string,
+    _rev: is.string,
+    attachedDocs: isStoredAttachedDocuments,
+    createdAt: is.string,
+    deletedAt: is.string,
+    lastAttachedDoc: is.number,
+    softDeleted: is.true,
+    updatedAt: is.string
+});
+export const isPutItemDocs = is.factory(is.array.of, isPutItemDoc);
 export const isItemDoc = is.factory(is.object.of, {
     _id: is.string,
     _rev: is.string
 }, {
     _deleted: is.true,
     attachedDocs: isStoredAttachedDocuments,
-    lastAttachedDoc: is.number
+    createdAt: is.string,
+    deletedAt: is.string,
+    lastAttachedDoc: is.number,
+    softDeleted: is.true,
+    updatedAt: is.string
 });
 export const isItemDocs = is.factory(is.array.of, isItemDoc);
-export const isPutItemDoc = is.factory(is.object.of, {}, {
-    _deleted: is.true,
-    _id: is.string,
-    _rev: is.string,
-    attachedDocs: isStoredAttachedDocuments,
-    lastAttachedDoc: is.number
-});
-export const isPutItemDocs = is.factory(is.array.of, isPutItemDoc);
 export class Item {
     /**
      * Creates class instance.
@@ -25,7 +33,7 @@ export class Item {
      * @param source - Source.
      */
     constructor(source) {
-        var _a;
+        var _a, _b;
         Object.defineProperty(this, "_deleted", {
             enumerable: true,
             configurable: true,
@@ -39,6 +47,30 @@ export class Item {
             value: void 0
         });
         Object.defineProperty(this, "_rev", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "createdAt", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "deletedAt", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "softDeleted", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "updatedAt", {
             enumerable: true,
             configurable: true,
             writable: true,
@@ -65,7 +97,11 @@ export class Item {
         this._id = source._id;
         this._rev = source._rev;
         this.attachedDocs = source.attachedDocs;
+        this.createdAt = source.createdAt;
+        this.deletedAt = source.deletedAt;
         this.lastAttachedDoc = source.lastAttachedDoc;
+        this.softDeleted = (_b = source.softDeleted) !== null && _b !== void 0 ? _b : false;
+        this.updatedAt = source.updatedAt;
     }
     /**
      * Returns database document.
@@ -78,7 +114,11 @@ export class Item {
             _id: this._id,
             _rev: this._rev,
             attachedDocs: this.attachedDocs,
-            lastAttachedDoc: this.lastAttachedDoc
+            createdAt: this.createdAt,
+            deletedAt: this.deletedAt,
+            lastAttachedDoc: this.lastAttachedDoc,
+            softDeleted: this.softDeleted ? true : undefined,
+            updatedAt: this.updatedAt
         });
     }
 }

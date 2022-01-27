@@ -23,6 +23,10 @@
 - [\_parent](classes_database_AttachedItem.AttachedItem.md#_parent)
 - [\_parentDoc](classes_database_AttachedItem.AttachedItem.md#_parentdoc)
 - [\_rev](classes_database_AttachedItem.AttachedItem.md#_rev)
+- [createdAt](classes_database_AttachedItem.AttachedItem.md#createdat)
+- [deletedAt](classes_database_AttachedItem.AttachedItem.md#deletedat)
+- [softDeleted](classes_database_AttachedItem.AttachedItem.md#softdeleted)
+- [updatedAt](classes_database_AttachedItem.AttachedItem.md#updatedat)
 
 ### Accessors
 
@@ -82,6 +86,30 @@ ___
 ### \_rev
 
 • `Readonly` **\_rev**: `number`
+
+___
+
+### createdAt
+
+• `Readonly` **createdAt**: `stringU`
+
+___
+
+### deletedAt
+
+• `Readonly` **deletedAt**: `stringU`
+
+___
+
+### softDeleted
+
+• `Readonly` **softDeleted**: `boolean`
+
+___
+
+### updatedAt
+
+• `Readonly` **updatedAt**: `stringU`
 
 ## Accessors
 
