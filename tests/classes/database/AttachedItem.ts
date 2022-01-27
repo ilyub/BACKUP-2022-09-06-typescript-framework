@@ -18,7 +18,8 @@ it.each<AttachedItemDoc>([
     parentDoc: {
       _id: "test-id",
       _rev: "test-rev"
-    }
+    },
+    softDeleted: true
   }
 ])("AttachedItem", doc => {
   {

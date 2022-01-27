@@ -1,8 +1,22 @@
 import * as is from "@skylib/functions/dist/guards";
 import * as o from "@skylib/functions/dist/object";
+import type { stringU } from "@skylib/functions/dist/types/core";
 
 import type { Item, ItemDoc } from "./Item";
 import { isItemDoc } from "./Item";
+
+export interface PutAttachedItemDoc {
+  readonly _deleted?: true;
+  readonly _id?: number;
+  readonly _rev?: number;
+  readonly createdAt?: string;
+  readonly deletedAt?: string;
+  readonly parentDoc: ItemDoc;
+  readonly softDeleted?: true;
+  readonly updatedAt?: string;
+}
+
+export type PutAttachedItemDocs = readonly AttachedItemDoc[];
 
 export interface AttachedItemDoc extends PutAttachedItemDoc {
   readonly _id: number;
@@ -13,14 +27,26 @@ export type AttachedItemDocs = readonly AttachedItemDoc[];
 
 export type AttachedItems = readonly AttachedItems[];
 
-export interface PutAttachedItemDoc {
-  readonly _deleted?: true;
-  readonly _id?: number;
-  readonly _rev?: number;
-  readonly parentDoc: ItemDoc;
-}
+export const isPutAttachedItemDoc: is.Guard<PutAttachedItemDoc> = is.factory(
+  is.object.of,
+  {
+    parentDoc: isItemDoc
+  },
+  {
+    _deleted: is.true,
+    _id: is.number,
+    _rev: is.number,
+    createdAt: is.string,
+    deletedAt: is.string,
+    softDeleted: is.true,
+    updatedAt: is.string
+  }
+);
 
-export type PutAttachedItemDocs = readonly AttachedItemDoc[];
+export const isPutAttachedItemDocs = is.factory(
+  is.array.of,
+  isPutAttachedItemDoc
+);
 
 export const isAttachedItemDoc: is.Guard<AttachedItemDoc> = is.factory(
   is.object.of,
@@ -30,28 +56,15 @@ export const isAttachedItemDoc: is.Guard<AttachedItemDoc> = is.factory(
     parentDoc: isItemDoc
   },
   {
-    _deleted: is.true
+    _deleted: is.true,
+    createdAt: is.string,
+    deletedAt: is.string,
+    softDeleted: is.true,
+    updatedAt: is.string
   }
 );
 
 export const isAttachedItemDocs = is.factory(is.array.of, isAttachedItemDoc);
-
-export const isPutAttachedItemDoc: is.Guard<PutAttachedItemDoc> = is.factory(
-  is.object.of,
-  {
-    parentDoc: isItemDoc
-  },
-  {
-    _deleted: is.true,
-    _id: is.number,
-    _rev: is.number
-  }
-);
-
-export const isPutAttachedItemDocs = is.factory(
-  is.array.of,
-  isPutAttachedItemDoc
-);
 
 export class AttachedItem<T extends Item = Item> {
   public readonly _deleted: boolean;
@@ -59,6 +72,14 @@ export class AttachedItem<T extends Item = Item> {
   public readonly _id: number;
 
   public readonly _rev: number;
+
+  public readonly createdAt: stringU;
+
+  public readonly deletedAt: stringU;
+
+  public readonly softDeleted: boolean;
+
+  public readonly updatedAt: stringU;
 
   /**
    * Returns parent item.
@@ -78,7 +99,11 @@ export class AttachedItem<T extends Item = Item> {
     this._deleted = source._deleted ?? false;
     this._id = source._id;
     this._rev = source._rev;
+    this.createdAt = source.createdAt;
+    this.deletedAt = source.deletedAt;
     this._parentDoc = source.parentDoc;
+    this.softDeleted = source.softDeleted ?? false;
+    this.updatedAt = source.updatedAt;
   }
 
   /**
@@ -91,7 +116,11 @@ export class AttachedItem<T extends Item = Item> {
       _deleted: this._deleted ? true : undefined,
       _id: this._id,
       _rev: this._rev,
-      parentDoc: this._parentDoc
+      createdAt: this.createdAt,
+      deletedAt: this.deletedAt,
+      parentDoc: this._parentDoc,
+      softDeleted: this.softDeleted ? true : undefined,
+      updatedAt: this.updatedAt
     });
   }
 
