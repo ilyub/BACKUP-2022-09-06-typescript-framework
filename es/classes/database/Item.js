@@ -10,6 +10,14 @@ export const isItemDoc = is.factory(is.object.of, {
     lastAttachedDoc: is.number
 });
 export const isItemDocs = is.factory(is.array.of, isItemDoc);
+export const isPutItemDoc = is.factory(is.object.of, {}, {
+    _deleted: is.true,
+    _id: is.string,
+    _rev: is.string,
+    attachedDocs: isStoredAttachedDocuments,
+    lastAttachedDoc: is.number
+});
+export const isPutItemDocs = is.factory(is.array.of, isPutItemDoc);
 export class Item {
     /**
      * Creates class instance.

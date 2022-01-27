@@ -9,6 +9,14 @@ export const isAttachedItemDoc = is.factory(is.object.of, {
     _deleted: is.true
 });
 export const isAttachedItemDocs = is.factory(is.array.of, isAttachedItemDoc);
+export const isPutAttachedItemDoc = is.factory(is.object.of, {
+    parentDoc: isItemDoc
+}, {
+    _deleted: is.true,
+    _id: is.number,
+    _rev: is.number
+});
+export const isPutAttachedItemDocs = is.factory(is.array.of, isPutAttachedItemDoc);
 export class AttachedItem {
     /**
      * Creates class instance.

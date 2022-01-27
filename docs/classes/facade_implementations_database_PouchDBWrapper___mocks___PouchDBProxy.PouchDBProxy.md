@@ -88,7 +88,7 @@ ___
 
 ### pouchDBConstructor
 
-▪ `Static` `Protected` **pouchDBConstructor**: `undefined` \| `Promise`<`Static`\>
+▪ `Static` `Protected` **pouchDBConstructor**: `undefined` \| `Promise`<`Static`<{}\>\>
 
 #### Inherited from
 
@@ -205,13 +205,13 @@ ___
 
 ### getPouchDBConstructor
 
-▸ `Protected` **getPouchDBConstructor**(): `Promise`<`Static`\>
+▸ `Protected` **getPouchDBConstructor**(): `Promise`<`Static`<{}\>\>
 
 Returns PouchDB constructor.
 
 #### Returns
 
-`Promise`<`Static`\>
+`Promise`<`Static`<{}\>\>
 
 PouchDB constructor.
 

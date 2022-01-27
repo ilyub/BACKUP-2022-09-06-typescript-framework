@@ -12,8 +12,11 @@ export interface PutAttachedItemDoc {
     readonly _rev?: number;
     readonly parentDoc: ItemDoc;
 }
+export declare type PutAttachedItemDocs = readonly AttachedItemDoc[];
 export declare const isAttachedItemDoc: is.Guard<AttachedItemDoc>;
 export declare const isAttachedItemDocs: is.Guard<readonly AttachedItemDoc[]>;
+export declare const isPutAttachedItemDoc: is.Guard<PutAttachedItemDoc>;
+export declare const isPutAttachedItemDocs: is.Guard<readonly PutAttachedItemDoc[]>;
 export declare class AttachedItem<T extends Item = Item> {
     readonly _deleted: boolean;
     readonly _id: number;

@@ -14,8 +14,11 @@ export interface PutItemDoc {
     readonly attachedDocs?: StoredAttachedDocuments;
     readonly lastAttachedDoc?: number;
 }
+export declare type PutItemDocs = readonly ItemDoc[];
 export declare const isItemDoc: is.Guard<ItemDoc>;
 export declare const isItemDocs: is.Guard<readonly ItemDoc[]>;
+export declare const isPutItemDoc: is.Guard<PutItemDoc>;
+export declare const isPutItemDocs: is.Guard<readonly PutItemDoc[]>;
 export declare class Item {
     readonly _deleted: boolean;
     readonly _id: string;
