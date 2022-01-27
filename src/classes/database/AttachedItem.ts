@@ -20,6 +20,8 @@ export interface PutAttachedItemDoc {
   readonly parentDoc: ItemDoc;
 }
 
+export type PutAttachedItemDocs = readonly AttachedItemDoc[];
+
 export const isAttachedItemDoc: is.Guard<AttachedItemDoc> = is.factory(
   is.object.of,
   {
@@ -33,6 +35,23 @@ export const isAttachedItemDoc: is.Guard<AttachedItemDoc> = is.factory(
 );
 
 export const isAttachedItemDocs = is.factory(is.array.of, isAttachedItemDoc);
+
+export const isPutAttachedItemDoc: is.Guard<PutAttachedItemDoc> = is.factory(
+  is.object.of,
+  {
+    parentDoc: isItemDoc
+  },
+  {
+    _deleted: is.true,
+    _id: is.number,
+    _rev: is.number
+  }
+);
+
+export const isPutAttachedItemDocs = is.factory(
+  is.array.of,
+  isPutAttachedItemDoc
+);
 
 export class AttachedItem<T extends Item = Item> {
   public readonly _deleted: boolean;
