@@ -9,7 +9,8 @@ it.each<ItemDoc>([
   {
     _deleted: true,
     _id: "test-id",
-    _rev: "test-rev"
+    _rev: "test-rev",
+    softDeleted: true
   }
 ])("Item", doc => {
   const item = new Item(doc);

@@ -2,7 +2,21 @@ import type { StoredAttachedDocuments } from "@skylib/facades/dist/database";
 import { isStoredAttachedDocuments } from "@skylib/facades/dist/database";
 import * as is from "@skylib/functions/dist/guards";
 import * as o from "@skylib/functions/dist/object";
-import type { numberU } from "@skylib/functions/dist/types/core";
+import type { numberU, stringU } from "@skylib/functions/dist/types/core";
+
+export interface PutItemDoc {
+  readonly _deleted?: true;
+  readonly _id?: string;
+  readonly _rev?: string;
+  readonly attachedDocs?: StoredAttachedDocuments;
+  readonly createdAt?: string;
+  readonly deletedAt?: string;
+  readonly lastAttachedDoc?: number;
+  readonly softDeleted?: true;
+  readonly updatedAt?: string;
+}
+
+export type PutItemDocs = readonly ItemDoc[];
 
 export interface ItemDoc extends PutItemDoc {
   readonly _id: string;
@@ -13,15 +27,23 @@ export type ItemDocs = readonly ItemDoc[];
 
 export type Items = readonly Items[];
 
-export interface PutItemDoc {
-  readonly _deleted?: true;
-  readonly _id?: string;
-  readonly _rev?: string;
-  readonly attachedDocs?: StoredAttachedDocuments;
-  readonly lastAttachedDoc?: number;
-}
+export const isPutItemDoc: is.Guard<PutItemDoc> = is.factory(
+  is.object.of,
+  {},
+  {
+    _deleted: is.true,
+    _id: is.string,
+    _rev: is.string,
+    attachedDocs: isStoredAttachedDocuments,
+    createdAt: is.string,
+    deletedAt: is.string,
+    lastAttachedDoc: is.number,
+    softDeleted: is.true,
+    updatedAt: is.string
+  }
+);
 
-export type PutItemDocs = readonly ItemDoc[];
+export const isPutItemDocs = is.factory(is.array.of, isPutItemDoc);
 
 export const isItemDoc: is.Guard<ItemDoc> = is.factory(
   is.object.of,
@@ -32,25 +54,15 @@ export const isItemDoc: is.Guard<ItemDoc> = is.factory(
   {
     _deleted: is.true,
     attachedDocs: isStoredAttachedDocuments,
-    lastAttachedDoc: is.number
+    createdAt: is.string,
+    deletedAt: is.string,
+    lastAttachedDoc: is.number,
+    softDeleted: is.true,
+    updatedAt: is.string
   }
 );
 
 export const isItemDocs = is.factory(is.array.of, isItemDoc);
-
-export const isPutItemDoc: is.Guard<PutItemDoc> = is.factory(
-  is.object.of,
-  {},
-  {
-    _deleted: is.true,
-    _id: is.string,
-    _rev: is.string,
-    attachedDocs: isStoredAttachedDocuments,
-    lastAttachedDoc: is.number
-  }
-);
-
-export const isPutItemDocs = is.factory(is.array.of, isPutItemDoc);
 
 export class Item {
   public readonly _deleted: boolean;
@@ -58,6 +70,14 @@ export class Item {
   public readonly _id: string;
 
   public readonly _rev: string;
+
+  public readonly createdAt: stringU;
+
+  public readonly deletedAt: stringU;
+
+  public readonly softDeleted: boolean;
+
+  public readonly updatedAt: stringU;
 
   /**
    * Creates class instance.
@@ -69,7 +89,11 @@ export class Item {
     this._id = source._id;
     this._rev = source._rev;
     this.attachedDocs = source.attachedDocs;
+    this.createdAt = source.createdAt;
+    this.deletedAt = source.deletedAt;
     this.lastAttachedDoc = source.lastAttachedDoc;
+    this.softDeleted = source.softDeleted ?? false;
+    this.updatedAt = source.updatedAt;
   }
 
   /**
@@ -83,7 +107,11 @@ export class Item {
       _id: this._id,
       _rev: this._rev,
       attachedDocs: this.attachedDocs,
-      lastAttachedDoc: this.lastAttachedDoc
+      createdAt: this.createdAt,
+      deletedAt: this.deletedAt,
+      lastAttachedDoc: this.lastAttachedDoc,
+      softDeleted: this.softDeleted ? true : undefined,
+      updatedAt: this.updatedAt
     });
   }
 
