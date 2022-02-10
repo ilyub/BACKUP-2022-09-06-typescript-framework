@@ -10,7 +10,7 @@ import { wrapProxyHandler } from "@skylib/functions/dist/helpers";
 import * as map from "@skylib/functions/dist/map";
 import * as reflect from "@skylib/functions/dist/reflect";
 
-export const implementation = fn.run((): Facade => {
+export const implementation = fn.run<Facade>(() => {
   function reflectStorage<T extends object>(obj: T): T {
     if (reflect.hasMetadata(callbacksKey, obj)) return obj;
 

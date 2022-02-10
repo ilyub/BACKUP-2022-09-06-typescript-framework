@@ -3,7 +3,7 @@
 import type { Facade } from "@skylib/facades/dist/showConfirm";
 import * as fn from "@skylib/functions/dist/function";
 
-export const implementation = fn.run((): Facade => {
+export const implementation = fn.run<Facade>(() => {
   function jsConfirm(
     message: string,
     success?: () => void,
