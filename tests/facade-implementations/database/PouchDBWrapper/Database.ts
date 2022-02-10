@@ -12,6 +12,34 @@ import { PouchNotFoundError } from "@/facade-implementations/database/PouchDBWra
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
+it("bulkAttachedDocs", async () => {
+  const db = database.create(uniqueId());
+
+  const { id: parentId } = await db.put({ value: 1 });
+
+  const responses = await db.bulkAttachedDocs(parentId, [
+    { value: 1 },
+    { value: 2 }
+  ]);
+
+  const { _rev: parentRev } = await db.get(parentId);
+
+  expect(responses).toStrictEqual([
+    {
+      id: 0,
+      parentId,
+      parentRev,
+      rev: 1
+    },
+    {
+      id: 1,
+      parentId,
+      parentRev,
+      rev: 1
+    }
+  ]);
+});
+
 it("bulkDocs", async () => {
   const db = database.create(uniqueId());
 
@@ -26,6 +54,45 @@ it("bulkDocs", async () => {
   expect(responses.length).toStrictEqual(2);
   expect(responses[0]).toContainAllKeys(["id", "rev"]);
   expect(responses[1]).toContainAllKeys(["id", "rev"]);
+});
+
+it("bulkExistingAttachedDocs", async () => {
+  const db = database.create(uniqueId());
+
+  const { id: parentId1 } = await db.put({});
+
+  const { id: parentId2 } = await db.put({});
+
+  await db.putAttached(parentId1, {});
+  await db.putAttached(parentId2, {});
+
+  const attachedDoc1 = await db.getAttached(0, parentId1);
+
+  const attachedDoc2 = await db.getAttached(0, parentId2);
+
+  const responses = await db.bulkExistingAttachedDocs([
+    attachedDoc1,
+    attachedDoc2
+  ]);
+
+  const { _rev: parentRev1 } = await db.get(parentId1);
+
+  const { _rev: parentRev2 } = await db.get(parentId2);
+
+  expect(responses).toStrictEqual([
+    {
+      id: 0,
+      parentId: parentId1,
+      parentRev: parentRev1,
+      rev: 2
+    },
+    {
+      id: 0,
+      parentId: parentId2,
+      parentRev: parentRev2,
+      rev: 2
+    }
+  ]);
 });
 
 it("exists", async () => {
@@ -123,7 +190,7 @@ it("getAttached|getAttachedIfExists", async () => {
         _id: parentId,
         _rev: parentRev,
         attachedDocs: [],
-        lastAttachedDoc: 0,
+        lastAttachedDocs: [0],
         value: 1
       },
       value: 2
@@ -286,7 +353,7 @@ it("putAttached", async () => {
       _id: response1.parentId,
       _rev: response1.parentRev,
       attachedDocs: [],
-      lastAttachedDoc: 0,
+      lastAttachedDocs: [0],
       value: 1
     };
 
@@ -301,7 +368,7 @@ it("putAttached", async () => {
         _id: response1.parentId,
         _rev: response1.parentRev,
         attachedDocs: [],
-        lastAttachedDoc: 0,
+        lastAttachedDocs: [0],
         value: 1
       },
       value: 2
@@ -326,7 +393,7 @@ it("putAttached", async () => {
       _id: response2.parentId,
       _rev: response2.parentRev,
       attachedDocs: [],
-      lastAttachedDoc: 0,
+      lastAttachedDocs: [0],
       value: 1
     };
 
@@ -341,7 +408,7 @@ it("putAttached", async () => {
         _id: response2.parentId,
         _rev: response2.parentRev,
         attachedDocs: [],
-        lastAttachedDoc: 0,
+        lastAttachedDocs: [0],
         value: 1
       },
       value: 3
@@ -472,7 +539,7 @@ it("subscribe|subscribeAttached|unsubscribe|unsubscribeAttached", async () => {
         _id: parentId,
         _rev: parentRev,
         attachedDocs: [],
-        lastAttachedDoc: 0,
+        lastAttachedDocs: [0],
         value: 1
       };
 

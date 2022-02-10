@@ -2,7 +2,7 @@ import type { StoredAttachedDocuments } from "@skylib/facades/dist/database";
 import { isStoredAttachedDocuments } from "@skylib/facades/dist/database";
 import * as is from "@skylib/functions/dist/guards";
 import * as o from "@skylib/functions/dist/object";
-import type { numberU, stringU } from "@skylib/functions/dist/types/core";
+import type { numbers, stringU } from "@skylib/functions/dist/types/core";
 
 export interface PutItemDoc {
   readonly _deleted?: true;
@@ -11,7 +11,7 @@ export interface PutItemDoc {
   readonly attachedDocs?: StoredAttachedDocuments;
   readonly createdAt?: string;
   readonly deletedAt?: string;
-  readonly lastAttachedDoc?: number;
+  readonly lastAttachedDocs?: numbers;
   readonly softDeleted?: true;
   readonly updatedAt?: string;
 }
@@ -37,7 +37,7 @@ export const isPutItemDoc: is.Guard<PutItemDoc> = is.factory(
     attachedDocs: isStoredAttachedDocuments,
     createdAt: is.string,
     deletedAt: is.string,
-    lastAttachedDoc: is.number,
+    lastAttachedDocs: is.numbers,
     softDeleted: is.true,
     updatedAt: is.string
   }
@@ -56,7 +56,7 @@ export const isItemDoc: is.Guard<ItemDoc> = is.factory(
     attachedDocs: isStoredAttachedDocuments,
     createdAt: is.string,
     deletedAt: is.string,
-    lastAttachedDoc: is.number,
+    lastAttachedDocs: is.numbers,
     softDeleted: is.true,
     updatedAt: is.string
   }
@@ -91,7 +91,7 @@ export class Item {
     this.attachedDocs = source.attachedDocs;
     this.createdAt = source.createdAt;
     this.deletedAt = source.deletedAt;
-    this.lastAttachedDoc = source.lastAttachedDoc;
+    this.lastAttachedDocs = source.lastAttachedDocs;
     this.softDeleted = source.softDeleted ?? false;
     this.updatedAt = source.updatedAt;
   }
@@ -109,7 +109,7 @@ export class Item {
       attachedDocs: this.attachedDocs,
       createdAt: this.createdAt,
       deletedAt: this.deletedAt,
-      lastAttachedDoc: this.lastAttachedDoc,
+      lastAttachedDocs: this.lastAttachedDocs,
       softDeleted: this.softDeleted ? true : undefined,
       updatedAt: this.updatedAt
     });
@@ -123,5 +123,5 @@ export class Item {
 
   protected readonly attachedDocs: StoredAttachedDocuments | undefined;
 
-  protected readonly lastAttachedDoc: numberU;
+  protected readonly lastAttachedDocs: numbers | undefined;
 }

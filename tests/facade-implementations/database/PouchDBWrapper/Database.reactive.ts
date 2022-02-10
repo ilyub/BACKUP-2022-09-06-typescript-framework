@@ -248,7 +248,7 @@ it.each([false, true])("Database.reactiveGetAttached", async async => {
           _id: parentId,
           _rev: parentRev1,
           attachedDocs: [],
-          lastAttachedDoc: 0
+          lastAttachedDocs: [0]
         }
       };
 
@@ -271,7 +271,7 @@ it.each([false, true])("Database.reactiveGetAttached", async async => {
           _id: parentId,
           _rev: parentRev2,
           attachedDocs: [],
-          lastAttachedDoc: 0
+          lastAttachedDocs: [0]
         }
       };
 
@@ -324,7 +324,7 @@ it.each([false, true])("Database.reactiveGetAttachedIfExists", async async => {
           _id: parentId,
           _rev: parentRev,
           attachedDocs: [],
-          lastAttachedDoc: 0
+          lastAttachedDocs: [0]
         }
       };
 
@@ -455,7 +455,7 @@ it.each([false, true])("Database.reactiveQueryAttached", async async => {
             _id: parentId,
             _rev: parentRev,
             attachedDocs: [],
-            lastAttachedDoc: 0
+            lastAttachedDocs: [0]
           },
           type: "a"
         }

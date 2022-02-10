@@ -3,7 +3,7 @@ import { testDelay } from "@skylib/facades/dist/testDelay";
 import * as fn from "@skylib/functions/dist/function";
 import * as is from "@skylib/functions/dist/guards";
 import * as o from "@skylib/functions/dist/object";
-import type { DeepReadonly } from "@skylib/functions/dist/types/core";
+import type { DeepReadonly, numbers } from "@skylib/functions/dist/types/core";
 
 import { PouchConflictError } from "./errors/PouchConflictError";
 import { PouchNotFoundError } from "./errors/PouchNotFoundError";
@@ -18,7 +18,7 @@ export interface Changes {
 export interface Content {
   readonly [key: string]: unknown;
   readonly attachedDocs?: readonly StoredAttachedDocument[];
-  readonly lastAttachedDoc?: number;
+  readonly lastAttachedDocs?: numbers;
 }
 
 export type PouchChange = DeepReadonly<

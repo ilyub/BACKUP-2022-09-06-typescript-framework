@@ -13,7 +13,9 @@ import type {
   ExistingDocument,
   ExistingDocuments,
   PutAttachedDocument,
+  PutAttachedDocuments,
   PutAttachedResponse,
+  PutAttachedResponses,
   PutDocument,
   PutDocuments,
   PutResponse,
@@ -30,6 +32,7 @@ import { handlePromise } from "@skylib/facades/dist/handlePromise";
 import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
 import * as a from "@skylib/functions/dist/array";
+import * as arrayMap from "@skylib/functions/dist/arrayMap";
 import * as assert from "@skylib/functions/dist/assertions";
 import * as cast from "@skylib/functions/dist/converters";
 import * as fn from "@skylib/functions/dist/function";
@@ -38,7 +41,11 @@ import * as json from "@skylib/functions/dist/json";
 import * as num from "@skylib/functions/dist/number";
 import * as o from "@skylib/functions/dist/object";
 import * as timer from "@skylib/functions/dist/timer";
-import type { Timeout, Writable } from "@skylib/functions/dist/types/core";
+import type {
+  numbers,
+  Timeout,
+  Writable
+} from "@skylib/functions/dist/types/core";
 
 import { PouchConflictError } from "./errors/PouchConflictError";
 import { PouchNotFoundError } from "./errors/PouchNotFoundError";
@@ -146,10 +153,81 @@ export class Database implements DatabaseInterface {
     this.pouchConfig = pouchConfig;
   }
 
+  public async bulkAttachedDocs(
+    parentId: string,
+    docs: PutAttachedDocuments
+  ): Promise<PutAttachedResponses> {
+    const db = await this.getDb();
+
+    for (let i = 0; i < 1 + this.options.retries; i++) {
+      // eslint-disable-next-line no-await-in-loop
+      const result = await attempt();
+
+      if (is.object(result)) return result;
+    }
+
+    throw new PouchRetryError(`Failed after ${this.options.retries} retries`);
+
+    async function attempt(): Promise<PutAttachedResponses | "retry"> {
+      const parentDoc = await db.get(parentId);
+
+      const attachedDocs = a.clone(parentDoc.attachedDocs ?? []);
+
+      const lastAttachedDocs: Writable<numbers> = [];
+
+      const result: Writable<PutAttachedResponses> = [];
+
+      for (const doc of docs) {
+        const { _id, _rev, parentDoc: omitParentDoc, ...content } = doc;
+
+        if (is.not.empty(_id) && _rev !== a.get(attachedDocs, _id)._rev)
+          throw new PouchConflictError("Attached document update conflict");
+
+        const id = _id ?? attachedDocs.length;
+
+        const rev = (_rev ?? 0) + 1;
+
+        const attachedDoc = { ...content, _id: id, _rev: rev };
+
+        if (id < attachedDocs.length) attachedDocs[id] = attachedDoc;
+        else attachedDocs.push(attachedDoc);
+
+        lastAttachedDocs.push(id);
+
+        result.push({
+          id,
+          parentId,
+          parentRev: "",
+          rev
+        });
+      }
+
+      try {
+        const response = await db.put(
+          o.omit({
+            ...parentDoc,
+            attachedDocs,
+            lastAttachedDocs
+          })
+        );
+
+        assert.toBeTrue(response.ok, "Database request failed");
+
+        return result.map(item => {
+          return { ...item, parentRev: response.rev };
+        });
+      } catch (e) {
+        assert.instance(e, PouchConflictError, assert.toErrorArg(e));
+
+        return "retry";
+      }
+    }
+  }
+
   public async bulkDocs(docs: PutDocuments): Promise<PutResponses> {
     for (const doc of docs) validatePutDocument(doc);
 
-    docs = docs.map(doc => o.omit(doc, "lastAttachedDoc"));
+    docs = docs.map(doc => o.omit(doc, "lastAttachedDocs"));
 
     const db = await this.getDb();
 
@@ -165,6 +243,24 @@ export class Database implements DatabaseInterface {
           : undefined
       )
       .filter(is.not.empty);
+  }
+
+  public async bulkExistingAttachedDocs(
+    docs: ExistingAttachedDocuments
+  ): Promise<PutAttachedResponses> {
+    const docsMap = new Map<string, Writable<ExistingAttachedDocuments>>();
+
+    for (const doc of docs) arrayMap.push(doc.parentDoc._id, doc, docsMap);
+
+    const result = await Promise.all(
+      a
+        .fromIterable(docsMap.entries())
+        .map(async ([parentId, docs2]) =>
+          this.bulkAttachedDocs(parentId, docs2)
+        )
+    );
+
+    return _.flatten(result);
   }
 
   public async count(conditions: Conditions = {}): Promise<number> {
@@ -269,7 +365,7 @@ export class Database implements DatabaseInterface {
       doc = { ...doc, attachedDocs: storedDoc.attachedDocs };
     }
 
-    const response = await db.post(o.omit(doc, "lastAttachedDoc"));
+    const response = await db.post(o.omit(doc, "lastAttachedDocs"));
 
     assert.toBeTrue(response.ok);
 
@@ -283,57 +379,7 @@ export class Database implements DatabaseInterface {
     parentId: string,
     doc: PutAttachedDocument
   ): Promise<PutAttachedResponse> {
-    const db = await this.getDb();
-
-    const { _id, _rev, parentDoc: omitParentDoc, ...content } = doc;
-
-    for (let i = 0; i < 1 + this.options.retries; i++) {
-      // eslint-disable-next-line no-await-in-loop
-      const result = await attempt();
-
-      if (is.object(result)) return result;
-    }
-
-    throw new PouchRetryError(`Failed after ${this.options.retries} retries`);
-
-    async function attempt(): Promise<PutAttachedResponse | "retry"> {
-      const parentDoc = await db.get(parentId);
-
-      const attachedDocs = parentDoc.attachedDocs ?? [];
-
-      if (is.not.empty(_id) && _rev !== a.get(attachedDocs, _id)._rev)
-        throw new PouchConflictError("Attached document update conflict");
-
-      const id = _id ?? attachedDocs.length;
-
-      const rev = (_rev ?? 0) + 1;
-
-      const attachedDoc = { ...content, _id: id, _rev: rev };
-
-      try {
-        const response = await db.put({
-          ...parentDoc,
-          attachedDocs:
-            id < attachedDocs.length
-              ? a.replace(attachedDocs, id, attachedDoc)
-              : [...attachedDocs, attachedDoc],
-          lastAttachedDoc: id
-        });
-
-        assert.toBeTrue(response.ok, "Database request failed");
-
-        return {
-          id,
-          parentId: response.id,
-          parentRev: response.rev,
-          rev
-        };
-      } catch (e) {
-        assert.instance(e, PouchConflictError, assert.toErrorArg(e));
-
-        return "retry";
-      }
-    }
+    return a.first(await this.bulkAttachedDocs(parentId, [doc]));
   }
 
   public async putAttachedIfNotExists(
@@ -835,7 +881,7 @@ export class Database implements DatabaseInterface {
       this.options.caseSensitiveSorting
     ];
 
-    const keyCode = fn.run((): string => {
+    const keyCode = fn.run<string>(() => {
       if (is.empty(sortBy))
         return `const key = [${group2}, null, doc._id, _id];`;
 
@@ -1556,19 +1602,17 @@ export class Database implements DatabaseInterface {
                 handler(doc);
             }
 
-            if (
-              this.changesHandlersAttachedPool.size &&
-              is.not.empty(value.doc.lastAttachedDoc)
-            ) {
-              const attachedDoc = extractDocAttached(
-                value.doc,
-                value.doc.lastAttachedDoc,
-                true
-              );
+            if (this.changesHandlersAttachedPool.size)
+              for (const lastAttachedDoc of value.doc.lastAttachedDocs ?? []) {
+                const attachedDoc = extractDocAttached(
+                  value.doc,
+                  lastAttachedDoc,
+                  true
+                );
 
-              for (const handler of this.changesHandlersAttachedPool.values())
-                handler(attachedDoc);
-            }
+                for (const handler of this.changesHandlersAttachedPool.values())
+                  handler(attachedDoc);
+              }
           },
           {
             include_docs: true,
@@ -1644,7 +1688,7 @@ const isExistingDocument: is.Guard<ExistingDocument> = is.factory(
   {
     _deleted: is.true,
     attachedDocs: isStoredDocumentAttachedArray,
-    lastAttachedDoc: is.number
+    lastAttachedDocs: is.numbers
   }
 );
 
