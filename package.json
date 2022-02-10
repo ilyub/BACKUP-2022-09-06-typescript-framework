@@ -1,6 +1,6 @@
 {
   "name": "@skylib/framework",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "private": false,
   "description": "Typescript framework",
   "keywords": [
