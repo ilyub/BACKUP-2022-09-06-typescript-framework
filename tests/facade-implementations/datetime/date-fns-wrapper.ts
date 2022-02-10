@@ -40,19 +40,31 @@ it("implementation.create", () => {
 
   const dt2 = datetime.create(dt1);
 
+  const dt3 = datetime.create(dt1.toDate());
+
   expect(dt1).datetimeToEqual("1950-01-01 14:30");
   expect(dt2).datetimeToEqual("1950-01-01 14:30");
+  expect(dt3).datetimeToEqual("1950-01-01 14:30");
 
   {
     dt1.add(1, "minute");
     expect(dt1).datetimeToEqual("1950-01-01 14:31");
     expect(dt2).datetimeToEqual("1950-01-01 14:30");
+    expect(dt3).datetimeToEqual("1950-01-01 14:30");
   }
 
   {
     dt2.add(1, "hour");
     expect(dt1).datetimeToEqual("1950-01-01 14:31");
     expect(dt2).datetimeToEqual("1950-01-01 15:30");
+    expect(dt3).datetimeToEqual("1950-01-01 14:30");
+  }
+
+  {
+    dt3.add(1, "day");
+    expect(dt1).datetimeToEqual("1950-01-01 14:31");
+    expect(dt2).datetimeToEqual("1950-01-01 15:30");
+    expect(dt3).datetimeToEqual("1950-01-02 14:30");
   }
 
   {

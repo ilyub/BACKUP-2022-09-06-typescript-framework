@@ -1,3 +1,3 @@
 module.exports = {
-  readonlyIgnoreTypes: ["ComponentOptions", "HTMLElement", "Timeout"]
+  readonlyIgnoreTypes: ["ComponentOptions", "Date", "HTMLElement", "Timeout"]
 };
