@@ -11,7 +11,7 @@
 /// <reference types="pouchdb-adapter-memory" />
 /// <reference types="pouchdb-adapter-websql" />
 import type { StoredAttachedDocument } from "@skylib/facades/es/database";
-import type { DeepReadonly } from "@skylib/functions/es/types/core";
+import type { DeepReadonly, numbers } from "@skylib/functions/es/types/core";
 export interface Changes {
     /**
      * Cancels changes.
@@ -21,7 +21,7 @@ export interface Changes {
 export interface Content {
     readonly [key: string]: unknown;
     readonly attachedDocs?: readonly StoredAttachedDocument[];
-    readonly lastAttachedDoc?: number;
+    readonly lastAttachedDocs?: numbers;
 }
 export declare type PouchChange = DeepReadonly<PouchDB.Core.ChangesResponseChange<Content>>;
 export declare type PouchChangesHandler = (change: PouchChange) => void;

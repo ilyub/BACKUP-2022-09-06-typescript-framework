@@ -53,7 +53,9 @@ export class DateTime {
             writable: true,
             value: void 0
         });
-        if (dt instanceof DateTime)
+        if (dt instanceof Date)
+            this.value = dt;
+        else if (dt instanceof DateTime)
             this.value = new Date(dt.value);
         else if (is.string(dt))
             this.value = parseString(dt);

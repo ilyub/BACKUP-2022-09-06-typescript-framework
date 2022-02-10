@@ -86,7 +86,7 @@ Creates or updates multiple documents.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `docs` | readonly { `attachedDocs?`: readonly { readonly [x: string]: unknown; readonly \_id: number; readonly \_rev: number; readonly \_deleted?: true; }[] ; `lastAttachedDoc?`: `number`  }[] | Documents. |
+| `docs` | readonly { `attachedDocs?`: readonly { readonly [x: string]: unknown; readonly \_id: number; readonly \_rev: number; readonly \_deleted?: true; }[] ; `lastAttachedDocs?`: readonly number[]  }[] | Documents. |
 
 #### Returns
 
@@ -189,7 +189,7 @@ Posts document.
 | :------ | :------ | :------ |
 | `doc` | `Object` | Document. |
 | `doc.attachedDocs?` | readonly { readonly [x: string]: unknown; readonly \_id: number; readonly \_rev: number; readonly \_deleted?: true; }[] | - |
-| `doc.lastAttachedDoc?` | `number` | - |
+| `doc.lastAttachedDocs?` | readonly `number`[] | - |
 
 #### Returns
 
@@ -211,7 +211,7 @@ Puts document.
 | :------ | :------ | :------ |
 | `doc` | `Object` | Document. |
 | `doc.attachedDocs?` | readonly { readonly [x: string]: unknown; readonly \_id: number; readonly \_rev: number; readonly \_deleted?: true; }[] | - |
-| `doc.lastAttachedDoc?` | `number` | - |
+| `doc.lastAttachedDocs?` | readonly `number`[] | - |
 
 #### Returns
 

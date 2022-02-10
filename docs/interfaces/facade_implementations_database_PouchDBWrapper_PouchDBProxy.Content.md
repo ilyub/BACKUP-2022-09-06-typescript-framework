@@ -13,7 +13,7 @@
 ### Properties
 
 - [attachedDocs](facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md#attacheddocs)
-- [lastAttachedDoc](facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md#lastattacheddoc)
+- [lastAttachedDocs](facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md#lastattacheddocs)
 
 ## Properties
 
@@ -23,6 +23,6 @@
 
 ___
 
-### lastAttachedDoc
+### lastAttachedDocs
 
-• `Optional` `Readonly` **lastAttachedDoc**: `number`
+• `Optional` `Readonly` **lastAttachedDocs**: `numbers`

@@ -18,7 +18,7 @@
 - [attachedDocs](classes_database_Item.Item.md#attacheddocs)
 - [createdAt](classes_database_Item.Item.md#createdat)
 - [deletedAt](classes_database_Item.Item.md#deletedat)
-- [lastAttachedDoc](classes_database_Item.Item.md#lastattacheddoc)
+- [lastAttachedDocs](classes_database_Item.Item.md#lastattacheddocs)
 - [softDeleted](classes_database_Item.Item.md#softdeleted)
 - [updatedAt](classes_database_Item.Item.md#updatedat)
 
@@ -78,9 +78,9 @@ ___
 
 ___
 
-### lastAttachedDoc
+### lastAttachedDocs
 
-• `Protected` `Readonly` **lastAttachedDoc**: `numberU`
+• `Protected` `Readonly` **lastAttachedDocs**: `undefined` \| `numbers`
 
 ___
 

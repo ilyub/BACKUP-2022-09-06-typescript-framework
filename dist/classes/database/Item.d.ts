@@ -1,6 +1,6 @@
 import type { StoredAttachedDocuments } from "@skylib/facades/dist/database";
 import * as is from "@skylib/functions/dist/guards";
-import type { numberU, stringU } from "@skylib/functions/dist/types/core";
+import type { numbers, stringU } from "@skylib/functions/dist/types/core";
 export interface PutItemDoc {
     readonly _deleted?: true;
     readonly _id?: string;
@@ -8,7 +8,7 @@ export interface PutItemDoc {
     readonly attachedDocs?: StoredAttachedDocuments;
     readonly createdAt?: string;
     readonly deletedAt?: string;
-    readonly lastAttachedDoc?: number;
+    readonly lastAttachedDocs?: numbers;
     readonly softDeleted?: true;
     readonly updatedAt?: string;
 }
@@ -44,6 +44,6 @@ export declare class Item {
      */
     doc(): ItemDoc;
     protected readonly attachedDocs: StoredAttachedDocuments | undefined;
-    protected readonly lastAttachedDoc: numberU;
+    protected readonly lastAttachedDocs: numbers | undefined;
 }
 //# sourceMappingURL=Item.d.ts.map

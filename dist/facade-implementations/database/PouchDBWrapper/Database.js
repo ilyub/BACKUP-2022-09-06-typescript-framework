@@ -9,6 +9,7 @@ const handlePromise_1 = require("@skylib/facades/dist/handlePromise");
 const reactiveStorage_1 = require("@skylib/facades/dist/reactiveStorage");
 const uniqueId_1 = require("@skylib/facades/dist/uniqueId");
 const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
+const arrayMap = (0, tslib_1.__importStar)(require("@skylib/functions/dist/arrayMap"));
 const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
 const cast = (0, tslib_1.__importStar)(require("@skylib/functions/dist/converters"));
 const fn = (0, tslib_1.__importStar)(require("@skylib/functions/dist/function"));
@@ -97,10 +98,58 @@ class Database {
         this.config = configWithDefaults;
         this.pouchConfig = pouchConfig;
     }
+    async bulkAttachedDocs(parentId, docs) {
+        const db = await this.getDb();
+        for (let i = 0; i < 1 + this.options.retries; i++) {
+            // eslint-disable-next-line no-await-in-loop
+            const result = await attempt();
+            if (is.object(result))
+                return result;
+        }
+        throw new PouchRetryError_1.PouchRetryError(`Failed after ${this.options.retries} retries`);
+        async function attempt() {
+            var _a;
+            const parentDoc = await db.get(parentId);
+            const attachedDocs = a.clone((_a = parentDoc.attachedDocs) !== null && _a !== void 0 ? _a : []);
+            const lastAttachedDocs = [];
+            const result = [];
+            for (const doc of docs) {
+                const { _id, _rev, parentDoc: omitParentDoc } = doc, content = (0, tslib_1.__rest)(doc, ["_id", "_rev", "parentDoc"]);
+                if (is.not.empty(_id) && _rev !== a.get(attachedDocs, _id)._rev)
+                    throw new PouchConflictError_1.PouchConflictError("Attached document update conflict");
+                const id = _id !== null && _id !== void 0 ? _id : attachedDocs.length;
+                const rev = (_rev !== null && _rev !== void 0 ? _rev : 0) + 1;
+                const attachedDoc = Object.assign(Object.assign({}, content), { _id: id, _rev: rev });
+                if (id < attachedDocs.length)
+                    attachedDocs[id] = attachedDoc;
+                else
+                    attachedDocs.push(attachedDoc);
+                lastAttachedDocs.push(id);
+                result.push({
+                    id,
+                    parentId,
+                    parentRev: "",
+                    rev
+                });
+            }
+            try {
+                const response = await db.put(o.omit(Object.assign(Object.assign({}, parentDoc), { attachedDocs,
+                    lastAttachedDocs })));
+                assert.toBeTrue(response.ok, "Database request failed");
+                return result.map(item => {
+                    return Object.assign(Object.assign({}, item), { parentRev: response.rev });
+                });
+            }
+            catch (e) {
+                assert.instance(e, PouchConflictError_1.PouchConflictError, assert.toErrorArg(e));
+                return "retry";
+            }
+        }
+    }
     async bulkDocs(docs) {
         for (const doc of docs)
             validatePutDocument(doc);
-        docs = docs.map(doc => o.omit(doc, "lastAttachedDoc"));
+        docs = docs.map(doc => o.omit(doc, "lastAttachedDocs"));
         const db = await this.getDb();
         const responses = await db.bulkDocs(docs);
         return responses
@@ -111,6 +160,15 @@ class Database {
             }
             : undefined)
             .filter(is.not.empty);
+    }
+    async bulkExistingAttachedDocs(docs) {
+        const docsMap = new Map();
+        for (const doc of docs)
+            arrayMap.push(doc.parentDoc._id, doc, docsMap);
+        const result = await Promise.all(a
+            .fromIterable(docsMap.entries())
+            .map(async ([parentId, docs2]) => this.bulkAttachedDocs(parentId, docs2)));
+        return _.flatten(result);
     }
     async count(conditions = {}) {
         const response = await this.rawQuery({}, { conditions, count: true });
@@ -179,7 +237,7 @@ class Database {
             assert.not.empty(storedDoc.attachedDocs);
             doc = Object.assign(Object.assign({}, doc), { attachedDocs: storedDoc.attachedDocs });
         }
-        const response = await db.post(o.omit(doc, "lastAttachedDoc"));
+        const response = await db.post(o.omit(doc, "lastAttachedDocs"));
         assert.toBeTrue(response.ok);
         return {
             id: response.id,
@@ -187,41 +245,7 @@ class Database {
         };
     }
     async putAttached(parentId, doc) {
-        const db = await this.getDb();
-        const { _id, _rev, parentDoc: omitParentDoc } = doc, content = (0, tslib_1.__rest)(doc, ["_id", "_rev", "parentDoc"]);
-        for (let i = 0; i < 1 + this.options.retries; i++) {
-            // eslint-disable-next-line no-await-in-loop
-            const result = await attempt();
-            if (is.object(result))
-                return result;
-        }
-        throw new PouchRetryError_1.PouchRetryError(`Failed after ${this.options.retries} retries`);
-        async function attempt() {
-            var _a;
-            const parentDoc = await db.get(parentId);
-            const attachedDocs = (_a = parentDoc.attachedDocs) !== null && _a !== void 0 ? _a : [];
-            if (is.not.empty(_id) && _rev !== a.get(attachedDocs, _id)._rev)
-                throw new PouchConflictError_1.PouchConflictError("Attached document update conflict");
-            const id = _id !== null && _id !== void 0 ? _id : attachedDocs.length;
-            const rev = (_rev !== null && _rev !== void 0 ? _rev : 0) + 1;
-            const attachedDoc = Object.assign(Object.assign({}, content), { _id: id, _rev: rev });
-            try {
-                const response = await db.put(Object.assign(Object.assign({}, parentDoc), { attachedDocs: id < attachedDocs.length
-                        ? a.replace(attachedDocs, id, attachedDoc)
-                        : [...attachedDocs, attachedDoc], lastAttachedDoc: id }));
-                assert.toBeTrue(response.ok, "Database request failed");
-                return {
-                    id,
-                    parentId: response.id,
-                    parentRev: response.rev,
-                    rev
-                };
-            }
-            catch (e) {
-                assert.instance(e, PouchConflictError_1.PouchConflictError, assert.toErrorArg(e));
-                return "retry";
-            }
-        }
+        return a.first(await this.bulkAttachedDocs(parentId, [doc]));
     }
     async putAttachedIfNotExists(parentId, doc) {
         try {
@@ -1041,18 +1065,19 @@ class Database {
             }
             else
                 this.changes = await this.db.changes(value => {
+                    var _a;
                     assert.byGuard(value.doc, isExistingDocument);
                     if (this.changesHandlersPool.size) {
                         const doc = extractDoc(value.doc);
                         for (const handler of this.changesHandlersPool.values())
                             handler(doc);
                     }
-                    if (this.changesHandlersAttachedPool.size &&
-                        is.not.empty(value.doc.lastAttachedDoc)) {
-                        const attachedDoc = extractDocAttached(value.doc, value.doc.lastAttachedDoc, true);
-                        for (const handler of this.changesHandlersAttachedPool.values())
-                            handler(attachedDoc);
-                    }
+                    if (this.changesHandlersAttachedPool.size)
+                        for (const lastAttachedDoc of (_a = value.doc.lastAttachedDocs) !== null && _a !== void 0 ? _a : []) {
+                            const attachedDoc = extractDocAttached(value.doc, lastAttachedDoc, true);
+                            for (const handler of this.changesHandlersAttachedPool.values())
+                                handler(attachedDoc);
+                        }
                 }, {
                     include_docs: true,
                     live: true,
@@ -1079,7 +1104,7 @@ const isExistingDocument = is.factory(is.object.of, {
 }, {
     _deleted: is.true,
     attachedDocs: isStoredDocumentAttachedArray,
-    lastAttachedDoc: is.number
+    lastAttachedDocs: is.numbers
 });
 const isExistingDocumentAttached = is.factory(is.object.of, {
     _id: is.number,

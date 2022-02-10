@@ -27,7 +27,9 @@
 
 ### Methods
 
+- [bulkAttachedDocs](facade_implementations_database_PouchDBWrapper_Database.Database.md#bulkattacheddocs)
 - [bulkDocs](facade_implementations_database_PouchDBWrapper_Database.Database.md#bulkdocs)
+- [bulkExistingAttachedDocs](facade_implementations_database_PouchDBWrapper_Database.Database.md#bulkexistingattacheddocs)
 - [count](facade_implementations_database_PouchDBWrapper_Database.Database.md#count)
 - [countAttached](facade_implementations_database_PouchDBWrapper_Database.Database.md#countattached)
 - [exists](facade_implementations_database_PouchDBWrapper_Database.Database.md#exists)
@@ -162,6 +164,27 @@ ___
 
 ## Methods
 
+### bulkAttachedDocs
+
+▸ **bulkAttachedDocs**(`parentId`, `docs`): `Promise`<`PutAttachedResponses`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `parentId` | `string` |
+| `docs` | `PutAttachedDocuments` |
+
+#### Returns
+
+`Promise`<`PutAttachedResponses`\>
+
+#### Implementation of
+
+DatabaseInterface.bulkAttachedDocs
+
+___
+
 ### bulkDocs
 
 ▸ **bulkDocs**(`docs`): `Promise`<`PutResponses`\>
@@ -179,6 +202,26 @@ ___
 #### Implementation of
 
 DatabaseInterface.bulkDocs
+
+___
+
+### bulkExistingAttachedDocs
+
+▸ **bulkExistingAttachedDocs**(`docs`): `Promise`<`PutAttachedResponses`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `docs` | `ExistingAttachedDocuments` |
+
+#### Returns
+
+`Promise`<`PutAttachedResponses`\>
+
+#### Implementation of
+
+DatabaseInterface.bulkExistingAttachedDocs
 
 ___
 

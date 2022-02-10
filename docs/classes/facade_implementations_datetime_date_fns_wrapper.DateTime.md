@@ -60,13 +60,13 @@ Creates class instance.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `dt?` | `string` \| `DateTime` | Date/time. |
+| `dt?` | `string` \| `Date` \| `DateTime` | Date/time. |
 
 ## Properties
 
 ### value
 
-• `Protected` **value**: `Readonly`<`Date`\>
+• `Protected` **value**: `Date`
 
 ## Methods
 
@@ -493,11 +493,11 @@ ___
 
 ### toDate
 
-▸ **toDate**(): `Readonly`<`Date`\>
+▸ **toDate**(): `Date`
 
 #### Returns
 
-`Readonly`<`Date`\>
+`Date`
 
 #### Implementation of
 

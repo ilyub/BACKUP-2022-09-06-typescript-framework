@@ -1,4 +1,4 @@
-import type { AttachedChangesHandler, ChangesHandler, Conditions, Database as DatabaseInterface, DatabaseOptions, ExistingAttachedDocument, ExistingAttachedDocuments, ExistingDocument, ExistingDocuments, PutAttachedDocument, PutAttachedResponse, PutDocument, PutDocuments, PutResponse, PutResponses, QueryOptions, ReactiveConfig, ReactiveConfigAttached, ReactiveResponse, ReactiveResponseAsync, ResetCallback } from "@skylib/facades/dist/database";
+import type { AttachedChangesHandler, ChangesHandler, Conditions, Database as DatabaseInterface, DatabaseOptions, ExistingAttachedDocument, ExistingAttachedDocuments, ExistingDocument, ExistingDocuments, PutAttachedDocument, PutAttachedDocuments, PutAttachedResponse, PutAttachedResponses, PutDocument, PutDocuments, PutResponse, PutResponses, QueryOptions, ReactiveConfig, ReactiveConfigAttached, ReactiveResponse, ReactiveResponseAsync, ResetCallback } from "@skylib/facades/dist/database";
 import type { Writable } from "@skylib/functions/dist/types/core";
 import type { Changes, PouchDatabase, PouchDatabaseConfiguration } from "./PouchDBProxy";
 import { PouchDBProxy } from "./PouchDBProxy";
@@ -48,7 +48,9 @@ export declare class Database implements DatabaseInterface {
      * @param pouchConfig - PouchDB configuration.
      */
     constructor(name: string, options?: DatabaseOptions, config?: Configuration, pouchConfig?: PouchDatabaseConfiguration);
+    bulkAttachedDocs(parentId: string, docs: PutAttachedDocuments): Promise<PutAttachedResponses>;
     bulkDocs(docs: PutDocuments): Promise<PutResponses>;
+    bulkExistingAttachedDocs(docs: ExistingAttachedDocuments): Promise<PutAttachedResponses>;
     count(conditions?: Conditions): Promise<number>;
     countAttached(conditions?: Conditions, parentConditions?: Conditions): Promise<number>;
     exists(id: string): Promise<boolean>;

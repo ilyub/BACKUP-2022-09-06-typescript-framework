@@ -12,7 +12,7 @@ exports.isPutItemDoc = is.factory(is.object.of, {}, {
     attachedDocs: database_1.isStoredAttachedDocuments,
     createdAt: is.string,
     deletedAt: is.string,
-    lastAttachedDoc: is.number,
+    lastAttachedDocs: is.numbers,
     softDeleted: is.true,
     updatedAt: is.string
 });
@@ -25,7 +25,7 @@ exports.isItemDoc = is.factory(is.object.of, {
     attachedDocs: database_1.isStoredAttachedDocuments,
     createdAt: is.string,
     deletedAt: is.string,
-    lastAttachedDoc: is.number,
+    lastAttachedDocs: is.numbers,
     softDeleted: is.true,
     updatedAt: is.string
 });
@@ -91,7 +91,7 @@ class Item {
             writable: true,
             value: void 0
         });
-        Object.defineProperty(this, "lastAttachedDoc", {
+        Object.defineProperty(this, "lastAttachedDocs", {
             enumerable: true,
             configurable: true,
             writable: true,
@@ -103,7 +103,7 @@ class Item {
         this.attachedDocs = source.attachedDocs;
         this.createdAt = source.createdAt;
         this.deletedAt = source.deletedAt;
-        this.lastAttachedDoc = source.lastAttachedDoc;
+        this.lastAttachedDocs = source.lastAttachedDocs;
         this.softDeleted = (_b = source.softDeleted) !== null && _b !== void 0 ? _b : false;
         this.updatedAt = source.updatedAt;
     }
@@ -120,7 +120,7 @@ class Item {
             attachedDocs: this.attachedDocs,
             createdAt: this.createdAt,
             deletedAt: this.deletedAt,
-            lastAttachedDoc: this.lastAttachedDoc,
+            lastAttachedDocs: this.lastAttachedDocs,
             softDeleted: this.softDeleted ? true : undefined,
             updatedAt: this.updatedAt
         });

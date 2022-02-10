@@ -20,7 +20,7 @@
 - [attachedDocs](classes_database_Item.PutItemDoc.md#attacheddocs)
 - [createdAt](classes_database_Item.PutItemDoc.md#createdat)
 - [deletedAt](classes_database_Item.PutItemDoc.md#deletedat)
-- [lastAttachedDoc](classes_database_Item.PutItemDoc.md#lastattacheddoc)
+- [lastAttachedDocs](classes_database_Item.PutItemDoc.md#lastattacheddocs)
 - [softDeleted](classes_database_Item.PutItemDoc.md#softdeleted)
 - [updatedAt](classes_database_Item.PutItemDoc.md#updatedat)
 
@@ -62,9 +62,9 @@ ___
 
 ___
 
-### lastAttachedDoc
+### lastAttachedDocs
 
-• `Optional` `Readonly` **lastAttachedDoc**: `number`
+• `Optional` `Readonly` **lastAttachedDocs**: `numbers`
 
 ___
 

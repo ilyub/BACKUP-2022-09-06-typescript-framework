@@ -20,7 +20,7 @@
 - [attachedDocs](classes_database_Item.ItemDoc.md#attacheddocs)
 - [createdAt](classes_database_Item.ItemDoc.md#createdat)
 - [deletedAt](classes_database_Item.ItemDoc.md#deletedat)
-- [lastAttachedDoc](classes_database_Item.ItemDoc.md#lastattacheddoc)
+- [lastAttachedDocs](classes_database_Item.ItemDoc.md#lastattacheddocs)
 - [softDeleted](classes_database_Item.ItemDoc.md#softdeleted)
 - [updatedAt](classes_database_Item.ItemDoc.md#updatedat)
 
@@ -86,13 +86,13 @@ ___
 
 ___
 
-### lastAttachedDoc
+### lastAttachedDocs
 
-• `Optional` `Readonly` **lastAttachedDoc**: `number`
+• `Optional` `Readonly` **lastAttachedDocs**: `numbers`
 
 #### Inherited from
 
-[PutItemDoc](classes_database_Item.PutItemDoc.md).[lastAttachedDoc](classes_database_Item.PutItemDoc.md#lastattacheddoc)
+[PutItemDoc](classes_database_Item.PutItemDoc.md).[lastAttachedDocs](classes_database_Item.PutItemDoc.md#lastattacheddocs)
 
 ___
 

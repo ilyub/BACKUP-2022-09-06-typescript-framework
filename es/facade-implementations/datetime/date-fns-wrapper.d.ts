@@ -28,7 +28,7 @@ export declare class DateTime implements DateTimeInterface {
      *
      * @param dt - Date/time.
      */
-    constructor(dt?: string | DateTimeInterface);
+    constructor(dt?: string | Date | DateTimeInterface);
     add(amount: number, unit: Unit): DateTimeInterface;
     clone(): DateTimeInterface;
     dayOfMonth(): number;
@@ -52,10 +52,10 @@ export declare class DateTime implements DateTimeInterface {
     setStartOfWeekLocale(): DateTimeInterface;
     setYear(year: number): DateTimeInterface;
     sub(amount: number, unit: Unit): DateTimeInterface;
-    toDate(): Readonly<Date>;
+    toDate(): Date;
     toString(): string;
     toTime(): number;
     year(): number;
-    protected value: Readonly<Date>;
+    protected value: Date;
 }
 //# sourceMappingURL=date-fns-wrapper.d.ts.map
