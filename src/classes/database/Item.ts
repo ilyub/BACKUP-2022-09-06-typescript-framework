@@ -71,9 +71,13 @@ export class Item {
 
   public readonly _rev: string;
 
+  public readonly attachedDocs: StoredAttachedDocuments | undefined;
+
   public readonly createdAt: stringU;
 
   public readonly deletedAt: stringU;
+
+  public readonly lastAttachedDocs: numbers | undefined;
 
   public readonly softDeleted: boolean;
 
@@ -114,14 +118,4 @@ export class Item {
       updatedAt: this.updatedAt
     });
   }
-
-  /*
-  |*******************************************************************************
-  |* Protected
-  |*******************************************************************************
-  |*/
-
-  protected readonly attachedDocs: StoredAttachedDocuments | undefined;
-
-  protected readonly lastAttachedDocs: numbers | undefined;
 }
