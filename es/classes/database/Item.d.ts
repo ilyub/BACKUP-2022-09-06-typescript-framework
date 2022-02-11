@@ -27,8 +27,10 @@ export declare class Item {
     readonly _deleted: boolean;
     readonly _id: string;
     readonly _rev: string;
+    readonly attachedDocs: StoredAttachedDocuments | undefined;
     readonly createdAt: stringU;
     readonly deletedAt: stringU;
+    readonly lastAttachedDocs: numbers | undefined;
     readonly softDeleted: boolean;
     readonly updatedAt: stringU;
     /**
@@ -43,7 +45,5 @@ export declare class Item {
      * @returns Database document.
      */
     doc(): ItemDoc;
-    protected readonly attachedDocs: StoredAttachedDocuments | undefined;
-    protected readonly lastAttachedDocs: numbers | undefined;
 }
 //# sourceMappingURL=Item.d.ts.map

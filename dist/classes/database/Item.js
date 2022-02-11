@@ -56,6 +56,12 @@ class Item {
             writable: true,
             value: void 0
         });
+        Object.defineProperty(this, "attachedDocs", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
         Object.defineProperty(this, "createdAt", {
             enumerable: true,
             configurable: true,
@@ -68,6 +74,12 @@ class Item {
             writable: true,
             value: void 0
         });
+        Object.defineProperty(this, "lastAttachedDocs", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
         Object.defineProperty(this, "softDeleted", {
             enumerable: true,
             configurable: true,
@@ -75,23 +87,6 @@ class Item {
             value: void 0
         });
         Object.defineProperty(this, "updatedAt", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: void 0
-        });
-        /*
-        |*******************************************************************************
-        |* Protected
-        |*******************************************************************************
-        |*/
-        Object.defineProperty(this, "attachedDocs", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: void 0
-        });
-        Object.defineProperty(this, "lastAttachedDocs", {
             enumerable: true,
             configurable: true,
             writable: true,
