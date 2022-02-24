@@ -11,6 +11,7 @@ export class Engine<T extends object> extends BaseEngine<
 > {
   public search(query: string): readonly T[] {
     const ids = new Set(
+      // eslint-disable-next-line no-type-assertion/no-type-assertion
       this.index.search(query).map(result => result.id as unknown)
     );
 
@@ -24,8 +25,8 @@ export class Engine<T extends object> extends BaseEngine<
   |*/
 
   protected buildIndex(
-    idField: keyof T & string,
-    fields: ReadonlyArray<keyof T & string>,
+    idField: string & keyof T,
+    fields: ReadonlyArray<string & keyof T>,
     items: readonly T[]
   ): Readonly<MiniSearch> {
     const result = new MiniSearch({ fields: a.clone(fields), idField });

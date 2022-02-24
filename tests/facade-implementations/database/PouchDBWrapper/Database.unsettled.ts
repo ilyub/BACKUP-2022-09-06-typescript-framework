@@ -1,6 +1,3 @@
-/**
- * @jest-environment @skylib/config/src/jest-env-jsdom
- */
 import type { Conditions } from "@skylib/facades/dist/database";
 import { database } from "@skylib/facades/dist/database";
 import { datetime } from "@skylib/facades/dist/datetime";
@@ -10,7 +7,9 @@ import * as testUtils from "@skylib/functions/dist/testUtils";
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
-it("unsettled", async () => {
+test("unsettled", async () => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -53,7 +52,9 @@ it("unsettled", async () => {
   });
 });
 
-it("unsettledAttached", async () => {
+test("unsettledAttached", async () => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -114,7 +115,9 @@ it("unsettledAttached", async () => {
   });
 });
 
-it("unsettledAttached: Combined", async () => {
+test("unsettledAttached: Combined", async () => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 

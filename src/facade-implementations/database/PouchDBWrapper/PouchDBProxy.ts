@@ -25,7 +25,14 @@ export type PouchChange = DeepReadonly<
   PouchDB.Core.ChangesResponseChange<Content>
 >;
 
-export type PouchChangesHandler = (change: PouchChange) => void;
+export interface PouchChangesHandler {
+  /**
+   * Changes handler.
+   *
+   * @param change - Change.
+   */
+  (change: PouchChange): void;
+}
 
 export type PouchChangesOptions = DeepReadonly<PouchDB.Core.ChangesOptions>;
 
@@ -76,7 +83,7 @@ export class PouchDBProxy {
    */
   public async bulkDocs(
     docs: readonly PouchPutDocument[]
-  ): Promise<Array<PouchResponse | PouchError>> {
+  ): Promise<Array<PouchError | PouchResponse>> {
     const db = await this.getDb();
 
     try {
@@ -130,7 +137,7 @@ export class PouchDBProxy {
    * @param id - ID.
    * @returns Document.
    */
-  public async get(id: string): Promise<Content & PouchIdMeta & PouchGetMeta> {
+  public async get(id: string): Promise<Content & PouchGetMeta & PouchIdMeta> {
     const db = await this.getDb();
 
     try {
@@ -237,7 +244,10 @@ export class PouchDBProxy {
 
     PouchDBProxy.pouchDBConstructor = fn.run(
       async (): Promise<PouchDB.Static> => {
-        const pouchdbModule = await import("pouchdb");
+        const pouchdbModule = await import(
+          /* webpackChunkName: "pouchdb" */
+          "pouchdb"
+        );
 
         return pouchdbModule.default;
       }

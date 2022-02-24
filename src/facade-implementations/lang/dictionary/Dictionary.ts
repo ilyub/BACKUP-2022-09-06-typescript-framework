@@ -18,6 +18,7 @@ import type { LocaleName } from "@skylib/functions/dist/types/locales";
 
 import type { Definitions } from ".";
 
+// eslint-disable-next-line @typescript-eslint/no-namespace, import/export
 export namespace Dictionary {
   export interface Configuration {
     readonly localeName: LocaleName;
@@ -28,6 +29,7 @@ export namespace Dictionary {
   };
 }
 
+// eslint-disable-next-line import/export
 export class Dictionary implements DictionaryInterface {
   /**
    * Configures plugin.
@@ -186,6 +188,7 @@ export class Dictionary implements DictionaryInterface {
         }
       });
 
+      // eslint-disable-next-line no-type-assertion/no-type-assertion
       return new Proxy(this, handler) as unknown as Facade;
     });
   }

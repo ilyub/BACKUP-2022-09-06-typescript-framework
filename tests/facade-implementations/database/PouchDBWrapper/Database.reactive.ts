@@ -1,6 +1,5 @@
-/**
- * @jest-environment @skylib/config/src/jest-env-jsdom
- */
+/* eslint-disable jest/no-conditional-in-test */
+
 import type {
   ExistingAttachedDocument,
   ExistingDocument,
@@ -24,7 +23,9 @@ const errorHandler = jest.spyOn(handlers, "error");
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
-it.each([false, true])("Database.reactiveCount", async async => {
+test.each([false, true])("database.reactiveCount", async async => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const config = reactiveStorage<Writable<ReactiveConfig>>({
       conditions: { type: { eq: "a" } },
@@ -46,10 +47,10 @@ it.each([false, true])("Database.reactiveCount", async async => {
     }
 
     {
-      expect(result.value).toStrictEqual(0);
+      expect(result.value).toBe(0);
       await db.put({ type: "a" });
       await wait(1000);
-      expect(result.value).toStrictEqual(1);
+      expect(result.value).toBe(1);
     }
 
     {
@@ -57,7 +58,7 @@ it.each([false, true])("Database.reactiveCount", async async => {
       expect(result.loading).toBeTrue();
       await wait(1000);
       expect(result.loading).toBeFalse();
-      expect(result.value).toStrictEqual(0);
+      expect(result.value).toBe(0);
     }
 
     {
@@ -69,12 +70,14 @@ it.each([false, true])("Database.reactiveCount", async async => {
       config.conditions = { type: { eq: "a" } };
       expect(result.loading).toBeFalse();
       await wait(1000);
-      expect(result.value).toStrictEqual(0);
+      expect(result.value).toBe(0);
     }
   });
 });
 
-it.each([false, true])("Database.reactiveCountAttached", async async => {
+test.each([false, true])("database.reactiveCountAttached", async async => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const config = reactiveStorage<Writable<ReactiveConfigAttached>>({
       conditions: { type: { eq: "a" } },
@@ -98,10 +101,10 @@ it.each([false, true])("Database.reactiveCountAttached", async async => {
     }
 
     {
-      expect(result.value).toStrictEqual(0);
+      expect(result.value).toBe(0);
       await db.putAttached(parentId, { type: "a" });
       await wait(1000);
-      expect(result.value).toStrictEqual(1);
+      expect(result.value).toBe(1);
     }
 
     {
@@ -109,7 +112,7 @@ it.each([false, true])("Database.reactiveCountAttached", async async => {
       expect(result.loading).toBeTrue();
       await wait(1000);
       expect(result.loading).toBeFalse();
-      expect(result.value).toStrictEqual(0);
+      expect(result.value).toBe(0);
     }
 
     {
@@ -121,12 +124,14 @@ it.each([false, true])("Database.reactiveCountAttached", async async => {
       config.conditions = { type: { eq: "a" } };
       expect(result.loading).toBeFalse();
       await wait(1000);
-      expect(result.value).toStrictEqual(0);
+      expect(result.value).toBe(0);
     }
   });
 });
 
-it.each([false, true])("Database.reactiveExists", async async => {
+test.each([false, true])("database.reactiveExists", async async => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -156,7 +161,9 @@ it.each([false, true])("Database.reactiveExists", async async => {
   });
 });
 
-it.each([false, true])("Database.reactiveExistsAttached", async async => {
+test.each([false, true])("database.reactiveExistsAttached", async async => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -186,7 +193,9 @@ it.each([false, true])("Database.reactiveExistsAttached", async async => {
   });
 });
 
-it.each([false, true])("Database.reactiveGet", async async => {
+test.each([false, true])("database.reactiveGet", async async => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -216,8 +225,8 @@ it.each([false, true])("Database.reactiveGet", async async => {
       errorHandler.mockImplementationOnce(() => {});
       await db.put({ _deleted: true, _id: id, _rev: rev2 });
       await wait(1000);
-      expect(errorHandler).toBeCalledTimes(1);
-      expect(errorHandler).toBeCalledWith(error);
+      expect(errorHandler).toHaveBeenCalledTimes(1);
+      expect(errorHandler).toHaveBeenCalledWith(error);
       errorHandler.mockClear();
     }
 
@@ -228,7 +237,9 @@ it.each([false, true])("Database.reactiveGet", async async => {
   });
 });
 
-it.each([false, true])("Database.reactiveGetAttached", async async => {
+test.each([false, true])("database.reactiveGetAttached", async async => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -285,8 +296,8 @@ it.each([false, true])("Database.reactiveGetAttached", async async => {
       errorHandler.mockImplementationOnce(() => {});
       await db.putAttached(parentId, { _deleted: true, _id: 0, _rev: 2 });
       await wait(1000);
-      expect(errorHandler).toBeCalledTimes(1);
-      expect(errorHandler).toBeCalledWith(error);
+      expect(errorHandler).toHaveBeenCalledTimes(1);
+      expect(errorHandler).toHaveBeenCalledWith(error);
       errorHandler.mockClear();
     }
 
@@ -297,55 +308,62 @@ it.each([false, true])("Database.reactiveGetAttached", async async => {
   });
 });
 
-it.each([false, true])("Database.reactiveGetAttachedIfExists", async async => {
-  await testUtils.run(async () => {
-    const db = database.create(uniqueId());
+test.each([false, true])(
+  "database.reactiveGetAttachedIfExists",
+  async async => {
+    expect.hasAssertions();
 
-    const { id: parentId } = await db.put({});
+    await testUtils.run(async () => {
+      const db = database.create(uniqueId());
 
-    const result = async
-      ? await db.reactiveGetAttachedIfExistsAsync(0, parentId)
-      : db.reactiveGetAttachedIfExists(0, parentId);
+      const { id: parentId } = await db.put({});
 
-    {
-      expect(result.loaded).toStrictEqual(async);
-      await handlePromise.runAll();
-      expect(result.loaded).toBeTrue();
-      expect(result.value).toBeUndefined();
-    }
+      const result = async
+        ? await db.reactiveGetAttachedIfExistsAsync(0, parentId)
+        : db.reactiveGetAttachedIfExists(0, parentId);
 
-    const { parentRev } = await db.putAttached(parentId, {});
+      {
+        expect(result.loaded).toStrictEqual(async);
+        await handlePromise.runAll();
+        expect(result.loaded).toBeTrue();
+        expect(result.value).toBeUndefined();
+      }
 
-    {
-      const expected = {
-        _id: 0,
-        _rev: 1,
-        parentDoc: {
-          _id: parentId,
-          _rev: parentRev,
-          attachedDocs: [],
-          lastAttachedDocs: [0]
-        }
-      };
+      const { parentRev } = await db.putAttached(parentId, {});
 
-      await wait(1000);
-      expect(result.value).toStrictEqual(expected);
-    }
+      {
+        const expected = {
+          _id: 0,
+          _rev: 1,
+          parentDoc: {
+            _id: parentId,
+            _rev: parentRev,
+            attachedDocs: [],
+            lastAttachedDocs: [0]
+          }
+        };
 
-    {
-      await db.putAttached(parentId, { _deleted: true, _id: 0, _rev: 1 });
-      await wait(1000);
-      expect(result.value).toBeUndefined();
-    }
+        await wait(1000);
+        expect(result.value).toStrictEqual(expected);
+      }
 
-    {
-      assert.toBeTrue(result.loaded);
-      await result.unsubscribe();
-    }
-  });
-});
+      {
+        await db.putAttached(parentId, { _deleted: true, _id: 0, _rev: 1 });
+        await wait(1000);
+        expect(result.value).toBeUndefined();
+      }
 
-it.each([false, true])("Database.reactiveGetIfExists", async async => {
+      {
+        assert.toBeTrue(result.loaded);
+        await result.unsubscribe();
+      }
+    });
+  }
+);
+
+test.each([false, true])("database.reactiveGetIfExists", async async => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -382,7 +400,9 @@ it.each([false, true])("Database.reactiveGetIfExists", async async => {
   });
 });
 
-it.each([false, true])("Database.reactiveQuery", async async => {
+test.each([false, true])("database.reactiveQuery", async async => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -418,7 +438,9 @@ it.each([false, true])("Database.reactiveQuery", async async => {
   });
 });
 
-it.each([false, true])("Database.reactiveQueryAttached", async async => {
+test.each([false, true])("database.reactiveQueryAttached", async async => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -472,7 +494,9 @@ it.each([false, true])("Database.reactiveQueryAttached", async async => {
   });
 });
 
-it.each([false, true])("Database.reactiveUnsettled", async async => {
+test.each([false, true])("database.reactiveUnsettled", async async => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const config: ReactiveConfig = {
       conditions: { d: { dgt: 24.5 * 3600 } },
@@ -491,12 +515,12 @@ it.each([false, true])("Database.reactiveUnsettled", async async => {
       expect(result.loaded).toStrictEqual(async);
       await handlePromise.runAll();
       expect(result.loaded).toBeTrue();
-      expect(result.value).toStrictEqual(1);
+      expect(result.value).toBe(1);
     }
 
     {
       await wait(2.5 * 3600 * 1000);
-      expect(result.value).toStrictEqual(0);
+      expect(result.value).toBe(0);
     }
 
     {
@@ -506,7 +530,9 @@ it.each([false, true])("Database.reactiveUnsettled", async async => {
   });
 });
 
-it.each([false, true])("Database.reactiveUnsettledAttached", async async => {
+test.each([false, true])("database.reactiveUnsettledAttached", async async => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const config: ReactiveConfigAttached = {
       conditions: { d: { dgt: 24.5 * 3600 } },
@@ -527,12 +553,12 @@ it.each([false, true])("Database.reactiveUnsettledAttached", async async => {
       expect(result.loaded).toStrictEqual(async);
       await handlePromise.runAll();
       expect(result.loaded).toBeTrue();
-      expect(result.value).toStrictEqual(1);
+      expect(result.value).toBe(1);
     }
 
     {
       await wait(2.5 * 3600 * 1000);
-      expect(result.value).toStrictEqual(0);
+      expect(result.value).toBe(0);
     }
 
     {
@@ -542,7 +568,7 @@ it.each([false, true])("Database.reactiveUnsettledAttached", async async => {
   });
 });
 
-it("handlers.error", () => {
+test("handlers.error", () => {
   const error = new Error("Sample error");
 
   expect(() => {

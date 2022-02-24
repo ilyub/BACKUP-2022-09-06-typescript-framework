@@ -13,7 +13,7 @@ export class Facebook implements Facade {
    * @param appId - Facebook app ID.
    * @param version - Version.
    */
-  public constructor(appId: stringU | PromiseAsync<stringU>, version: string) {
+  public constructor(appId: PromiseAsync<stringU> | stringU, version: string) {
     this.appId = appId;
     this.version = version;
   }
@@ -72,7 +72,7 @@ export class Facebook implements Facade {
   |*****************************************************************************
   |*/
 
-  protected appId: stringU | PromiseAsync<stringU>;
+  protected appId: PromiseAsync<stringU> | stringU;
 
   protected sdk: Promise<void> | undefined = undefined;
 

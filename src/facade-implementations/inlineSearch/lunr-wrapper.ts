@@ -20,8 +20,8 @@ export class Engine<T extends object> extends BaseEngine<T, lunr.Index> {
   |*/
 
   protected buildIndex(
-    idField: keyof T & string,
-    fields: ReadonlyArray<keyof T & string>,
+    idField: string & keyof T,
+    fields: ReadonlyArray<string & keyof T>,
     items: readonly T[]
   ): lunr.Index {
     return lunr(configFunction);

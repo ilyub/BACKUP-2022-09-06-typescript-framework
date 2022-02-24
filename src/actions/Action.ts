@@ -61,7 +61,8 @@ export class Action<A extends unknown[], R> {
    * @param _args - Arguments.
    * @returns Result.
    */
+  // eslint-disable-next-line @typescript-eslint/require-await
   protected async _execute(..._args: A): Promise<R> {
-    return Promise.reject(new Error("Not implemented"));
+    throw new Error("Not implemented");
   }
 }

@@ -62,7 +62,15 @@ export interface Configuration {
   readonly reindexThreshold?: number;
 }
 
-export type Filter = (doc: unknown) => boolean;
+export interface Filter {
+  /**
+   * Filter function.
+   *
+   * @param doc - Document.
+   * @returns Result.
+   */
+  (doc: unknown): boolean;
+}
 
 export interface MapReduce {
   readonly groupLevel: number;
@@ -93,26 +101,58 @@ export interface RawQueryResponse {
   readonly unsettledCount: number;
 }
 
-export type ReactiveRequest<T> = (
-  conditions?: Conditions,
-  options?: QueryOptions
-) => Promise<T>;
+export interface ReactiveRequest<T> {
+  /**
+   * Reactive request.
+   *
+   * @param conditions - Conditions.
+   * @param options - Options.
+   * @returns Promise.
+   */
+  (conditions?: Conditions, options?: QueryOptions): Promise<T>;
+}
 
-export type ReactiveRequestAttached<T> = (
-  conditions?: Conditions,
-  parentConditions?: Conditions,
-  options?: QueryOptions
-) => Promise<T>;
+export interface ReactiveRequestAttached<T> {
+  /**
+   * Reactive request.
+   *
+   * @param conditions - Conditions.
+   * @param parentConditions - Parent conditions.
+   * @param options - Options.
+   * @returns Promise.
+   */
+  (
+    conditions?: Conditions,
+    parentConditions?: Conditions,
+    options?: QueryOptions
+  ): Promise<T>;
+}
 
-export type ReactiveHandler<T> = (
-  doc: ExistingDocument,
-  mutableResult: Writable<ReactiveResponseAsync<T>>
-) => void;
+export interface ReactiveHandler<T> {
+  /**
+   * Reactive handler.
+   *
+   * @param doc - Document.
+   * @param mutableResult - Mutable result.
+   */
+  (
+    doc: ExistingDocument,
+    mutableResult: Writable<ReactiveResponseAsync<T>>
+  ): void;
+}
 
-export type ReactiveHandlerAttached<T> = (
-  doc: ExistingAttachedDocument,
-  mutableResult: Writable<ReactiveResponseAsync<T>>
-) => void;
+export interface ReactiveHandlerAttached<T> {
+  /**
+   * Reactive handler.
+   *
+   * @param doc - Document.
+   * @param mutableResult - Mutable result.
+   */
+  (
+    doc: ExistingAttachedDocument,
+    mutableResult: Writable<ReactiveResponseAsync<T>>
+  ): void;
+}
 
 export const handlers = o.freeze({
   error(error: unknown): void {
@@ -841,7 +881,7 @@ export class Database implements DatabaseInterface {
     };
 
     function createFilter(cond: string): Filter {
-      // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func
+      // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion
       return new Function("doc", `return ${cond};`) as Filter;
     }
   }
@@ -960,7 +1000,7 @@ export class Database implements DatabaseInterface {
     };
 
     function createFilter(cond1: string, cond2: string): Filter {
-      // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func
+      // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion
       return new Function(
         "attached",
         uglify(`
@@ -1036,6 +1076,7 @@ export class Database implements DatabaseInterface {
 
     const toSettle = _.flatten(
       response.rows
+        // eslint-disable-next-line no-type-assertion/no-type-assertion
         .map(row => row.value as unknown)
         .filter(isDocsResponse)
         .filter(docsResponse => !docsResponse.settled)
@@ -1068,6 +1109,7 @@ export class Database implements DatabaseInterface {
       return rawQueryOptions.count ?? false
         ? num.sum(
             ...response.rows
+              // eslint-disable-next-line no-type-assertion/no-type-assertion
               .map(row => row.value as unknown)
               .filter(isDocsResponse)
               .map(docsResponse =>
@@ -1085,6 +1127,7 @@ export class Database implements DatabaseInterface {
       if (rawQueryOptions.docs ?? false) {
         const docResponses = _.flatten(
           response.rows
+            // eslint-disable-next-line no-type-assertion/no-type-assertion
             .map(row => row.value as unknown)
             .filter(isDocsResponse)
             .map(docsResponse => docsResponse.docs)
@@ -1107,6 +1150,7 @@ export class Database implements DatabaseInterface {
         ? num.sum(
             0,
             ...response.rows
+              // eslint-disable-next-line no-type-assertion/no-type-assertion
               .map(row => row.value as unknown)
               .filter(isDocsResponse)
               .filter(docsResponse => !docsResponse.settled)
@@ -1344,10 +1388,10 @@ export class Database implements DatabaseInterface {
     const observer = reactiveStorage.watch(config, refresh);
 
     const subscription = await this.subscribe(doc => {
-      if (config.updateFn && config.updateFn(doc)) refresh();
+      if (config.updateFn?.(doc) ?? false) refresh();
     });
 
-    let timeout: Timeout | undefined = undefined;
+    let timeout: Timeout | undefined;
 
     updateTimeout();
 
@@ -1446,10 +1490,10 @@ export class Database implements DatabaseInterface {
     const observer = reactiveStorage.watch(config, refresh);
 
     const subscription = await this.subscribeAttached(doc => {
-      if (config.updateFn && config.updateFn(doc)) refresh();
+      if (config.updateFn?.(doc) ?? false) refresh();
     });
 
-    let timeout: Timeout | undefined = undefined;
+    let timeout: Timeout | undefined;
 
     updateTimeout();
 
@@ -1729,7 +1773,7 @@ function and(conditions: readonly string[]): string {
  * @returns Condition strings.
  */
 function condsToStr(
-  source: "doc" | "attached",
+  source: "attached" | "doc",
   conditions: Conditions
 ): StrConds {
   const toEmit: string[] = [];
@@ -1907,8 +1951,8 @@ function validatePutDocument(doc: PutDocument): void {
     throw new Error("Put document contains reserved word: views");
 
   if (
-    doc.attachedDocs &&
-    doc.attachedDocs.some((attachedDoc, index) => attachedDoc._id !== index)
+    doc.attachedDocs?.some((attachedDoc, index) => attachedDoc._id !== index) ??
+    false
   )
     throw new Error("Invalid attached document");
 }

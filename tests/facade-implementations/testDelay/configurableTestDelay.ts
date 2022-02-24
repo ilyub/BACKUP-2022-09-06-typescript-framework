@@ -5,19 +5,20 @@ import * as configurableTestDelay from "@/facade-implementations/testDelay/confi
 
 testUtils.installFakeTimer();
 
-it("configure, getConfiguration", () => {
-  expect(configurableTestDelay.getConfiguration().timeout).toStrictEqual(1000);
+test("configure, getConfiguration", () => {
+  expect(configurableTestDelay.getConfiguration().timeout).toBe(1000);
   configurableTestDelay.configure({ timeout: 1001 });
-  expect(configurableTestDelay.getConfiguration().timeout).toStrictEqual(1001);
+  expect(configurableTestDelay.getConfiguration().timeout).toBe(1001);
 });
 
-it("testDelay", async () => {
+test("testDelay", async () => {
+  expect.assertions(1);
   await testUtils.run(async () => {
     configurableTestDelay.configure({ enabled: true });
     await expect(testDelay).executionTimeToEqual(1000);
   });
 });
 
-it("testDelay: Disabled", async () => {
+test("testDelay: Disabled", async () => {
   await expect(testDelay).executionTimeToEqual(0);
 });

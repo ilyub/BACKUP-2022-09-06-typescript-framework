@@ -1,6 +1,6 @@
 import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
 
-it("reactiveStorage", () => {
+test("reactiveStorage", () => {
   const callback = jest.fn();
 
   const obj = reactiveStorage(reactiveStorage({ x: 0, y: { z: 0 } }));
@@ -9,15 +9,15 @@ it("reactiveStorage", () => {
 
   {
     obj.x = 1;
-    expect(callback).toBeCalledTimes(1);
-    expect(callback).toBeCalledWith({ x: 1, y: { z: 0 } });
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith({ x: 1, y: { z: 0 } });
     callback.mockClear();
   }
 
   {
     obj.y.z = 1;
-    expect(callback).toBeCalledTimes(1);
-    expect(callback).toBeCalledWith({ x: 1, y: { z: 1 } });
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith({ x: 1, y: { z: 1 } });
     callback.mockClear();
   }
 
@@ -25,7 +25,7 @@ it("reactiveStorage", () => {
     reactiveStorage.unwatch(obj, observer);
     obj.x = 2;
     obj.y.z = 2;
-    expect(callback).not.toBeCalled();
+    expect(callback).not.toHaveBeenCalled();
   }
 
   {
@@ -40,7 +40,7 @@ it("reactiveStorage", () => {
   }
 });
 
-it("reactiveStorage: reducer", () => {
+test("reactiveStorage: reducer", () => {
   const callback = jest.fn();
 
   const obj = reactiveStorage(reactiveStorage({ x: 0, y: { z: 0 } }));
@@ -49,21 +49,21 @@ it("reactiveStorage: reducer", () => {
 
   {
     obj.x = 1;
-    expect(callback).toBeCalledTimes(1);
-    expect(callback).toBeCalledWith({ x: 1, y: { z: 0 } });
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith({ x: 1, y: { z: 0 } });
     callback.mockClear();
   }
 
   {
     obj.y.z = 1;
-    expect(callback).not.toBeCalled();
+    expect(callback).not.toHaveBeenCalled();
   }
 
   {
     reactiveStorage.unwatch(obj, observer);
     obj.x = 2;
     obj.y.z = 2;
-    expect(callback).not.toBeCalled();
+    expect(callback).not.toHaveBeenCalled();
   }
 
   {

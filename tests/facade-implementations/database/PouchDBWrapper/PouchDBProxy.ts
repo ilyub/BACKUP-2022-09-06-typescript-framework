@@ -1,6 +1,3 @@
-/**
- * @jest-environment @skylib/config/src/jest-env-jsdom
- */
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
 
 import { PouchConflictError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchConflictError";
@@ -11,7 +8,7 @@ import {
   PouchDBProxy
 } from "@/facade-implementations/database/PouchDBWrapper/PouchDBProxy";
 
-it("handlers.error", () => {
+test("handlers.error", () => {
   {
     const error = new Error("Sample error");
 
@@ -47,15 +44,16 @@ it("handlers.error", () => {
   }
 });
 
-it("PouchDBProxy.bulkDocs", async () => {
+test("pouchDBProxy.bulkDocs", async () => {
   const db = new PouchDBProxy(uniqueId(), {});
 
   await expect(
+    // eslint-disable-next-line no-type-assertion/no-type-assertion
     db.bulkDocs(undefined as unknown as PouchPutDocument[])
   ).rejects.toStrictEqual(new Error("Missing JSON list of 'docs'"));
 });
 
-it("PouchDBProxy.destroy", async () => {
+test("pouchDBProxy.destroy", async () => {
   const db = new PouchDBProxy(uniqueId(), {});
 
   await db.destroy();
@@ -64,7 +62,8 @@ it("PouchDBProxy.destroy", async () => {
   );
 });
 
-it("PouchDBProxy.getDb", async () => {
+test("pouchDBProxy.getDb", async () => {
+  // eslint-disable-next-line no-type-assertion/no-type-assertion
   const db = new PouchDBProxy(undefined as unknown as string, {});
 
   await expect(db.get(uniqueId())).rejects.toStrictEqual(

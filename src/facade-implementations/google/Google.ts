@@ -16,7 +16,7 @@ export class Google implements Facade {
    *
    * @param clientId - Client ID.
    */
-  public constructor(clientId: stringU | PromiseAsync<stringU>) {
+  public constructor(clientId: PromiseAsync<stringU> | stringU) {
     this.clientId = clientId;
   }
 
@@ -61,6 +61,7 @@ export class Google implements Facade {
             reject: (reason: unknown) => void
           ) => {
             gapi.load("auth2", () => {
+              // eslint-disable-next-line github/no-then
               gapi.auth2.init({ client_id: clientId }).then(
                 googleAuth => {
                   resolve(googleAuth);
@@ -83,7 +84,7 @@ export class Google implements Facade {
   |*****************************************************************************
   |*/
 
-  protected clientId: stringU | PromiseAsync<stringU>;
+  protected clientId: PromiseAsync<stringU> | stringU;
 
   protected sdk: Promise<GoogleAuth> | undefined = undefined;
 }

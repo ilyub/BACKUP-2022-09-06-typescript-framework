@@ -68,7 +68,7 @@ export function getConfiguration(): Configuration {
 }
 
 export const implementation: Facade = {
-  create(dt?: string | Date | DateTimeInterface) {
+  create(dt?: Date | DateTimeInterface | string) {
     return new DateTime(dt);
   },
   now() {
@@ -92,7 +92,7 @@ export class DateTime implements DateTimeInterface {
    *
    * @param dt - Date/time.
    */
-  public constructor(dt?: string | Date | DateTimeInterface) {
+  public constructor(dt?: Date | DateTimeInterface | string) {
     if (dt instanceof Date) this.value = dt;
     else if (dt instanceof DateTime) this.value = new Date(dt.value);
     else if (is.string(dt)) this.value = parseString(dt);

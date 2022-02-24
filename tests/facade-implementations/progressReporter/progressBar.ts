@@ -1,6 +1,5 @@
-/**
- * @jest-environment @skylib/config/src/jest-env-jsdom
- */
+/* eslint-disable jest/expect-expect */
+
 import $ from "jquery";
 
 import { progressReporter } from "@skylib/facades/dist/progressReporter";
@@ -12,14 +11,12 @@ import * as progressBar from "@/facade-implementations/progressReporter/progress
 function expectProgressToEqual(progress: number): void {
   if (progress) {
     expect(progressReporter.getProgress()).toStrictEqual(progress);
-    expect($("#progressBar").attr("class")).toStrictEqual(
-      "progress-bar-active"
-    );
-    expect($("#progressBar").attr("style")).toStrictEqual(
+    expect($("#progressBar").attr("class")).toBe("progress-bar-active");
+    expect($("#progressBar").attr("style")).toBe(
       `width: ${100 * progressReporter.getProgress()}%;`
     );
   } else {
-    expect(progressReporter.getProgress()).toStrictEqual(0);
+    expect(progressReporter.getProgress()).toBe(0);
     expect($("#progressBar").attr("class")).toBeOneOf([undefined, ""]);
     expect($("#progressBar").attr("style")).toBeOneOf([undefined, ""]);
   }
@@ -28,16 +25,19 @@ function expectProgressToEqual(progress: number): void {
 testUtils.installFakeTimer();
 
 beforeEach(() => {
-  document.body.innerHTML = '<div id="progressBar"></div>';
+  const div = document.createElement("div");
+
+  div.setAttribute("id", "progressBar");
+  document.body.append(div);
 });
 
-it("configure, getConfiguration", () => {
-  expect(progressBar.getConfiguration().latency).toStrictEqual(0);
+test("configure, getConfiguration", () => {
+  expect(progressBar.getConfiguration().latency).toBe(0);
   progressBar.configure({ latency: 1 });
-  expect(progressBar.getConfiguration().latency).toStrictEqual(1);
+  expect(progressBar.getConfiguration().latency).toBe(1);
 });
 
-it("implementation.getProgress, implementation.spawn, implementation.reset", () => {
+test("implementation.getProgress, implementation.spawn, implementation.reset", () => {
   {
     progressReporter.spawn().setProgress(0.5);
     expectProgressToEqual(0.5);
@@ -49,7 +49,7 @@ it("implementation.getProgress, implementation.spawn, implementation.reset", () 
   }
 });
 
-it("Process.done", () => {
+test("process.done", () => {
   const process1 = progressReporter.spawn();
 
   const process2 = progressReporter.spawn();
@@ -66,7 +66,7 @@ it("Process.done", () => {
   }
 });
 
-it("Process.done: Final easing", async () => {
+test("process.done: Final easing", async () => {
   await testUtils.run(async () => {
     progressBar.configure({
       finalEasing: true,
@@ -86,7 +86,7 @@ it("Process.done: Final easing", async () => {
   });
 });
 
-it("Process.done: Latency", async () => {
+test("process.done: Latency", async () => {
   await testUtils.run(async () => {
     progressBar.configure({
       latency: 1500
@@ -111,7 +111,7 @@ it("Process.done: Latency", async () => {
   });
 });
 
-it("Process.done: Latency overdue", async () => {
+test("process.done: Latency overdue", async () => {
   await testUtils.run(async () => {
     progressBar.configure({
       latency: 1500
@@ -136,7 +136,7 @@ it("Process.done: Latency overdue", async () => {
   });
 });
 
-it("Process.setAuto", async () => {
+test("process.setAuto", async () => {
   await testUtils.run(async () => {
     const progress = progressReporter.spawn().setAuto(1000);
 
@@ -152,7 +152,7 @@ it("Process.setAuto", async () => {
   });
 });
 
-it("Process.setWeight", () => {
+test("process.setWeight", () => {
   const process1 = progressReporter.spawn();
 
   const process2 = progressReporter.spawn();

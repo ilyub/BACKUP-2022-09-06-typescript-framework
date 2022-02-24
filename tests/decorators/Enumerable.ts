@@ -29,7 +29,7 @@ class TestClass2 {
   protected _value = 1;
 }
 
-it("Enumerable", () => {
+test("enumerable", () => {
   const c1 = new TestClass1();
 
   const c2 = new TestClass2();

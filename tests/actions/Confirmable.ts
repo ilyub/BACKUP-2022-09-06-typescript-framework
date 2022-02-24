@@ -15,24 +15,24 @@ const testConfirmation = "Sample confirmation";
 
 globalThis.confirm = confirmMock;
 
-it("constructor", () => {
+test("constructor", () => {
   expect(new Confirmable()).toBeInstanceOf(Confirmable);
   expect(new Confirmable(testConfirmation)).toBeInstanceOf(Confirmable);
 });
 
-it("execute: With message", async () => {
+test("execute: With message", async () => {
   const action = new TestConfirmable(testConfirmation);
 
-  expect(callback).not.toBeCalled();
-  expect(confirmMock).not.toBeCalled();
+  expect(callback).not.toHaveBeenCalled();
+  expect(confirmMock).not.toHaveBeenCalled();
 
   {
     confirmMock.mockImplementationOnce(() => true);
     await action.execute();
-    expect(callback).toBeCalledTimes(1);
-    expect(callback).toBeCalledWith();
-    expect(confirmMock).toBeCalledTimes(1);
-    expect(confirmMock).toBeCalledWith(testConfirmation);
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith();
+    expect(confirmMock).toHaveBeenCalledTimes(1);
+    expect(confirmMock).toHaveBeenCalledWith(testConfirmation);
     callback.mockClear();
     confirmMock.mockClear();
   }
@@ -40,22 +40,22 @@ it("execute: With message", async () => {
   {
     confirmMock.mockImplementationOnce(() => false);
     await action.execute();
-    expect(callback).not.toBeCalled();
-    expect(confirmMock).toBeCalledTimes(1);
-    expect(confirmMock).toBeCalledWith(testConfirmation);
+    expect(callback).not.toHaveBeenCalled();
+    expect(confirmMock).toHaveBeenCalledTimes(1);
+    expect(confirmMock).toHaveBeenCalledWith(testConfirmation);
   }
 });
 
-it("execute: Without message", async () => {
+test("execute: Without message", async () => {
   const action = new TestConfirmable();
 
-  expect(callback).not.toBeCalled();
-  expect(confirmMock).not.toBeCalled();
+  expect(callback).not.toHaveBeenCalled();
+  expect(confirmMock).not.toHaveBeenCalled();
 
   {
     await action.execute();
-    expect(callback).toBeCalledTimes(1);
-    expect(callback).toBeCalledWith();
-    expect(confirmMock).not.toBeCalled();
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith();
+    expect(confirmMock).not.toHaveBeenCalled();
   }
 });

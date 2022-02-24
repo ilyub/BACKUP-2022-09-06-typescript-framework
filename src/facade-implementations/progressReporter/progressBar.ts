@@ -24,7 +24,7 @@ export type PartialConfiguration<K extends keyof Configuration> = {
   readonly [L in K]: Configuration[L];
 };
 
-export type State = "manual" | "auto" | "done";
+export type State = "auto" | "done" | "manual";
 
 /**
  * Configures plugin.
@@ -73,7 +73,7 @@ export class Process implements ProcessInterface {
     Process.update();
   }
 
-  public done(): Process {
+  public done(): this {
     this.state = "done";
     this.progress = 1;
     Process.update();
@@ -81,7 +81,7 @@ export class Process implements ProcessInterface {
     return this;
   }
 
-  public setAuto(expectedDuration: number): Process {
+  public setAuto(expectedDuration: number): this {
     this.state = "auto";
     this.expectedDuration = expectedDuration;
     this.lastAutoGrow = Date.now();
@@ -90,7 +90,7 @@ export class Process implements ProcessInterface {
     return this;
   }
 
-  public setProgress(value: number): Process {
+  public setProgress(value: number): this {
     this.state = "manual";
     this.progress = value;
     Process.update();
@@ -98,7 +98,7 @@ export class Process implements ProcessInterface {
     return this;
   }
 
-  public setWeight(value: number): Process {
+  public setWeight(value: number): this {
     this.weight = value;
     Process.update();
 
@@ -221,4 +221,4 @@ const processesPool = new Map<symbol, Process>();
 
 let progress = 0;
 
-let timeout: Timeout | undefined = undefined;
+let timeout: Timeout | undefined;

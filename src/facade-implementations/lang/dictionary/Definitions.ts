@@ -89,7 +89,15 @@ export class Definitions {
 |*******************************************************************************
 |*/
 
-type Callback = (str: string) => string;
+interface Callback {
+  /**
+   * Callback.
+   *
+   * @param str - String.
+   * @returns Result.
+   */
+  (str: string): string;
+}
 
 /**
  * Applies callback to raw definition.

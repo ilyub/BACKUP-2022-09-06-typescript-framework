@@ -4,16 +4,16 @@ const alertMock = jest.fn();
 
 globalThis.alert = alertMock;
 
-it("showAlert", () => {
+test("showAlert", () => {
   alertMock.mockImplementationOnce(() => {});
   showAlert("Sample message");
-  expect(alertMock).toBeCalledTimes(1);
-  expect(alertMock).toBeCalledWith("Sample message");
+  expect(alertMock).toHaveBeenCalledTimes(1);
+  expect(alertMock).toHaveBeenCalledWith("Sample message");
 });
 
-it("showAlert.async", async () => {
+test("showAlert.async", async () => {
   alertMock.mockImplementationOnce(() => {});
   await showAlert.async("Sample message");
-  expect(alertMock).toBeCalledTimes(1);
-  expect(alertMock).toBeCalledWith("Sample message");
+  expect(alertMock).toHaveBeenCalledTimes(1);
+  expect(alertMock).toHaveBeenCalledWith("Sample message");
 });

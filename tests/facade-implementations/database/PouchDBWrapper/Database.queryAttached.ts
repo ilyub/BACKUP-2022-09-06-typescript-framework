@@ -1,6 +1,3 @@
-/**
- * @jest-environment @skylib/config/src/jest-env-jsdom
- */
 import type { Conditions, QueryOptions } from "@skylib/facades/dist/database";
 import { database } from "@skylib/facades/dist/database";
 import { datetime } from "@skylib/facades/dist/datetime";
@@ -10,7 +7,7 @@ import * as testUtils from "@skylib/functions/dist/testUtils";
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
-it("queryAttached", async () => {
+test("queryAttached", async () => {
   const db = database.create(uniqueId());
 
   await db.bulkDocs([
@@ -88,7 +85,7 @@ it("queryAttached", async () => {
   }
 });
 
-it("queryAttached: Combined", async () => {
+test("queryAttached: Combined", async () => {
   const db = database.create(uniqueId());
 
   await db.bulkDocs([
@@ -140,7 +137,7 @@ it("queryAttached: Combined", async () => {
   }
 });
 
-it("queryAttached: Options", async () => {
+test("queryAttached: Options", async () => {
   const db = database.create(uniqueId());
 
   await db.bulkDocs([
@@ -179,7 +176,9 @@ it("queryAttached: Options", async () => {
   }
 });
 
-it("queryAttached: Time evolution", async () => {
+test("queryAttached: Time evolution", async () => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -260,7 +259,7 @@ it("queryAttached: Time evolution", async () => {
   });
 });
 
-it("query: Unexpected value type", async () => {
+test("query: Unexpected value type", async () => {
   const db = database.create(uniqueId());
 
   const error = new Error("Unexpected value type: undefined");

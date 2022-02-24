@@ -1,6 +1,3 @@
-/**
- * @jest-environment @skylib/config/src/jest-env-jsdom
- */
 import { handlePromise } from "@skylib/facades/dist/handlePromise";
 import { progressReporter } from "@skylib/facades/dist/progressReporter";
 import { wait } from "@skylib/functions/dist/helpers";
@@ -26,10 +23,10 @@ async function fail(): Promise<void> {
   globalThis.alert = alertMock;
 }
 
-it("configure, getConfiguration", () => {
-  expect(
-    promiseHandler.getConfiguration().expectedDurations.createDb
-  ).toStrictEqual(1000);
+test("configure, getConfiguration", () => {
+  expect(promiseHandler.getConfiguration().expectedDurations.createDb).toBe(
+    1000
+  );
 
   promiseHandler.configure({
     expectedDurations: {
@@ -38,23 +35,26 @@ it("configure, getConfiguration", () => {
     }
   });
 
-  expect(
-    promiseHandler.getConfiguration().expectedDurations.createDb
-  ).toStrictEqual(1001);
+  expect(promiseHandler.getConfiguration().expectedDurations.createDb).toBe(
+    1001
+  );
 });
 
-it("handlers.error", () => {
+test("handlers.error", () => {
   expect(() => {
     promiseHandler.handlers.error("Sample error");
   }).toThrow(testError);
 });
 
-it("runAll", async () => {
+test("runAll", async () => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
-    let done: booleanU = undefined;
+    let done: booleanU;
 
     {
       handlePromise.silent(wait(1000));
+      // eslint-disable-next-line github/no-then
       handlePromise.runAll().then(fulfilled).catch(rejected);
       expect(done).toBeUndefined();
     }
@@ -74,7 +74,9 @@ it("runAll", async () => {
   });
 });
 
-it("running", async () => {
+test("running", async () => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     {
       expect(handlePromise.running()).toBeFalse();
@@ -89,75 +91,85 @@ it("running", async () => {
   });
 });
 
-it("silent: Async", async () => {
+test("silent: Async", async () => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     handlePromise.silent(async () => wait(1500));
 
     {
       await wait(1000);
-      expect(progressReporter.getProgress()).toStrictEqual(0);
+      expect(progressReporter.getProgress()).toBe(0);
     }
 
     {
       await wait(1000);
-      expect(progressReporter.getProgress()).toStrictEqual(0);
+      expect(progressReporter.getProgress()).toBe(0);
     }
   });
 });
 
-it("silent: Error", async () => {
+test("silent: Error", async () => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     alertMock.mockImplementationOnce(() => {});
     errorHandler.mockImplementationOnce(() => {});
 
     {
       handlePromise.silent(fail);
-      expect(alertMock).not.toBeCalled();
-      expect(errorHandler).not.toBeCalled();
+      expect(alertMock).not.toHaveBeenCalled();
+      expect(errorHandler).not.toHaveBeenCalled();
     }
 
     {
       await wait(1000);
-      expect(alertMock).not.toBeCalled();
-      expect(errorHandler).toBeCalledTimes(1);
-      expect(errorHandler).toBeCalledWith(testError);
+      expect(alertMock).not.toHaveBeenCalled();
+      expect(errorHandler).toHaveBeenCalledTimes(1);
+      expect(errorHandler).toHaveBeenCalledWith(testError);
     }
   });
 });
 
-it("silent: Promise", async () => {
+test("silent: Promise", async () => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     handlePromise.silent(wait(1500));
 
     {
       await wait(1000);
-      expect(progressReporter.getProgress()).toStrictEqual(0);
+      expect(progressReporter.getProgress()).toBe(0);
     }
 
     {
       await wait(1000);
-      expect(progressReporter.getProgress()).toStrictEqual(0);
+      expect(progressReporter.getProgress()).toBe(0);
     }
   });
 });
 
-it("verbose: Async", async () => {
+test("verbose: Async", async () => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     handlePromise.verbose(async () => wait(1500), "createDb");
 
     {
       await wait(1000);
-      expect(progressReporter.getProgress()).toStrictEqual(0.551);
+      expect(progressReporter.getProgress()).toBe(0.551);
     }
 
     {
       await wait(1000);
-      expect(progressReporter.getProgress()).toStrictEqual(0);
+      expect(progressReporter.getProgress()).toBe(0);
     }
   });
 });
 
-it("verbose: Error", async () => {
+test("verbose: Error", async () => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const errorMessage = "Sample error message";
 
@@ -166,32 +178,34 @@ it("verbose: Error", async () => {
 
     {
       handlePromise.verbose(fail, "createDb", errorMessage);
-      expect(alertMock).not.toBeCalled();
-      expect(errorHandler).not.toBeCalled();
+      expect(alertMock).not.toHaveBeenCalled();
+      expect(errorHandler).not.toHaveBeenCalled();
     }
 
     {
       await wait(1500);
-      expect(alertMock).toBeCalledTimes(1);
-      expect(alertMock).toBeCalledWith(errorMessage);
-      expect(errorHandler).toBeCalledTimes(1);
-      expect(errorHandler).toBeCalledWith(testError);
+      expect(alertMock).toHaveBeenCalledTimes(1);
+      expect(alertMock).toHaveBeenCalledWith(errorMessage);
+      expect(errorHandler).toHaveBeenCalledTimes(1);
+      expect(errorHandler).toHaveBeenCalledWith(testError);
     }
   });
 });
 
-it("verbose: Promise", async () => {
+test("verbose: Promise", async () => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     handlePromise.verbose(wait(1500), "createDb");
 
     {
       await wait(1000);
-      expect(progressReporter.getProgress()).toStrictEqual(0.551);
+      expect(progressReporter.getProgress()).toBe(0.551);
     }
 
     {
       await wait(1000);
-      expect(progressReporter.getProgress()).toStrictEqual(0);
+      expect(progressReporter.getProgress()).toBe(0);
     }
   });
 });

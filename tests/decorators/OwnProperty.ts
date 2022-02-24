@@ -47,7 +47,7 @@ beforeEach(() => {
   OwnProperty.resetValidators();
 });
 
-it("OwnProperty, OwnProperty.ClassDecorator", () => {
+test("ownProperty, OwnProperty.ClassDecorator", () => {
   const c1 = new TestClass1();
 
   const c2 = new TestClass2();
@@ -64,26 +64,26 @@ it("OwnProperty, OwnProperty.ClassDecorator", () => {
     expect(OwnProperty.validate).not.toThrow();
     expect(Object.keys(descriptors1)).toStrictEqual(expected1);
     expect(Object.keys(descriptors2)).toStrictEqual(expected2);
-    expect(c1.value1).toStrictEqual(1);
-    expect(c2.value1).toStrictEqual(1);
+    expect(c1.value1).toBe(1);
+    expect(c2.value1).toBe(1);
   }
 
   {
     c1.value1 = 2;
     c2.value1 = 2;
-    expect(c1.value2).toStrictEqual(2);
-    expect(c2.value2).toStrictEqual(2);
+    expect(c1.value2).toBe(2);
+    expect(c2.value2).toBe(2);
   }
 
   {
     c1.value2 = 3;
     c2.value2 = 3;
-    expect(c1.value1).toStrictEqual(3);
-    expect(c2.value1).toStrictEqual(3);
+    expect(c1.value1).toBe(3);
+    expect(c2.value1).toBe(3);
   }
 });
 
-it("OwnProperty.resetValidators, OwnProperty.validate", () => {
+test("ownProperty.resetValidators, OwnProperty.validate", () => {
   {
     expect(OwnProperty.validate).not.toThrow();
 

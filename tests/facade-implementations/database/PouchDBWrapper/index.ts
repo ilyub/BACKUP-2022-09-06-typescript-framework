@@ -1,6 +1,3 @@
-/**
- * @jest-environment @skylib/config/src/jest-env-jsdom
- */
 import type {
   Conditions,
   Database as DatabaseInterface,
@@ -20,7 +17,7 @@ import { PouchRetryError } from "@/facade-implementations/database/PouchDBWrappe
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
-it("create: options.caseSensitiveSorting", async () => {
+test("create: options.caseSensitiveSorting", async () => {
   const db1 = database.create(uniqueId());
 
   const db2 = database.create(uniqueId(), { caseSensitiveSorting: true });
@@ -63,8 +60,9 @@ it("create: options.caseSensitiveSorting", async () => {
   ): Promise<void> {
     const got = await fn.run(
       async (): Promise<
-        ReadonlyArray<ExistingDocument | ExistingAttachedDocument>
+        ReadonlyArray<ExistingAttachedDocument | ExistingDocument>
       > => {
+        // eslint-disable-next-line jest/no-conditional-in-test
         switch (method) {
           case "query1":
             return db.query({});
@@ -85,7 +83,7 @@ it("create: options.caseSensitiveSorting", async () => {
   }
 });
 
-it("create: options.migrations", async () => {
+test("create: options.migrations", async () => {
   const name = uniqueId();
 
   const id = uniqueId();
@@ -117,20 +115,20 @@ it("create: options.migrations", async () => {
       ]
     });
 
-    expect(callback1).not.toBeCalled();
-    expect(callback2).not.toBeCalled();
+    expect(callback1).not.toHaveBeenCalled();
+    expect(callback2).not.toHaveBeenCalled();
 
     {
       await expect(db.exists(id)).resolves.toBeTrue();
-      expect(callback1).not.toBeCalled();
-      expect(callback2).toBeCalledTimes(1);
-      expect(callback2).toBeCalledWith();
+      expect(callback1).not.toHaveBeenCalled();
+      expect(callback2).toHaveBeenCalledTimes(1);
+      expect(callback2).toHaveBeenCalledWith();
       callback2.mockClear();
     }
   }
 });
 
-it("create: options.retries = 0", async () => {
+test("create: options.retries = 0", async () => {
   const db = database.create(uniqueId());
 
   const { id } = await db.put({});
@@ -140,7 +138,7 @@ it("create: options.retries = 0", async () => {
   ).rejects.toStrictEqual(new PouchRetryError("Failed after 0 retries"));
 });
 
-it("create: options.retries = 3", async () => {
+test("create: options.retries = 3", async () => {
   const db = database.create(uniqueId(), { retries: 3 });
 
   const { id } = await db.put({});
@@ -150,12 +148,14 @@ it("create: options.retries = 3", async () => {
     db.putAttached(id, {})
   ]);
 
-  expect(responses.length).toStrictEqual(2);
+  expect(responses).toHaveLength(2);
   expect(responses[0]).toContainAllKeys(["id", "parentId", "parentRev", "rev"]);
   expect(responses[1]).toContainAllKeys(["id", "parentId", "parentRev", "rev"]);
 });
 
-it("create: config.reindexThreshold", async () => {
+test("create: config.reindexThreshold", async () => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const db1 = new Database(uniqueId());
 
@@ -206,7 +206,7 @@ it("create: config.reindexThreshold", async () => {
   });
 });
 
-it("create: pouchConfig.revsLimit", async () => {
+test("create: pouchConfig.revsLimit", async () => {
   await Promise.all([subtest(1), subtest(9)]);
 
   async function subtest(revsLimit: number): Promise<void> {

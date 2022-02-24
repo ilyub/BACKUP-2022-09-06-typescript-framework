@@ -4,8 +4,8 @@ import type {
 } from "@skylib/facades/dist/inlineSearch";
 
 export type Constructor = new <T extends object>(
-  idField: keyof T & string,
-  fields: ReadonlyArray<keyof T & string>,
+  idField: string & keyof T,
+  fields: ReadonlyArray<string & keyof T>,
   items: readonly T[]
 ) => EngineInterface<T>;
 
@@ -18,8 +18,8 @@ export type Constructor = new <T extends object>(
 export function createImplementation(ctor: Constructor): Facade {
   return {
     create<T extends object>(
-      idField: keyof T & string,
-      fields: ReadonlyArray<keyof T & string>,
+      idField: string & keyof T,
+      fields: ReadonlyArray<string & keyof T>,
       items: readonly T[]
     ): EngineInterface<T> {
       return new ctor<T>(idField, fields, items);
@@ -38,8 +38,8 @@ export abstract class Engine<T extends object, I>
    * @param items - Items.
    */
   public constructor(
-    idField: keyof T & string,
-    fields: ReadonlyArray<keyof T & string>,
+    idField: string & keyof T,
+    fields: ReadonlyArray<string & keyof T>,
     items: readonly T[]
   ) {
     this.idField = idField;
@@ -49,7 +49,7 @@ export abstract class Engine<T extends object, I>
 
   public abstract search(query: string): readonly T[];
 
-  protected idField: keyof T & string;
+  protected idField: string & keyof T;
 
   protected index: I;
 
@@ -70,8 +70,8 @@ export abstract class Engine<T extends object, I>
    * @returns Index.
    */
   protected abstract buildIndex(
-    idField: keyof T & string,
-    fields: ReadonlyArray<keyof T & string>,
+    idField: string & keyof T,
+    fields: ReadonlyArray<string & keyof T>,
     items: readonly T[]
   ): I;
 }

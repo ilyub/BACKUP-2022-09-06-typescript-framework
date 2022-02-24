@@ -1,6 +1,3 @@
-/**
- * @jest-environment @skylib/config/src/jest-env-jsdom
- */
 import $ from "jquery";
 
 import { AssertionError } from "@skylib/functions/dist/errors/AssertionError";
@@ -30,16 +27,19 @@ const subtests = [
 
 shortcuts.install();
 
-it("install: Double install", () => {
+test("install: Double install", () => {
   expect(() => {
     shortcuts.install();
   }).toThrow(new AssertionError("Double install"));
 });
 
-it("install: Handled by container", () => {
+test("install: Handled by container", () => {
+  expect.hasAssertions();
+
   for (const subtest of subtests) {
     const onClick = jest.fn();
 
+    // eslint-disable-next-line github/no-inner-html
     document.body.innerHTML = `
       <div class="x-shortcuts-container ${subtest.selector}">
         <textarea></textarea>
@@ -49,24 +49,27 @@ it("install: Handled by container", () => {
     $(".x-shortcuts-container").on("click", onClick);
 
     {
-      expect(onClick).not.toBeCalled();
+      expect(onClick).not.toHaveBeenCalled();
       $("body").trigger($.Event("keydown", { key: subtest.key }));
-      expect(onClick).toBeCalledTimes(subtest.timesBody);
+      expect(onClick).toHaveBeenCalledTimes(subtest.timesBody);
       onClick.mockClear();
     }
 
     {
-      expect(onClick).not.toBeCalled();
+      expect(onClick).not.toHaveBeenCalled();
       $("textarea").trigger($.Event("keydown", { key: subtest.key }));
-      expect(onClick).toBeCalledTimes(subtest.timesTextarea);
+      expect(onClick).toHaveBeenCalledTimes(subtest.timesTextarea);
     }
   }
 });
 
-it("install: Handled by container's descendants", () => {
+test("install: Handled by container's descendants", () => {
+  expect.hasAssertions();
+
   for (const subtest of subtests) {
     const onClick = jest.fn();
 
+    // eslint-disable-next-line github/no-inner-html
     document.body.innerHTML = `
       <div class="x-shortcuts-container"></div>
       <div class="x-shortcuts-container" style="z-index: 1"></div>
@@ -83,20 +86,21 @@ it("install: Handled by container's descendants", () => {
     $(".x-shortcuts-container").on("click", onClick);
 
     {
-      expect(onClick).not.toBeCalled();
+      expect(onClick).not.toHaveBeenCalled();
       $("body").trigger($.Event("keydown", { key: subtest.key }));
-      expect(onClick).toBeCalledTimes(subtest.timesBody);
+      expect(onClick).toHaveBeenCalledTimes(subtest.timesBody);
       onClick.mockClear();
     }
 
     {
-      expect(onClick).not.toBeCalled();
+      expect(onClick).not.toHaveBeenCalled();
       $("textarea").trigger($.Event("keydown", { key: subtest.key }));
-      expect(onClick).toBeCalledTimes(subtest.timesTextarea);
+      expect(onClick).toHaveBeenCalledTimes(subtest.timesTextarea);
     }
   }
 });
 
-it("install: Unhandled", () => {
+// eslint-disable-next-line jest/expect-expect
+test("install: Unhandled", () => {
   $("body").trigger($.Event("keydown", { key: "Escape" }));
 });

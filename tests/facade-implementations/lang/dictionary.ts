@@ -5,45 +5,45 @@ import {
   pluralReduce
 } from "@/facade-implementations/lang/dictionary";
 
-it("pluralReduce", () => {
-  expect(pluralReduce(0)).toStrictEqual(2);
-  expect(pluralReduce(1)).toStrictEqual(1);
-  expect(pluralReduce(2)).toStrictEqual(2);
-  expect(pluralReduce(3)).toStrictEqual(2);
+test("pluralReduce", () => {
+  expect(pluralReduce(0)).toBe(2);
+  expect(pluralReduce(1)).toBe(1);
+  expect(pluralReduce(2)).toBe(2);
+  expect(pluralReduce(3)).toBe(2);
 });
 
-it("pluralReduce.ru", () => {
-  expect(pluralReduce.ru(0)).toStrictEqual(5);
-  expect(pluralReduce.ru(1)).toStrictEqual(1);
-  expect(pluralReduce.ru(2)).toStrictEqual(2);
-  expect(pluralReduce.ru(3)).toStrictEqual(2);
-  expect(pluralReduce.ru(4)).toStrictEqual(2);
-  expect(pluralReduce.ru(5)).toStrictEqual(5);
-  expect(pluralReduce.ru(10)).toStrictEqual(5);
-  expect(pluralReduce.ru(20)).toStrictEqual(5);
-  expect(pluralReduce.ru(21)).toStrictEqual(1);
-  expect(pluralReduce.ru(22)).toStrictEqual(2);
-  expect(pluralReduce.ru(23)).toStrictEqual(2);
-  expect(pluralReduce.ru(24)).toStrictEqual(2);
-  expect(pluralReduce.ru(25)).toStrictEqual(5);
+test("pluralReduce.ru", () => {
+  expect(pluralReduce.ru(0)).toBe(5);
+  expect(pluralReduce.ru(1)).toBe(1);
+  expect(pluralReduce.ru(2)).toBe(2);
+  expect(pluralReduce.ru(3)).toBe(2);
+  expect(pluralReduce.ru(4)).toBe(2);
+  expect(pluralReduce.ru(5)).toBe(5);
+  expect(pluralReduce.ru(10)).toBe(5);
+  expect(pluralReduce.ru(20)).toBe(5);
+  expect(pluralReduce.ru(21)).toBe(1);
+  expect(pluralReduce.ru(22)).toBe(2);
+  expect(pluralReduce.ru(23)).toBe(2);
+  expect(pluralReduce.ru(24)).toBe(2);
+  expect(pluralReduce.ru(25)).toBe(5);
 });
 
-it("Dictionary.configure, Dictionary.getConfiguration", () => {
-  expect(Dictionary.getConfiguration().localeName).toStrictEqual("en-US");
+test("dictionary.configure, Dictionary.getConfiguration", () => {
+  expect(Dictionary.getConfiguration().localeName).toBe("en-US");
   Dictionary.configure({ localeName: "ru-RU" });
-  expect(Dictionary.getConfiguration().localeName).toStrictEqual("ru-RU");
+  expect(Dictionary.getConfiguration().localeName).toBe("ru-RU");
 });
 
-it("Dictionary.context", () => {
+test("dictionary.context", () => {
   Dictionary.configure({ localeName: "ru-RU" });
-  expect(lang.day).toStrictEqual("день");
-  expect(lang.context("InXDays").day).toStrictEqual("дня");
-  expect(lang.context("InXDays").day).toStrictEqual("дня");
-  expect(lang.context("InXDays").context("InXDays").day).toStrictEqual("дня");
-  expect(lang.context("InXDays").context("InXDays").day).toStrictEqual("дня");
+  expect(lang.day).toBe("день");
+  expect(lang.context("InXDays").day).toBe("дня");
+  expect(lang.context("InXDays").day).toBe("дня");
+  expect(lang.context("InXDays").context("InXDays").day).toBe("дня");
+  expect(lang.context("InXDays").context("InXDays").day).toBe("дня");
 });
 
-it("Dictionary.create", () => {
+test("dictionary.create", () => {
   const expected = {
     configurable: true,
     enumerable: true,
@@ -56,27 +56,19 @@ it("Dictionary.create", () => {
   );
 });
 
-it("Dictionary.get", () => {
+test("dictionary.get", () => {
   Dictionary.configure({ localeName: "ru-RU" });
-  expect(lang.get("Day")).toStrictEqual("День");
-  expect(lang.get("day")).toStrictEqual("день");
-  expect(lang.get("DAY")).toStrictEqual("ДЕНЬ");
-  expect(lang.get("MustBeValidString")).toStrictEqual(
-    "Введите корректную строку"
-  );
-  expect(lang.get("mustBeValidString")).toStrictEqual(
-    "введите корректную строку"
-  );
-  expect(lang.get("MUSTBEVALIDSTRING")).toStrictEqual(
-    "ВВЕДИТЕ КОРРЕКТНУЮ СТРОКУ"
-  );
-  expect(lang.get("mustbevalidstring")).toStrictEqual(
-    "введите корректную строку"
-  );
+  expect(lang.get("Day")).toBe("День");
+  expect(lang.get("day")).toBe("день");
+  expect(lang.get("DAY")).toBe("ДЕНЬ");
+  expect(lang.get("MustBeValidString")).toBe("Введите корректную строку");
+  expect(lang.get("mustBeValidString")).toBe("введите корректную строку");
+  expect(lang.get("MUSTBEVALIDSTRING")).toBe("ВВЕДИТЕ КОРРЕКТНУЮ СТРОКУ");
+  expect(lang.get("mustbevalidstring")).toBe("введите корректную строку");
   expect(() => lang.get("unknown")).toThrow(new Error("Unknown word: unknown"));
 });
 
-it("Dictionary.has", () => {
+test("dictionary.has", () => {
   expect(lang.has("Day")).toBeTrue();
   expect(lang.has("day")).toBeTrue();
   expect(lang.has("DAY")).toBeTrue();
@@ -87,7 +79,7 @@ it("Dictionary.has", () => {
   expect(lang.has("unknown")).toBeFalse();
 });
 
-it("Dictionary.plural", () => {
+test("dictionary.plural", () => {
   Dictionary.configure({ localeName: "ru-RU" });
   subtest(1, "1 день");
   subtest(2, "2 дня");
@@ -100,18 +92,18 @@ it("Dictionary.plural", () => {
   }
 });
 
-it("Dictionary.with", () => {
-  expect(lang.with("field", "string").MustBeValidField).toStrictEqual(
+test("dictionary.with", () => {
+  expect(lang.with("field", "string").MustBeValidField).toBe(
     "Must be valid string"
   );
   Dictionary.configure({ localeName: "ru-RU" });
-  expect(
-    lang.with("field", "string").with("min", 10).FieldIsTooShort
-  ).toStrictEqual("Строка должна содержать не менее 10 символов");
+  expect(lang.with("field", "string").with("min", 10).FieldIsTooShort).toBe(
+    "Строка должна содержать не менее 10 символов"
+  );
   expect(
     lang.with("field", "Confirm").with("field2", "Password").MustBeSameAs
-  ).toStrictEqual("Подтверждение пароля должно совпадать с паролем");
-  expect(lang.with("field", "string").MustBeValidField).toStrictEqual(
+  ).toBe("Подтверждение пароля должно совпадать с паролем");
+  expect(lang.with("field", "string").MustBeValidField).toBe(
     "Введите корректную строку"
   );
 });

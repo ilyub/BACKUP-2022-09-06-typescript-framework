@@ -1,12 +1,9 @@
-/**
- * @jest-environment @skylib/config/src/jest-env-jsdom
- */
 import type { Conditions } from "@skylib/facades/dist/database";
 import { database } from "@skylib/facades/dist/database";
 import { datetime } from "@skylib/facades/dist/datetime";
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
 
-it("count", async () => {
+test("count", async () => {
   const db = database.create(uniqueId());
 
   await db.bulkDocs([
@@ -42,7 +39,7 @@ it("count", async () => {
   }
 });
 
-it("countAttached", async () => {
+test("countAttached", async () => {
   const db = database.create(uniqueId());
 
   await db.bulkDocs([
@@ -97,7 +94,7 @@ it("countAttached", async () => {
   }
 });
 
-it("countAttached: Combined", async () => {
+test("countAttached: Combined", async () => {
   const db = database.create(uniqueId());
 
   await db.bulkDocs([

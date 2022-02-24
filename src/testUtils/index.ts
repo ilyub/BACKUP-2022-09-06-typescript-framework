@@ -39,7 +39,6 @@ import * as uuidWrapper from "../facade-implementations/uniqueId/uuidWrapper";
 
 declare global {
   namespace jest {
-    // eslint-disable-next-line @skylib/prefer-readonly
     interface Matchers<R> {
       /**
        * Checks that datetime equals expected value.
@@ -163,7 +162,8 @@ export function jestSetup(): void {
       datetimeToEqual
     };
 
-    expect.extend(expectExtend as jest.ExpectExtendMap & ExpectExtendMap);
+    // eslint-disable-next-line no-type-assertion/no-type-assertion
+    expect.extend(expectExtend as ExpectExtendMap & jest.ExpectExtendMap);
   }
 
   jestReset();

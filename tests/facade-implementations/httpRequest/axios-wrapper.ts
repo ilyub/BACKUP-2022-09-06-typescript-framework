@@ -6,13 +6,13 @@ import * as axiosWrapper from "@/facade-implementations/httpRequest/axios-wrappe
 
 beforeEach(jestMockAxios.reset);
 
-it("configure, getConfiguration", () => {
-  expect(axiosWrapper.getConfiguration().timeout).toStrictEqual(30_000);
+test("configure, getConfiguration", () => {
+  expect(axiosWrapper.getConfiguration().timeout).toBe(30_000);
   axiosWrapper.configure({ timeout: 30_001 });
-  expect(axiosWrapper.getConfiguration().timeout).toStrictEqual(30_001);
+  expect(axiosWrapper.getConfiguration().timeout).toBe(30_001);
 });
 
-it("request", async () => {
+test("request", async () => {
   const data = "Sample response";
 
   const promise = httpRequest.send("http://localhost/");

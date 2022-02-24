@@ -12,7 +12,7 @@ class TestClass2 {
   public value!: number;
 }
 
-it("MustBeDefined", () => {
+test("mustBeDefined", () => {
   const c1 = new TestClass1();
 
   const c2 = new TestClass2();
@@ -29,7 +29,7 @@ it("MustBeDefined", () => {
   {
     c1.value = 1;
     c2.value = 1;
-    expect(c1.value).toStrictEqual(1);
-    expect(c2.value).toStrictEqual(1);
+    expect(c1.value).toBe(1);
+    expect(c2.value).toBe(1);
   }
 });

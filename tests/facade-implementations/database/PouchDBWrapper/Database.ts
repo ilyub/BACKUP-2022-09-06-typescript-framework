@@ -1,6 +1,3 @@
-/**
- * @jest-environment @skylib/config/src/jest-env-jsdom
- */
 import { database } from "@skylib/facades/dist/database";
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
 import * as assert from "@skylib/functions/dist/assertions";
@@ -12,7 +9,7 @@ import { PouchNotFoundError } from "@/facade-implementations/database/PouchDBWra
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
-it("bulkAttachedDocs", async () => {
+test("bulkAttachedDocs", async () => {
   const db = database.create(uniqueId());
 
   const { id: parentId } = await db.put({ value: 1 });
@@ -40,7 +37,7 @@ it("bulkAttachedDocs", async () => {
   ]);
 });
 
-it("bulkDocs", async () => {
+test("bulkDocs", async () => {
   const db = database.create(uniqueId());
 
   const { id } = await db.put({ value: 1 });
@@ -51,12 +48,12 @@ it("bulkDocs", async () => {
     { value: 3 }
   ]);
 
-  expect(responses.length).toStrictEqual(2);
+  expect(responses).toHaveLength(2);
   expect(responses[0]).toContainAllKeys(["id", "rev"]);
   expect(responses[1]).toContainAllKeys(["id", "rev"]);
 });
 
-it("bulkExistingAttachedDocs", async () => {
+test("bulkExistingAttachedDocs", async () => {
   const db = database.create(uniqueId());
 
   const { id: parentId1 } = await db.put({});
@@ -95,7 +92,7 @@ it("bulkExistingAttachedDocs", async () => {
   ]);
 });
 
-it("exists", async () => {
+test("exists", async () => {
   const db = database.create(uniqueId());
 
   const { id } = await db.put({});
@@ -104,19 +101,19 @@ it("exists", async () => {
   await expect(db.exists(uniqueId())).resolves.toBeFalse();
 });
 
-it("existsAttached", async () => {
+test("existsAttached", async () => {
   const db = database.create(uniqueId());
 
   const { id: parentId } = await db.put({});
 
   const { id } = await db.putAttached(parentId, {});
 
-  expect(id).toStrictEqual(0);
+  expect(id).toBe(0);
   await expect(db.existsAttached(0, parentId)).resolves.toBeTrue();
   await expect(db.existsAttached(1, parentId)).resolves.toBeFalse();
 });
 
-it("get|getIfExists", async () => {
+test("get|getIfExists", async () => {
   const db = database.create(uniqueId());
 
   {
@@ -168,7 +165,7 @@ it("get|getIfExists", async () => {
   }
 });
 
-it("getAttached|getAttachedIfExists", async () => {
+test("getAttached|getAttachedIfExists", async () => {
   const db = database.create(uniqueId());
 
   const { id: parentId } = await db.put({ value: 1 });
@@ -229,7 +226,7 @@ it("getAttached|getAttachedIfExists", async () => {
   }
 });
 
-it("put", async () => {
+test("put", async () => {
   const db = database.create(uniqueId());
 
   const response1 = await db.put({
@@ -297,7 +294,7 @@ it("put", async () => {
   }
 });
 
-it("put: null|undefined", async () => {
+test("put: null|undefined", async () => {
   const db = database.create(uniqueId());
 
   const { id, rev } = await db.put({
@@ -312,7 +309,7 @@ it("put: null|undefined", async () => {
   });
 });
 
-it("put: validatePutDocument", async () => {
+test("put: validatePutDocument", async () => {
   const db = database.create(uniqueId());
 
   await expect(db.put({ _attachments: undefined })).rejects.toStrictEqual(
@@ -336,7 +333,7 @@ it("put: validatePutDocument", async () => {
   ).rejects.toStrictEqual(new Error("Invalid attached document"));
 });
 
-it("putAttached", async () => {
+test("putAttached", async () => {
   const db = database.create(uniqueId());
 
   const { id: parentId } = await db.put({ value: 1 });
@@ -344,9 +341,9 @@ it("putAttached", async () => {
   const response1 = await db.putAttached(parentId, { value: 2 });
 
   expect(response1).toContainAllKeys(["id", "parentId", "parentRev", "rev"]);
-  expect(response1.id).toStrictEqual(0);
+  expect(response1.id).toBe(0);
   expect(response1.parentId).toStrictEqual(parentId);
-  expect(response1.rev).toStrictEqual(1);
+  expect(response1.rev).toBe(1);
 
   {
     const expected = {
@@ -384,9 +381,9 @@ it("putAttached", async () => {
   });
 
   expect(response2).toContainAllKeys(["id", "parentId", "parentRev", "rev"]);
-  expect(response2.id).toStrictEqual(0);
+  expect(response2.id).toBe(0);
   expect(response2.parentId).toStrictEqual(parentId);
-  expect(response2.rev).toStrictEqual(2);
+  expect(response2.rev).toBe(2);
 
   {
     const expected = {
@@ -426,7 +423,7 @@ it("putAttached", async () => {
   }
 });
 
-it("putIfNotExists", async () => {
+test("putIfNotExists", async () => {
   const db = database.create(uniqueId());
 
   const response1 = await db.putIfNotExists({});
@@ -449,7 +446,7 @@ it("putIfNotExists", async () => {
   expect(response3).toBeUndefined();
 });
 
-it("putAttachedIfNotExists", async () => {
+test("putAttachedIfNotExists", async () => {
   const db = database.create(uniqueId());
 
   const { id: parentId } = await db.put({});
@@ -458,9 +455,9 @@ it("putAttachedIfNotExists", async () => {
 
   assert.not.empty(response1);
   expect(response1).toContainAllKeys(["id", "parentId", "parentRev", "rev"]);
-  expect(response1.id).toStrictEqual(0);
+  expect(response1.id).toBe(0);
   expect(response1.parentId).toStrictEqual(parentId);
-  expect(response1.rev).toStrictEqual(1);
+  expect(response1.rev).toBe(1);
 
   const response2 = await db.putAttachedIfNotExists(parentId, {
     _id: 0,
@@ -469,16 +466,16 @@ it("putAttachedIfNotExists", async () => {
 
   assert.not.empty(response2);
   expect(response2).toContainAllKeys(["id", "parentId", "parentRev", "rev"]);
-  expect(response2.id).toStrictEqual(0);
+  expect(response2.id).toBe(0);
   expect(response2.parentId).toStrictEqual(parentId);
-  expect(response2.rev).toStrictEqual(2);
+  expect(response2.rev).toBe(2);
 
   const response3 = await db.putAttachedIfNotExists(parentId, { _id: 0 });
 
   expect(response3).toBeUndefined();
 });
 
-it("reset", async () => {
+test("reset", async () => {
   const db = database.create(uniqueId());
 
   const id = uniqueId();
@@ -496,15 +493,17 @@ it("reset", async () => {
   }
 
   {
-    expect(callback).not.toBeCalled();
+    expect(callback).not.toHaveBeenCalled();
     await db.reset(callback);
-    expect(callback).toBeCalledTimes(1);
-    expect(callback).toBeCalledWith();
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith();
     callback.mockClear();
   }
 });
 
-it("subscribe|subscribeAttached|unsubscribe|unsubscribeAttached", async () => {
+test("subscribe|subscribeAttached|unsubscribe|unsubscribeAttached", async () => {
+  expect.hasAssertions();
+
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -526,9 +525,9 @@ it("subscribe|subscribeAttached|unsubscribe|unsubscribeAttached", async () => {
       };
 
       await wait(1000);
-      expect(handler).toBeCalledTimes(1);
-      expect(handler).toBeCalledWith(expected);
-      expect(handlerAttached).not.toBeCalled();
+      expect(handler).toHaveBeenCalledTimes(1);
+      expect(handler).toHaveBeenCalledWith(expected);
+      expect(handlerAttached).not.toHaveBeenCalled();
       handler.mockClear();
     }
 
@@ -551,10 +550,10 @@ it("subscribe|subscribeAttached|unsubscribe|unsubscribeAttached", async () => {
       };
 
       await wait(1000);
-      expect(handler).toBeCalledTimes(1);
-      expect(handler).toBeCalledWith(expected);
-      expect(handlerAttached).toBeCalledTimes(1);
-      expect(handlerAttached).toBeCalledWith(expectedAttached);
+      expect(handler).toHaveBeenCalledTimes(1);
+      expect(handler).toHaveBeenCalledWith(expected);
+      expect(handlerAttached).toHaveBeenCalledTimes(1);
+      expect(handlerAttached).toHaveBeenCalledWith(expectedAttached);
       handler.mockClear();
       handlerAttached.mockClear();
     }
@@ -565,8 +564,8 @@ it("subscribe|subscribeAttached|unsubscribe|unsubscribeAttached", async () => {
       await db.put({ value: 1 });
       await db.putAttached(id, { value: 2 });
       await wait(1000);
-      expect(handler).not.toBeCalled();
-      expect(handlerAttached).not.toBeCalled();
+      expect(handler).not.toHaveBeenCalled();
+      expect(handlerAttached).not.toHaveBeenCalled();
     }
   });
 });

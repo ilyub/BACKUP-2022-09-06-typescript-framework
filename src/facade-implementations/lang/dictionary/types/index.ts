@@ -6,13 +6,21 @@ import type {
   ReadonlyRecord
 } from "@skylib/functions/dist/types/core";
 
-export type PluralReduce = (count: number) => number;
+export interface PluralReduce {
+  /**
+   * Reduces count for plural form.
+   *
+   * @param count - Count.
+   * @returns Reduced count.
+   */
+  (count: number): number;
+}
 
 export type RawDefinition =
-  | string
   | RawDefinitions
-  | readonly [NumStr, RawDefinitions]
-  | readonly [NumStr, RawDefinitions, ReadonlyPartialRecord<Context, NumStr>];
+  | string
+  | readonly [NumStr, RawDefinitions, ReadonlyPartialRecord<Context, NumStr>]
+  | readonly [NumStr, RawDefinitions];
 
 // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 export interface RawDefinitions {

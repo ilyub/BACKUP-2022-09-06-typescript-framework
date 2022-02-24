@@ -1,6 +1,3 @@
-/**
- * @jest-environment @skylib/config/src/jest-env-jsdom
- */
 import $ from "jquery";
 
 import { facebook } from "@skylib/facades/dist/facebook";
@@ -16,8 +13,9 @@ const getScript = jest
     assert.toBeTrue(args.length === 1);
     assert.toBeTrue(args[0] === "https://connect.facebook.net/en_US/sdk.js");
 
-    let appId: stringU = undefined;
+    let appId: stringU;
 
+    // eslint-disable-next-line no-type-assertion/no-type-assertion
     globalThis.FB = {
       getAuthResponse() {
         return appId === "loggedIn" ? getAuthResponse(appId) : null;
@@ -33,6 +31,7 @@ const getScript = jest
       }
     } as fb.FacebookStatic;
 
+    // eslint-disable-next-line no-type-assertion/no-type-assertion
     return {} as JQuery.jqXHR<stringU>;
   });
 
@@ -66,13 +65,13 @@ function getLoginStatus(appId: stringU): fb.LoginStatus {
   }
 }
 
-it("Facebook.accessToken", async () => {
+test("facebook.accessToken", async () => {
   const error = new AssertionError("Missing Facebook app ID");
 
   await expect(facebook.accessToken()).rejects.toStrictEqual(error);
 });
 
-it("Facebook.accessToken: loggedIn", async () => {
+test("facebook.accessToken: loggedIn", async () => {
   const appId = "loggedIn";
 
   const accessToken = `access-token-${appId}`;
@@ -81,7 +80,7 @@ it("Facebook.accessToken: loggedIn", async () => {
   await expect(facebook.accessToken()).resolves.toStrictEqual(accessToken);
 });
 
-it("Facebook.accessToken: login-authorization_expired", async () => {
+test("facebook.accessToken: login-authorization_expired", async () => {
   const appId = "login-authorization_expired";
 
   const error = new Error("Facebook login failed (authorization_expired)");
@@ -90,7 +89,7 @@ it("Facebook.accessToken: login-authorization_expired", async () => {
   await expect(facebook.accessToken()).rejects.toStrictEqual(error);
 });
 
-it("Facebook.accessToken: login-connected", async () => {
+test("facebook.accessToken: login-connected", async () => {
   const appId = "login-connected";
 
   const accessToken = `access-token-${appId}`;
@@ -99,14 +98,14 @@ it("Facebook.accessToken: login-connected", async () => {
   await expect(facebook.accessToken()).resolves.toStrictEqual(accessToken);
 });
 
-it("Facebook.accessToken: login-not_authorized", async () => {
+test("facebook.accessToken: login-not_authorized", async () => {
   const appId = "login-not_authorized";
 
   facebook.setImplementation(new Facebook(appId, "10.0"));
   await expect(facebook.accessToken()).resolves.toBeUndefined();
 });
 
-it("Facebook.accessToken: login-unknown", async () => {
+test("facebook.accessToken: login-unknown", async () => {
   const appId = "login-unknown";
 
   const error = new Error("Facebook login failed (unknown)");
@@ -115,18 +114,18 @@ it("Facebook.accessToken: login-unknown", async () => {
   await expect(facebook.accessToken()).rejects.toStrictEqual(error);
 });
 
-it("Facebook.loadSdk", async () => {
+test("facebook.loadSdk", async () => {
   facebook.setImplementation(new Facebook(appId, "10.0"));
 
   {
-    expect(getScript).not.toBeCalled();
+    expect(getScript).not.toHaveBeenCalled();
     await facebook.loadSdk();
-    expect(getScript).toBeCalledTimes(1);
+    expect(getScript).toHaveBeenCalledTimes(1);
   }
 
   {
     await facebook.loadSdk();
-    expect(getScript).toBeCalledTimes(1);
+    expect(getScript).toHaveBeenCalledTimes(1);
   }
 
   async function appId(): Promise<stringU> {

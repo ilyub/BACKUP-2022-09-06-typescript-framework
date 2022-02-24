@@ -2,7 +2,7 @@ import type { AttachedItemDoc } from "@/classes/database/AttachedItem";
 import { AttachedItem } from "@/classes/database/AttachedItem";
 import { Item } from "@/classes/database/Item";
 
-it.each<AttachedItemDoc>([
+test.each<AttachedItemDoc>([
   {
     _id: 0,
     _rev: 1,
@@ -21,7 +21,7 @@ it.each<AttachedItemDoc>([
     },
     softDeleted: true
   }
-])("AttachedItem", doc => {
+])("attachedItem", doc => {
   {
     const item = new AttachedItem(doc);
 

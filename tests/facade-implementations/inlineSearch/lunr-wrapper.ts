@@ -1,6 +1,6 @@
 import * as lunrWrapper from "@/facade-implementations/inlineSearch/lunr-wrapper";
 
-it.each([
+test.each([
   { ids: ["a"], searchString: "n1" },
   { ids: ["a", "b"], searchString: "n2" },
   { ids: ["b", "c"], searchString: "n3" },
@@ -10,7 +10,7 @@ it.each([
   { ids: ["a", "b", "c"], searchString: "d3" },
   { ids: ["b", "c"], searchString: "d4" },
   { ids: ["c"], searchString: "d5" }
-])("Engine.search", ({ ids, searchString }) => {
+])("engine.search", ({ ids, searchString }) => {
   interface Item {
     readonly description: string;
     readonly id: string;

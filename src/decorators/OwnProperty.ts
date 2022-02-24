@@ -1,7 +1,11 @@
 import * as a from "@skylib/functions/dist/array";
 import * as assert from "@skylib/functions/dist/assertions";
 import * as reflect from "@skylib/functions/dist/reflect";
-import type { Constructor } from "@skylib/functions/dist/types/core";
+import type {
+  Constructor,
+  strings,
+  Writable
+} from "@skylib/functions/dist/types/core";
 
 /**
  * Property decorator. Converts property into own property.
@@ -95,13 +99,11 @@ OwnProperty.validate = OwnPropertyValidate;
 |*******************************************************************************
 |*/
 
-type Validator = () => void;
-
 const flagKey = Symbol("FlagKey");
 
 const ownPropertiesKey = Symbol("OwnPropertiesKey");
 
-const validatorsStack: Validator[] = [];
+const validatorsStack: Array<() => void> = [];
 
 /**
  * Stores own properties as a metadata.
@@ -109,22 +111,16 @@ const validatorsStack: Validator[] = [];
  * @param ctor - Constructor.
  * @returns Editable array of own properties.
  */
-function getOwnProperties(ctor: Function): string[] {
-  {
-    const data = reflect.getOwnMetadata(ownPropertiesKey, ctor) as
-      | string[]
-      | undefined;
+function getOwnProperties(ctor: Function): Writable<strings> {
+  if (reflect.hasOwnMetadata(ownPropertiesKey, ctor))
+    // eslint-disable-next-line no-type-assertion/no-type-assertion
+    return reflect.getOwnMetadata(ownPropertiesKey, ctor) as Writable<strings>;
 
-    if (data) return data;
-  }
+  const result: Writable<strings> = [];
 
-  {
-    const data: string[] = [];
+  reflect.defineMetadata(ownPropertiesKey, result, ctor);
 
-    reflect.defineMetadata(ownPropertiesKey, data, ctor);
-
-    return data;
-  }
+  return result;
 }
 
 /**
