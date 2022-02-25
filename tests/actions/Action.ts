@@ -1,6 +1,7 @@
 import type { TaskType } from "@skylib/facades/dist/handlePromise";
 import { handlePromise } from "@skylib/facades/dist/handlePromise";
 import { progressReporter } from "@skylib/facades/dist/progressReporter";
+import * as fn from "@skylib/functions/dist/function";
 import { wait } from "@skylib/functions/dist/helpers";
 import * as testUtils from "@skylib/functions/dist/testUtils";
 
@@ -57,8 +58,8 @@ test("errorMessage", async () => {
   }
 
   {
-    alertMock.mockImplementationOnce(() => {});
-    errorHandler.mockImplementationOnce(() => {});
+    alertMock.mockImplementationOnce(fn.noop);
+    errorHandler.mockImplementationOnce(fn.noop);
     await expect(handlePromise.runAll()).rejects.toStrictEqual(testError);
     expect(handlePromise.running()).toBeFalse();
     expect(alertMock).toHaveBeenCalledTimes(1);

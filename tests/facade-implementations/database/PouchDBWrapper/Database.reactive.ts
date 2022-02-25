@@ -12,6 +12,7 @@ import { handlePromise } from "@skylib/facades/dist/handlePromise";
 import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
 import * as assert from "@skylib/functions/dist/assertions";
+import * as fn from "@skylib/functions/dist/function";
 import { wait } from "@skylib/functions/dist/helpers";
 import * as testUtils from "@skylib/functions/dist/testUtils";
 import type { Writable } from "@skylib/functions/dist/types/core";
@@ -222,7 +223,7 @@ test.each([false, true])("database.reactiveGet", async async => {
     {
       const error = new PouchNotFoundError("Missing document");
 
-      errorHandler.mockImplementationOnce(() => {});
+      errorHandler.mockImplementationOnce(fn.noop);
       await db.put({ _deleted: true, _id: id, _rev: rev2 });
       await wait(1000);
       expect(errorHandler).toHaveBeenCalledTimes(1);
@@ -293,7 +294,7 @@ test.each([false, true])("database.reactiveGetAttached", async async => {
     {
       const error = new PouchNotFoundError("Missing attached document");
 
-      errorHandler.mockImplementationOnce(() => {});
+      errorHandler.mockImplementationOnce(fn.noop);
       await db.putAttached(parentId, { _deleted: true, _id: 0, _rev: 2 });
       await wait(1000);
       expect(errorHandler).toHaveBeenCalledTimes(1);

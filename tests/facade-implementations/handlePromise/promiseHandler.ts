@@ -1,5 +1,6 @@
 import { handlePromise } from "@skylib/facades/dist/handlePromise";
 import { progressReporter } from "@skylib/facades/dist/progressReporter";
+import * as fn from "@skylib/functions/dist/function";
 import { wait } from "@skylib/functions/dist/helpers";
 import * as testUtils from "@skylib/functions/dist/testUtils";
 import type { booleanU } from "@skylib/functions/dist/types/core";
@@ -113,8 +114,8 @@ test("silent: Error", async () => {
   expect.hasAssertions();
 
   await testUtils.run(async () => {
-    alertMock.mockImplementationOnce(() => {});
-    errorHandler.mockImplementationOnce(() => {});
+    alertMock.mockImplementationOnce(fn.noop);
+    errorHandler.mockImplementationOnce(fn.noop);
 
     {
       handlePromise.silent(fail);
@@ -173,8 +174,8 @@ test("verbose: Error", async () => {
   await testUtils.run(async () => {
     const errorMessage = "Sample error message";
 
-    alertMock.mockImplementationOnce(() => {});
-    errorHandler.mockImplementationOnce(() => {});
+    alertMock.mockImplementationOnce(fn.noop);
+    errorHandler.mockImplementationOnce(fn.noop);
 
     {
       handlePromise.verbose(fail, "createDb", errorMessage);

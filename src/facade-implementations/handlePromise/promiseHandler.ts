@@ -96,7 +96,7 @@ function handle<T>(
     : undefined;
 
   promisesPool.set(id, promise);
-  // eslint-disable-next-line github/no-then
+  // eslint-disable-next-line github/no-then, promise/prefer-await-to-then
   promise.catch(rejected).then(fulfilled).catch(rejected);
 
   /**

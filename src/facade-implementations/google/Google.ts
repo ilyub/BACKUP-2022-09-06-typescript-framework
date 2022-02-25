@@ -61,7 +61,7 @@ export class Google implements Facade {
             reject: (reason: unknown) => void
           ) => {
             gapi.load("auth2", () => {
-              // eslint-disable-next-line github/no-then
+              // eslint-disable-next-line github/no-then, promise/prefer-await-to-then
               gapi.auth2.init({ client_id: clientId }).then(
                 googleAuth => {
                   resolve(googleAuth);
