@@ -1385,7 +1385,8 @@ export class Database implements DatabaseInterface {
     const observer = reactiveStorage.watch(config, refresh);
 
     const subscription = await this.subscribe(doc => {
-      if (config.updateFn?.(doc) ?? false) refresh();
+      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+      if (config.updateFn && config.updateFn(doc)) refresh();
     });
 
     let timeout: Timeout | undefined;
@@ -1485,7 +1486,8 @@ export class Database implements DatabaseInterface {
     const observer = reactiveStorage.watch(config, refresh);
 
     const subscription = await this.subscribeAttached(doc => {
-      if (config.updateFn?.(doc) ?? false) refresh();
+      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+      if (config.updateFn && config.updateFn(doc)) refresh();
     });
 
     let timeout: Timeout | undefined;
