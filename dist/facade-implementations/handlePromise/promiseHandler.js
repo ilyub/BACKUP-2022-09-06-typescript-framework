@@ -72,6 +72,7 @@ function handle(promiseAsync, type, errorMessage) {
         ? progressReporter_1.progressReporter.spawn().setAuto(moduleConfig.expectedDurations[type])
         : undefined;
     promisesPool.set(id, promise);
+    // eslint-disable-next-line github/no-then, promise/prefer-await-to-then
     promise.catch(rejected).then(fulfilled).catch(rejected);
     /**
      * Fulfilled callback.

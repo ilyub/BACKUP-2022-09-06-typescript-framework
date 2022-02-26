@@ -48,7 +48,7 @@ ___
 
 ### isItemDoc
 
-▸ `Const` **isItemDoc**(`value`): value is ItemDoc
+▸ **isItemDoc**(`value`): value is ItemDoc
 
 #### Parameters
 
@@ -64,7 +64,7 @@ ___
 
 ### isItemDocs
 
-▸ `Const` **isItemDocs**(`value`): value is readonly ItemDoc[]
+▸ **isItemDocs**(`value`): value is readonly ItemDoc[]
 
 #### Parameters
 
@@ -80,7 +80,7 @@ ___
 
 ### isPutItemDoc
 
-▸ `Const` **isPutItemDoc**(`value`): value is PutItemDoc
+▸ **isPutItemDoc**(`value`): value is PutItemDoc
 
 #### Parameters
 
@@ -96,7 +96,7 @@ ___
 
 ### isPutItemDocs
 
-▸ `Const` **isPutItemDocs**(`value`): value is readonly PutItemDoc[]
+▸ **isPutItemDocs**(`value`): value is readonly PutItemDoc[]
 
 #### Parameters
 

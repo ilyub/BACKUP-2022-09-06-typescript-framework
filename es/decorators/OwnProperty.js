@@ -59,6 +59,11 @@ export function OwnPropertyValidate() {
         validator();
 }
 OwnProperty.validate = OwnPropertyValidate;
+/*
+|*******************************************************************************
+|* Private
+|*******************************************************************************
+|*/
 const flagKey = Symbol("FlagKey");
 const ownPropertiesKey = Symbol("OwnPropertiesKey");
 const validatorsStack = [];
@@ -69,16 +74,12 @@ const validatorsStack = [];
  * @returns Editable array of own properties.
  */
 function getOwnProperties(ctor) {
-    {
-        const data = reflect.getOwnMetadata(ownPropertiesKey, ctor);
-        if (data)
-            return data;
-    }
-    {
-        const data = [];
-        reflect.defineMetadata(ownPropertiesKey, data, ctor);
-        return data;
-    }
+    if (reflect.hasOwnMetadata(ownPropertiesKey, ctor))
+        // eslint-disable-next-line no-type-assertion/no-type-assertion
+        return reflect.getOwnMetadata(ownPropertiesKey, ctor);
+    const result = [];
+    reflect.defineMetadata(ownPropertiesKey, result, ctor);
+    return result;
 }
 /**
  * Checks if class decorator flag is set.

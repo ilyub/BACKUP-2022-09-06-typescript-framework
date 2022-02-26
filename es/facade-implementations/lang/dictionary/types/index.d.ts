@@ -1,7 +1,15 @@
 import type { Context, Word } from "@skylib/facades/es/lang";
 import type { NumStr, ReadonlyIndexedObject, ReadonlyPartialRecord, ReadonlyRecord } from "@skylib/functions/es/types/core";
-export declare type PluralReduce = (count: number) => number;
-export declare type RawDefinition = string | RawDefinitions | readonly [NumStr, RawDefinitions] | readonly [NumStr, RawDefinitions, ReadonlyPartialRecord<Context, NumStr>];
+export interface PluralReduce {
+    /**
+     * Reduces count for plural form.
+     *
+     * @param count - Count.
+     * @returns Reduced count.
+     */
+    (count: number): number;
+}
+export declare type RawDefinition = RawDefinitions | string | readonly [NumStr, RawDefinitions, ReadonlyPartialRecord<Context, NumStr>] | readonly [NumStr, RawDefinitions];
 export interface RawDefinitions {
     readonly [key: string]: RawDefinition;
 }

@@ -39,7 +39,7 @@ Creates class instance.
 
 ### pluralReduce
 
-• **pluralReduce**: [`PluralReduce`](../modules/facade_implementations_lang_dictionary_types.md#pluralreduce)
+• **pluralReduce**: [`PluralReduce`](../interfaces/facade_implementations_lang_dictionary_types.PluralReduce.md)
 
 ___
 

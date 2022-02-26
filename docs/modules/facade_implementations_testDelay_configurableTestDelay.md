@@ -38,7 +38,7 @@
 
 ### moduleConfig
 
-• **moduleConfig**: [`Configuration`](../interfaces/facade_implementations_testDelay_configurableTestDelay.Configuration.md)
+• `Const` **moduleConfig**: [`Configuration`](../interfaces/facade_implementations_testDelay_configurableTestDelay.Configuration.md)
 
 ## Functions
 
@@ -82,7 +82,7 @@ ___
 
 ### implementation
 
-▸ `Const` **implementation**(): `Promise`<`void`\>
+▸ **implementation**(): `Promise`<`void`\>
 
 #### Returns
 

@@ -62,7 +62,7 @@ ___
 
 ### attachedDocs
 
-• `Readonly` **attachedDocs**: `undefined` \| `StoredAttachedDocuments`
+• `Protected` `Readonly` **attachedDocs**: `undefined` \| `StoredAttachedDocuments`
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 ### lastAttachedDocs
 
-• `Readonly` **lastAttachedDocs**: `undefined` \| `numbers`
+• `Protected` `Readonly` **lastAttachedDocs**: `undefined` \| `numbers`
 
 ___
 

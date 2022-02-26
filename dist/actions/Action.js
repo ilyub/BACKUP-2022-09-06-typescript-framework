@@ -68,8 +68,9 @@ class Action {
      * @param _args - Arguments.
      * @returns Result.
      */
+    // eslint-disable-next-line @typescript-eslint/require-await
     async _execute(..._args) {
-        return Promise.reject(new Error("Not implemented"));
+        throw new Error("Not implemented");
     }
 }
 exports.Action = Action;

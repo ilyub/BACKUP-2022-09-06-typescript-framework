@@ -7,10 +7,10 @@ export declare class Google implements Facade {
      *
      * @param clientId - Client ID.
      */
-    constructor(clientId: stringU | PromiseAsync<stringU>);
+    constructor(clientId: PromiseAsync<stringU> | stringU);
     idToken(): Promise<stringU>;
     loadSdk(): Promise<void>;
-    protected clientId: stringU | PromiseAsync<stringU>;
+    protected clientId: PromiseAsync<stringU> | stringU;
     protected sdk: Promise<GoogleAuth> | undefined;
 }
 export declare type GoogleAuth = DeepReadonly<Omit<gapi.auth2.GoogleAuth, "then">>;

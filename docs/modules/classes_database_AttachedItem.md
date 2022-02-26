@@ -48,7 +48,7 @@ ___
 
 ### isAttachedItemDoc
 
-▸ `Const` **isAttachedItemDoc**(`value`): value is AttachedItemDoc
+▸ **isAttachedItemDoc**(`value`): value is AttachedItemDoc
 
 #### Parameters
 
@@ -64,7 +64,7 @@ ___
 
 ### isAttachedItemDocs
 
-▸ `Const` **isAttachedItemDocs**(`value`): value is readonly AttachedItemDoc[]
+▸ **isAttachedItemDocs**(`value`): value is readonly AttachedItemDoc[]
 
 #### Parameters
 
@@ -80,7 +80,7 @@ ___
 
 ### isPutAttachedItemDoc
 
-▸ `Const` **isPutAttachedItemDoc**(`value`): value is PutAttachedItemDoc
+▸ **isPutAttachedItemDoc**(`value`): value is PutAttachedItemDoc
 
 #### Parameters
 
@@ -96,7 +96,7 @@ ___
 
 ### isPutAttachedItemDocs
 
-▸ `Const` **isPutAttachedItemDocs**(`value`): value is readonly PutAttachedItemDoc[]
+▸ **isPutAttachedItemDocs**(`value`): value is readonly PutAttachedItemDoc[]
 
 #### Parameters
 

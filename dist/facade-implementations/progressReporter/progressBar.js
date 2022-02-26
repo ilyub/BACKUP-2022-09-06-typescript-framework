@@ -198,5 +198,5 @@ const moduleConfig = {
 };
 const processesPool = new Map();
 let progress = 0;
-let timeout = undefined;
+let timeout;
 //# sourceMappingURL=progressBar.js.map

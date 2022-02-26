@@ -172,7 +172,9 @@ export class PouchDBProxy {
         if (PouchDBProxy.pouchDBConstructor)
             return PouchDBProxy.pouchDBConstructor;
         PouchDBProxy.pouchDBConstructor = fn.run(async () => {
-            const pouchdbModule = await import("pouchdb");
+            const pouchdbModule = await import(
+            /* webpackChunkName: "pouchdb" */
+            "pouchdb");
             return pouchdbModule.default;
         });
         return PouchDBProxy.pouchDBConstructor;

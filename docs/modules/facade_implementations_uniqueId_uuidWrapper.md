@@ -12,7 +12,7 @@
 
 ### implementation
 
-▸ `Const` **implementation**(): `string`
+▸ **implementation**(): `string`
 
 #### Returns
 

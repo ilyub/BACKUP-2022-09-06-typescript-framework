@@ -12,7 +12,7 @@ export interface Configuration {
 export declare type PartialConfiguration<K extends keyof Configuration> = {
     readonly [L in K]: Configuration[L];
 };
-export declare type State = "manual" | "auto" | "done";
+export declare type State = "auto" | "done" | "manual";
 /**
  * Configures plugin.
  *
@@ -31,10 +31,10 @@ export declare class Process implements ProcessInterface {
      * Creates class instance.
      */
     constructor();
-    done(): Process;
-    setAuto(expectedDuration: number): Process;
-    setProgress(value: number): Process;
-    setWeight(value: number): Process;
+    done(): this;
+    setAuto(expectedDuration: number): this;
+    setProgress(value: number): this;
+    setWeight(value: number): this;
     /**
      * Updates progress bar state.
      *

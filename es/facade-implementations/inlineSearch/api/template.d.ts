@@ -1,5 +1,5 @@
 import type { Engine as EngineInterface, Facade } from "@skylib/facades/es/inlineSearch";
-export declare type Constructor = new <T extends object>(idField: keyof T & string, fields: ReadonlyArray<keyof T & string>, items: readonly T[]) => EngineInterface<T>;
+export declare type Constructor = new <T extends object>(idField: string & keyof T, fields: ReadonlyArray<string & keyof T>, items: readonly T[]) => EngineInterface<T>;
 /**
  * Creates search engine.
  *
@@ -15,9 +15,9 @@ export declare abstract class Engine<T extends object, I> implements EngineInter
      * @param fields - Searchable fields.
      * @param items - Items.
      */
-    constructor(idField: keyof T & string, fields: ReadonlyArray<keyof T & string>, items: readonly T[]);
+    constructor(idField: string & keyof T, fields: ReadonlyArray<string & keyof T>, items: readonly T[]);
     abstract search(query: string): readonly T[];
-    protected idField: keyof T & string;
+    protected idField: string & keyof T;
     protected index: I;
     protected items: readonly T[];
     /**
@@ -28,6 +28,6 @@ export declare abstract class Engine<T extends object, I> implements EngineInter
      * @param items - Items.
      * @returns Index.
      */
-    protected abstract buildIndex(idField: keyof T & string, fields: ReadonlyArray<keyof T & string>, items: readonly T[]): I;
+    protected abstract buildIndex(idField: string & keyof T, fields: ReadonlyArray<string & keyof T>, items: readonly T[]): I;
 }
 //# sourceMappingURL=template.d.ts.map

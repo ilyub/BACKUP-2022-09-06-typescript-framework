@@ -48,7 +48,7 @@ ___
 
 ### implementation
 
-• **implementation**: `Facade`
+• `Const` **implementation**: `Facade`
 
 ## Functions
 

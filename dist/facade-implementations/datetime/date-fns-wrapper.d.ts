@@ -28,7 +28,7 @@ export declare class DateTime implements DateTimeInterface {
      *
      * @param dt - Date/time.
      */
-    constructor(dt?: string | Date | DateTimeInterface);
+    constructor(dt?: Date | DateTimeInterface | string);
     add(amount: number, unit: Unit): DateTimeInterface;
     clone(): DateTimeInterface;
     dayOfMonth(): number;

@@ -12,4 +12,4 @@
 
 ### implementation
 
-• **implementation**: `Facade`
+• `Const` **implementation**: `Facade`

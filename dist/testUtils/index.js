@@ -125,6 +125,7 @@ function jestSetup() {
         const expectExtend = {
             datetimeToEqual
         };
+        // eslint-disable-next-line no-type-assertion/no-type-assertion
         expect.extend(expectExtend);
     }
     jestReset();

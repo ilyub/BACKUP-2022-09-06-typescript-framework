@@ -796,7 +796,7 @@ Reactive factory.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `request` | `Promise`<`T`\> | Request. |
-| `handler` | [`ReactiveHandler`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)<`T`\> | Handler. |
+| `handler` | [`ReactiveHandler`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveHandler.md)<`T`\> | Handler. |
 
 #### Returns
 
@@ -823,7 +823,7 @@ Reactive factory.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `request` | `Promise`<`T`\> | Request. |
-| `handler` | [`ReactiveHandler`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)<`T`\> | Handler. |
+| `handler` | [`ReactiveHandler`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveHandler.md)<`T`\> | Handler. |
 | `result?` | `Writable`<`ReactiveResponse`<`T`\>\> | Reactive result. |
 
 #### Returns
@@ -851,7 +851,7 @@ Reactive factory.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `request` | `Promise`<`T`\> | Request. |
-| `handler` | [`ReactiveHandlerAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)<`T`\> | Handler. |
+| `handler` | [`ReactiveHandlerAttached`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveHandlerAttached.md)<`T`\> | Handler. |
 
 #### Returns
 
@@ -878,7 +878,7 @@ Reactive factory.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `request` | `Promise`<`T`\> | Request. |
-| `handler` | [`ReactiveHandlerAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)<`T`\> | Handler. |
+| `handler` | [`ReactiveHandlerAttached`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveHandlerAttached.md)<`T`\> | Handler. |
 | `result?` | `Writable`<`ReactiveResponse`<`T`\>\> | Reactive result. |
 
 #### Returns
@@ -905,7 +905,7 @@ Reactive factory.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `request` | [`ReactiveRequest`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactiverequest)<`T`\> | Request. |
+| `request` | [`ReactiveRequest`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveRequest.md)<`T`\> | Request. |
 | `config` | `ReactiveConfig` | Configuration. |
 
 #### Returns
@@ -932,7 +932,7 @@ Reactive factory.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `request` | [`ReactiveRequest`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactiverequest)<`T`\> | Request. |
+| `request` | [`ReactiveRequest`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveRequest.md)<`T`\> | Request. |
 | `config` | `ReactiveConfig` | Configuration. |
 | `result?` | `Writable`<`ReactiveResponse`<`T`\>\> | Reactive result. |
 
@@ -960,7 +960,7 @@ Reactive factory.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `request` | [`ReactiveRequestAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactiverequestattached)<`T`\> | Request. |
+| `request` | [`ReactiveRequestAttached`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveRequestAttached.md)<`T`\> | Request. |
 | `config` | `ReactiveConfigAttached` | Configuration. |
 
 #### Returns
@@ -987,7 +987,7 @@ Reactive factory.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `request` | [`ReactiveRequestAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactiverequestattached)<`T`\> | Request. |
+| `request` | [`ReactiveRequestAttached`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveRequestAttached.md)<`T`\> | Request. |
 | `config` | `ReactiveConfigAttached` | Configuration. |
 | `result?` | `Writable`<`ReactiveResponse`<`T`\>\> | Reactive result. |
 
@@ -1165,7 +1165,7 @@ ___
 
 ### reactiveHandlerExists
 
-▸ `Protected` **reactiveHandlerExists**(`id`): [`ReactiveHandler`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)<`boolean`\>
+▸ `Protected` **reactiveHandlerExists**(`id`): [`ReactiveHandler`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveHandler.md)<`boolean`\>
 
 Reactive handler factory.
 
@@ -1177,7 +1177,7 @@ Reactive handler factory.
 
 #### Returns
 
-[`ReactiveHandler`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)<`boolean`\>
+[`ReactiveHandler`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveHandler.md)<`boolean`\>
 
 Reactive handler.
 
@@ -1185,7 +1185,7 @@ ___
 
 ### reactiveHandlerExistsAttached
 
-▸ `Protected` **reactiveHandlerExistsAttached**(`id`, `parentId`): [`ReactiveHandlerAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)<`boolean`\>
+▸ `Protected` **reactiveHandlerExistsAttached**(`id`, `parentId`): [`ReactiveHandlerAttached`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveHandlerAttached.md)<`boolean`\>
 
 Reactive handler factory.
 
@@ -1198,7 +1198,7 @@ Reactive handler factory.
 
 #### Returns
 
-[`ReactiveHandlerAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)<`boolean`\>
+[`ReactiveHandlerAttached`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveHandlerAttached.md)<`boolean`\>
 
 Reactive handler.
 
@@ -1206,7 +1206,7 @@ ___
 
 ### reactiveHandlerGet
 
-▸ `Protected` **reactiveHandlerGet**(`id`): [`ReactiveHandler`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)<`ExistingDocument`\>
+▸ `Protected` **reactiveHandlerGet**(`id`): [`ReactiveHandler`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveHandler.md)<`ExistingDocument`\>
 
 Reactive handler factory.
 
@@ -1218,7 +1218,7 @@ Reactive handler factory.
 
 #### Returns
 
-[`ReactiveHandler`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)<`ExistingDocument`\>
+[`ReactiveHandler`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveHandler.md)<`ExistingDocument`\>
 
 Reactive handler.
 
@@ -1226,7 +1226,7 @@ ___
 
 ### reactiveHandlerGetAttached
 
-▸ `Protected` **reactiveHandlerGetAttached**(`id`, `parentId`): [`ReactiveHandlerAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)<`ExistingAttachedDocument`\>
+▸ `Protected` **reactiveHandlerGetAttached**(`id`, `parentId`): [`ReactiveHandlerAttached`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveHandlerAttached.md)<`ExistingAttachedDocument`\>
 
 Reactive handler factory.
 
@@ -1239,7 +1239,7 @@ Reactive handler factory.
 
 #### Returns
 
-[`ReactiveHandlerAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)<`ExistingAttachedDocument`\>
+[`ReactiveHandlerAttached`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveHandlerAttached.md)<`ExistingAttachedDocument`\>
 
 Reactive handler.
 
@@ -1247,7 +1247,7 @@ ___
 
 ### reactiveHandlerGetAttachedIfExists
 
-▸ `Protected` **reactiveHandlerGetAttachedIfExists**(`id`, `parentId`): [`ReactiveHandlerAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)<`undefined` \| `ExistingAttachedDocument`\>
+▸ `Protected` **reactiveHandlerGetAttachedIfExists**(`id`, `parentId`): [`ReactiveHandlerAttached`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveHandlerAttached.md)<`undefined` \| `ExistingAttachedDocument`\>
 
 Reactive handler factory.
 
@@ -1260,7 +1260,7 @@ Reactive handler factory.
 
 #### Returns
 
-[`ReactiveHandlerAttached`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandlerattached)<`undefined` \| `ExistingAttachedDocument`\>
+[`ReactiveHandlerAttached`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveHandlerAttached.md)<`undefined` \| `ExistingAttachedDocument`\>
 
 Reactive handler.
 
@@ -1268,7 +1268,7 @@ ___
 
 ### reactiveHandlerGetIfExists
 
-▸ `Protected` **reactiveHandlerGetIfExists**(`id`): [`ReactiveHandler`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)<`undefined` \| `ExistingDocument`\>
+▸ `Protected` **reactiveHandlerGetIfExists**(`id`): [`ReactiveHandler`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveHandler.md)<`undefined` \| `ExistingDocument`\>
 
 Reactive handler factory.
 
@@ -1280,7 +1280,7 @@ Reactive handler factory.
 
 #### Returns
 
-[`ReactiveHandler`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#reactivehandler)<`undefined` \| `ExistingDocument`\>
+[`ReactiveHandler`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.ReactiveHandler.md)<`undefined` \| `ExistingDocument`\>
 
 Reactive handler.
 

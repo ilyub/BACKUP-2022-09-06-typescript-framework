@@ -176,7 +176,9 @@ class PouchDBProxy {
         if (PouchDBProxy.pouchDBConstructor)
             return PouchDBProxy.pouchDBConstructor;
         PouchDBProxy.pouchDBConstructor = fn.run(async () => {
-            const pouchdbModule = await Promise.resolve().then(() => (0, tslib_1.__importStar)(require("pouchdb")));
+            const pouchdbModule = await Promise.resolve().then(() => (0, tslib_1.__importStar)(require(
+            /* webpackChunkName: "pouchdb" */
+            "pouchdb")));
             return pouchdbModule.default;
         });
         return PouchDBProxy.pouchDBConstructor;

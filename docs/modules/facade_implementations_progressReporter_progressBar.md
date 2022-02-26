@@ -42,13 +42,13 @@ ___
 
 ### State
 
-Ƭ **State**: ``"manual"`` \| ``"auto"`` \| ``"done"``
+Ƭ **State**: ``"auto"`` \| ``"done"`` \| ``"manual"``
 
 ## Variables
 
 ### implementation
 
-• **implementation**: `Facade`
+• `Const` **implementation**: `Facade`
 
 ## Functions
 

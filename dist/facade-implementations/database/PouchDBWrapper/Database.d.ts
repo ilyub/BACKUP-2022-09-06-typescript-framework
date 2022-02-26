@@ -5,7 +5,15 @@ import { PouchDBProxy } from "./PouchDBProxy";
 export interface Configuration {
     readonly reindexThreshold?: number;
 }
-export declare type Filter = (doc: unknown) => boolean;
+export interface Filter {
+    /**
+     * Filter function.
+     *
+     * @param doc - Document.
+     * @returns Result.
+     */
+    (doc: unknown): boolean;
+}
 export interface MapReduce {
     readonly groupLevel: number;
     readonly id: string;
@@ -31,10 +39,45 @@ export interface RawQueryResponse {
     readonly mapReduce: MapReduce;
     readonly unsettledCount: number;
 }
-export declare type ReactiveRequest<T> = (conditions?: Conditions, options?: QueryOptions) => Promise<T>;
-export declare type ReactiveRequestAttached<T> = (conditions?: Conditions, parentConditions?: Conditions, options?: QueryOptions) => Promise<T>;
-export declare type ReactiveHandler<T> = (doc: ExistingDocument, mutableResult: Writable<ReactiveResponseAsync<T>>) => void;
-export declare type ReactiveHandlerAttached<T> = (doc: ExistingAttachedDocument, mutableResult: Writable<ReactiveResponseAsync<T>>) => void;
+export interface ReactiveRequest<T> {
+    /**
+     * Reactive request.
+     *
+     * @param conditions - Conditions.
+     * @param options - Options.
+     * @returns Promise.
+     */
+    (conditions?: Conditions, options?: QueryOptions): Promise<T>;
+}
+export interface ReactiveRequestAttached<T> {
+    /**
+     * Reactive request.
+     *
+     * @param conditions - Conditions.
+     * @param parentConditions - Parent conditions.
+     * @param options - Options.
+     * @returns Promise.
+     */
+    (conditions?: Conditions, parentConditions?: Conditions, options?: QueryOptions): Promise<T>;
+}
+export interface ReactiveHandler<T> {
+    /**
+     * Reactive handler.
+     *
+     * @param doc - Document.
+     * @param mutableResult - Mutable result.
+     */
+    (doc: ExistingDocument, mutableResult: Writable<ReactiveResponseAsync<T>>): void;
+}
+export interface ReactiveHandlerAttached<T> {
+    /**
+     * Reactive handler.
+     *
+     * @param doc - Document.
+     * @param mutableResult - Mutable result.
+     */
+    (doc: ExistingAttachedDocument, mutableResult: Writable<ReactiveResponseAsync<T>>): void;
+}
 export declare const handlers: Readonly<{
     error(error: unknown): void;
 }>;

@@ -98,7 +98,7 @@ ___
 
 ### bulkDocs
 
-▸ **bulkDocs**(`docs`): `Promise`<(`Readonly`<`Response`\> \| `Readonly`<`Error`\>)[]\>
+▸ **bulkDocs**(`docs`): `Promise`<(`Readonly`<`Error`\> \| `Readonly`<`Response`\>)[]\>
 
 Creates or updates multiple documents.
 
@@ -110,7 +110,7 @@ Creates or updates multiple documents.
 
 #### Returns
 
-`Promise`<(`Readonly`<`Response`\> \| `Readonly`<`Error`\>)[]\>
+`Promise`<(`Readonly`<`Error`\> \| `Readonly`<`Response`\>)[]\>
 
 Responses.
 
@@ -130,7 +130,7 @@ Subscribes to changes.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `changesHandler` | [`PouchChangesHandler`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchchangeshandler) | Changes handler. |
+| `changesHandler` | [`PouchChangesHandler`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.PouchChangesHandler.md) | Changes handler. |
 | `options` | `Object` | Options. |
 
 #### Returns
@@ -163,7 +163,7 @@ ___
 
 ### get
 
-▸ **get**(`id`): `Promise`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md) & `Readonly`<`IdMeta`\> & {}\>
+▸ **get**(`id`): `Promise`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md) & {} & `Readonly`<`IdMeta`\>\>
 
 Fetches document.
 
@@ -175,7 +175,7 @@ Fetches document.
 
 #### Returns
 
-`Promise`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md) & `Readonly`<`IdMeta`\> & {}\>
+`Promise`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md) & {} & `Readonly`<`IdMeta`\>\>
 
 Document.
 

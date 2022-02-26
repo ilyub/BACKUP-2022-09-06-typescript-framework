@@ -10,6 +10,7 @@ const helpers_1 = require("@skylib/functions/dist/helpers");
 const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
 const reflect = (0, tslib_1.__importStar)(require("@skylib/functions/dist/reflect"));
 const s = (0, tslib_1.__importStar)(require("@skylib/functions/dist/string"));
+// eslint-disable-next-line import/export
 class Dictionary {
     /**
      * Creates class instance.
@@ -67,6 +68,7 @@ class Dictionary {
                     return Object.getOwnPropertyDescriptor(target, key);
                 }
             });
+            // eslint-disable-next-line no-type-assertion/no-type-assertion
             return new Proxy(this, handler);
         });
     }

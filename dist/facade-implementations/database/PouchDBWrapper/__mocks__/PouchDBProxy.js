@@ -40,7 +40,10 @@ class PouchDBProxy extends PouchDBProxy_1.PouchDBProxy {
     |*/
     async getPouchDBConstructor() {
         const pouchDBConstructor = await super.getPouchDBConstructor();
-        pouchDBConstructor.plugin((await Promise.resolve().then(() => __importStar(require("pouchdb-adapter-memory")))).default);
+        const pouchdbAdapterMemory = await Promise.resolve().then(() => __importStar(require(
+        /* webpackChunkName: "pouchdb-adapter-memory" */
+        "pouchdb-adapter-memory")));
+        pouchDBConstructor.plugin(pouchdbAdapterMemory.default);
         return pouchDBConstructor;
     }
 }

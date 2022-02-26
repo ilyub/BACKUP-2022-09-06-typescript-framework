@@ -31,6 +31,7 @@ exports.implementation = {
             timeout: moduleConfig.timeout,
             url
         });
+        // eslint-disable-next-line no-type-assertion/no-type-assertion
         return response.data;
     }
 };

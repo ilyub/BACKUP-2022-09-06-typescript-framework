@@ -7,10 +7,10 @@ export declare class Facebook implements Facade {
      * @param appId - Facebook app ID.
      * @param version - Version.
      */
-    constructor(appId: stringU | PromiseAsync<stringU>, version: string);
+    constructor(appId: PromiseAsync<stringU> | stringU, version: string);
     accessToken(): Promise<stringU>;
     loadSdk(): Promise<void>;
-    protected appId: stringU | PromiseAsync<stringU>;
+    protected appId: PromiseAsync<stringU> | stringU;
     protected sdk: Promise<void> | undefined;
     protected version: string;
 }

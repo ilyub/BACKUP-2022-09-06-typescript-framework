@@ -51,8 +51,8 @@ Creates class instance.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `idField` | keyof `T` & `string` | ID field. |
-| `fields` | readonly keyof `T` & `string`[] | Searchable fields. |
+| `idField` | `string` & keyof `T` | ID field. |
+| `fields` | readonly `string` & keyof `T`[] | Searchable fields. |
 | `items` | readonly `T`[] | Items. |
 
 #### Inherited from
@@ -63,7 +63,7 @@ Creates class instance.
 
 ### idField
 
-• `Protected` **idField**: keyof `T` & `string`
+• `Protected` **idField**: `string` & keyof `T`
 
 #### Inherited from
 
@@ -101,8 +101,8 @@ Builds index.
 
 | Name | Type |
 | :------ | :------ |
-| `idField` | keyof `T` & `string` |
-| `fields` | readonly keyof `T` & `string`[] |
+| `idField` | `string` & keyof `T` |
+| `fields` | readonly `string` & keyof `T`[] |
 | `items` | readonly `T`[] |
 
 #### Returns

@@ -423,15 +423,15 @@ class Database {
         var _a, _b;
         const conds = condsToStr("doc", rawQueryOptions.conditions);
         const sortBy = options.sortBy;
-        const sortDesc = (_a = options.sortDesc) !== null && _a !== void 0 ? _a : false;
-        const group1 = sortDesc ? 4 : 1;
-        const group2 = sortDesc ? 3 : 2;
-        const group3 = sortDesc ? 2 : 3;
-        const group4 = sortDesc ? 1 : 4;
+        const descending = (_a = options.descending) !== null && _a !== void 0 ? _a : false;
+        const group1 = descending ? 4 : 1;
+        const group2 = descending ? 3 : 2;
+        const group3 = descending ? 2 : 3;
+        const group4 = descending ? 1 : 4;
         const idParams = [
             conds,
             sortBy,
-            sortDesc,
+            descending,
             this.options.caseSensitiveSorting
         ];
         const keyCode = fn.run(() => {
@@ -501,7 +501,7 @@ class Database {
             settle: createFilter(conds.toSettle)
         };
         function createFilter(cond) {
-            // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func
+            // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion
             return new Function("doc", `return ${cond};`);
         }
     }
@@ -517,16 +517,16 @@ class Database {
         const conds = condsToStr("attached", rawQueryOptions.conditions);
         const parentConds = condsToStr("doc", rawQueryOptions.parentConditions);
         const sortBy = options.sortBy;
-        const sortDesc = (_a = options.sortDesc) !== null && _a !== void 0 ? _a : false;
-        const group1 = sortDesc ? 4 : 1;
-        const group2 = sortDesc ? 3 : 2;
-        const group3 = sortDesc ? 2 : 3;
-        const group4 = sortDesc ? 1 : 4;
+        const descending = (_a = options.descending) !== null && _a !== void 0 ? _a : false;
+        const group1 = descending ? 4 : 1;
+        const group2 = descending ? 3 : 2;
+        const group3 = descending ? 2 : 3;
+        const group4 = descending ? 1 : 4;
         const idParams = [
             conds,
             parentConds,
             sortBy,
-            sortDesc,
+            descending,
             this.options.caseSensitiveSorting
         ];
         const keyCode = fn.run(() => {
@@ -603,7 +603,7 @@ class Database {
             settle: createFilter(conds.toSettle, parentConds.toSettle)
         };
         function createFilter(cond1, cond2) {
-            // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func
+            // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion
             return new Function("attached", uglify(`
           doc = attached.parentDoc;
           return ${cond1} && ${cond2};
@@ -653,6 +653,7 @@ class Database {
         const skip = (_a = options.skip) !== null && _a !== void 0 ? _a : 0;
         const response = await query();
         const toSettle = _.flatten(response.rows
+            // eslint-disable-next-line no-type-assertion/no-type-assertion
             .map(row => row.value)
             .filter(isDocsResponse)
             .filter(docsResponse => !docsResponse.settled)
@@ -682,6 +683,7 @@ class Database {
             var _a;
             return ((_a = rawQueryOptions.count) !== null && _a !== void 0 ? _a : false)
                 ? num.sum(...response.rows
+                    // eslint-disable-next-line no-type-assertion/no-type-assertion
                     .map(row => row.value)
                     .filter(isDocsResponse)
                     .map(docsResponse => docsResponse.settled
@@ -695,11 +697,12 @@ class Database {
             var _a, _b;
             if ((_a = rawQueryOptions.docs) !== null && _a !== void 0 ? _a : false) {
                 const docResponses = _.flatten(response.rows
+                    // eslint-disable-next-line no-type-assertion/no-type-assertion
                     .map(row => row.value)
                     .filter(isDocsResponse)
                     .map(docsResponse => docsResponse.docs)).filter(docResponse => mapReduce.output(docResponse.doc));
                 docResponses.sort((docsResponse1, docsResponse2) => (0, pouchdb_collate_1.collate)(docsResponse1.key, docsResponse2.key));
-                if ((_b = options.sortDesc) !== null && _b !== void 0 ? _b : false)
+                if ((_b = options.descending) !== null && _b !== void 0 ? _b : false)
                     docResponses.reverse();
                 return sliceDocs(docResponses).map(doc => doc.doc);
             }
@@ -709,6 +712,7 @@ class Database {
             var _a;
             return ((_a = rawQueryOptions.unsettledCount) !== null && _a !== void 0 ? _a : false)
                 ? num.sum(0, ...response.rows
+                    // eslint-disable-next-line no-type-assertion/no-type-assertion
                     .map(row => row.value)
                     .filter(isDocsResponse)
                     .filter(docsResponse => !docsResponse.settled)
@@ -727,7 +731,7 @@ class Database {
         }
         async function queryAttempt() {
             return db.query(`${mapReduce.id}/default`, {
-                descending: options.sortDesc,
+                descending: options.descending,
                 group: true,
                 group_level: mapReduce.groupLevel,
                 limit: is.not.empty(limit) ? limit + skip + 1 : undefined
@@ -757,7 +761,7 @@ class Database {
             loaded: false,
             loading: true
         });
-        handlePromise_1.handlePromise.verbose(this.reactiveFactoryGetAsync(request, handler, result), "dbRequest");
+        handlePromise_1.handlePromise.silent(this.reactiveFactoryGetAsync(request, handler, result));
         return result;
     }
     /**
@@ -802,7 +806,7 @@ class Database {
             loaded: false,
             loading: true
         });
-        handlePromise_1.handlePromise.verbose(this.reactiveFactoryGetAttachedAsync(request, handler, result), "dbRequest");
+        handlePromise_1.handlePromise.silent(this.reactiveFactoryGetAttachedAsync(request, handler, result));
         return result;
     }
     /**
@@ -847,7 +851,7 @@ class Database {
             loaded: false,
             loading: true
         });
-        handlePromise_1.handlePromise.verbose(this.reactiveFactoryQueryAsync(request, config, result), "dbRequest");
+        handlePromise_1.handlePromise.silent(this.reactiveFactoryQueryAsync(request, config, result));
         return result;
     }
     /**
@@ -878,24 +882,25 @@ class Database {
         assert.toBeTrue(result.loaded);
         const observer = reactiveStorage_1.reactiveStorage.watch(config, refresh);
         const subscription = await this.subscribe(doc => {
+            // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
             if (config.updateFn && config.updateFn(doc))
                 refresh();
         });
-        let timeout = undefined;
+        let timeout;
         updateTimeout();
         return result;
         function refresh() {
-            handlePromise_1.handlePromise.verbose(fn.doNotRunParallel(async () => {
+            handlePromise_1.handlePromise.silent(fn.doNotRunParallel(async () => {
                 assert.not.undefined(result);
                 assert.toBeTrue(result.loaded);
                 result.loading = true;
-                const newValue = await request(config.conditions, config.options);
+                const value = await request(config.conditions, config.options);
                 assert.not.undefined(result);
                 assert.toBeTrue(result.loaded);
                 result.loading = false;
-                result.value = newValue;
+                result.value = value;
                 updateTimeout();
-            }), "dbRequest");
+            }));
         }
         function updateTimeout() {
             timer.removeTimeout(timeout);
@@ -916,7 +921,7 @@ class Database {
             loaded: false,
             loading: true
         });
-        handlePromise_1.handlePromise.verbose(this.reactiveFactoryQueryAttachedAsync(request, config, result), "dbRequest");
+        handlePromise_1.handlePromise.silent(this.reactiveFactoryQueryAttachedAsync(request, config, result));
         return result;
     }
     /**
@@ -947,24 +952,25 @@ class Database {
         assert.toBeTrue(result.loaded);
         const observer = reactiveStorage_1.reactiveStorage.watch(config, refresh);
         const subscription = await this.subscribeAttached(doc => {
+            // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
             if (config.updateFn && config.updateFn(doc))
                 refresh();
         });
-        let timeout = undefined;
+        let timeout;
         updateTimeout();
         return result;
         function refresh() {
-            handlePromise_1.handlePromise.verbose(fn.doNotRunParallel(async () => {
+            handlePromise_1.handlePromise.silent(fn.doNotRunParallel(async () => {
                 assert.not.undefined(result);
                 assert.toBeTrue(result.loaded);
                 result.loading = true;
-                const newValue = await request(config.conditions, config.parentConditions, config.options);
+                const value = await request(config.conditions, config.parentConditions, config.options);
                 assert.not.undefined(result);
                 assert.toBeTrue(result.loaded);
                 result.loading = false;
-                result.value = newValue;
+                result.value = value;
                 updateTimeout();
-            }), "dbRequest");
+            }));
         }
         function updateTimeout() {
             timer.removeTimeout(timeout);
@@ -1234,6 +1240,7 @@ function extractDocAttached(rawDoc, id, extractDeleted = false) {
  * @param doc - Document.
  */
 function validatePutDocument(doc) {
+    var _a, _b;
     if (o.hasOwnProp("_attachments", doc))
         throw new Error("Put document contains reserved word: _attachments");
     if (o.hasOwnProp("_conflicts", doc))
@@ -1242,8 +1249,7 @@ function validatePutDocument(doc) {
         throw new Error("Put document contains reserved word: filters");
     if (o.hasOwnProp("views", doc))
         throw new Error("Put document contains reserved word: views");
-    if (doc.attachedDocs &&
-        doc.attachedDocs.some((attachedDoc, index) => attachedDoc._id !== index))
+    if ((_b = (_a = doc.attachedDocs) === null || _a === void 0 ? void 0 : _a.some((attachedDoc, index) => attachedDoc._id !== index)) !== null && _b !== void 0 ? _b : false)
         throw new Error("Invalid attached document");
 }
 /**

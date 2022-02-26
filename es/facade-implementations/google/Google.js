@@ -56,6 +56,7 @@ export class Google {
                 assert.not.empty(clientId, "Missing Google client ID");
                 return new Promise((resolve, reject) => {
                     gapi.load("auth2", () => {
+                        // eslint-disable-next-line github/no-then, promise/prefer-await-to-then
                         gapi.auth2.init({ client_id: clientId }).then(googleAuth => {
                             resolve(googleAuth);
                         }, e => {

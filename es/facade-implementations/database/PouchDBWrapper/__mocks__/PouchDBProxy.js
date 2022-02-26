@@ -17,7 +17,10 @@ export class PouchDBProxy extends BasePouchDBProxy {
     |*/
     async getPouchDBConstructor() {
         const pouchDBConstructor = await super.getPouchDBConstructor();
-        pouchDBConstructor.plugin((await import("pouchdb-adapter-memory")).default);
+        const pouchdbAdapterMemory = await import(
+        /* webpackChunkName: "pouchdb-adapter-memory" */
+        "pouchdb-adapter-memory");
+        pouchDBConstructor.plugin(pouchdbAdapterMemory.default);
         return pouchDBConstructor;
     }
 }

@@ -12,11 +12,11 @@
 
 - [Changes](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Changes.md)
 - [Content](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md)
+- [PouchChangesHandler](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.PouchChangesHandler.md)
 
 ### Type aliases
 
 - [PouchChange](facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchchange)
-- [PouchChangesHandler](facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchchangeshandler)
 - [PouchChangesOptions](facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchchangesoptions)
 - [PouchDatabase](facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchdatabase)
 - [PouchDatabaseConfiguration](facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchdatabaseconfiguration)
@@ -37,26 +37,6 @@
 ### PouchChange
 
 Ƭ **PouchChange**: `DeepReadonly`<`PouchDB.Core.ChangesResponseChange`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md)\>\>
-
-___
-
-### PouchChangesHandler
-
-Ƭ **PouchChangesHandler**: (`change`: [`PouchChange`](facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchchange)) => `void`
-
-#### Type declaration
-
-▸ (`change`): `void`
-
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `change` | [`PouchChange`](facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchchange) |
-
-##### Returns
-
-`void`
 
 ___
 
@@ -122,4 +102,4 @@ ___
 
 ### handlers
 
-• **handlers**: `Readonly`<{ `error`: (`error`: `unknown`) => `void`  }\>
+• `Const` **handlers**: `Readonly`<{ `error`: (`error`: `unknown`) => `void`  }\>

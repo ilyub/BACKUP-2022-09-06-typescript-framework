@@ -20,7 +20,7 @@
 
 ### Constructor
 
-Ƭ **Constructor**: <T\>(`idField`: keyof `T` & `string`, `fields`: `ReadonlyArray`<keyof `T` & `string`\>, `items`: readonly `T`[]) => `EngineInterface`<`T`\>
+Ƭ **Constructor**: <T\>(`idField`: `string` & keyof `T`, `fields`: `ReadonlyArray`<`string` & keyof `T`\>, `items`: readonly `T`[]) => `EngineInterface`<`T`\>
 
 #### Type declaration
 
@@ -36,8 +36,8 @@
 
 | Name | Type |
 | :------ | :------ |
-| `idField` | keyof `T` & `string` |
-| `fields` | `ReadonlyArray`<keyof `T` & `string`\> |
+| `idField` | `string` & keyof `T` |
+| `fields` | `ReadonlyArray`<`string` & keyof `T`\> |
 | `items` | readonly `T`[] |
 
 ## Functions

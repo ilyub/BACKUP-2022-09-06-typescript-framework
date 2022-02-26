@@ -38,13 +38,13 @@
 
 ### handlers
 
-• **handlers**: `Readonly`<{ `error`: (`error`: `unknown`) => `void`  }\>
+• `Const` **handlers**: `Readonly`<{ `error`: (`error`: `unknown`) => `void`  }\>
 
 ___
 
 ### implementation
 
-• **implementation**: `Facade`
+• `Const` **implementation**: `Facade`
 
 ## Functions
 

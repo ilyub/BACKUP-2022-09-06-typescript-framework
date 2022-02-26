@@ -43,10 +43,10 @@ ___
 
 ### output
 
-• `Readonly` **output**: [`Filter`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#filter)
+• `Readonly` **output**: [`Filter`](facade_implementations_database_PouchDBWrapper_Database.Filter.md)
 
 ___
 
 ### settle
 
-• `Readonly` **settle**: [`Filter`](../modules/facade_implementations_database_PouchDBWrapper_Database.md#filter)
+• `Readonly` **settle**: [`Filter`](facade_implementations_database_PouchDBWrapper_Database.Filter.md)

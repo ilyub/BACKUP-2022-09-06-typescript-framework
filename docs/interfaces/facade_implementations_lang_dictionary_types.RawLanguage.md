@@ -16,7 +16,7 @@
 
 ### pluralReduce
 
-• `Readonly` **pluralReduce**: [`PluralReduce`](../modules/facade_implementations_lang_dictionary_types.md#pluralreduce)
+• `Readonly` **pluralReduce**: [`PluralReduce`](facade_implementations_lang_dictionary_types.PluralReduce.md)
 
 ___
 

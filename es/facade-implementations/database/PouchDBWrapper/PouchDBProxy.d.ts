@@ -24,7 +24,14 @@ export interface Content {
     readonly lastAttachedDocs?: numbers;
 }
 export declare type PouchChange = DeepReadonly<PouchDB.Core.ChangesResponseChange<Content>>;
-export declare type PouchChangesHandler = (change: PouchChange) => void;
+export interface PouchChangesHandler {
+    /**
+     * Changes handler.
+     *
+     * @param change - Change.
+     */
+    (change: PouchChange): void;
+}
 export declare type PouchChangesOptions = DeepReadonly<PouchDB.Core.ChangesOptions>;
 export declare type PouchDatabaseConfiguration = DeepReadonly<PouchDB.Configuration.DatabaseConfiguration>;
 export declare type PouchGetMeta = DeepReadonly<PouchDB.Core.GetMeta>;
@@ -52,7 +59,7 @@ export declare class PouchDBProxy {
      * @param docs - Documents.
      * @returns Responses.
      */
-    bulkDocs(docs: readonly PouchPutDocument[]): Promise<Array<PouchResponse | PouchError>>;
+    bulkDocs(docs: readonly PouchPutDocument[]): Promise<Array<PouchError | PouchResponse>>;
     /**
      * Subscribes to changes.
      *
@@ -71,7 +78,7 @@ export declare class PouchDBProxy {
      * @param id - ID.
      * @returns Document.
      */
-    get(id: string): Promise<Content & PouchIdMeta & PouchGetMeta>;
+    get(id: string): Promise<Content & PouchGetMeta & PouchIdMeta>;
     /**
      * Returns original PouchDB database.
      *
