@@ -793,20 +793,20 @@ export class Database implements DatabaseInterface {
 
     const sortBy = options.sortBy;
 
-    const sortDesc = options.sortDesc ?? false;
+    const descending = options.descending ?? false;
 
-    const group1 = sortDesc ? 4 : 1;
+    const group1 = descending ? 4 : 1;
 
-    const group2 = sortDesc ? 3 : 2;
+    const group2 = descending ? 3 : 2;
 
-    const group3 = sortDesc ? 2 : 3;
+    const group3 = descending ? 2 : 3;
 
-    const group4 = sortDesc ? 1 : 4;
+    const group4 = descending ? 1 : 4;
 
     const idParams = [
       conds,
       sortBy,
-      sortDesc,
+      descending,
       this.options.caseSensitiveSorting
     ];
 
@@ -903,21 +903,21 @@ export class Database implements DatabaseInterface {
 
     const sortBy = options.sortBy;
 
-    const sortDesc = options.sortDesc ?? false;
+    const descending = options.descending ?? false;
 
-    const group1 = sortDesc ? 4 : 1;
+    const group1 = descending ? 4 : 1;
 
-    const group2 = sortDesc ? 3 : 2;
+    const group2 = descending ? 3 : 2;
 
-    const group3 = sortDesc ? 2 : 3;
+    const group3 = descending ? 2 : 3;
 
-    const group4 = sortDesc ? 1 : 4;
+    const group4 = descending ? 1 : 4;
 
     const idParams = [
       conds,
       parentConds,
       sortBy,
-      sortDesc,
+      descending,
       this.options.caseSensitiveSorting
     ];
 
@@ -1137,7 +1137,7 @@ export class Database implements DatabaseInterface {
           collate(docsResponse1.key, docsResponse2.key)
         );
 
-        if (options.sortDesc ?? false) docResponses.reverse();
+        if (options.descending ?? false) docResponses.reverse();
 
         return sliceDocs(docResponses).map(doc => doc.doc);
       }
@@ -1172,7 +1172,7 @@ export class Database implements DatabaseInterface {
 
     async function queryAttempt(): Promise<PouchQueryResponse> {
       return db.query(`${mapReduce.id}/default`, {
-        descending: options.sortDesc,
+        descending: options.descending,
         group: true,
         group_level: mapReduce.groupLevel,
         limit: is.not.empty(limit) ? limit + skip + 1 : undefined
@@ -1404,12 +1404,12 @@ export class Database implements DatabaseInterface {
           assert.toBeTrue(result.loaded);
           result.loading = true;
 
-          const newValue = await request(config.conditions, config.options);
+          const value = await request(config.conditions, config.options);
 
           assert.not.undefined(result);
           assert.toBeTrue(result.loaded);
           result.loading = false;
-          result.value = newValue;
+          result.value = value;
           updateTimeout();
         }),
         "dbRequest"
@@ -1506,7 +1506,7 @@ export class Database implements DatabaseInterface {
           assert.toBeTrue(result.loaded);
           result.loading = true;
 
-          const newValue = await request(
+          const value = await request(
             config.conditions,
             config.parentConditions,
             config.options
@@ -1515,7 +1515,7 @@ export class Database implements DatabaseInterface {
           assert.not.undefined(result);
           assert.toBeTrue(result.loaded);
           result.loading = false;
-          result.value = newValue;
+          result.value = value;
           updateTimeout();
         }),
         "dbRequest"

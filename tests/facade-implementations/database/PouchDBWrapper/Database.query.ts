@@ -100,18 +100,21 @@ test("query: Options", async () => {
     subtest({ limit: 2 }, ["id1", "id2"]),
     subtest({ limit: 2, skip: 1 }, ["id2", "id3"]),
     subtest({ limit: 2, skip: 1, sortBy: "s" }, ["id4", "id1"]),
-    subtest({ limit: 2, skip: 1, sortBy: "s", sortDesc: true }, ["id2", "id1"]),
-    subtest({ limit: 2, skip: 1, sortDesc: true }, ["id3", "id2"]),
+    subtest({ descending: true, limit: 2, skip: 1, sortBy: "s" }, [
+      "id2",
+      "id1"
+    ]),
+    subtest({ descending: true, limit: 2, skip: 1 }, ["id3", "id2"]),
     subtest({ limit: 2, sortBy: "s" }, ["id3", "id4"]),
-    subtest({ limit: 2, sortBy: "s", sortDesc: true }, ["id3", "id2"]),
-    subtest({ limit: 2, sortDesc: true }, ["id4", "id3"]),
+    subtest({ descending: true, limit: 2, sortBy: "s" }, ["id3", "id2"]),
+    subtest({ descending: true, limit: 2 }, ["id4", "id3"]),
     subtest({ skip: 1 }, ["id2", "id3", "id4"]),
     subtest({ skip: 1, sortBy: "s" }, ["id4", "id1", "id2"]),
-    subtest({ skip: 1, sortBy: "s", sortDesc: true }, ["id2", "id1", "id4"]),
-    subtest({ skip: 1, sortDesc: true }, ["id3", "id2", "id1"]),
+    subtest({ descending: true, skip: 1, sortBy: "s" }, ["id2", "id1", "id4"]),
+    subtest({ descending: true, skip: 1 }, ["id3", "id2", "id1"]),
     subtest({ sortBy: "s" }, ["id3", "id4", "id1", "id2"]),
-    subtest({ sortBy: "s", sortDesc: true }, ["id3", "id2", "id1", "id4"]),
-    subtest({ sortDesc: true }, ["id4", "id3", "id2", "id1"])
+    subtest({ descending: true, sortBy: "s" }, ["id3", "id2", "id1", "id4"]),
+    subtest({ descending: true }, ["id4", "id3", "id2", "id1"])
   ]);
 
   async function subtest(
