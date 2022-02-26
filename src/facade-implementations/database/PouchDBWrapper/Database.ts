@@ -1214,9 +1214,8 @@ export class Database implements DatabaseInterface {
       loading: true
     });
 
-    handlePromise.verbose(
-      this.reactiveFactoryGetAsync(request, handler, result),
-      "dbRequest"
+    handlePromise.silent(
+      this.reactiveFactoryGetAsync(request, handler, result)
     );
 
     return result;
@@ -1278,9 +1277,8 @@ export class Database implements DatabaseInterface {
       loading: true
     });
 
-    handlePromise.verbose(
-      this.reactiveFactoryGetAttachedAsync(request, handler, result),
-      "dbRequest"
+    handlePromise.silent(
+      this.reactiveFactoryGetAttachedAsync(request, handler, result)
     );
 
     return result;
@@ -1342,9 +1340,8 @@ export class Database implements DatabaseInterface {
       loading: true
     });
 
-    handlePromise.verbose(
-      this.reactiveFactoryQueryAsync(request, config, result),
-      "dbRequest"
+    handlePromise.silent(
+      this.reactiveFactoryQueryAsync(request, config, result)
     );
 
     return result;
@@ -1398,7 +1395,7 @@ export class Database implements DatabaseInterface {
     return result;
 
     function refresh(): void {
-      handlePromise.verbose(
+      handlePromise.silent(
         fn.doNotRunParallel(async () => {
           assert.not.undefined(result);
           assert.toBeTrue(result.loaded);
@@ -1411,8 +1408,7 @@ export class Database implements DatabaseInterface {
           result.loading = false;
           result.value = value;
           updateTimeout();
-        }),
-        "dbRequest"
+        })
       );
     }
 
@@ -1440,9 +1436,8 @@ export class Database implements DatabaseInterface {
       loading: true
     });
 
-    handlePromise.verbose(
-      this.reactiveFactoryQueryAttachedAsync(request, config, result),
-      "dbRequest"
+    handlePromise.silent(
+      this.reactiveFactoryQueryAttachedAsync(request, config, result)
     );
 
     return result;
@@ -1500,7 +1495,7 @@ export class Database implements DatabaseInterface {
     return result;
 
     function refresh(): void {
-      handlePromise.verbose(
+      handlePromise.silent(
         fn.doNotRunParallel(async () => {
           assert.not.undefined(result);
           assert.toBeTrue(result.loaded);
@@ -1517,8 +1512,7 @@ export class Database implements DatabaseInterface {
           result.loading = false;
           result.value = value;
           updateTimeout();
-        }),
-        "dbRequest"
+        })
       );
     }
 
