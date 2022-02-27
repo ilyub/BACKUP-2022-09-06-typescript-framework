@@ -61,12 +61,3 @@ test("pouchDBProxy.destroy", async () => {
     new Error("database is destroyed")
   );
 });
-
-test("pouchDBProxy.getDb", async () => {
-  // eslint-disable-next-line no-type-assertion/no-type-assertion
-  const db = new PouchDBProxy(undefined as unknown as string, {});
-
-  await expect(db.get(uniqueId())).rejects.toStrictEqual(
-    new Error("Missing/invalid DB name")
-  );
-});

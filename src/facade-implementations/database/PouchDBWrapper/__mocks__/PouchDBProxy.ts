@@ -1,3 +1,5 @@
+import pouchdb from "pouchdb";
+
 import type { PouchDatabaseConfiguration } from "../PouchDBProxy";
 import { PouchDBProxy as BasePouchDBProxy } from "../PouchDBProxy";
 
@@ -11,25 +13,8 @@ export class PouchDBProxy extends BasePouchDBProxy {
    * @param options - Database options.
    */
   public constructor(name: string, options: PouchDatabaseConfiguration) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+    pouchdb.plugin(require("pouchdb-adapter-memory"));
     super(name, { ...options, adapter: "memory" });
-  }
-
-  /*
-  |*****************************************************************************
-  |* Protected
-  |*****************************************************************************
-  |*/
-
-  protected override async getPouchDBConstructor(): Promise<PouchDB.Static> {
-    const pouchDBConstructor = await super.getPouchDBConstructor();
-
-    const pouchdbAdapterMemory = await import(
-      /* webpackChunkName: "pouchdb-adapter-memory" */
-      "pouchdb-adapter-memory"
-    );
-
-    pouchDBConstructor.plugin(pouchdbAdapterMemory.default);
-
-    return pouchDBConstructor;
   }
 }

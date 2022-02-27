@@ -1,6 +1,7 @@
+import pouchdb from "pouchdb";
+
 import type { StoredAttachedDocument } from "@skylib/facades/dist/database";
 import { testDelay } from "@skylib/facades/dist/testDelay";
-import * as fn from "@skylib/functions/dist/function";
 import * as is from "@skylib/functions/dist/guards";
 import * as o from "@skylib/functions/dist/object";
 import type { DeepReadonly, numbers } from "@skylib/functions/dist/types/core";
@@ -64,6 +65,8 @@ export const handlers = o.freeze({
 });
 
 export class PouchDBProxy {
+  public db: PouchDatabase;
+
   /**
    * Creates class instance.
    *
@@ -71,8 +74,7 @@ export class PouchDBProxy {
    * @param options - Database options.
    */
   public constructor(name: string, options: PouchDatabaseConfiguration) {
-    this.name = name;
-    this.options = options;
+    this.db = new pouchdb(name, options);
   }
 
   /**
@@ -84,10 +86,10 @@ export class PouchDBProxy {
   public async bulkDocs(
     docs: readonly PouchPutDocument[]
   ): Promise<Array<PouchError | PouchResponse>> {
-    const db = await this.getDb();
+    await testDelay();
 
     try {
-      return await db.bulkDocs(o.unfreeze.deep(docs));
+      return await this.db.bulkDocs(o.unfreeze.deep(docs));
     } catch (e) {
       throw wrapPouchError(e);
     }
@@ -100,13 +102,11 @@ export class PouchDBProxy {
    * @param options - Options.
    * @returns Subscription ID.
    */
-  public async changes(
+  public changes(
     changesHandler: PouchChangesHandler,
     options: PouchChangesOptions
-  ): Promise<Changes> {
-    const db = await this.getDb();
-
-    const changes = db
+  ): Changes {
+    const changes = this.db
       .changes(o.unfreeze.deep(options))
       .on("change", changesHandler)
       .on("error", handlers.error);
@@ -122,10 +122,10 @@ export class PouchDBProxy {
    * Destroys database.
    */
   public async destroy(): Promise<void> {
-    const db = await this.getDb();
+    await testDelay();
 
     try {
-      await db.destroy();
+      await this.db.destroy();
     } catch (e) {
       throw wrapPouchError(e);
     }
@@ -138,34 +138,13 @@ export class PouchDBProxy {
    * @returns Document.
    */
   public async get(id: string): Promise<Content & PouchGetMeta & PouchIdMeta> {
-    const db = await this.getDb();
-
-    try {
-      return await db.get(id);
-    } catch (e) {
-      throw wrapPouchError(e);
-    }
-  }
-
-  /**
-   * Returns original PouchDB database.
-   *
-   * @returns Original PouchDB database.
-   */
-  public async getDb(): Promise<PouchDatabase> {
     await testDelay();
 
-    if (this.db) return this.db;
-
-    const pouchDBConstructor = await this.getPouchDBConstructor();
-
     try {
-      this.db = new pouchDBConstructor(this.name, this.options);
+      return await this.db.get(id);
     } catch (e) {
       throw wrapPouchError(e);
     }
-
-    return this.db;
   }
 
   /**
@@ -175,10 +154,10 @@ export class PouchDBProxy {
    * @returns Response.
    */
   public async post(doc: PouchPutDocument): Promise<PouchResponse> {
-    const db = await this.getDb();
+    await testDelay();
 
     try {
-      return await db.post(doc);
+      return await this.db.post(doc);
     } catch (e) {
       throw wrapPouchError(e);
     }
@@ -191,10 +170,10 @@ export class PouchDBProxy {
    * @returns Response.
    */
   public async put(doc: PouchPutDocument): Promise<PouchResponse> {
-    const db = await this.getDb();
+    await testDelay();
 
     try {
-      return await db.put(o.unfreeze.deep(doc));
+      return await this.db.put(o.unfreeze.deep(doc));
     } catch (e) {
       throw wrapPouchError(e);
     }
@@ -211,49 +190,13 @@ export class PouchDBProxy {
     mapReduce: string,
     options: PouchQueryOptions
   ): Promise<PouchQueryResponse> {
-    const db = await this.getDb();
+    await testDelay();
 
     try {
-      return await db.query(mapReduce, o.unfreeze.deep(options));
+      return await this.db.query(mapReduce, o.unfreeze.deep(options));
     } catch (e) {
       throw wrapPouchError(e);
     }
-  }
-
-  /*
-  |*****************************************************************************
-  |* Protected
-  |*****************************************************************************
-  |*/
-
-  protected static pouchDBConstructor: Promise<PouchDB.Static> | undefined;
-
-  protected db: PouchDatabase | undefined;
-
-  protected name: string;
-
-  protected options: PouchDatabaseConfiguration;
-
-  /**
-   * Returns PouchDB constructor.
-   *
-   * @returns PouchDB constructor.
-   */
-  protected async getPouchDBConstructor(): Promise<PouchDB.Static> {
-    if (PouchDBProxy.pouchDBConstructor) return PouchDBProxy.pouchDBConstructor;
-
-    PouchDBProxy.pouchDBConstructor = fn.run(
-      async (): Promise<PouchDB.Static> => {
-        const pouchdbModule = await import(
-          /* webpackChunkName: "pouchdb" */
-          "pouchdb"
-        );
-
-        return pouchdbModule.default;
-      }
-    );
-
-    return PouchDBProxy.pouchDBConstructor;
   }
 }
 

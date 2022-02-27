@@ -387,7 +387,7 @@ export class Database implements DatabaseInterface {
   public async getRawDb(): Promise<PouchDatabase> {
     const db = await this.getDb();
 
-    return db.getDb();
+    return db.db;
   }
 
   public async put(doc: PutDocument): Promise<PutResponse> {
@@ -675,7 +675,7 @@ export class Database implements DatabaseInterface {
 
     await db.destroy();
     this.db = undefined;
-    await this.refreshSubscription();
+    this.refreshSubscription();
     await callback?.call(this);
     await this.getDb();
   }
@@ -684,7 +684,7 @@ export class Database implements DatabaseInterface {
     const id = Symbol("ChangesHandler");
 
     this.changesHandlersPool.set(id, handler);
-    await this.refreshSubscription();
+    this.refreshSubscription();
 
     return id;
   }
@@ -695,7 +695,7 @@ export class Database implements DatabaseInterface {
     const id = Symbol("AttachedChangesHandler");
 
     this.changesHandlersAttachedPool.set(id, handler);
-    await this.refreshSubscription();
+    this.refreshSubscription();
 
     return id;
   }
@@ -729,13 +729,13 @@ export class Database implements DatabaseInterface {
   public async unsubscribe(id: Symbol): Promise<void> {
     assert.toBeTrue(this.changesHandlersPool.has(id));
     this.changesHandlersPool.delete(id);
-    await this.refreshSubscription();
+    this.refreshSubscription();
   }
 
   public async unsubscribeAttached(id: Symbol): Promise<void> {
     assert.toBeTrue(this.changesHandlersAttachedPool.has(id));
     this.changesHandlersAttachedPool.delete(id);
-    await this.refreshSubscription();
+    this.refreshSubscription();
   }
 
   /*
@@ -771,7 +771,7 @@ export class Database implements DatabaseInterface {
   protected async getDb(): Promise<PouchDBProxy> {
     if (is.empty(this.db)) {
       this.db = new PouchDBProxy(this.name, this.pouchConfig);
-      await this.refreshSubscription();
+      this.refreshSubscription();
       await this.migrate();
     }
 
@@ -1623,7 +1623,7 @@ export class Database implements DatabaseInterface {
   /**
    * Refreshes subscriptions.
    */
-  protected async refreshSubscription(): Promise<void> {
+  protected refreshSubscription(): void {
     if (
       this.db &&
       this.changesHandlersPool.size + this.changesHandlersAttachedPool.size > 0
@@ -1631,7 +1631,7 @@ export class Database implements DatabaseInterface {
       if (this.changes) {
         // Already exists
       } else
-        this.changes = await this.db.changes(
+        this.changes = this.db.changes(
           value => {
             assert.byGuard(value.doc, isExistingDocument);
 
