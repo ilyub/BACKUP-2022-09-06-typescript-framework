@@ -1,4 +1,4 @@
-import type { AttachedChangesHandler, ChangesHandler, Conditions, Database as DatabaseInterface, DatabaseOptions, ExistingAttachedDocument, ExistingAttachedDocuments, ExistingDocument, ExistingDocuments, PutAttachedDocument, PutAttachedDocuments, PutAttachedResponse, PutAttachedResponses, PutDocument, PutDocuments, PutResponse, PutResponses, QueryOptions, ReactiveConfig, ReactiveConfigAttached, ReactiveResponse, ReactiveResponseAsync, ResetCallback } from "@skylib/facades/es/database";
+import type { AttachedChangesHandler, AttachedSubscriptionId, ChangesHandler, Conditions, Database as DatabaseInterface, DatabaseOptions, ExistingAttachedDocument, ExistingAttachedDocuments, ExistingDocument, ExistingDocuments, PutAttachedDocument, PutAttachedDocuments, PutAttachedResponse, PutAttachedResponses, PutDocument, PutDocuments, PutResponse, PutResponses, QueryOptions, ReactiveConfig, ReactiveConfigAttached, ReactiveResponse, ReactiveResponseAsync, ResetCallback, SubscriptionId } from "@skylib/facades/es/database";
 import type { Writable } from "@skylib/functions/es/types/core";
 import type { Changes, PouchDatabase, PouchDatabaseConfiguration } from "./PouchDBProxy";
 import { PouchDBProxy } from "./PouchDBProxy";
@@ -139,15 +139,15 @@ export declare class Database implements DatabaseInterface {
     reactiveUnsettledAttached(config: ReactiveConfigAttached): ReactiveResponse<number>;
     reactiveUnsettledAttachedAsync(config: ReactiveConfigAttached): Promise<ReactiveResponseAsync<number>>;
     reset(callback?: ResetCallback): Promise<void>;
-    subscribe(handler: ChangesHandler): Promise<Symbol>;
-    subscribeAttached(handler: AttachedChangesHandler): Promise<Symbol>;
+    subscribe(handler: ChangesHandler): SubscriptionId;
+    subscribeAttached(handler: AttachedChangesHandler): AttachedSubscriptionId;
     unsettled(conditions?: Conditions, options?: QueryOptions): Promise<number>;
     unsettledAttached(conditions?: Conditions, parentConditions?: Conditions, options?: QueryOptions): Promise<number>;
-    unsubscribe(id: Symbol): Promise<void>;
-    unsubscribeAttached(id: Symbol): Promise<void>;
+    unsubscribe(id: SubscriptionId): void;
+    unsubscribeAttached(id: AttachedSubscriptionId): void;
     protected changes: Changes | undefined;
-    protected changesHandlersAttachedPool: Map<Symbol, AttachedChangesHandler>;
-    protected changesHandlersPool: Map<Symbol, ChangesHandler>;
+    protected changesHandlersAttachedPool: Map<`attached-subscription-id-${string}`, AttachedChangesHandler>;
+    protected changesHandlersPool: Map<`subscription-id-${string}`, ChangesHandler>;
     protected config: Required<Configuration>;
     protected db: PouchDBProxy | undefined;
     protected name: string;
@@ -303,6 +303,6 @@ export declare class Database implements DatabaseInterface {
     /**
      * Refreshes subscriptions.
      */
-    protected refreshSubscription(): Promise<void>;
+    protected refreshSubscription(): void;
 }
 //# sourceMappingURL=Database.d.ts.map

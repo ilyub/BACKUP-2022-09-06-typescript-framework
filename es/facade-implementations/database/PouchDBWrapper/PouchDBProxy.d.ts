@@ -2,14 +2,6 @@
 /// <reference types="pouchdb-find" />
 /// <reference types="pouchdb-mapreduce" />
 /// <reference types="pouchdb-replication" />
-/// <reference types="pouchdb-adapter-cordova-sqlite" />
-/// <reference types="pouchdb-adapter-fruitdown" />
-/// <reference types="pouchdb-adapter-http" />
-/// <reference types="pouchdb-adapter-idb" />
-/// <reference types="pouchdb-adapter-leveldb" />
-/// <reference types="pouchdb-adapter-localstorage" />
-/// <reference types="pouchdb-adapter-memory" />
-/// <reference types="pouchdb-adapter-websql" />
 import type { StoredAttachedDocument } from "@skylib/facades/es/database";
 import type { DeepReadonly, numbers } from "@skylib/functions/es/types/core";
 export interface Changes {
@@ -46,6 +38,7 @@ export declare const handlers: Readonly<{
     error(error: unknown): void;
 }>;
 export declare class PouchDBProxy {
+    db: PouchDatabase;
     /**
      * Creates class instance.
      *
@@ -67,7 +60,7 @@ export declare class PouchDBProxy {
      * @param options - Options.
      * @returns Subscription ID.
      */
-    changes(changesHandler: PouchChangesHandler, options: PouchChangesOptions): Promise<Changes>;
+    changes(changesHandler: PouchChangesHandler, options: PouchChangesOptions): Changes;
     /**
      * Destroys database.
      */
@@ -79,12 +72,6 @@ export declare class PouchDBProxy {
      * @returns Document.
      */
     get(id: string): Promise<Content & PouchGetMeta & PouchIdMeta>;
-    /**
-     * Returns original PouchDB database.
-     *
-     * @returns Original PouchDB database.
-     */
-    getDb(): Promise<PouchDatabase>;
     /**
      * Posts document.
      *
@@ -107,15 +94,5 @@ export declare class PouchDBProxy {
      * @returns Query response.
      */
     query(mapReduce: string, options: PouchQueryOptions): Promise<PouchQueryResponse>;
-    protected static pouchDBConstructor: Promise<PouchDB.Static> | undefined;
-    protected db: PouchDatabase | undefined;
-    protected name: string;
-    protected options: PouchDatabaseConfiguration;
-    /**
-     * Returns PouchDB constructor.
-     *
-     * @returns PouchDB constructor.
-     */
-    protected getPouchDBConstructor(): Promise<PouchDB.Static>;
 }
 //# sourceMappingURL=PouchDBProxy.d.ts.map

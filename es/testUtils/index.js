@@ -3,6 +3,7 @@ import { compare } from "@skylib/facades/es/compare";
 import { database } from "@skylib/facades/es/database";
 import { datetime } from "@skylib/facades/es/datetime";
 import { facebook } from "@skylib/facades/es/facebook";
+import { faker } from "@skylib/facades/es/faker";
 import { google } from "@skylib/facades/es/google";
 import { handlePromise } from "@skylib/facades/es/handlePromise";
 import { httpRequest } from "@skylib/facades/es/httpRequest";
@@ -19,6 +20,7 @@ import * as naturalCompareWrapper from "../facade-implementations/compare/natura
 import { PouchDBWrapper } from "../facade-implementations/database/PouchDBWrapper";
 import * as dateFnsWrapper from "../facade-implementations/datetime/date-fns-wrapper";
 import { Facebook } from "../facade-implementations/facebook/Facebook";
+import { loremIpsumWrapper } from "../facade-implementations/faker/lorem-ipsum-wrapper";
 import { Google } from "../facade-implementations/google/Google";
 import * as promiseHandler from "../facade-implementations/handlePromise/promiseHandler";
 import * as axiosWrapper from "../facade-implementations/httpRequest/axios-wrapper";
@@ -34,6 +36,7 @@ import * as uuidWrapper from "../facade-implementations/uniqueId/uuidWrapper";
  * Jest reset.
  */
 export function jestReset() {
+    faker.setImplementation(loremIpsumWrapper);
     compare.setImplementation(naturalCompareWrapper.implementation);
     database.setImplementation(new PouchDBWrapper());
     facebook.setImplementation(new Facebook(undefined, "10.0"));

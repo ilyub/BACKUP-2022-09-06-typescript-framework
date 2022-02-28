@@ -124,13 +124,13 @@ ___
 
 ### changesHandlersAttachedPool
 
-• `Protected` **changesHandlersAttachedPool**: `Map`<`Symbol`, `AttachedChangesHandler`\>
+• `Protected` **changesHandlersAttachedPool**: `Map`<\`attached-subscription-id-${string}\`, `AttachedChangesHandler`\>
 
 ___
 
 ### changesHandlersPool
 
-• `Protected` **changesHandlersPool**: `Map`<`Symbol`, `ChangesHandler`\>
+• `Protected` **changesHandlersPool**: `Map`<\`subscription-id-${string}\`, `ChangesHandler`\>
 
 ___
 
@@ -1448,13 +1448,13 @@ ___
 
 ### refreshSubscription
 
-▸ `Protected` **refreshSubscription**(): `Promise`<`void`\>
+▸ `Protected` **refreshSubscription**(): `void`
 
 Refreshes subscriptions.
 
 #### Returns
 
-`Promise`<`void`\>
+`void`
 
 ___
 
@@ -1480,7 +1480,7 @@ ___
 
 ### subscribe
 
-▸ **subscribe**(`handler`): `Promise`<`Symbol`\>
+▸ **subscribe**(`handler`): \`subscription-id-${string}\`
 
 #### Parameters
 
@@ -1490,7 +1490,7 @@ ___
 
 #### Returns
 
-`Promise`<`Symbol`\>
+\`subscription-id-${string}\`
 
 #### Implementation of
 
@@ -1500,7 +1500,7 @@ ___
 
 ### subscribeAttached
 
-▸ **subscribeAttached**(`handler`): `Promise`<`Symbol`\>
+▸ **subscribeAttached**(`handler`): \`attached-subscription-id-${string}\`
 
 #### Parameters
 
@@ -1510,7 +1510,7 @@ ___
 
 #### Returns
 
-`Promise`<`Symbol`\>
+\`attached-subscription-id-${string}\`
 
 #### Implementation of
 
@@ -1563,17 +1563,17 @@ ___
 
 ### unsubscribe
 
-▸ **unsubscribe**(`id`): `Promise`<`void`\>
+▸ **unsubscribe**(`id`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `Symbol` |
+| `id` | \`subscription-id-${string}\` |
 
 #### Returns
 
-`Promise`<`void`\>
+`void`
 
 #### Implementation of
 
@@ -1583,17 +1583,17 @@ ___
 
 ### unsubscribeAttached
 
-▸ **unsubscribeAttached**(`id`): `Promise`<`void`\>
+▸ **unsubscribeAttached**(`id`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `id` | `Symbol` |
+| `id` | \`attached-subscription-id-${string}\` |
 
 #### Returns
 
-`Promise`<`void`\>
+`void`
 
 #### Implementation of
 

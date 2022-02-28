@@ -24,6 +24,7 @@
 - [facade-implementations/database/PouchDBWrapper/errors/PouchRetryError](modules/facade_implementations_database_PouchDBWrapper_errors_PouchRetryError.md)
 - [facade-implementations/datetime/date-fns-wrapper](modules/facade_implementations_datetime_date_fns_wrapper.md)
 - [facade-implementations/facebook/Facebook](modules/facade_implementations_facebook_Facebook.md)
+- [facade-implementations/faker/lorem-ipsum-wrapper](modules/facade_implementations_faker_lorem_ipsum_wrapper.md)
 - [facade-implementations/google/Google](modules/facade_implementations_google_Google.md)
 - [facade-implementations/handlePromise/promiseHandler](modules/facade_implementations_handlePromise_promiseHandler.md)
 - [facade-implementations/httpRequest/axios-wrapper](modules/facade_implementations_httpRequest_axios_wrapper.md)

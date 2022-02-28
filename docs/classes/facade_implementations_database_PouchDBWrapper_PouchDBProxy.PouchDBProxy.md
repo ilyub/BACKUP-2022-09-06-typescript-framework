@@ -19,9 +19,6 @@
 ### Properties
 
 - [db](facade_implementations_database_PouchDBWrapper_PouchDBProxy.PouchDBProxy.md#db)
-- [name](facade_implementations_database_PouchDBWrapper_PouchDBProxy.PouchDBProxy.md#name)
-- [options](facade_implementations_database_PouchDBWrapper_PouchDBProxy.PouchDBProxy.md#options)
-- [pouchDBConstructor](facade_implementations_database_PouchDBWrapper_PouchDBProxy.PouchDBProxy.md#pouchdbconstructor)
 
 ### Methods
 
@@ -29,8 +26,6 @@
 - [changes](facade_implementations_database_PouchDBWrapper_PouchDBProxy.PouchDBProxy.md#changes)
 - [destroy](facade_implementations_database_PouchDBWrapper_PouchDBProxy.PouchDBProxy.md#destroy)
 - [get](facade_implementations_database_PouchDBWrapper_PouchDBProxy.PouchDBProxy.md#get)
-- [getDb](facade_implementations_database_PouchDBWrapper_PouchDBProxy.PouchDBProxy.md#getdb)
-- [getPouchDBConstructor](facade_implementations_database_PouchDBWrapper_PouchDBProxy.PouchDBProxy.md#getpouchdbconstructor)
 - [post](facade_implementations_database_PouchDBWrapper_PouchDBProxy.PouchDBProxy.md#post)
 - [put](facade_implementations_database_PouchDBWrapper_PouchDBProxy.PouchDBProxy.md#put)
 - [query](facade_implementations_database_PouchDBWrapper_PouchDBProxy.PouchDBProxy.md#query)
@@ -54,25 +49,7 @@ Creates class instance.
 
 ### db
 
-• `Protected` **db**: `undefined` \| {}
-
-___
-
-### name
-
-• `Protected` **name**: `string`
-
-___
-
-### options
-
-• `Protected` **options**: [`PouchDatabaseConfiguration`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchdatabaseconfiguration)
-
-___
-
-### pouchDBConstructor
-
-▪ `Static` `Protected` **pouchDBConstructor**: `undefined` \| `Promise`<`Static`<{}\>\>
+• **db**: `Object`
 
 ## Methods
 
@@ -98,7 +75,7 @@ ___
 
 ### changes
 
-▸ **changes**(`changesHandler`, `options`): `Promise`<[`Changes`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Changes.md)\>
+▸ **changes**(`changesHandler`, `options`): [`Changes`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Changes.md)
 
 Subscribes to changes.
 
@@ -111,7 +88,7 @@ Subscribes to changes.
 
 #### Returns
 
-`Promise`<[`Changes`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Changes.md)\>
+[`Changes`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Changes.md)
 
 Subscription ID.
 
@@ -146,34 +123,6 @@ Fetches document.
 `Promise`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md) & {} & `Readonly`<`IdMeta`\>\>
 
 Document.
-
-___
-
-### getDb
-
-▸ **getDb**(): `Promise`<{}\>
-
-Returns original PouchDB database.
-
-#### Returns
-
-`Promise`<{}\>
-
-Original PouchDB database.
-
-___
-
-### getPouchDBConstructor
-
-▸ `Protected` **getPouchDBConstructor**(): `Promise`<`Static`<{}\>\>
-
-Returns PouchDB constructor.
-
-#### Returns
-
-`Promise`<`Static`<{}\>\>
-
-PouchDB constructor.
 
 ___
 

@@ -5,6 +5,7 @@ const tslib_1 = require("tslib");
 const _ = (0, tslib_1.__importStar)(require("lodash"));
 const pouchdb_collate_1 = require("pouchdb-collate");
 const sha256_1 = (0, tslib_1.__importDefault)(require("sha256"));
+const database_1 = require("@skylib/facades/dist/database");
 const handlePromise_1 = require("@skylib/facades/dist/handlePromise");
 const reactiveStorage_1 = require("@skylib/facades/dist/reactiveStorage");
 const uniqueId_1 = require("@skylib/facades/dist/uniqueId");
@@ -225,7 +226,7 @@ class Database {
      */
     async getRawDb() {
         const db = await this.getDb();
-        return db.getDb();
+        return db.db;
     }
     async put(doc) {
         validatePutDocument(doc);
@@ -358,20 +359,20 @@ class Database {
         const db = await this.getDb();
         await db.destroy();
         this.db = undefined;
-        await this.refreshSubscription();
+        this.refreshSubscription();
         await (callback === null || callback === void 0 ? void 0 : callback.call(this));
         await this.getDb();
     }
-    async subscribe(handler) {
-        const id = Symbol("ChangesHandler");
+    subscribe(handler) {
+        const id = (0, database_1.uniqueSubscriptionId)();
         this.changesHandlersPool.set(id, handler);
-        await this.refreshSubscription();
+        this.refreshSubscription();
         return id;
     }
-    async subscribeAttached(handler) {
-        const id = Symbol("AttachedChangesHandler");
+    subscribeAttached(handler) {
+        const id = (0, database_1.uniqueAttachedSubscriptionId)();
         this.changesHandlersAttachedPool.set(id, handler);
-        await this.refreshSubscription();
+        this.refreshSubscription();
         return id;
     }
     async unsettled(conditions = {}, options = {}) {
@@ -389,15 +390,15 @@ class Database {
         });
         return response.unsettledCount;
     }
-    async unsubscribe(id) {
+    unsubscribe(id) {
         assert.toBeTrue(this.changesHandlersPool.has(id));
         this.changesHandlersPool.delete(id);
-        await this.refreshSubscription();
+        this.refreshSubscription();
     }
-    async unsubscribeAttached(id) {
+    unsubscribeAttached(id) {
         assert.toBeTrue(this.changesHandlersAttachedPool.has(id));
         this.changesHandlersAttachedPool.delete(id);
-        await this.refreshSubscription();
+        this.refreshSubscription();
     }
     /**
      * Returns PouchDBProxy instance.
@@ -407,7 +408,7 @@ class Database {
     async getDb() {
         if (is.empty(this.db)) {
             this.db = new PouchDBProxy_1.PouchDBProxy(this.name, this.pouchConfig);
-            await this.refreshSubscription();
+            this.refreshSubscription();
             await this.migrate();
         }
         return this.db;
@@ -759,7 +760,8 @@ class Database {
     reactiveFactoryGet(request, handler) {
         const result = (0, reactiveStorage_1.reactiveStorage)({
             loaded: false,
-            loading: true
+            loading: true,
+            unsubscribe: fn.noop
         });
         handlePromise_1.handlePromise.silent(this.reactiveFactoryGetAsync(request, handler, result));
         return result;
@@ -776,18 +778,19 @@ class Database {
         result =
             result !== null && result !== void 0 ? result : (0, reactiveStorage_1.reactiveStorage)({
                 loaded: false,
-                loading: true
+                loading: true,
+                unsubscribe: fn.noop
             });
         o.assign(result, {
             loaded: true,
             loading: false,
-            unsubscribe: async () => {
-                await this.unsubscribe(subscription);
+            unsubscribe: () => {
+                this.unsubscribe(subscription);
             },
             value: await request
         });
         assert.toBeTrue(result.loaded);
-        const subscription = await this.subscribe(doc => {
+        const subscription = this.subscribe(doc => {
             assert.not.undefined(result);
             assert.toBeTrue(result.loaded);
             handler(doc, result);
@@ -804,7 +807,8 @@ class Database {
     reactiveFactoryGetAttached(request, handler) {
         const result = (0, reactiveStorage_1.reactiveStorage)({
             loaded: false,
-            loading: true
+            loading: true,
+            unsubscribe: fn.noop
         });
         handlePromise_1.handlePromise.silent(this.reactiveFactoryGetAttachedAsync(request, handler, result));
         return result;
@@ -821,18 +825,19 @@ class Database {
         result =
             result !== null && result !== void 0 ? result : (0, reactiveStorage_1.reactiveStorage)({
                 loaded: false,
-                loading: true
+                loading: true,
+                unsubscribe: fn.noop
             });
         o.assign(result, {
             loaded: true,
             loading: false,
-            unsubscribe: async () => {
-                await this.unsubscribeAttached(subscription);
+            unsubscribe: () => {
+                this.unsubscribeAttached(subscription);
             },
             value: await request
         });
         assert.toBeTrue(result.loaded);
-        const subscription = await this.subscribeAttached(doc => {
+        const subscription = this.subscribeAttached(doc => {
             assert.not.undefined(result);
             assert.toBeTrue(result.loaded);
             handler(doc, result);
@@ -849,7 +854,8 @@ class Database {
     reactiveFactoryQuery(request, config) {
         const result = (0, reactiveStorage_1.reactiveStorage)({
             loaded: false,
-            loading: true
+            loading: true,
+            unsubscribe: fn.noop
         });
         handlePromise_1.handlePromise.silent(this.reactiveFactoryQueryAsync(request, config, result));
         return result;
@@ -867,21 +873,22 @@ class Database {
         result =
             result !== null && result !== void 0 ? result : (0, reactiveStorage_1.reactiveStorage)({
                 loaded: false,
-                loading: true
+                loading: true,
+                unsubscribe: fn.noop
             });
         o.assign(result, {
             loaded: true,
             loading: false,
-            unsubscribe: async () => {
+            unsubscribe: () => {
                 reactiveStorage_1.reactiveStorage.unwatch(config, observer);
-                await this.unsubscribe(subscription);
+                this.unsubscribe(subscription);
                 timer.removeTimeout(timeout);
             },
             value: await request(config.conditions, config.options)
         });
         assert.toBeTrue(result.loaded);
         const observer = reactiveStorage_1.reactiveStorage.watch(config, refresh);
-        const subscription = await this.subscribe(doc => {
+        const subscription = this.subscribe(doc => {
             // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
             if (config.updateFn && config.updateFn(doc))
                 refresh();
@@ -919,7 +926,8 @@ class Database {
     reactiveFactoryQueryAttached(request, config) {
         const result = (0, reactiveStorage_1.reactiveStorage)({
             loaded: false,
-            loading: true
+            loading: true,
+            unsubscribe: fn.noop
         });
         handlePromise_1.handlePromise.silent(this.reactiveFactoryQueryAttachedAsync(request, config, result));
         return result;
@@ -937,21 +945,22 @@ class Database {
         result =
             result !== null && result !== void 0 ? result : (0, reactiveStorage_1.reactiveStorage)({
                 loaded: false,
-                loading: true
+                loading: true,
+                unsubscribe: fn.noop
             });
         o.assign(result, {
             loaded: true,
             loading: false,
-            unsubscribe: async () => {
+            unsubscribe: () => {
                 reactiveStorage_1.reactiveStorage.unwatch(config, observer);
-                await this.unsubscribeAttached(subscription);
+                this.unsubscribeAttached(subscription);
                 timer.removeTimeout(timeout);
             },
             value: await request(config.conditions, config.parentConditions, config.options)
         });
         assert.toBeTrue(result.loaded);
         const observer = reactiveStorage_1.reactiveStorage.watch(config, refresh);
-        const subscription = await this.subscribeAttached(doc => {
+        const subscription = this.subscribeAttached(doc => {
             // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
             if (config.updateFn && config.updateFn(doc))
                 refresh();
@@ -1063,14 +1072,14 @@ class Database {
     /**
      * Refreshes subscriptions.
      */
-    async refreshSubscription() {
+    refreshSubscription() {
         if (this.db &&
             this.changesHandlersPool.size + this.changesHandlersAttachedPool.size > 0)
             if (this.changes) {
                 // Already exists
             }
             else
-                this.changes = await this.db.changes(value => {
+                this.changes = this.db.changes(value => {
                     var _a;
                     assert.byGuard(value.doc, isExistingDocument);
                     if (this.changesHandlersPool.size) {

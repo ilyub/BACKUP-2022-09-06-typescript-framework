@@ -7,6 +7,7 @@ const compare_1 = require("@skylib/facades/dist/compare");
 const database_1 = require("@skylib/facades/dist/database");
 const datetime_1 = require("@skylib/facades/dist/datetime");
 const facebook_1 = require("@skylib/facades/dist/facebook");
+const faker_1 = require("@skylib/facades/dist/faker");
 const google_1 = require("@skylib/facades/dist/google");
 const handlePromise_1 = require("@skylib/facades/dist/handlePromise");
 const httpRequest_1 = require("@skylib/facades/dist/httpRequest");
@@ -23,6 +24,7 @@ const naturalCompareWrapper = (0, tslib_1.__importStar)(require("../facade-imple
 const PouchDBWrapper_1 = require("../facade-implementations/database/PouchDBWrapper");
 const dateFnsWrapper = (0, tslib_1.__importStar)(require("../facade-implementations/datetime/date-fns-wrapper"));
 const Facebook_1 = require("../facade-implementations/facebook/Facebook");
+const lorem_ipsum_wrapper_1 = require("../facade-implementations/faker/lorem-ipsum-wrapper");
 const Google_1 = require("../facade-implementations/google/Google");
 const promiseHandler = (0, tslib_1.__importStar)(require("../facade-implementations/handlePromise/promiseHandler"));
 const axiosWrapper = (0, tslib_1.__importStar)(require("../facade-implementations/httpRequest/axios-wrapper"));
@@ -38,6 +40,7 @@ const uuidWrapper = (0, tslib_1.__importStar)(require("../facade-implementations
  * Jest reset.
  */
 function jestReset() {
+    faker_1.faker.setImplementation(lorem_ipsum_wrapper_1.loremIpsumWrapper);
     compare_1.compare.setImplementation(naturalCompareWrapper.implementation);
     database_1.database.setImplementation(new PouchDBWrapper_1.PouchDBWrapper());
     facebook_1.facebook.setImplementation(new Facebook_1.Facebook(undefined, "10.0"));

@@ -22,6 +22,8 @@ Typescript framework / [Exports](modules.md)
       - [date-fns-wrapper](https://ilyub.github.io/typescript-framework/modules/facade_implementations_datetime_date_fns_wrapper.html) - Implements datetime facade.
     - facebook
       - [Facebook](https://ilyub.github.io/typescript-framework/modules/facade_implementations_facebook_Facebook.html) - Implements facebook facade.
+    - faker
+      - [faker](https://ilyub.github.io/typescript-framework/modules/facade_implementations_faker_lorem_ipsum_wrapper.html) - Implements faker facade.
     - google
       - [Google](https://ilyub.github.io/typescript-framework/modules/facade_implementations_google_Google.html) - Implements google facade.
     - handlePromise

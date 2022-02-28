@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PouchDBProxy = exports.handlers = void 0;
 const tslib_1 = require("tslib");
+const pouchdb_1 = (0, tslib_1.__importDefault)(require("pouchdb"));
 const testDelay_1 = require("@skylib/facades/dist/testDelay");
-const fn = (0, tslib_1.__importStar)(require("@skylib/functions/dist/function"));
 const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
 const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
 const PouchConflictError_1 = require("./errors/PouchConflictError");
@@ -27,20 +27,7 @@ class PouchDBProxy {
             writable: true,
             value: void 0
         });
-        Object.defineProperty(this, "name", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: void 0
-        });
-        Object.defineProperty(this, "options", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: void 0
-        });
-        this.name = name;
-        this.options = options;
+        this.db = new pouchdb_1.default(name, options);
     }
     /**
      * Creates or updates multiple documents.
@@ -49,9 +36,9 @@ class PouchDBProxy {
      * @returns Responses.
      */
     async bulkDocs(docs) {
-        const db = await this.getDb();
+        await (0, testDelay_1.testDelay)();
         try {
-            return await db.bulkDocs(o.unfreeze.deep(docs));
+            return await this.db.bulkDocs(o.unfreeze.deep(docs));
         }
         catch (e) {
             throw wrapPouchError(e);
@@ -64,9 +51,8 @@ class PouchDBProxy {
      * @param options - Options.
      * @returns Subscription ID.
      */
-    async changes(changesHandler, options) {
-        const db = await this.getDb();
-        const changes = db
+    changes(changesHandler, options) {
+        const changes = this.db
             .changes(o.unfreeze.deep(options))
             .on("change", changesHandler)
             .on("error", exports.handlers.error);
@@ -80,9 +66,9 @@ class PouchDBProxy {
      * Destroys database.
      */
     async destroy() {
-        const db = await this.getDb();
+        await (0, testDelay_1.testDelay)();
         try {
-            await db.destroy();
+            await this.db.destroy();
         }
         catch (e) {
             throw wrapPouchError(e);
@@ -95,31 +81,13 @@ class PouchDBProxy {
      * @returns Document.
      */
     async get(id) {
-        const db = await this.getDb();
-        try {
-            return await db.get(id);
-        }
-        catch (e) {
-            throw wrapPouchError(e);
-        }
-    }
-    /**
-     * Returns original PouchDB database.
-     *
-     * @returns Original PouchDB database.
-     */
-    async getDb() {
         await (0, testDelay_1.testDelay)();
-        if (this.db)
-            return this.db;
-        const pouchDBConstructor = await this.getPouchDBConstructor();
         try {
-            this.db = new pouchDBConstructor(this.name, this.options);
+            return await this.db.get(id);
         }
         catch (e) {
             throw wrapPouchError(e);
         }
-        return this.db;
     }
     /**
      * Posts document.
@@ -128,9 +96,9 @@ class PouchDBProxy {
      * @returns Response.
      */
     async post(doc) {
-        const db = await this.getDb();
+        await (0, testDelay_1.testDelay)();
         try {
-            return await db.post(doc);
+            return await this.db.post(doc);
         }
         catch (e) {
             throw wrapPouchError(e);
@@ -143,9 +111,9 @@ class PouchDBProxy {
      * @returns Response.
      */
     async put(doc) {
-        const db = await this.getDb();
+        await (0, testDelay_1.testDelay)();
         try {
-            return await db.put(o.unfreeze.deep(doc));
+            return await this.db.put(o.unfreeze.deep(doc));
         }
         catch (e) {
             throw wrapPouchError(e);
@@ -159,29 +127,13 @@ class PouchDBProxy {
      * @returns Query response.
      */
     async query(mapReduce, options) {
-        const db = await this.getDb();
+        await (0, testDelay_1.testDelay)();
         try {
-            return await db.query(mapReduce, o.unfreeze.deep(options));
+            return await this.db.query(mapReduce, o.unfreeze.deep(options));
         }
         catch (e) {
             throw wrapPouchError(e);
         }
-    }
-    /**
-     * Returns PouchDB constructor.
-     *
-     * @returns PouchDB constructor.
-     */
-    async getPouchDBConstructor() {
-        if (PouchDBProxy.pouchDBConstructor)
-            return PouchDBProxy.pouchDBConstructor;
-        PouchDBProxy.pouchDBConstructor = fn.run(async () => {
-            const pouchdbModule = await Promise.resolve().then(() => (0, tslib_1.__importStar)(require(
-            /* webpackChunkName: "pouchdb" */
-            "pouchdb")));
-            return pouchdbModule.default;
-        });
-        return PouchDBProxy.pouchDBConstructor;
     }
 }
 exports.PouchDBProxy = PouchDBProxy;
