@@ -511,9 +511,9 @@ test("subscribe|subscribeAttached|unsubscribe|unsubscribeAttached", async () => 
 
     const handlerAttached = jest.fn();
 
-    const subscription = await db.subscribe(handler);
+    const subscription = db.subscribe(handler);
 
-    const subscriptionAttached = await db.subscribeAttached(handlerAttached);
+    const subscriptionAttached = db.subscribeAttached(handlerAttached);
 
     const { id, rev } = await db.put({ value: 1 });
 
@@ -559,8 +559,8 @@ test("subscribe|subscribeAttached|unsubscribe|unsubscribeAttached", async () => 
     }
 
     {
-      await db.unsubscribe(subscription);
-      await db.unsubscribeAttached(subscriptionAttached);
+      db.unsubscribe(subscription);
+      db.unsubscribeAttached(subscriptionAttached);
       await db.put({ value: 1 });
       await db.putAttached(id, { value: 2 });
       await wait(1000);

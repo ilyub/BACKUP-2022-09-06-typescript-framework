@@ -44,7 +44,7 @@ test.each([false, true])("database.reactiveCount", async async => {
     {
       expect(result.loaded).toStrictEqual(async);
       await handlePromise.runAll();
-      expect(result.loaded).toBeTrue();
+      assert.toBeTrue(result.loaded);
     }
 
     {
@@ -64,7 +64,7 @@ test.each([false, true])("database.reactiveCount", async async => {
 
     {
       assert.toBeTrue(result.loaded);
-      await result.unsubscribe();
+      result.unsubscribe();
     }
 
     {
@@ -98,7 +98,7 @@ test.each([false, true])("database.reactiveCountAttached", async async => {
     {
       expect(result.loaded).toStrictEqual(async);
       await handlePromise.runAll();
-      expect(result.loaded).toBeTrue();
+      assert.toBeTrue(result.loaded);
     }
 
     {
@@ -118,7 +118,7 @@ test.each([false, true])("database.reactiveCountAttached", async async => {
 
     {
       assert.toBeTrue(result.loaded);
-      await result.unsubscribe();
+      result.unsubscribe();
     }
 
     {
@@ -145,7 +145,7 @@ test.each([false, true])("database.reactiveExists", async async => {
     {
       expect(result.loaded).toStrictEqual(async);
       await handlePromise.runAll();
-      expect(result.loaded).toBeTrue();
+      assert.toBeTrue(result.loaded);
     }
 
     {
@@ -157,7 +157,7 @@ test.each([false, true])("database.reactiveExists", async async => {
 
     {
       assert.toBeTrue(result.loaded);
-      await result.unsubscribe();
+      result.unsubscribe();
     }
   });
 });
@@ -177,7 +177,7 @@ test.each([false, true])("database.reactiveExistsAttached", async async => {
     {
       expect(result.loaded).toStrictEqual(async);
       await handlePromise.runAll();
-      expect(result.loaded).toBeTrue();
+      assert.toBeTrue(result.loaded);
     }
 
     {
@@ -189,7 +189,7 @@ test.each([false, true])("database.reactiveExistsAttached", async async => {
 
     {
       assert.toBeTrue(result.loaded);
-      await result.unsubscribe();
+      result.unsubscribe();
     }
   });
 });
@@ -209,7 +209,7 @@ test.each([false, true])("database.reactiveGet", async async => {
     {
       expect(result.loaded).toStrictEqual(async);
       await handlePromise.runAll();
-      expect(result.loaded).toBeTrue();
+      assert.toBeTrue(result.loaded);
       expect(result.value).toStrictEqual({ _id: id, _rev: rev1 });
     }
 
@@ -233,7 +233,7 @@ test.each([false, true])("database.reactiveGet", async async => {
 
     {
       assert.toBeTrue(result.loaded);
-      await result.unsubscribe();
+      result.unsubscribe();
     }
   });
 });
@@ -266,7 +266,7 @@ test.each([false, true])("database.reactiveGetAttached", async async => {
 
       expect(result.loaded).toStrictEqual(async);
       await handlePromise.runAll();
-      expect(result.loaded).toBeTrue();
+      assert.toBeTrue(result.loaded);
       expect(result.value).toStrictEqual(expected);
     }
 
@@ -304,7 +304,7 @@ test.each([false, true])("database.reactiveGetAttached", async async => {
 
     {
       assert.toBeTrue(result.loaded);
-      await result.unsubscribe();
+      result.unsubscribe();
     }
   });
 });
@@ -326,7 +326,7 @@ test.each([false, true])(
       {
         expect(result.loaded).toStrictEqual(async);
         await handlePromise.runAll();
-        expect(result.loaded).toBeTrue();
+        assert.toBeTrue(result.loaded);
         expect(result.value).toBeUndefined();
       }
 
@@ -356,7 +356,7 @@ test.each([false, true])(
 
       {
         assert.toBeTrue(result.loaded);
-        await result.unsubscribe();
+        result.unsubscribe();
       }
     });
   }
@@ -377,7 +377,7 @@ test.each([false, true])("database.reactiveGetIfExists", async async => {
     {
       expect(result.loaded).toStrictEqual(async);
       await handlePromise.runAll();
-      expect(result.loaded).toBeTrue();
+      assert.toBeTrue(result.loaded);
       expect(result.value).toBeUndefined();
     }
 
@@ -396,7 +396,7 @@ test.each([false, true])("database.reactiveGetIfExists", async async => {
 
     {
       assert.toBeTrue(result.loaded);
-      await result.unsubscribe();
+      result.unsubscribe();
     }
   });
 });
@@ -421,7 +421,7 @@ test.each([false, true])("database.reactiveQuery", async async => {
     {
       expect(result.loaded).toStrictEqual(async);
       await handlePromise.runAll();
-      expect(result.loaded).toBeTrue();
+      assert.toBeTrue(result.loaded);
       expect(result.value).toStrictEqual([]);
     }
 
@@ -434,7 +434,7 @@ test.each([false, true])("database.reactiveQuery", async async => {
 
     {
       assert.toBeTrue(result.loaded);
-      await result.unsubscribe();
+      result.unsubscribe();
     }
   });
 });
@@ -461,7 +461,7 @@ test.each([false, true])("database.reactiveQueryAttached", async async => {
     {
       expect(result.loaded).toStrictEqual(async);
       await handlePromise.runAll();
-      expect(result.loaded).toBeTrue();
+      assert.toBeTrue(result.loaded);
       expect(result.value).toStrictEqual([]);
     }
 
@@ -490,7 +490,7 @@ test.each([false, true])("database.reactiveQueryAttached", async async => {
 
     {
       assert.toBeTrue(result.loaded);
-      await result.unsubscribe();
+      result.unsubscribe();
     }
   });
 });
@@ -515,7 +515,7 @@ test.each([false, true])("database.reactiveUnsettled", async async => {
     {
       expect(result.loaded).toStrictEqual(async);
       await handlePromise.runAll();
-      expect(result.loaded).toBeTrue();
+      assert.toBeTrue(result.loaded);
       expect(result.value).toBe(1);
     }
 
@@ -526,7 +526,7 @@ test.each([false, true])("database.reactiveUnsettled", async async => {
 
     {
       assert.toBeTrue(result.loaded);
-      await result.unsubscribe();
+      result.unsubscribe();
     }
   });
 });
@@ -553,7 +553,7 @@ test.each([false, true])("database.reactiveUnsettledAttached", async async => {
     {
       expect(result.loaded).toStrictEqual(async);
       await handlePromise.runAll();
-      expect(result.loaded).toBeTrue();
+      assert.toBeTrue(result.loaded);
       expect(result.value).toBe(1);
     }
 
@@ -564,7 +564,7 @@ test.each([false, true])("database.reactiveUnsettledAttached", async async => {
 
     {
       assert.toBeTrue(result.loaded);
-      await result.unsubscribe();
+      result.unsubscribe();
     }
   });
 });

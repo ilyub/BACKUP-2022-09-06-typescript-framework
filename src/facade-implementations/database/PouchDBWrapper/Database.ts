@@ -4,6 +4,7 @@ import sha256 from "sha256";
 
 import type {
   AttachedChangesHandler,
+  AttachedSubscriptionId,
   ChangesHandler,
   Conditions,
   Database as DatabaseInterface,
@@ -26,7 +27,12 @@ import type {
   ReactiveResponse,
   ReactiveResponseAsync,
   ResetCallback,
-  StoredAttachedDocument
+  StoredAttachedDocument,
+  SubscriptionId
+} from "@skylib/facades/dist/database";
+import {
+  uniqueAttachedSubscriptionId,
+  uniqueSubscriptionId
 } from "@skylib/facades/dist/database";
 import { handlePromise } from "@skylib/facades/dist/handlePromise";
 import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
@@ -680,8 +686,8 @@ export class Database implements DatabaseInterface {
     await this.getDb();
   }
 
-  public async subscribe(handler: ChangesHandler): Promise<Symbol> {
-    const id = Symbol("ChangesHandler");
+  public subscribe(handler: ChangesHandler): SubscriptionId {
+    const id = uniqueSubscriptionId();
 
     this.changesHandlersPool.set(id, handler);
     this.refreshSubscription();
@@ -689,10 +695,10 @@ export class Database implements DatabaseInterface {
     return id;
   }
 
-  public async subscribeAttached(
+  public subscribeAttached(
     handler: AttachedChangesHandler
-  ): Promise<Symbol> {
-    const id = Symbol("AttachedChangesHandler");
+  ): AttachedSubscriptionId {
+    const id = uniqueAttachedSubscriptionId();
 
     this.changesHandlersAttachedPool.set(id, handler);
     this.refreshSubscription();
@@ -726,13 +732,13 @@ export class Database implements DatabaseInterface {
     return response.unsettledCount;
   }
 
-  public async unsubscribe(id: Symbol): Promise<void> {
+  public unsubscribe(id: SubscriptionId): void {
     assert.toBeTrue(this.changesHandlersPool.has(id));
     this.changesHandlersPool.delete(id);
     this.refreshSubscription();
   }
 
-  public async unsubscribeAttached(id: Symbol): Promise<void> {
+  public unsubscribeAttached(id: AttachedSubscriptionId): void {
     assert.toBeTrue(this.changesHandlersAttachedPool.has(id));
     this.changesHandlersAttachedPool.delete(id);
     this.refreshSubscription();
@@ -747,11 +753,11 @@ export class Database implements DatabaseInterface {
   protected changes: Changes | undefined = undefined;
 
   protected changesHandlersAttachedPool = new Map<
-    Symbol,
+    AttachedSubscriptionId,
     AttachedChangesHandler
   >();
 
-  protected changesHandlersPool = new Map<Symbol, ChangesHandler>();
+  protected changesHandlersPool = new Map<SubscriptionId, ChangesHandler>();
 
   protected config: Required<Configuration>;
 
@@ -1211,7 +1217,8 @@ export class Database implements DatabaseInterface {
   ): ReactiveResponse<T> {
     const result = reactiveStorage<ReactiveResponse<T>>({
       loaded: false,
-      loading: true
+      loading: true,
+      unsubscribe: fn.noop
     });
 
     handlePromise.silent(
@@ -1238,21 +1245,22 @@ export class Database implements DatabaseInterface {
       result ??
       reactiveStorage<ReactiveResponse<T>>({
         loaded: false,
-        loading: true
+        loading: true,
+        unsubscribe: fn.noop
       });
 
     o.assign(result, {
       loaded: true,
       loading: false,
-      unsubscribe: async (): Promise<void> => {
-        await this.unsubscribe(subscription);
+      unsubscribe: (): void => {
+        this.unsubscribe(subscription);
       },
       value: await request
     });
 
     assert.toBeTrue(result.loaded);
 
-    const subscription = await this.subscribe(doc => {
+    const subscription = this.subscribe(doc => {
       assert.not.undefined(result);
       assert.toBeTrue(result.loaded);
       handler(doc, result);
@@ -1274,7 +1282,8 @@ export class Database implements DatabaseInterface {
   ): ReactiveResponse<T> {
     const result = reactiveStorage<ReactiveResponse<T>>({
       loaded: false,
-      loading: true
+      loading: true,
+      unsubscribe: fn.noop
     });
 
     handlePromise.silent(
@@ -1301,21 +1310,22 @@ export class Database implements DatabaseInterface {
       result ??
       reactiveStorage<ReactiveResponse<T>>({
         loaded: false,
-        loading: true
+        loading: true,
+        unsubscribe: fn.noop
       });
 
     o.assign(result, {
       loaded: true,
       loading: false,
-      unsubscribe: async (): Promise<void> => {
-        await this.unsubscribeAttached(subscription);
+      unsubscribe: (): void => {
+        this.unsubscribeAttached(subscription);
       },
       value: await request
     });
 
     assert.toBeTrue(result.loaded);
 
-    const subscription = await this.subscribeAttached(doc => {
+    const subscription = this.subscribeAttached(doc => {
       assert.not.undefined(result);
       assert.toBeTrue(result.loaded);
       handler(doc, result);
@@ -1337,7 +1347,8 @@ export class Database implements DatabaseInterface {
   ): ReactiveResponse<T> {
     const result = reactiveStorage<ReactiveResponse<T>>({
       loaded: false,
-      loading: true
+      loading: true,
+      unsubscribe: fn.noop
     });
 
     handlePromise.silent(
@@ -1366,15 +1377,16 @@ export class Database implements DatabaseInterface {
       result ??
       reactiveStorage<ReactiveResponse<T>>({
         loaded: false,
-        loading: true
+        loading: true,
+        unsubscribe: fn.noop
       });
 
     o.assign(result, {
       loaded: true,
       loading: false,
-      unsubscribe: async (): Promise<void> => {
+      unsubscribe: (): void => {
         reactiveStorage.unwatch(config, observer);
-        await this.unsubscribe(subscription);
+        this.unsubscribe(subscription);
         timer.removeTimeout(timeout);
       },
       value: await request(config.conditions, config.options)
@@ -1384,7 +1396,7 @@ export class Database implements DatabaseInterface {
 
     const observer = reactiveStorage.watch(config, refresh);
 
-    const subscription = await this.subscribe(doc => {
+    const subscription = this.subscribe(doc => {
       // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
       if (config.updateFn && config.updateFn(doc)) refresh();
     });
@@ -1434,7 +1446,8 @@ export class Database implements DatabaseInterface {
   ): ReactiveResponse<T> {
     const result = reactiveStorage<ReactiveResponse<T>>({
       loaded: false,
-      loading: true
+      loading: true,
+      unsubscribe: fn.noop
     });
 
     handlePromise.silent(
@@ -1463,15 +1476,16 @@ export class Database implements DatabaseInterface {
       result ??
       reactiveStorage<ReactiveResponse<T>>({
         loaded: false,
-        loading: true
+        loading: true,
+        unsubscribe: fn.noop
       });
 
     o.assign(result, {
       loaded: true,
       loading: false,
-      unsubscribe: async (): Promise<void> => {
+      unsubscribe: (): void => {
         reactiveStorage.unwatch(config, observer);
-        await this.unsubscribeAttached(subscription);
+        this.unsubscribeAttached(subscription);
         timer.removeTimeout(timeout);
       },
       value: await request(
@@ -1485,7 +1499,7 @@ export class Database implements DatabaseInterface {
 
     const observer = reactiveStorage.watch(config, refresh);
 
-    const subscription = await this.subscribeAttached(doc => {
+    const subscription = this.subscribeAttached(doc => {
       // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
       if (config.updateFn && config.updateFn(doc)) refresh();
     });
