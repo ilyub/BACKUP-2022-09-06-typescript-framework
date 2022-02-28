@@ -4,6 +4,7 @@ import { compare } from "@skylib/facades/dist/compare";
 import { database } from "@skylib/facades/dist/database";
 import { datetime } from "@skylib/facades/dist/datetime";
 import { facebook } from "@skylib/facades/dist/facebook";
+import { faker } from "@skylib/facades/dist/faker";
 import { google } from "@skylib/facades/dist/google";
 import { handlePromise } from "@skylib/facades/dist/handlePromise";
 import { httpRequest } from "@skylib/facades/dist/httpRequest";
@@ -24,6 +25,7 @@ import * as naturalCompareWrapper from "../facade-implementations/compare/natura
 import { PouchDBWrapper } from "../facade-implementations/database/PouchDBWrapper";
 import * as dateFnsWrapper from "../facade-implementations/datetime/date-fns-wrapper";
 import { Facebook } from "../facade-implementations/facebook/Facebook";
+import { loremIpsumWrapper } from "../facade-implementations/faker/lorem-ipsum-wrapper";
 import { Google } from "../facade-implementations/google/Google";
 import * as promiseHandler from "../facade-implementations/handlePromise/promiseHandler";
 import * as axiosWrapper from "../facade-implementations/httpRequest/axios-wrapper";
@@ -55,6 +57,7 @@ declare global {
  * Jest reset.
  */
 export function jestReset(): void {
+  faker.setImplementation(loremIpsumWrapper);
   compare.setImplementation(naturalCompareWrapper.implementation);
   database.setImplementation(new PouchDBWrapper());
   facebook.setImplementation(new Facebook(undefined, "10.0"));
