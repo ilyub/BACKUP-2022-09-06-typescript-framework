@@ -103,7 +103,7 @@
     "vue-eslint-parser": "^8.3.0"
   },
   "peerDependencies": {
-    "@skylib/facades": "^0.1.30",
+    "@skylib/facades": "^0.1.31",
     "@skylib/functions": "^0.1.26",
     "@skylib/typescript-types": "^0.1.2",
     "@types/facebook-js-sdk": "^3.3.5",
