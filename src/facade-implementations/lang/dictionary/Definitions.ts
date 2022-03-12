@@ -5,7 +5,8 @@ import * as o from "@skylib/functions/dist/object";
 import * as s from "@skylib/functions/dist/string";
 import type {
   IndexedObject,
-  ReadonlyIndexedObject
+  ReadonlyIndexedObject,
+  strings
 } from "@skylib/functions/dist/types/core";
 
 import { Definition } from ".";
@@ -45,7 +46,7 @@ export class Definitions {
   public get(
     key: string,
     context: Context | undefined,
-    forms: string | readonly string[],
+    forms: strings | string,
     count: number,
     replacements: ReadonlyMap<string, string>
   ): WordInfo {
@@ -78,7 +79,7 @@ export class Definitions {
   |*****************************************************************************
   |*/
 
-  protected wordForms: ReadonlyIndexedObject<readonly string[]>;
+  protected wordForms: ReadonlyIndexedObject<strings>;
 
   protected words: ReadonlyIndexedObject<Definition> = {};
 }

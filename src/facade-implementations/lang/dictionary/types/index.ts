@@ -3,7 +3,8 @@ import type {
   NumStr,
   ReadonlyIndexedObject,
   ReadonlyPartialRecord,
-  ReadonlyRecord
+  ReadonlyRecord,
+  strings
 } from "@skylib/functions/dist/types/core";
 
 export interface PluralReduce {
@@ -29,14 +30,14 @@ export interface RawDefinitions {
 
 export interface RawLanguage {
   readonly pluralReduce: PluralReduce;
-  readonly wordForms: ReadonlyIndexedObject<readonly string[]>;
+  readonly wordForms: ReadonlyIndexedObject<strings>;
   readonly words: ReadonlyRecord<Word, RawDefinition>;
 }
 
 export interface WordInfo {
   readonly context: Context | undefined;
   readonly count: number;
-  readonly forms: readonly string[];
+  readonly forms: strings;
   readonly replacements: ReadonlyMap<string, string>;
   readonly value: string;
 }

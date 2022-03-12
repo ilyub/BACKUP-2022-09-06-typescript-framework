@@ -7,7 +7,8 @@ import * as o from "@skylib/functions/dist/object";
 import * as regexp from "@skylib/functions/dist/regexp";
 import type {
   NumStr,
-  ReadonlyIndexedObject
+  ReadonlyIndexedObject,
+  strings
 } from "@skylib/functions/dist/types/core";
 
 import type { Definitions } from ".";
@@ -88,7 +89,7 @@ export class Definition {
   public get(
     owner: Definitions,
     context: Context | undefined,
-    forms: readonly string[],
+    forms: strings,
     count: number,
     replacements: ReadonlyMap<string, string>
   ): WordInfo {
@@ -152,17 +153,17 @@ export class Definition {
 
   protected id: string;
 
-  protected rulesRef: ReadonlyArray<readonly string[]>;
+  protected rulesRef: readonly strings[];
 
-  protected rulesRefDependent: ReadonlyArray<readonly string[]>;
+  protected rulesRefDependent: readonly strings[];
 
-  protected rulesRefSecondary: ReadonlyArray<readonly string[]>;
+  protected rulesRefSecondary: readonly strings[];
 
-  protected rulesVal: ReadonlyArray<readonly string[]>;
+  protected rulesVal: readonly strings[];
 
-  protected rulesWord: ReadonlyArray<readonly string[]>;
+  protected rulesWord: readonly strings[];
 
-  protected rulesWordSecondary: ReadonlyArray<readonly string[]>;
+  protected rulesWordSecondary: readonly strings[];
 
   protected sub: Definition | undefined = undefined;
 
