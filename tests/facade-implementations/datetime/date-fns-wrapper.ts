@@ -7,21 +7,21 @@ import * as testUtils from "@skylib/functions/dist/testUtils";
 
 import * as dateFnsWrapper from "@/facade-implementations/datetime/date-fns-wrapper";
 
-function d(dt = "1950-01-01 14:30"): DateTime {
+function d(dt = "1950-06-15 14:30"): DateTime {
   return datetime.create(dt);
 }
 
-const d1 = d("1950-01-01 14:30");
+const d1 = d("1950-06-15 14:30");
 
-const d2 = d("1950-01-01 14:31");
+const d2 = d("1950-06-15 14:31");
 
-const d3 = d("1950-01-01 15:30");
+const d3 = d("1950-06-15 15:30");
 
-const d4 = d("1950-01-02 14:30");
+const d4 = d("1950-06-16 14:30");
 
-const d5 = d("1950-02-01 14:30");
+const d5 = d("1950-07-15 14:30");
 
-const d6 = d("1951-01-01 14:30");
+const d6 = d("1951-06-15 14:30");
 
 const firstDayOfWeekOptions: readonly dateFnsWrapper.FirstDayOfWeek[] = [0, 1];
 
@@ -36,35 +36,35 @@ test("configure, getConfiguration", () => {
 });
 
 test("implementation.create", () => {
-  const dt1 = datetime.create("1950-01-01 14:30");
+  const dt1 = datetime.create("1950-06-15 14:30");
 
   const dt2 = datetime.create(dt1);
 
   const dt3 = datetime.create(dt1.toDate());
 
-  expect(dt1).datetimeToEqual("1950-01-01 14:30");
-  expect(dt2).datetimeToEqual("1950-01-01 14:30");
-  expect(dt3).datetimeToEqual("1950-01-01 14:30");
+  expect(dt1).datetimeToEqual("1950-06-15 14:30");
+  expect(dt2).datetimeToEqual("1950-06-15 14:30");
+  expect(dt3).datetimeToEqual("1950-06-15 14:30");
 
   {
     dt1.add(1, "minute");
-    expect(dt1).datetimeToEqual("1950-01-01 14:31");
-    expect(dt2).datetimeToEqual("1950-01-01 14:30");
-    expect(dt3).datetimeToEqual("1950-01-01 14:30");
+    expect(dt1).datetimeToEqual("1950-06-15 14:31");
+    expect(dt2).datetimeToEqual("1950-06-15 14:30");
+    expect(dt3).datetimeToEqual("1950-06-15 14:30");
   }
 
   {
     dt2.add(1, "hour");
-    expect(dt1).datetimeToEqual("1950-01-01 14:31");
-    expect(dt2).datetimeToEqual("1950-01-01 15:30");
-    expect(dt3).datetimeToEqual("1950-01-01 14:30");
+    expect(dt1).datetimeToEqual("1950-06-15 14:31");
+    expect(dt2).datetimeToEqual("1950-06-15 15:30");
+    expect(dt3).datetimeToEqual("1950-06-15 14:30");
   }
 
   {
     dt3.add(1, "day");
-    expect(dt1).datetimeToEqual("1950-01-01 14:31");
-    expect(dt2).datetimeToEqual("1950-01-01 15:30");
-    expect(dt3).datetimeToEqual("1950-01-02 14:30");
+    expect(dt1).datetimeToEqual("1950-06-15 14:31");
+    expect(dt2).datetimeToEqual("1950-06-15 15:30");
+    expect(dt3).datetimeToEqual("1950-06-16 14:30");
   }
 
   {
@@ -79,28 +79,32 @@ test("implementation.now", () => {
 });
 
 test("implementation.time", () => {
-  expect(datetime.time()).toStrictEqual(Date.now() / 1000);
+  expect(datetime.time()).toStrictEqual(Date.now());
+});
+
+test("implementation.timeSec", () => {
+  expect(datetime.timeSec()).toStrictEqual(Date.now() / 1000);
 });
 
 test("implementation.validate", () => {
-  expect(datetime.validate("2016-01-01")).toBeTrue();
+  expect(datetime.validate("2016-06-15")).toBeTrue();
   expect(datetime.validate("1")).toBeFalse();
   expect(datetime.validate("")).toBeFalse();
 });
 
 test("dateTime.add", () => {
-  expect(d().add(1, "minute")).datetimeToEqual("1950-01-01 14:31");
-  expect(d().add(2, "minutes")).datetimeToEqual("1950-01-01 14:32");
-  expect(d().add(1, "hour")).datetimeToEqual("1950-01-01 15:30");
-  expect(d().add(2, "hours")).datetimeToEqual("1950-01-01 16:30");
-  expect(d().add(1, "day")).datetimeToEqual("1950-01-02 14:30");
-  expect(d().add(2, "days")).datetimeToEqual("1950-01-03 14:30");
-  expect(d().add(1, "week")).datetimeToEqual("1950-01-08 14:30");
-  expect(d().add(2, "weeks")).datetimeToEqual("1950-01-15 14:30");
-  expect(d().add(1, "month")).datetimeToEqual("1950-02-01 14:30");
-  expect(d().add(2, "months")).datetimeToEqual("1950-03-01 14:30");
-  expect(d().add(1, "year")).datetimeToEqual("1951-01-01 14:30");
-  expect(d().add(2, "years")).datetimeToEqual("1952-01-01 14:30");
+  expect(d().add(1, "minute")).datetimeToEqual("1950-06-15 14:31");
+  expect(d().add(2, "minutes")).datetimeToEqual("1950-06-15 14:32");
+  expect(d().add(1, "hour")).datetimeToEqual("1950-06-15 15:30");
+  expect(d().add(2, "hours")).datetimeToEqual("1950-06-15 16:30");
+  expect(d().add(1, "day")).datetimeToEqual("1950-06-16 14:30");
+  expect(d().add(2, "days")).datetimeToEqual("1950-06-17 14:30");
+  expect(d().add(1, "week")).datetimeToEqual("1950-06-22 14:30");
+  expect(d().add(2, "weeks")).datetimeToEqual("1950-06-29 14:30");
+  expect(d().add(1, "month")).datetimeToEqual("1950-07-15 14:30");
+  expect(d().add(2, "months")).datetimeToEqual("1950-08-15 14:30");
+  expect(d().add(1, "year")).datetimeToEqual("1951-06-15 14:30");
+  expect(d().add(2, "years")).datetimeToEqual("1952-06-15 14:30");
 });
 
 test("dateTime.clone", () => {
@@ -108,33 +112,33 @@ test("dateTime.clone", () => {
 
   const dt2 = dt1.clone();
 
-  expect(dt1).datetimeToEqual("1950-01-01 14:30");
-  expect(dt2).datetimeToEqual("1950-01-01 14:30");
+  expect(dt1).datetimeToEqual("1950-06-15 14:30");
+  expect(dt2).datetimeToEqual("1950-06-15 14:30");
 
   {
     dt1.add(1, "minute");
-    expect(dt1).datetimeToEqual("1950-01-01 14:31");
-    expect(dt2).datetimeToEqual("1950-01-01 14:30");
+    expect(dt1).datetimeToEqual("1950-06-15 14:31");
+    expect(dt2).datetimeToEqual("1950-06-15 14:30");
   }
 
   {
     dt2.add(1, "hour");
-    expect(dt1).datetimeToEqual("1950-01-01 14:31");
-    expect(dt2).datetimeToEqual("1950-01-01 15:30");
+    expect(dt1).datetimeToEqual("1950-06-15 14:31");
+    expect(dt2).datetimeToEqual("1950-06-15 15:30");
   }
 });
 
 test("dateTime.dayOfMonth", () => {
-  expect(d("1950-01-01 14:30").dayOfMonth()).toBe(1);
-  expect(d("1950-01-02 14:30").dayOfMonth()).toBe(2);
-  expect(d("1950-01-03 14:30").dayOfMonth()).toBe(3);
+  expect(d("1950-06-15 14:30").dayOfMonth()).toBe(15);
+  expect(d("1950-06-16 14:30").dayOfMonth()).toBe(16);
+  expect(d("1950-06-17 14:30").dayOfMonth()).toBe(17);
 });
 
 test.each(firstDayOfWeekOptions)("dateTime.dayOfWeek", firstDayOfWeek => {
   dateFnsWrapper.configure({ firstDayOfWeek });
-  expect(d("1950-01-01 14:30").dayOfWeek()).toBe(0);
-  expect(d("1950-01-02 14:30").dayOfWeek()).toBe(1);
-  expect(d("1950-01-03 14:30").dayOfWeek()).toBe(2);
+  expect(d("1950-06-15 14:30").dayOfWeek()).toBe(4);
+  expect(d("1950-06-16 14:30").dayOfWeek()).toBe(5);
+  expect(d("1950-06-17 14:30").dayOfWeek()).toBe(6);
 });
 
 test("dateTime.format: English", () => {
@@ -142,7 +146,7 @@ test("dateTime.format: English", () => {
     locale: enUS,
     pm: true
   });
-  expect(d().format("d MMM yyyy")).toBe("1 Jan 1950");
+  expect(d().format("d MMM yyyy")).toBe("15 Jun 1950");
   expect(d().format("HHHH:mm A")).toBe("02:30 PM");
   expect(d().format("HHH:mm A")).toBe("2:30 PM");
   expect(d().format("hh:mm a")).toBe("02:30 PM");
@@ -156,7 +160,7 @@ test("dateTime.format: Russian", () => {
     locale: ru,
     pm: false
   });
-  expect(d().format("d MMM yyyy")).toBe("1 янв. 1950");
+  expect(d().format("d MMM yyyy")).toBe("15 июн. 1950");
   expect(d().format("HHHH:mm A")).toBe("14:30");
   expect(d().format("HHH:mm A")).toBe("14:30");
   expect(d().format("hh:mm a")).toBe("02:30 ПП");
@@ -166,9 +170,9 @@ test("dateTime.format: Russian", () => {
 });
 
 test("dateTime.hours", () => {
-  expect(d("1950-01-01 14:30").hours()).toBe(14);
-  expect(d("1950-01-01 15:30").hours()).toBe(15);
-  expect(d("1950-01-01 16:30").hours()).toBe(16);
+  expect(d("1950-06-15 14:30").hours()).toBe(14);
+  expect(d("1950-06-15 15:30").hours()).toBe(15);
+  expect(d("1950-06-15 16:30").hours()).toBe(16);
 });
 
 test("dateTime.isSameDayOfMonth", () => {
@@ -217,103 +221,121 @@ test("dateTime.isSameYear", () => {
 });
 
 test("dateTime.minutes", () => {
-  expect(d("1950-01-01 14:30").minutes()).toBe(30);
-  expect(d("1950-01-01 14:31").minutes()).toBe(31);
-  expect(d("1950-01-01 14:32").minutes()).toBe(32);
+  expect(d("1950-06-15 14:30").minutes()).toBe(30);
+  expect(d("1950-06-15 14:31").minutes()).toBe(31);
+  expect(d("1950-06-15 14:32").minutes()).toBe(32);
 });
 
 test("dateTime.month", () => {
-  expect(d("1950-01-01 14:30").month()).toBe(0);
-  expect(d("1950-02-01 14:30").month()).toBe(1);
-  expect(d("1950-03-01 14:30").month()).toBe(2);
+  expect(d("1950-01-15 14:30").month()).toBe(0);
+  expect(d("1950-02-15 14:30").month()).toBe(1);
+  expect(d("1950-03-15 14:30").month()).toBe(2);
 });
 
 test("dateTime.setDayOfMonth", () => {
-  expect(d().setDayOfMonth(2)).datetimeToEqual("1950-01-02 14:30");
+  expect(d().setDayOfMonth(2)).datetimeToEqual("1950-06-02 14:30");
 });
 
 test("dateTime.setDayOfWeek", () => {
-  expect(d().setDayOfWeek(6, 0)).datetimeToEqual("1950-01-07 14:30");
-  expect(d().setDayOfWeek(6, 1)).datetimeToEqual("1949-12-31 14:30");
+  expect(d().setDayOfWeek(6, 0)).datetimeToEqual("1950-06-17 14:30");
+  expect(d().setDayOfWeek(6, 1)).datetimeToEqual("1950-06-17 14:30");
 });
 
 test("dateTime.setDayOfWeekLocale", () => {
   {
     dateFnsWrapper.configure({ firstDayOfWeek: 0 });
-    expect(d().setDayOfWeekLocale(6)).datetimeToEqual("1950-01-07 14:30");
+    expect(d().setDayOfWeekLocale(6)).datetimeToEqual("1950-06-17 14:30");
   }
 
   {
     dateFnsWrapper.configure({ firstDayOfWeek: 1 });
-    expect(d().setDayOfWeekLocale(6)).datetimeToEqual("1949-12-31 14:30");
+    expect(d().setDayOfWeekLocale(6)).datetimeToEqual("1950-06-17 14:30");
   }
 });
 
 test("dateTime.setHours", () => {
-  expect(d().setHours(15)).datetimeToEqual("1950-01-01 15:30");
+  expect(d().setHours(15)).datetimeToEqual("1950-06-15 15:30");
 });
 
 test("dateTime.setMinutes", () => {
-  expect(d().setMinutes(31)).datetimeToEqual("1950-01-01 14:31");
+  expect(d().setMinutes(31)).datetimeToEqual("1950-06-15 14:31");
 });
 
 test("dateTime.setMonth", () => {
-  expect(d().setMonth(1)).datetimeToEqual("1950-02-01 14:30");
+  expect(d().setMonth(1)).datetimeToEqual("1950-02-15 14:30");
+});
+
+test("dateTime.setStartOfHour", () => {
+  expect(d().setStartOfHour()).datetimeToEqual("1950-06-15 14:00");
+});
+
+test("dateTime.setStartOfDay", () => {
+  expect(d().setStartOfDay()).datetimeToEqual("1950-06-15 00:00");
+});
+
+test("dateTime.setStartOfMonth", () => {
+  expect(d().setStartOfMonth()).datetimeToEqual("1950-06-01 00:00");
 });
 
 test("dateTime.setStartOfWeek", () => {
-  expect(d().setStartOfWeek(0)).datetimeToEqual("1950-01-01 14:30");
-  expect(d().setStartOfWeek(1)).datetimeToEqual("1949-12-26 14:30");
+  expect(d().setStartOfWeek(0)).datetimeToEqual("1950-06-11 00:00");
+  expect(d().setStartOfWeek(1)).datetimeToEqual("1950-06-12 00:00");
 });
 
 test("dateTime.setStartOfWeekLocale", () => {
   {
     dateFnsWrapper.configure({ firstDayOfWeek: 0 });
-    expect(d().setStartOfWeekLocale()).datetimeToEqual("1950-01-01 14:30");
+    expect(d().setStartOfWeekLocale()).datetimeToEqual("1950-06-11 00:00");
   }
 
   {
     dateFnsWrapper.configure({ firstDayOfWeek: 1 });
-    expect(d().setStartOfWeekLocale()).datetimeToEqual("1949-12-26 14:30");
+    expect(d().setStartOfWeekLocale()).datetimeToEqual("1950-06-12 00:00");
   }
 });
 
 test("dateTime.setYear", () => {
-  expect(d().setYear(1951)).datetimeToEqual("1951-01-01 14:30");
+  expect(d().setYear(1951)).datetimeToEqual("1951-06-15 14:30");
 });
 
 test("dateTime.sub", () => {
-  expect(d().sub(1, "minute")).datetimeToEqual("1950-01-01 14:29");
-  expect(d().sub(2, "minutes")).datetimeToEqual("1950-01-01 14:28");
-  expect(d().sub(1, "hour")).datetimeToEqual("1950-01-01 13:30");
-  expect(d().sub(2, "hours")).datetimeToEqual("1950-01-01 12:30");
-  expect(d().sub(1, "day")).datetimeToEqual("1949-12-31 14:30");
-  expect(d().sub(2, "days")).datetimeToEqual("1949-12-30 14:30");
-  expect(d().sub(1, "week")).datetimeToEqual("1949-12-25 14:30");
-  expect(d().sub(2, "weeks")).datetimeToEqual("1949-12-18 14:30");
-  expect(d().sub(1, "month")).datetimeToEqual("1949-12-01 14:30");
-  expect(d().sub(2, "months")).datetimeToEqual("1949-11-01 14:30");
-  expect(d().sub(1, "year")).datetimeToEqual("1949-01-01 14:30");
-  expect(d().sub(2, "years")).datetimeToEqual("1948-01-01 14:30");
+  expect(d().sub(1, "minute")).datetimeToEqual("1950-06-15 14:29");
+  expect(d().sub(2, "minutes")).datetimeToEqual("1950-06-15 14:28");
+  expect(d().sub(1, "hour")).datetimeToEqual("1950-06-15 13:30");
+  expect(d().sub(2, "hours")).datetimeToEqual("1950-06-15 12:30");
+  expect(d().sub(1, "day")).datetimeToEqual("1950-06-14 14:30");
+  expect(d().sub(2, "days")).datetimeToEqual("1950-06-13 14:30");
+  expect(d().sub(1, "week")).datetimeToEqual("1950-06-08 14:30");
+  expect(d().sub(2, "weeks")).datetimeToEqual("1950-06-01 14:30");
+  expect(d().sub(1, "month")).datetimeToEqual("1950-05-15 14:30");
+  expect(d().sub(2, "months")).datetimeToEqual("1950-04-15 14:30");
+  expect(d().sub(1, "year")).datetimeToEqual("1949-06-15 14:30");
+  expect(d().sub(2, "years")).datetimeToEqual("1948-06-15 14:30");
 });
 
 test("dateTime.toDate", () => {
-  expect(d().toDate()).toStrictEqual(new Date("1950-01-01 14:30"));
+  expect(d().toDate()).toStrictEqual(new Date("1950-06-15 14:30"));
 });
 
 test.each(pmOptions)("dateTime.toString", pm => {
   dateFnsWrapper.configure({ pm });
-  expect(d().toString()).toBe("1950-01-01 14:30");
+  expect(d().toString()).toBe("1950-06-15 14:30");
 });
 
 test("dateTime.toTime", () => {
-  const expected = new Date("1950-01-01 14:30").getTime() / 1000;
+  const expected = new Date("1950-06-15 14:30").getTime();
 
   expect(d().toTime()).toStrictEqual(expected);
 });
 
+test("dateTime.toTimeSec", () => {
+  const expected = new Date("1950-06-15 14:30").getTime() / 1000;
+
+  expect(d().toTimeSec()).toStrictEqual(expected);
+});
+
 test("dateTime.year", () => {
-  expect(d("1950-01-01 14:30").year()).toBe(1950);
-  expect(d("1951-01-01 14:30").year()).toBe(1951);
-  expect(d("1952-01-01 14:30").year()).toBe(1952);
+  expect(d("1950-06-15 14:30").year()).toBe(1950);
+  expect(d("1951-06-15 14:30").year()).toBe(1951);
+  expect(d("1952-06-15 14:30").year()).toBe(1952);
 });

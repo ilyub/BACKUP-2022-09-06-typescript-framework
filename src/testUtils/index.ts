@@ -209,7 +209,7 @@ export function datetimeToEqual(
 ): testUtils.ExpectReturnType {
   assert.instance(got, dateFnsWrapper.DateTime);
 
-  return got.toTime() === new Date(expected).getTime() / 1000
+  return got.toTime() === new Date(expected).getTime()
     ? {
         message: (): string => `Expected date not to be "${expected}"`,
         pass: true

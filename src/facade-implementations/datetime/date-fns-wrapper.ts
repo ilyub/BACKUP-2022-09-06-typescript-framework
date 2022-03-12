@@ -20,6 +20,10 @@ import {
   setMinutes,
   setMonth,
   setYear,
+  startOfDay,
+  startOfHour,
+  startOfMonth,
+  startOfWeek,
   sub
 } from "date-fns"; // eslint-disable-line import/no-duplicates
 import enUS from "date-fns/locale/en-US"; // eslint-disable-line import/no-duplicates
@@ -33,7 +37,7 @@ import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
 import * as is from "@skylib/functions/dist/guards";
 import { onDemand } from "@skylib/functions/dist/helpers";
 import * as o from "@skylib/functions/dist/object";
-import type { DeepReadonly } from "@skylib/functions/dist/types/core";
+import type { DeepReadonly, strings } from "@skylib/functions/dist/types/core";
 
 export interface Configuration {
   readonly firstDayOfWeek: FirstDayOfWeek;
@@ -75,6 +79,9 @@ export const implementation: Facade = {
     return new DateTime().toString();
   },
   time() {
+    return Date.now();
+  },
+  timeSec() {
     return Date.now() / 1000;
   },
   validate(dt: string) {
@@ -244,14 +251,36 @@ export class DateTime implements DateTimeInterface {
     return this;
   }
 
+  public setStartOfDay(): DateTimeInterface {
+    this.value = startOfDay(this.value);
+
+    return this;
+  }
+
+  public setStartOfHour(): DateTimeInterface {
+    this.value = startOfHour(this.value);
+
+    return this;
+  }
+
+  public setStartOfMonth(): DateTimeInterface {
+    this.value = startOfMonth(this.value);
+
+    return this;
+  }
+
   public setStartOfWeek(weekStartsOn: FirstDayOfWeek): DateTimeInterface {
-    return this.setDayOfWeek(weekStartsOn, weekStartsOn);
+    this.value = startOfWeek(this.value, { weekStartsOn });
+
+    return this;
   }
 
   public setStartOfWeekLocale(): DateTimeInterface {
     const weekStartsOn = moduleConfig.firstDayOfWeek;
 
-    return this.setDayOfWeek(weekStartsOn, weekStartsOn);
+    this.value = startOfWeek(this.value, { weekStartsOn });
+
+    return this;
   }
 
   public setYear(year: number): DateTimeInterface {
@@ -313,6 +342,10 @@ export class DateTime implements DateTimeInterface {
   }
 
   public toTime(): number {
+    return this.value.getTime();
+  }
+
+  public toTimeSec(): number {
     return this.value.getTime() / 1000;
   }
 
@@ -335,7 +368,7 @@ export class DateTime implements DateTimeInterface {
 |*******************************************************************************
 |*/
 
-const formatStrings: readonly string[] = [
+const formatStrings: strings = [
   "yyyy-M-d h:m:s a",
   "yyyy-M-d H:m:s",
   "yyyy-M-d h:m a",
