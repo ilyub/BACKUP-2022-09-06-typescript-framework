@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.implementation = exports.getConfiguration = exports.configure = void 0;
 const tslib_1 = require("tslib");
-const axios_1 = (0, tslib_1.__importDefault)(require("axios"));
-const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
+const axios_1 = tslib_1.__importDefault(require("axios"));
+const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
 /**
  * Configures plugin.
  *

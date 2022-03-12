@@ -22,7 +22,7 @@ ___
 
 ### wordForms
 
-• `Readonly` **wordForms**: `Readonly`<`IndexedObject`<readonly `string`[]\>\>
+• `Readonly` **wordForms**: `Readonly`<`IndexedObject`<`strings`\>\>
 
 ___
 

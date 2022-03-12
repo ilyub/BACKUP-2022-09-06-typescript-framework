@@ -4,8 +4,8 @@ exports.implementation = exports.getConfiguration = exports.configure = exports.
 const tslib_1 = require("tslib");
 const progressReporter_1 = require("@skylib/facades/dist/progressReporter");
 const showAlert_1 = require("@skylib/facades/dist/showAlert");
-const fn = (0, tslib_1.__importStar)(require("@skylib/functions/dist/function"));
-const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
+const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
+const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
 exports.handlers = o.freeze({
     error(error) {
         throw error;

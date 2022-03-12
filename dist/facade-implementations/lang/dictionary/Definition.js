@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Definition = void 0;
 const tslib_1 = require("tslib");
-const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
-const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
-const fn = (0, tslib_1.__importStar)(require("@skylib/functions/dist/function"));
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
-const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
-const regexp = (0, tslib_1.__importStar)(require("@skylib/functions/dist/regexp"));
+const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
+const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
+const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
+const regexp = tslib_1.__importStar(require("@skylib/functions/dist/regexp"));
 class Definition {
     /**
      * Creates class instance.

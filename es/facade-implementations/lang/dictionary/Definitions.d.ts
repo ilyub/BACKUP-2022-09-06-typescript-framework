@@ -1,5 +1,5 @@
 import type { Context, Transforms, Word } from "@skylib/facades/es/lang";
-import type { ReadonlyIndexedObject } from "@skylib/functions/es/types/core";
+import type { ReadonlyIndexedObject, strings } from "@skylib/functions/es/types/core";
 import { Definition } from ".";
 import type { PluralReduce, RawLanguage, WordInfo } from "./types";
 export declare class Definitions {
@@ -20,7 +20,7 @@ export declare class Definitions {
      * @param replacements - Replacements.
      * @returns Word.
      */
-    get(key: string, context: Context | undefined, forms: string | readonly string[], count: number, replacements: ReadonlyMap<string, string>): WordInfo;
+    get(key: string, context: Context | undefined, forms: strings | string, count: number, replacements: ReadonlyMap<string, string>): WordInfo;
     /**
      * Checks if dictionary has word.
      *
@@ -28,7 +28,7 @@ export declare class Definitions {
      * @returns _True_ if dictionary has word, _false_ otherwise.
      */
     has(key: string): key is Transforms<Word>;
-    protected wordForms: ReadonlyIndexedObject<readonly string[]>;
+    protected wordForms: ReadonlyIndexedObject<strings>;
     protected words: ReadonlyIndexedObject<Definition>;
 }
 //# sourceMappingURL=Definitions.d.ts.map

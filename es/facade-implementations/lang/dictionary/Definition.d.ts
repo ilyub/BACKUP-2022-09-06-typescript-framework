@@ -1,5 +1,5 @@
 import type { Context } from "@skylib/facades/es/lang";
-import type { NumStr, ReadonlyIndexedObject } from "@skylib/functions/es/types/core";
+import type { NumStr, ReadonlyIndexedObject, strings } from "@skylib/functions/es/types/core";
 import type { Definitions } from ".";
 import type { RawDefinition, WordInfo } from "./types";
 export declare class Definition {
@@ -21,15 +21,15 @@ export declare class Definition {
      * @param replacements - Replacements.
      * @returns Word.
      */
-    get(owner: Definitions, context: Context | undefined, forms: readonly string[], count: number, replacements: ReadonlyMap<string, string>): WordInfo;
+    get(owner: Definitions, context: Context | undefined, forms: strings, count: number, replacements: ReadonlyMap<string, string>): WordInfo;
     protected contexts: ReadonlyIndexedObject<NumStr>;
     protected id: string;
-    protected rulesRef: ReadonlyArray<readonly string[]>;
-    protected rulesRefDependent: ReadonlyArray<readonly string[]>;
-    protected rulesRefSecondary: ReadonlyArray<readonly string[]>;
-    protected rulesVal: ReadonlyArray<readonly string[]>;
-    protected rulesWord: ReadonlyArray<readonly string[]>;
-    protected rulesWordSecondary: ReadonlyArray<readonly string[]>;
+    protected rulesRef: readonly strings[];
+    protected rulesRefDependent: readonly strings[];
+    protected rulesRefSecondary: readonly strings[];
+    protected rulesVal: readonly strings[];
+    protected rulesWord: readonly strings[];
+    protected rulesWordSecondary: readonly strings[];
     protected sub: Definition | undefined;
     protected subs: ReadonlyIndexedObject<Definition>;
     protected value: string;

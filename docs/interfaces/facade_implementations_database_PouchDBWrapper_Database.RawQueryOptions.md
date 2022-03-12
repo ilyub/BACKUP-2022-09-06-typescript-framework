@@ -23,7 +23,7 @@
 
 ### conditions
 
-• `Readonly` **conditions**: `Readonly`<`Record`<`string`, `Condition`\>\>
+• `Readonly` **conditions**: `Conditions`<`string`\>
 
 ___
 

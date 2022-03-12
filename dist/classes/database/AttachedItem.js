@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AttachedItem = exports.isAttachedItemDocs = exports.isAttachedItemDoc = exports.isPutAttachedItemDocs = exports.isPutAttachedItemDoc = void 0;
 const tslib_1 = require("tslib");
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
-const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
 const Item_1 = require("./Item");
 exports.isPutAttachedItemDoc = is.factory(is.object.of, {
     parentDoc: Item_1.isItemDoc

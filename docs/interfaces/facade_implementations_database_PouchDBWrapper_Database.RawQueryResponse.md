@@ -23,7 +23,7 @@ ___
 
 ### docs
 
-• `Readonly` **docs**: readonly `unknown`[]
+• `Readonly` **docs**: `unknowns`
 
 ___
 

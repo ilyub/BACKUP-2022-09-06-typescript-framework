@@ -3,11 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DateTime = exports.implementation = exports.getConfiguration = exports.configure = void 0;
 const tslib_1 = require("tslib");
 const date_fns_1 = require("date-fns"); // eslint-disable-line import/no-duplicates
-const en_US_1 = (0, tslib_1.__importDefault)(require("date-fns/locale/en-US")); // eslint-disable-line import/no-duplicates
+const en_US_1 = tslib_1.__importDefault(require("date-fns/locale/en-US")); // eslint-disable-line import/no-duplicates
 const reactiveStorage_1 = require("@skylib/facades/dist/reactiveStorage");
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const helpers_1 = require("@skylib/functions/dist/helpers");
-const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
+const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
 /**
  * Configures plugin.
  *
@@ -34,6 +34,9 @@ exports.implementation = {
         return new DateTime().toString();
     },
     time() {
+        return Date.now();
+    },
+    timeSec() {
         return Date.now() / 1000;
     },
     validate(dt) {
@@ -170,12 +173,26 @@ class DateTime {
         this.value = (0, date_fns_1.setMonth)(this.value, month);
         return this;
     }
+    setStartOfDay() {
+        this.value = (0, date_fns_1.startOfDay)(this.value);
+        return this;
+    }
+    setStartOfHour() {
+        this.value = (0, date_fns_1.startOfHour)(this.value);
+        return this;
+    }
+    setStartOfMonth() {
+        this.value = (0, date_fns_1.startOfMonth)(this.value);
+        return this;
+    }
     setStartOfWeek(weekStartsOn) {
-        return this.setDayOfWeek(weekStartsOn, weekStartsOn);
+        this.value = (0, date_fns_1.startOfWeek)(this.value, { weekStartsOn });
+        return this;
     }
     setStartOfWeekLocale() {
         const weekStartsOn = moduleConfig.firstDayOfWeek;
-        return this.setDayOfWeek(weekStartsOn, weekStartsOn);
+        this.value = (0, date_fns_1.startOfWeek)(this.value, { weekStartsOn });
+        return this;
     }
     setYear(year) {
         this.value = (0, date_fns_1.setYear)(this.value, year);
@@ -218,6 +235,9 @@ class DateTime {
         return (0, date_fns_1.format)(this.value, "yyyy-MM-dd HH:mm");
     }
     toTime() {
+        return this.value.getTime();
+    }
+    toTimeSec() {
         return this.value.getTime() / 1000;
     }
     year() {

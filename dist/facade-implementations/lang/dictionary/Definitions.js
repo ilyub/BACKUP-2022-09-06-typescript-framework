@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Definitions = void 0;
 const tslib_1 = require("tslib");
-const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
-const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
-const s = (0, tslib_1.__importStar)(require("@skylib/functions/dist/string"));
+const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
+const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
 const _1 = require(".");
 class Definitions {
     /**

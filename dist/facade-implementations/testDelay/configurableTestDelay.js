@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.moduleConfig = exports.getConfiguration = exports.configure = exports.implementation = void 0;
 const tslib_1 = require("tslib");
 const helpers_1 = require("@skylib/functions/dist/helpers");
-const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
+const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
 const implementation = async () => {
     if (exports.moduleConfig.enabled)
         await (0, helpers_1.wait)(exports.moduleConfig.timeout);

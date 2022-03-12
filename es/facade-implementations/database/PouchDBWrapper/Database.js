@@ -3,6 +3,7 @@ import * as _ from "lodash-es";
 import { collate } from "pouchdb-collate";
 import sha256 from "sha256";
 import { uniqueAttachedSubscriptionId, uniqueSubscriptionId } from "@skylib/facades/es/database";
+import { datetime } from "@skylib/facades/es/datetime";
 import { handlePromise } from "@skylib/facades/es/handlePromise";
 import { reactiveStorage } from "@skylib/facades/es/reactiveStorage";
 import { uniqueId } from "@skylib/facades/es/uniqueId";
@@ -427,7 +428,8 @@ export class Database {
         const group3 = descending ? 2 : 3;
         const group4 = descending ? 1 : 4;
         const idParams = [
-            conds,
+            conds.toEmit,
+            conds.toSettle,
             sortBy,
             descending,
             this.options.caseSensitiveSorting
@@ -521,7 +523,8 @@ export class Database {
         const group3 = descending ? 2 : 3;
         const group4 = descending ? 1 : 4;
         const idParams = [
-            conds,
+            conds.toEmit,
+            conds.toSettle,
             parentConds,
             sortBy,
             descending,
@@ -758,6 +761,7 @@ export class Database {
         const result = reactiveStorage({
             loaded: false,
             loading: true,
+            refresh: fn.noop,
             unsubscribe: fn.noop
         });
         handlePromise.silent(this.reactiveFactoryGetAsync(request, handler, result));
@@ -776,6 +780,7 @@ export class Database {
             result !== null && result !== void 0 ? result : reactiveStorage({
                 loaded: false,
                 loading: true,
+                refresh: fn.noop,
                 unsubscribe: fn.noop
             });
         o.assign(result, {
@@ -805,6 +810,7 @@ export class Database {
         const result = reactiveStorage({
             loaded: false,
             loading: true,
+            refresh: fn.noop,
             unsubscribe: fn.noop
         });
         handlePromise.silent(this.reactiveFactoryGetAttachedAsync(request, handler, result));
@@ -823,6 +829,7 @@ export class Database {
             result !== null && result !== void 0 ? result : reactiveStorage({
                 loaded: false,
                 loading: true,
+                refresh: fn.noop,
                 unsubscribe: fn.noop
             });
         o.assign(result, {
@@ -852,6 +859,7 @@ export class Database {
         const result = reactiveStorage({
             loaded: false,
             loading: true,
+            refresh: fn.noop,
             unsubscribe: fn.noop
         });
         handlePromise.silent(this.reactiveFactoryQueryAsync(request, config, result));
@@ -871,6 +879,7 @@ export class Database {
             result !== null && result !== void 0 ? result : reactiveStorage({
                 loaded: false,
                 loading: true,
+                refresh: fn.noop,
                 unsubscribe: fn.noop
             });
         o.assign(result, {
@@ -886,7 +895,6 @@ export class Database {
         assert.toBeTrue(result.loaded);
         const observer = reactiveStorage.watch(config, refresh);
         const subscription = this.subscribe(doc => {
-            // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
             if (config.updateFn && config.updateFn(doc))
                 refresh();
         });
@@ -924,6 +932,7 @@ export class Database {
         const result = reactiveStorage({
             loaded: false,
             loading: true,
+            refresh: fn.noop,
             unsubscribe: fn.noop
         });
         handlePromise.silent(this.reactiveFactoryQueryAttachedAsync(request, config, result));
@@ -943,6 +952,7 @@ export class Database {
             result !== null && result !== void 0 ? result : reactiveStorage({
                 loaded: false,
                 loading: true,
+                refresh: fn.noop,
                 unsubscribe: fn.noop
             });
         o.assign(result, {
@@ -958,7 +968,6 @@ export class Database {
         assert.toBeTrue(result.loaded);
         const observer = reactiveStorage.watch(config, refresh);
         const subscription = this.subscribeAttached(doc => {
-            // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
             if (config.updateFn && config.updateFn(doc))
                 refresh();
         });
@@ -1145,56 +1154,127 @@ function and(conditions) {
  * @returns Condition strings.
  */
 function condsToStr(source, conditions) {
+    conditions = is.array(conditions) ? conditions : [conditions];
     const toEmit = [];
     const toOutput = [];
     const toSettle = [];
-    for (const [property, condition] of Object.entries(conditions))
-        for (const [operator, value] of o.entries(condition))
-            switch (operator) {
-                case "dgt":
-                    assert.number(value);
-                    {
-                        const sign = value >= 0 ? "+" : "-";
-                        const abs = Math.abs(value);
-                        toEmit.push(`${source}.${property}`);
-                        toEmit.push(`(new Date(${source}.${property}).getTime() / 1000 > Date.now() / 1000 ${sign} ${abs} - 25 * 3600)`);
-                        toOutput.push(`(new Date(${source}.${property}).getTime() / 1000 > Date.now() / 1000 ${sign} ${abs})`);
-                        toSettle.push(`(new Date(${source}.${property}).getTime() / 1000 < Date.now() / 1000 ${sign} ${abs} - 25 * 3600)`);
-                    }
-                    break;
-                case "dlt":
-                    assert.number(value);
-                    {
-                        const sign = value >= 0 ? "+" : "-";
-                        const abs = Math.abs(value);
-                        toEmit.push(`${source}.${property}`);
-                        toOutput.push(`(new Date(${source}.${property}).getTime() / 1000 < Date.now() / 1000 ${sign} ${abs})`);
-                        toSettle.push(`(new Date(${source}.${property}).getTime() / 1000 < Date.now() / 1000 ${sign} ${abs} - 25 * 3600)`);
-                    }
-                    break;
-                case "eq":
-                    toEmit.push(`(${source}.${property} === ${escapeForJs(value)})`);
-                    break;
-                case "gt":
-                    toEmit.push(`(${source}.${property} > ${escapeForJs(value)})`);
-                    break;
-                case "gte":
-                    toEmit.push(`(${source}.${property} >= ${escapeForJs(value)})`);
-                    break;
-                case "lt":
-                    toEmit.push(`(${source}.${property} < ${escapeForJs(value)})`);
-                    break;
-                case "lte":
-                    toEmit.push(`(${source}.${property} <= ${escapeForJs(value)})`);
-                    break;
-                case "neq":
-                    toEmit.push(`(${source}.${property} !== ${escapeForJs(value)})`);
+    for (const conditionsGroup of conditions)
+        for (const [key, fieldConditions] of Object.entries(conditionsGroup)) {
+            const dest = `${source}.${key}`;
+            const destDelta = `new Date(${dest}).getTime() - Date.now()`;
+            if ("isSet" in fieldConditions)
+                toEmit.push(fieldConditions.isSet
+                    ? `(${dest} !== null && ${dest} !== undefined)`
+                    : `(${dest} === null || ${dest} === undefined)`);
+            if ("eq" in fieldConditions)
+                toEmit.push(`(${dest} === ${escapeForJs(fieldConditions.eq)})`);
+            if ("neq" in fieldConditions)
+                toEmit.push(`(${dest} !== ${escapeForJs(fieldConditions.neq)})`);
+            if ("gt" in fieldConditions)
+                toEmit.push(`(${dest} > ${escapeForJs(fieldConditions.gt)})`);
+            if ("gte" in fieldConditions)
+                toEmit.push(`(${dest} >= ${escapeForJs(fieldConditions.gte)})`);
+            if ("lt" in fieldConditions)
+                toEmit.push(`(${dest} < ${escapeForJs(fieldConditions.lt)})`);
+            if ("lte" in fieldConditions)
+                toEmit.push(`(${dest} <= ${escapeForJs(fieldConditions.lte)})`);
+            if ("dateEq" in fieldConditions) {
+                const value = dateValue(fieldConditions.dateEq);
+                const delta = dateDelta(value);
+                toEmit.push(`(${dest} && ${destDelta} > ${delta})`);
+                toSettle.push(`(${destDelta} < ${delta})`);
+                toOutput.push(`(${dest} === ${escapeForJs(value)})`);
             }
+            if ("dateNeq" in fieldConditions) {
+                const value = dateValue(fieldConditions.dateNeq);
+                const delta = dateDelta(value);
+                toEmit.push(`(${dest} && ${destDelta} > ${delta})`);
+                toSettle.push(`(${destDelta} < ${delta})`);
+                toOutput.push(`(${dest} !== ${escapeForJs(value)})`);
+            }
+            if ("dateGt" in fieldConditions) {
+                const value = dateValue(fieldConditions.dateGt);
+                const delta = dateDelta(value);
+                toEmit.push(`(${dest} && ${destDelta} > ${delta})`);
+                toSettle.push(`(${destDelta} < ${delta})`);
+                toOutput.push(`(${dest} > ${escapeForJs(value)})`);
+            }
+            if ("dateGte" in fieldConditions) {
+                const value = dateValue(fieldConditions.dateGte);
+                const delta = dateDelta(value);
+                toEmit.push(`(${dest} && ${destDelta} > ${delta})`);
+                toSettle.push(`(${destDelta} < ${delta})`);
+                toOutput.push(`(${dest} >= ${escapeForJs(value)})`);
+            }
+            if ("dateLt" in fieldConditions) {
+                const value = dateValue(fieldConditions.dateLt);
+                const delta = dateDelta(value);
+                toEmit.push(`${dest}`);
+                toSettle.push(`(${destDelta} < ${delta})`);
+                toOutput.push(`(${dest} < ${escapeForJs(value)})`);
+            }
+            if ("dateLte" in fieldConditions) {
+                const value = dateValue(fieldConditions.dateLte);
+                const delta = dateDelta(value);
+                toEmit.push(`${dest}`);
+                toSettle.push(`(${destDelta} < ${delta})`);
+                toOutput.push(`(${dest} <= ${escapeForJs(value)})`);
+            }
+        }
     return {
         toEmit: and(toEmit),
         toOutput: and(toOutput),
         toSettle: and(toSettle)
     };
+}
+// eslint-disable-next-line @skylib/require-jsdoc
+function dateDelta(date) {
+    return num.round.step(datetime.create(date).toTime() - datetime.time() - 50 * 3600 * 1000, 3600 * 1000);
+}
+// eslint-disable-next-line @skylib/require-jsdoc
+function dateValue(date) {
+    if (is.string(date))
+        return date;
+    if (date.length === 1)
+        date = [date[0], "+", 0, "minutes"];
+    const [type, sign, value, unit] = date;
+    const result = datetime.create();
+    switch (type) {
+        case "endOfDay":
+            result.setStartOfDay().add(1, "day");
+            break;
+        case "endOfHour":
+            result.setStartOfHour().add(1, "hour");
+            break;
+        case "endOfMonth":
+            result.setStartOfMonth().add(1, "month");
+            break;
+        case "endOfWeek":
+            result.setStartOfWeekLocale().add(1, "week");
+            break;
+        case "now":
+            break;
+        case "startOfDay":
+            result.setStartOfDay();
+            break;
+        case "startOfHour":
+            result.setStartOfHour();
+            break;
+        case "startOfMonth":
+            result.setStartOfMonth();
+            break;
+        case "startOfWeek":
+            result.setStartOfWeekLocale();
+            break;
+    }
+    switch (sign) {
+        case "-":
+            result.sub(value, unit);
+            break;
+        case "+":
+            result.add(value, unit);
+    }
+    return result.toString();
 }
 /**
  * Escapes value for use in map/reduce functions.

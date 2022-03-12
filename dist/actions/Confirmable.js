@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Confirmable = void 0;
 const tslib_1 = require("tslib");
 const showConfirm_1 = require("@skylib/facades/dist/showConfirm");
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const Action_1 = require("./Action");
 class Confirmable extends Action_1.Action {
     /**

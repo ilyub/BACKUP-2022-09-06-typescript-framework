@@ -22,7 +22,7 @@ Reactive request.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `conditions?` | `Readonly`<`Record`<`string`, `Condition`\>\> | Conditions. |
+| `conditions?` | `Conditions`<`string`\> | Conditions. |
 | `options?` | `QueryOptions` | Options. |
 
 #### Returns

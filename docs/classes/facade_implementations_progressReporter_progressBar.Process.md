@@ -160,9 +160,15 @@ ___
 
 ### update
 
-▸ `Static` `Protected` **update**(): `void`
+▸ `Static` `Protected` **update**(`this`): `void`
 
 Updates progress bar state.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `this` | `void` | This argument. |
 
 #### Returns
 

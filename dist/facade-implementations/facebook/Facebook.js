@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Facebook = void 0;
 const tslib_1 = require("tslib");
-const jquery_1 = (0, tslib_1.__importDefault)(require("jquery"));
-const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
-const fn = (0, tslib_1.__importStar)(require("@skylib/functions/dist/function"));
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
+const jquery_1 = tslib_1.__importDefault(require("jquery"));
+const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
+const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 class Facebook {
     /**
      * Creates class instance.

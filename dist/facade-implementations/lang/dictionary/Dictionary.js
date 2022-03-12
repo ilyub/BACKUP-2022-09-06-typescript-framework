@@ -3,13 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Dictionary = void 0;
 const tslib_1 = require("tslib");
 const reactiveStorage_1 = require("@skylib/facades/dist/reactiveStorage");
-const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
-const cast = (0, tslib_1.__importStar)(require("@skylib/functions/dist/converters"));
-const fn = (0, tslib_1.__importStar)(require("@skylib/functions/dist/function"));
+const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
+const cast = tslib_1.__importStar(require("@skylib/functions/dist/converters"));
+const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
 const helpers_1 = require("@skylib/functions/dist/helpers");
-const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
-const reflect = (0, tslib_1.__importStar)(require("@skylib/functions/dist/reflect"));
-const s = (0, tslib_1.__importStar)(require("@skylib/functions/dist/string"));
+const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
+const reflect = tslib_1.__importStar(require("@skylib/functions/dist/reflect"));
+const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
 // eslint-disable-next-line import/export
 class Dictionary {
     /**

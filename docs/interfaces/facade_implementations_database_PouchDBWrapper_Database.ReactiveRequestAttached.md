@@ -22,8 +22,8 @@ Reactive request.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `conditions?` | `Readonly`<`Record`<`string`, `Condition`\>\> | Conditions. |
-| `parentConditions?` | `Readonly`<`Record`<`string`, `Condition`\>\> | Parent conditions. |
+| `conditions?` | `Conditions`<`string`\> | Conditions. |
+| `parentConditions?` | `Conditions`<`string`\> | Parent conditions. |
 | `options?` | `QueryOptions` | Options. |
 
 #### Returns

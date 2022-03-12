@@ -24,7 +24,7 @@
 
 ### conditions
 
-• `Readonly` **conditions**: `Readonly`<`Record`<`string`, `Condition`\>\>
+• `Readonly` **conditions**: `Conditions`<`string`\>
 
 #### Inherited from
 
@@ -54,7 +54,7 @@ ___
 
 ### parentConditions
 
-• `Readonly` **parentConditions**: `Readonly`<`Record`<`string`, `Condition`\>\>
+• `Readonly` **parentConditions**: `Conditions`<`string`\>
 
 ___
 

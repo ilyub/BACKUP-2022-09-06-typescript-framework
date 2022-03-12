@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.datetimeToEqual = exports.jestSetupDom = exports.jestSetupDictionary = exports.jestSetup = exports.jestResetDom = exports.jestResetDictionary = exports.jestReset = void 0;
 const tslib_1 = require("tslib");
-const en_US_1 = (0, tslib_1.__importDefault)(require("date-fns/locale/en-US"));
+const en_US_1 = tslib_1.__importDefault(require("date-fns/locale/en-US"));
 const compare_1 = require("@skylib/facades/dist/compare");
 const database_1 = require("@skylib/facades/dist/database");
 const datetime_1 = require("@skylib/facades/dist/datetime");
@@ -19,23 +19,23 @@ const showAlert_1 = require("@skylib/facades/dist/showAlert");
 const showConfirm_1 = require("@skylib/facades/dist/showConfirm");
 const testDelay_1 = require("@skylib/facades/dist/testDelay");
 const uniqueId_1 = require("@skylib/facades/dist/uniqueId");
-const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
-const naturalCompareWrapper = (0, tslib_1.__importStar)(require("../facade-implementations/compare/natural-compare-wrapper"));
+const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
+const naturalCompareWrapper = tslib_1.__importStar(require("../facade-implementations/compare/natural-compare-wrapper"));
 const PouchDBWrapper_1 = require("../facade-implementations/database/PouchDBWrapper");
-const dateFnsWrapper = (0, tslib_1.__importStar)(require("../facade-implementations/datetime/date-fns-wrapper"));
+const dateFnsWrapper = tslib_1.__importStar(require("../facade-implementations/datetime/date-fns-wrapper"));
 const Facebook_1 = require("../facade-implementations/facebook/Facebook");
 const lorem_ipsum_wrapper_1 = require("../facade-implementations/faker/lorem-ipsum-wrapper");
 const Google_1 = require("../facade-implementations/google/Google");
-const promiseHandler = (0, tslib_1.__importStar)(require("../facade-implementations/handlePromise/promiseHandler"));
-const axiosWrapper = (0, tslib_1.__importStar)(require("../facade-implementations/httpRequest/axios-wrapper"));
-const lunrWrapper = (0, tslib_1.__importStar)(require("../facade-implementations/inlineSearch/lunr-wrapper"));
+const promiseHandler = tslib_1.__importStar(require("../facade-implementations/handlePromise/promiseHandler"));
+const axiosWrapper = tslib_1.__importStar(require("../facade-implementations/httpRequest/axios-wrapper"));
+const lunrWrapper = tslib_1.__importStar(require("../facade-implementations/inlineSearch/lunr-wrapper"));
 const dictionary_1 = require("../facade-implementations/lang/dictionary");
-const progressBar = (0, tslib_1.__importStar)(require("../facade-implementations/progressReporter/progressBar"));
-const reflectStorage = (0, tslib_1.__importStar)(require("../facade-implementations/reactiveStorage/reflectStorage"));
-const jsAlert = (0, tslib_1.__importStar)(require("../facade-implementations/showAlert/jsAlert"));
-const jsConfirm = (0, tslib_1.__importStar)(require("../facade-implementations/showConfirm/jsConfirm"));
-const configurableTestDelay = (0, tslib_1.__importStar)(require("../facade-implementations/testDelay/configurableTestDelay"));
-const uuidWrapper = (0, tslib_1.__importStar)(require("../facade-implementations/uniqueId/uuidWrapper"));
+const progressBar = tslib_1.__importStar(require("../facade-implementations/progressReporter/progressBar"));
+const reflectStorage = tslib_1.__importStar(require("../facade-implementations/reactiveStorage/reflectStorage"));
+const jsAlert = tslib_1.__importStar(require("../facade-implementations/showAlert/jsAlert"));
+const jsConfirm = tslib_1.__importStar(require("../facade-implementations/showConfirm/jsConfirm"));
+const configurableTestDelay = tslib_1.__importStar(require("../facade-implementations/testDelay/configurableTestDelay"));
+const uuidWrapper = tslib_1.__importStar(require("../facade-implementations/uniqueId/uuidWrapper"));
 /**
  * Jest reset.
  */
@@ -162,7 +162,7 @@ jestSetup.dom = jestSetupDom;
  */
 function datetimeToEqual(got, expected) {
     assert.instance(got, dateFnsWrapper.DateTime);
-    return got.toTime() === new Date(expected).getTime() / 1000
+    return got.toTime() === new Date(expected).getTime()
         ? {
             message: () => `Expected date not to be "${expected}"`,
             pass: true

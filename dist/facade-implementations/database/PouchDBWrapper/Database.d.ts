@@ -1,5 +1,5 @@
 import type { AttachedChangesHandler, AttachedSubscriptionId, ChangesHandler, Conditions, Database as DatabaseInterface, DatabaseOptions, ExistingAttachedDocument, ExistingAttachedDocuments, ExistingDocument, ExistingDocuments, PutAttachedDocument, PutAttachedDocuments, PutAttachedResponse, PutAttachedResponses, PutDocument, PutDocuments, PutResponse, PutResponses, QueryOptions, ReactiveConfig, ReactiveConfigAttached, ReactiveResponse, ReactiveResponseAsync, ResetCallback, SubscriptionId } from "@skylib/facades/dist/database";
-import type { Writable } from "@skylib/functions/dist/types/core";
+import type { unknowns, Writable } from "@skylib/functions/dist/types/core";
 import type { Changes, PouchDatabase, PouchDatabaseConfiguration } from "./PouchDBProxy";
 import { PouchDBProxy } from "./PouchDBProxy";
 export interface Configuration {
@@ -35,7 +35,7 @@ export interface RawQueryOptionsAttached extends RawQueryOptions {
 }
 export interface RawQueryResponse {
     readonly count: number;
-    readonly docs: readonly unknown[];
+    readonly docs: unknowns;
     readonly mapReduce: MapReduce;
     readonly unsettledCount: number;
 }

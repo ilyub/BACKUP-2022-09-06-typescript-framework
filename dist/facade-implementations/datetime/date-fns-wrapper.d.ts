@@ -48,6 +48,9 @@ export declare class DateTime implements DateTimeInterface {
     setHours(hours: number): DateTimeInterface;
     setMinutes(minutes: number): DateTimeInterface;
     setMonth(month: number): DateTimeInterface;
+    setStartOfDay(): DateTimeInterface;
+    setStartOfHour(): DateTimeInterface;
+    setStartOfMonth(): DateTimeInterface;
     setStartOfWeek(weekStartsOn: FirstDayOfWeek): DateTimeInterface;
     setStartOfWeekLocale(): DateTimeInterface;
     setYear(year: number): DateTimeInterface;
@@ -55,6 +58,7 @@ export declare class DateTime implements DateTimeInterface {
     toDate(): Date;
     toString(): string;
     toTime(): number;
+    toTimeSec(): number;
     year(): number;
     protected value: Date;
 }

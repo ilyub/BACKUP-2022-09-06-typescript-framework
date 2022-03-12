@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Item = exports.isItemDocs = exports.isItemDoc = exports.isPutItemDocs = exports.isPutItemDoc = void 0;
 const tslib_1 = require("tslib");
 const database_1 = require("@skylib/facades/dist/database");
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
-const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
 exports.isPutItemDoc = is.factory(is.object.of, {}, {
     _deleted: is.true,
     _id: is.string,

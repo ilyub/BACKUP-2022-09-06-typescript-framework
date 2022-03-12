@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OwnPropertyValidate = exports.OwnPropertyResetValidators = exports.OwnPropertyClassDecorator = exports.OwnProperty = void 0;
 const tslib_1 = require("tslib");
-const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
-const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
-const reflect = (0, tslib_1.__importStar)(require("@skylib/functions/dist/reflect"));
+const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
+const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
+const reflect = tslib_1.__importStar(require("@skylib/functions/dist/reflect"));
 /**
  * Property decorator. Converts property into own property.
  *

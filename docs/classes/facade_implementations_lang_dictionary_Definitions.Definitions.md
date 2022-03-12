@@ -45,7 +45,7 @@ ___
 
 ### wordForms
 
-• `Protected` **wordForms**: `Readonly`<`IndexedObject`<readonly `string`[]\>\>
+• `Protected` **wordForms**: `Readonly`<`IndexedObject`<`strings`\>\>
 
 ___
 
@@ -67,7 +67,7 @@ Gets word based on context, count, and replacements.
 | :------ | :------ | :------ |
 | `key` | `string` | Word ID. |
 | `context` | `undefined` \| ``"InXDays"`` | Context. |
-| `forms` | `string` \| readonly `string`[] | Word forms or reference to wordForms. |
+| `forms` | `string` \| `strings` | Word forms or reference to wordForms. |
 | `count` | `number` | Count for plural form. |
 | `replacements` | `ReadonlyMap`<`string`, `string`\> | Replacements. |
 

@@ -30,7 +30,7 @@ ___
 
 ### forms
 
-• `Readonly` **forms**: readonly `string`[]
+• `Readonly` **forms**: `strings`
 
 ___
 

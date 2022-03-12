@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.loremIpsumWrapper = void 0;
 const tslib_1 = require("tslib");
 const lorem_ipsum_1 = require("lorem-ipsum");
-const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
+const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
 exports.loremIpsumWrapper = {
     configure(config) {
         o.assign(moduleConfig, config);

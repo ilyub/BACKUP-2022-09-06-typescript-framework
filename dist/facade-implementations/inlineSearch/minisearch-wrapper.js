@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.implementation = exports.Engine = void 0;
 const tslib_1 = require("tslib");
-const minisearch_1 = (0, tslib_1.__importDefault)(require("minisearch"));
-const a = (0, tslib_1.__importStar)(require("@skylib/functions/dist/array"));
+const minisearch_1 = tslib_1.__importDefault(require("minisearch"));
+const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
 const template_1 = require("./api/template");
 class Engine extends template_1.Engine {
     search(query) {

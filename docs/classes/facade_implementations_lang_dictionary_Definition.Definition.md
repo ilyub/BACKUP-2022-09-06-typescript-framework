@@ -65,37 +65,37 @@ ___
 
 ### rulesRef
 
-• `Protected` **rulesRef**: readonly readonly string[][]
+• `Protected` **rulesRef**: readonly `strings`[]
 
 ___
 
 ### rulesRefDependent
 
-• `Protected` **rulesRefDependent**: readonly readonly string[][]
+• `Protected` **rulesRefDependent**: readonly `strings`[]
 
 ___
 
 ### rulesRefSecondary
 
-• `Protected` **rulesRefSecondary**: readonly readonly string[][]
+• `Protected` **rulesRefSecondary**: readonly `strings`[]
 
 ___
 
 ### rulesVal
 
-• `Protected` **rulesVal**: readonly readonly string[][]
+• `Protected` **rulesVal**: readonly `strings`[]
 
 ___
 
 ### rulesWord
 
-• `Protected` **rulesWord**: readonly readonly string[][]
+• `Protected` **rulesWord**: readonly `strings`[]
 
 ___
 
 ### rulesWordSecondary
 
-• `Protected` **rulesWordSecondary**: readonly readonly string[][]
+• `Protected` **rulesWordSecondary**: readonly `strings`[]
 
 ___
 
@@ -255,7 +255,7 @@ Applies replacements.
 | :------ | :------ | :------ |
 | `owner` | [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md) | Parent object. |
 | `context` | `undefined` \| ``"InXDays"`` | Context. |
-| `forms` | readonly `string`[] | Word form. |
+| `forms` | `strings` | Word form. |
 | `count` | `number` | Count for plural form. |
 | `replacements` | `ReadonlyMap`<`string`, `string`\> | Replacements. |
 

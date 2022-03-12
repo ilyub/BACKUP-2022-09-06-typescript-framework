@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.implementation = exports.Engine = void 0;
 const tslib_1 = require("tslib");
-const lunr_1 = (0, tslib_1.__importDefault)(require("lunr"));
+const lunr_1 = tslib_1.__importDefault(require("lunr"));
 const template_1 = require("./api/template");
 class Engine extends template_1.Engine {
     search(query) {

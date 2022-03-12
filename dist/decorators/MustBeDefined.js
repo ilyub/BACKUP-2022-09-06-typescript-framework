@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MustBeDefined = void 0;
 const tslib_1 = require("tslib");
-const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
-const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
-const reflect = (0, tslib_1.__importStar)(require("@skylib/functions/dist/reflect"));
+const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
+const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
+const reflect = tslib_1.__importStar(require("@skylib/functions/dist/reflect"));
 const MustBeDefinedError_1 = require("./errors/MustBeDefinedError");
 const OwnProperty_1 = require("./OwnProperty");
 /**

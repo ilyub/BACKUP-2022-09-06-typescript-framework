@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Process = exports.implementation = exports.getConfiguration = exports.configure = void 0;
 const tslib_1 = require("tslib");
-const jquery_1 = (0, tslib_1.__importDefault)(require("jquery"));
-const num = (0, tslib_1.__importStar)(require("@skylib/functions/dist/number"));
-const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
-const timer = (0, tslib_1.__importStar)(require("@skylib/functions/dist/timer"));
+const jquery_1 = tslib_1.__importDefault(require("jquery"));
+const num = tslib_1.__importStar(require("@skylib/functions/dist/number"));
+const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
+const timer = tslib_1.__importStar(require("@skylib/functions/dist/timer"));
 /**
  * Configures plugin.
  *

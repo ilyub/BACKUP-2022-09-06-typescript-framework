@@ -39,6 +39,9 @@
 - [setHours](facade_implementations_datetime_date_fns_wrapper.DateTime.md#sethours)
 - [setMinutes](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setminutes)
 - [setMonth](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setmonth)
+- [setStartOfDay](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setstartofday)
+- [setStartOfHour](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setstartofhour)
+- [setStartOfMonth](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setstartofmonth)
 - [setStartOfWeek](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setstartofweek)
 - [setStartOfWeekLocale](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setstartofweeklocale)
 - [setYear](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setyear)
@@ -46,6 +49,7 @@
 - [toDate](facade_implementations_datetime_date_fns_wrapper.DateTime.md#todate)
 - [toString](facade_implementations_datetime_date_fns_wrapper.DateTime.md#tostring)
 - [toTime](facade_implementations_datetime_date_fns_wrapper.DateTime.md#totime)
+- [toTimeSec](facade_implementations_datetime_date_fns_wrapper.DateTime.md#totimesec)
 - [year](facade_implementations_datetime_date_fns_wrapper.DateTime.md#year)
 
 ## Constructors
@@ -416,6 +420,48 @@ DateTimeInterface.setMonth
 
 ___
 
+### setStartOfDay
+
+▸ **setStartOfDay**(): `DateTime`
+
+#### Returns
+
+`DateTime`
+
+#### Implementation of
+
+DateTimeInterface.setStartOfDay
+
+___
+
+### setStartOfHour
+
+▸ **setStartOfHour**(): `DateTime`
+
+#### Returns
+
+`DateTime`
+
+#### Implementation of
+
+DateTimeInterface.setStartOfHour
+
+___
+
+### setStartOfMonth
+
+▸ **setStartOfMonth**(): `DateTime`
+
+#### Returns
+
+`DateTime`
+
+#### Implementation of
+
+DateTimeInterface.setStartOfMonth
+
+___
+
 ### setStartOfWeek
 
 ▸ **setStartOfWeek**(`weekStartsOn`): `DateTime`
@@ -530,6 +576,20 @@ ___
 #### Implementation of
 
 DateTimeInterface.toTime
+
+___
+
+### toTimeSec
+
+▸ **toTimeSec**(): `number`
+
+#### Returns
+
+`number`
+
+#### Implementation of
+
+DateTimeInterface.toTimeSec
 
 ___
 

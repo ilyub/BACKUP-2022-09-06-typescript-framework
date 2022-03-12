@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PouchDBProxy = exports.handlers = void 0;
 const tslib_1 = require("tslib");
-const pouchdb_1 = (0, tslib_1.__importDefault)(require("pouchdb"));
+const pouchdb_1 = tslib_1.__importDefault(require("pouchdb"));
 const testDelay_1 = require("@skylib/facades/dist/testDelay");
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
-const o = (0, tslib_1.__importStar)(require("@skylib/functions/dist/object"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
+const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
 const PouchConflictError_1 = require("./errors/PouchConflictError");
 const PouchNotFoundError_1 = require("./errors/PouchNotFoundError");
 exports.handlers = o.freeze({

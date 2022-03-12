@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PouchDBProxy = exports.handlers = void 0;
 const tslib_1 = require("tslib");
-const pouchdb_1 = (0, tslib_1.__importDefault)(require("pouchdb"));
+const pouchdb_1 = tslib_1.__importDefault(require("pouchdb"));
 const PouchDBProxy_1 = require("../PouchDBProxy");
 var PouchDBProxy_2 = require("../PouchDBProxy");
 Object.defineProperty(exports, "handlers", { enumerable: true, get: function () { return PouchDBProxy_2.handlers; } });

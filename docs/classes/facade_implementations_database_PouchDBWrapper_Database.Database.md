@@ -233,7 +233,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `conditions` | `Readonly`<`Record`<`string`, `Condition`\>\> |
+| `conditions` | `Conditions`<`string`\> |
 
 #### Returns
 
@@ -253,8 +253,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `conditions` | `Readonly`<`Record`<`string`, `Condition`\>\> |
-| `parentConditions` | `Readonly`<`Record`<`string`, `Condition`\>\> |
+| `conditions` | `Conditions`<`string`\> |
+| `parentConditions` | `Conditions`<`string`\> |
 
 #### Returns
 
@@ -561,7 +561,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `conditions` | `Readonly`<`Record`<`string`, `Condition`\>\> |
+| `conditions` | `Conditions`<`string`\> |
 | `options` | `QueryOptions` |
 
 #### Returns
@@ -582,8 +582,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `conditions` | `Readonly`<`Record`<`string`, `Condition`\>\> |
-| `parentConditions` | `Readonly`<`Record`<`string`, `Condition`\>\> |
+| `conditions` | `Conditions`<`string`\> |
+| `parentConditions` | `Conditions`<`string`\> |
 | `options` | `QueryOptions` |
 
 #### Returns
@@ -1526,7 +1526,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `conditions` | `Readonly`<`Record`<`string`, `Condition`\>\> |
+| `conditions` | `Conditions`<`string`\> |
 | `options` | `QueryOptions` |
 
 #### Returns
@@ -1547,8 +1547,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `conditions` | `Readonly`<`Record`<`string`, `Condition`\>\> |
-| `parentConditions` | `Readonly`<`Record`<`string`, `Condition`\>\> |
+| `conditions` | `Conditions`<`string`\> |
+| `parentConditions` | `Conditions`<`string`\> |
 | `options` | `QueryOptions` |
 
 #### Returns

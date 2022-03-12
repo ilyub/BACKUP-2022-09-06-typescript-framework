@@ -1,4 +1,4 @@
-import { add, format, getDate, getDay, getHours, getMinutes, getMonth, getYear, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameYear, isValid, parse, setDate, setDay, setHours, setMinutes, setMonth, setYear, sub } from "date-fns"; // eslint-disable-line import/no-duplicates
+import { add, format, getDate, getDay, getHours, getMinutes, getMonth, getYear, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameYear, isValid, parse, setDate, setDay, setHours, setMinutes, setMonth, setYear, startOfDay, startOfHour, startOfMonth, startOfWeek, sub } from "date-fns"; // eslint-disable-line import/no-duplicates
 import enUS from "date-fns/locale/en-US"; // eslint-disable-line import/no-duplicates
 import { reactiveStorage } from "@skylib/facades/es/reactiveStorage";
 import * as is from "@skylib/functions/es/guards";
@@ -28,6 +28,9 @@ export const implementation = {
         return new DateTime().toString();
     },
     time() {
+        return Date.now();
+    },
+    timeSec() {
         return Date.now() / 1000;
     },
     validate(dt) {
@@ -164,12 +167,26 @@ export class DateTime {
         this.value = setMonth(this.value, month);
         return this;
     }
+    setStartOfDay() {
+        this.value = startOfDay(this.value);
+        return this;
+    }
+    setStartOfHour() {
+        this.value = startOfHour(this.value);
+        return this;
+    }
+    setStartOfMonth() {
+        this.value = startOfMonth(this.value);
+        return this;
+    }
     setStartOfWeek(weekStartsOn) {
-        return this.setDayOfWeek(weekStartsOn, weekStartsOn);
+        this.value = startOfWeek(this.value, { weekStartsOn });
+        return this;
     }
     setStartOfWeekLocale() {
         const weekStartsOn = moduleConfig.firstDayOfWeek;
-        return this.setDayOfWeek(weekStartsOn, weekStartsOn);
+        this.value = startOfWeek(this.value, { weekStartsOn });
+        return this;
     }
     setYear(year) {
         this.value = setYear(this.value, year);
@@ -212,6 +229,9 @@ export class DateTime {
         return format(this.value, "yyyy-MM-dd HH:mm");
     }
     toTime() {
+        return this.value.getTime();
+    }
+    toTimeSec() {
         return this.value.getTime() / 1000;
     }
     year() {

@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.implementation = void 0;
 const tslib_1 = require("tslib");
-const assert = (0, tslib_1.__importStar)(require("@skylib/functions/dist/assertions"));
-const fn = (0, tslib_1.__importStar)(require("@skylib/functions/dist/function"));
-const is = (0, tslib_1.__importStar)(require("@skylib/functions/dist/guards"));
+const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
+const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
+const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const helpers_1 = require("@skylib/functions/dist/helpers");
-const map = (0, tslib_1.__importStar)(require("@skylib/functions/dist/map"));
-const reflect = (0, tslib_1.__importStar)(require("@skylib/functions/dist/reflect"));
+const map = tslib_1.__importStar(require("@skylib/functions/dist/map"));
+const reflect = tslib_1.__importStar(require("@skylib/functions/dist/reflect"));
 exports.implementation = fn.run(() => {
     function reflectStorage(obj) {
         if (reflect.hasMetadata(callbacksKey, obj))
