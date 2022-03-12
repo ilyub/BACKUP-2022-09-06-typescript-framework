@@ -498,15 +498,19 @@ test.each([false, true])("database.reactiveQueryAttached", async async => {
 test.each([false, true])("database.reactiveUnsettled", async async => {
   expect.hasAssertions();
 
+  testUtils
+    .getClock()
+    .setSystemTime(datetime.create("2001-02-15 12:00").toDate());
+
   await testUtils.run(async () => {
     const config: ReactiveConfig = {
-      conditions: { d: { dgt: 24.5 * 3600 } },
+      conditions: { d: { dateGt: ["now"] } },
       updateInterval: 3600 * 1000
     };
 
     const db = database.create(uniqueId());
 
-    await db.put({ d: datetime.create().toString() });
+    await db.put({ d: "2001-02-13 10:30" });
 
     const result = async
       ? await db.reactiveUnsettledAsync(config)
@@ -520,7 +524,7 @@ test.each([false, true])("database.reactiveUnsettled", async async => {
     }
 
     {
-      await wait(2.5 * 3600 * 1000);
+      await wait(3 * 3600 * 1000);
       expect(result.value).toBe(0);
     }
 
@@ -534,9 +538,13 @@ test.each([false, true])("database.reactiveUnsettled", async async => {
 test.each([false, true])("database.reactiveUnsettledAttached", async async => {
   expect.hasAssertions();
 
+  testUtils
+    .getClock()
+    .setSystemTime(datetime.create("2001-02-15 12:00").toDate());
+
   await testUtils.run(async () => {
     const config: ReactiveConfigAttached = {
-      conditions: { d: { dgt: 24.5 * 3600 } },
+      conditions: { d: { dateGt: ["now"] } },
       updateInterval: 3600 * 1000
     };
 
@@ -544,7 +552,7 @@ test.each([false, true])("database.reactiveUnsettledAttached", async async => {
 
     const { id: parentId } = await db.put({});
 
-    await db.putAttached(parentId, { d: datetime.create().toString() });
+    await db.putAttached(parentId, { d: "2001-02-13 10:30" });
 
     const result = async
       ? await db.reactiveUnsettledAttachedAsync(config)
@@ -558,7 +566,7 @@ test.each([false, true])("database.reactiveUnsettledAttached", async async => {
     }
 
     {
-      await wait(2.5 * 3600 * 1000);
+      await wait(3 * 3600 * 1000);
       expect(result.value).toBe(0);
     }
 

@@ -15,27 +15,19 @@ test("queryAttached", async () => {
     { _id: "b2", attachedDocs: [{ _id: 0, _rev: 1, b: false }] },
     {
       _id: "d1",
-      attachedDocs: [
-        { _id: 0, _rev: 1, d: datetime.create().sub(20, "minutes").toString() }
-      ]
+      attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 11:40" }]
     },
     {
       _id: "d2",
-      attachedDocs: [
-        { _id: 0, _rev: 1, d: datetime.create().sub(10, "minutes").toString() }
-      ]
+      attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 11:50" }]
     },
     {
       _id: "d3",
-      attachedDocs: [
-        { _id: 0, _rev: 1, d: datetime.create().add(10, "minutes").toString() }
-      ]
+      attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 12:10" }]
     },
     {
       _id: "d4",
-      attachedDocs: [
-        { _id: 0, _rev: 1, d: datetime.create().add(20, "minutes").toString() }
-      ]
+      attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 12:20" }]
     },
     { _id: "n1", attachedDocs: [{ _id: 0, _rev: 1, n: 1 }] },
     { _id: "n2", attachedDocs: [{ _id: 0, _rev: 1, n: 2 }] },
@@ -62,12 +54,12 @@ test("queryAttached", async () => {
     ]),
     subtest({ b: { eq: true } }, ["b1"]),
     subtest({ b: { eq: false } }, ["b2"]),
-    subtest({ d: { dgt: -15 * 60 } }, ["d2", "d3", "d4"]),
-    subtest({ d: { dlt: -15 * 60 } }, ["d1"]),
-    subtest({ d: { dgt: 0 } }, ["d3", "d4"]),
-    subtest({ d: { dlt: 0 } }, ["d1", "d2"]),
-    subtest({ d: { dgt: 15 * 60 } }, ["d4"]),
-    subtest({ d: { dlt: 15 * 60 } }, ["d1", "d2", "d3"]),
+    subtest({ d: { dateGt: "2001-02-15 11:45" } }, ["d2", "d3", "d4"]),
+    subtest({ d: { dateLt: "2001-02-15 11:45" } }, ["d1"]),
+    subtest({ d: { dateGt: "2001-02-15 12:00" } }, ["d3", "d4"]),
+    subtest({ d: { dateLt: "2001-02-15 12:00" } }, ["d1", "d2"]),
+    subtest({ d: { dateGt: "2001-02-15 12:15" } }, ["d4"]),
+    subtest({ d: { dateLt: "2001-02-15 12:15" } }, ["d1", "d2", "d3"]),
     subtest({ n: { gt: 2 } }, ["n3"]),
     subtest({ n: { gte: 2 } }, ["n2", "n3"]),
     subtest({ n: { lt: 2 } }, ["n1"]),
@@ -91,39 +83,47 @@ test("queryAttached: Combined", async () => {
   await db.bulkDocs([
     {
       _id: "d1",
-      attachedDocs: [
-        { _id: 0, _rev: 1, d: datetime.create().sub(10, "minutes").toString() }
-      ],
-      d: datetime.create().sub(10, "minutes").toString()
+      attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 11:50" }],
+      d: "2001-02-15 11:50"
     },
     {
       _id: "d2",
-      attachedDocs: [
-        { _id: 0, _rev: 1, d: datetime.create().sub(10, "minutes").toString() }
-      ],
-      d: datetime.create().add(10, "minutes").toString()
+      attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 11:50" }],
+      d: "2001-02-15 12:10"
     },
     {
       _id: "d3",
-      attachedDocs: [
-        { _id: 0, _rev: 1, d: datetime.create().add(10, "minutes").toString() }
-      ],
-      d: datetime.create().sub(10, "minutes").toString()
+      attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 12:10" }],
+      d: "2001-02-15 11:50"
     },
     {
       _id: "d4",
-      attachedDocs: [
-        { _id: 0, _rev: 1, d: datetime.create().add(10, "minutes").toString() }
-      ],
-      d: datetime.create().add(10, "minutes").toString()
+      attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 12:10" }],
+      d: "2001-02-15 12:10"
     }
   ]);
 
   await Promise.all([
-    subtest({ d: { dgt: 0 } }, { d: { dgt: 0 } }, ["d4"]),
-    subtest({ d: { dgt: 0 } }, { d: { dlt: 0 } }, ["d3"]),
-    subtest({ d: { dlt: 0 } }, { d: { dgt: 0 } }, ["d2"]),
-    subtest({ d: { dlt: 0 } }, { d: { dlt: 0 } }, ["d1"])
+    subtest(
+      { d: { dateGt: "2001-02-15 12:00" } },
+      { d: { dateGt: "2001-02-15 12:00" } },
+      ["d4"]
+    ),
+    subtest(
+      { d: { dateGt: "2001-02-15 12:00" } },
+      { d: { dateLt: "2001-02-15 12:00" } },
+      ["d3"]
+    ),
+    subtest(
+      { d: { dateLt: "2001-02-15 12:00" } },
+      { d: { dateGt: "2001-02-15 12:00" } },
+      ["d2"]
+    ),
+    subtest(
+      { d: { dateLt: "2001-02-15 12:00" } },
+      { d: { dateLt: "2001-02-15 12:00" } },
+      ["d1"]
+    )
   ]);
 
   async function subtest(
@@ -182,73 +182,57 @@ test("queryAttached: Options", async () => {
 test("queryAttached: Time evolution", async () => {
   expect.hasAssertions();
 
+  testUtils
+    .getClock()
+    .setSystemTime(datetime.create("2001-02-15 12:00").toDate());
+
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
     await db.bulkDocs([
       {
         _id: "id1",
-        attachedDocs: [
-          { _id: 0, _rev: 1, d: datetime.create().sub(2, "days").toString() }
-        ]
+        attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-13 12:00" }]
       },
       {
         _id: "id2",
-        attachedDocs: [
-          { _id: 0, _rev: 1, d: datetime.create().sub(2, "hours").toString() }
-        ]
+        attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 10:00" }]
       },
       {
         _id: "id3",
-        attachedDocs: [
-          { _id: 0, _rev: 1, d: datetime.create().sub(1, "hour").toString() }
-        ]
+        attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 11:00" }]
       },
       {
         _id: "id4",
-        attachedDocs: [
-          { _id: 0, _rev: 1, d: datetime.create().add(1, "hour").toString() }
-        ]
+        attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 13:00" }]
       },
       {
         _id: "id5",
-        attachedDocs: [
-          {
-            _id: 0,
-            _rev: 1,
-            d: datetime.create().add(2, "hours").toString()
-          }
-        ]
+        attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 14:00" }]
       },
       {
         _id: "id6",
-        attachedDocs: [
-          {
-            _id: 0,
-            _rev: 1,
-            d: datetime.create().add(2, "days").toString()
-          }
-        ]
+        attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-17 12:00" }]
       }
     ]);
 
     await Promise.all([
-      subtest({ d: { dgt: 0 } }, ["id4", "id5", "id6"]),
-      subtest({ d: { dlt: 0 } }, ["id1", "id2", "id3"])
+      subtest({ d: { dateGt: ["now"] } }, ["id4", "id5", "id6"]),
+      subtest({ d: { dateLt: ["now"] } }, ["id1", "id2", "id3"])
     ]);
 
     await wait(1.5 * 3600 * 1000);
 
     await Promise.all([
-      subtest({ d: { dgt: 0 } }, ["id5", "id6"]),
-      subtest({ d: { dlt: 0 } }, ["id1", "id2", "id3", "id4"])
+      subtest({ d: { dateGt: ["now"] } }, ["id5", "id6"]),
+      subtest({ d: { dateLt: ["now"] } }, ["id1", "id2", "id3", "id4"])
     ]);
 
     await wait(1.5 * 3600 * 1000);
 
     await Promise.all([
-      subtest({ d: { dgt: 0 } }, ["id6"]),
-      subtest({ d: { dlt: 0 } }, ["id1", "id2", "id3", "id4", "id5"])
+      subtest({ d: { dateGt: ["now"] } }, ["id6"]),
+      subtest({ d: { dateLt: ["now"] } }, ["id1", "id2", "id3", "id4", "id5"])
     ]);
 
     async function subtest(

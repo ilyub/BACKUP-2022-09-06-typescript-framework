@@ -156,43 +156,47 @@ test("create: options.retries = 3", async () => {
 test("create: config.reindexThreshold", async () => {
   expect.hasAssertions();
 
+  testUtils
+    .getClock()
+    .setSystemTime(datetime.create("2001-02-15 12:00").toDate());
+
   await testUtils.run(async () => {
     const db1 = new Database(uniqueId());
 
     const db2 = new Database(uniqueId(), {}, { reindexThreshold: 2 });
 
     const docs = [
-      { d: datetime.create().sub(2, "days").toString() },
-      { d: datetime.create().sub(1, "hour").toString() },
-      { d: datetime.create().add(1, "hour").toString() },
-      { d: datetime.create().add(2, "days").toString() }
+      { d: "2001-02-12 12:00" },
+      { d: "2001-02-15 11:00" },
+      { d: "2001-02-15 13:00" },
+      { d: "2001-02-18 12:00" }
     ];
 
     await Promise.all([db1.bulkDocs(docs), db2.bulkDocs(docs)]);
 
     await Promise.all([
-      subtest(db1, { d: { dgt: 0 } }, 3),
-      subtest(db1, { d: { dlt: 0 } }, 3),
-      subtest(db2, { d: { dgt: 0 } }, 3),
-      subtest(db2, { d: { dlt: 0 } }, 3)
+      subtest(db1, { d: { dateGt: ["now"] } }, 3),
+      subtest(db1, { d: { dateLt: ["now"] } }, 3),
+      subtest(db2, { d: { dateGt: ["now"] } }, 3),
+      subtest(db2, { d: { dateLt: ["now"] } }, 3)
     ]);
 
-    await wait(24.5 * 3600 * 1000);
+    await wait(49.5 * 3600 * 1000);
 
     await Promise.all([
-      subtest(db1, { d: { dgt: 0 } }, 2),
-      subtest(db1, { d: { dlt: 0 } }, 2),
-      subtest(db2, { d: { dgt: 0 } }, 3),
-      subtest(db2, { d: { dlt: 0 } }, 3)
+      subtest(db1, { d: { dateGt: ["now"] } }, 2),
+      subtest(db1, { d: { dateLt: ["now"] } }, 2),
+      subtest(db2, { d: { dateGt: ["now"] } }, 3),
+      subtest(db2, { d: { dateLt: ["now"] } }, 3)
     ]);
 
     await wait(2 * 3600 * 1000);
 
     await Promise.all([
-      subtest(db1, { d: { dgt: 0 } }, 1),
-      subtest(db1, { d: { dlt: 0 } }, 1),
-      subtest(db2, { d: { dgt: 0 } }, 1),
-      subtest(db2, { d: { dlt: 0 } }, 1)
+      subtest(db1, { d: { dateGt: ["now"] } }, 1),
+      subtest(db1, { d: { dateLt: ["now"] } }, 1),
+      subtest(db2, { d: { dateGt: ["now"] } }, 1),
+      subtest(db2, { d: { dateLt: ["now"] } }, 1)
     ]);
 
     async function subtest(

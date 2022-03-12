@@ -10,36 +10,40 @@ testUtils.installFakeTimer({ shouldAdvanceTime: true });
 test("unsettled", async () => {
   expect.hasAssertions();
 
+  testUtils
+    .getClock()
+    .setSystemTime(datetime.create("2001-02-14 12:00").toDate());
+
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
     await db.bulkDocs([
-      { d: datetime.create().sub(2, "days").toString() },
-      { d: datetime.create().sub(1, "hour").toString() },
-      { d: datetime.create().add(1, "hour").toString() },
-      { d: datetime.create().add(2, "days").toString() }
+      { d: "2001-02-12 12:00" },
+      { d: "2001-02-15 11:00" },
+      { d: "2001-02-15 13:00" },
+      { d: "2001-02-18 12:00" }
     ]);
 
     await Promise.all([
       subtest(undefined, 0),
-      subtest({ d: { dgt: 0 } }, 3),
-      subtest({ d: { dlt: 0 } }, 3)
+      subtest({ d: { dateGt: ["now", "+", 1, "day"] } }, 3),
+      subtest({ d: { dateLt: ["now", "+", 1, "day"] } }, 3)
     ]);
 
-    await wait(24.5 * 3600 * 1000);
+    await wait(49.5 * 3600 * 1000);
 
     await Promise.all([
       subtest(undefined, 0),
-      subtest({ d: { dgt: 0 } }, 2),
-      subtest({ d: { dlt: 0 } }, 2)
+      subtest({ d: { dateGt: ["now", "+", 1, "day"] } }, 2),
+      subtest({ d: { dateLt: ["now", "+", 1, "day"] } }, 2)
     ]);
 
     await wait(2 * 3600 * 1000);
 
     await Promise.all([
       subtest(undefined, 0),
-      subtest({ d: { dgt: 0 } }, 1),
-      subtest({ d: { dlt: 0 } }, 1)
+      subtest({ d: { dateGt: ["now", "+", 1, "day"] } }, 1),
+      subtest({ d: { dateLt: ["now", "+", 1, "day"] } }, 1)
     ]);
 
     async function subtest(
@@ -55,52 +59,40 @@ test("unsettled", async () => {
 test("unsettledAttached", async () => {
   expect.hasAssertions();
 
+  testUtils
+    .getClock()
+    .setSystemTime(datetime.create("2001-02-16 12:00").toDate());
+
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
     await db.bulkDocs([
-      {
-        attachedDocs: [
-          { _id: 0, _rev: 1, d: datetime.create().sub(2, "days").toString() }
-        ]
-      },
-      {
-        attachedDocs: [
-          { _id: 0, _rev: 1, d: datetime.create().sub(1, "hour").toString() }
-        ]
-      },
-      {
-        attachedDocs: [
-          { _id: 0, _rev: 1, d: datetime.create().add(1, "hour").toString() }
-        ]
-      },
-      {
-        attachedDocs: [
-          { _id: 0, _rev: 1, d: datetime.create().add(2, "days").toString() }
-        ]
-      }
+      { attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-12 12:00" }] },
+      { attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 11:00" }] },
+      { attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 13:00" }] },
+      { attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-18 12:00" }] }
     ]);
 
     await Promise.all([
       subtest(undefined, 0),
-      subtest({ d: { dgt: 0 } }, 3),
-      subtest({ d: { dlt: 0 } }, 3)
+      subtest({ d: { dateGt: ["now", "-", 1, "day"] } }, 3),
+      subtest({ d: { dateLt: ["now", "-", 1, "day"] } }, 3)
     ]);
 
-    await wait(24.5 * 3600 * 1000);
+    await wait(49.5 * 3600 * 1000);
 
     await Promise.all([
       subtest(undefined, 0),
-      subtest({ d: { dgt: 0 } }, 2),
-      subtest({ d: { dlt: 0 } }, 2)
+      subtest({ d: { dateGt: ["now", "-", 1, "day"] } }, 2),
+      subtest({ d: { dateLt: ["now", "-", 1, "day"] } }, 2)
     ]);
 
     await wait(2 * 3600 * 1000);
 
     await Promise.all([
       subtest(undefined, 0),
-      subtest({ d: { dgt: 0 } }, 1),
-      subtest({ d: { dlt: 0 } }, 1)
+      subtest({ d: { dateGt: ["now", "-", 1, "day"] } }, 1),
+      subtest({ d: { dateLt: ["now", "-", 1, "day"] } }, 1)
     ]);
 
     async function subtest(
@@ -118,71 +110,75 @@ test("unsettledAttached", async () => {
 test("unsettledAttached: Combined", async () => {
   expect.hasAssertions();
 
+  testUtils
+    .getClock()
+    .setSystemTime(datetime.create("2001-02-15 12:00").toDate());
+
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
     await db.bulkDocs([
       {
         attachedDocs: [
-          { _id: 0, _rev: 1, d: datetime.create().sub(2, "days").toString() },
-          { _id: 1, _rev: 1, d: datetime.create().sub(1, "hour").toString() },
-          { _id: 2, _rev: 1, d: datetime.create().add(1, "hour").toString() },
-          { _id: 3, _rev: 1, d: datetime.create().add(2, "days").toString() }
+          { _id: 0, _rev: 1, d: "2001-02-12 12:00" },
+          { _id: 1, _rev: 1, d: "2001-02-15 11:00" },
+          { _id: 2, _rev: 1, d: "2001-02-15 13:00" },
+          { _id: 3, _rev: 1, d: "2001-02-18 12:00" }
         ],
-        d: datetime.create().sub(2, "days").toString()
+        d: "2001-02-12 12:00"
       },
       {
         attachedDocs: [
-          { _id: 0, _rev: 1, d: datetime.create().sub(2, "days").toString() },
-          { _id: 1, _rev: 1, d: datetime.create().sub(1, "hour").toString() },
-          { _id: 2, _rev: 1, d: datetime.create().add(1, "hour").toString() },
-          { _id: 3, _rev: 1, d: datetime.create().add(2, "days").toString() }
+          { _id: 0, _rev: 1, d: "2001-02-12 12:00" },
+          { _id: 1, _rev: 1, d: "2001-02-15 11:00" },
+          { _id: 2, _rev: 1, d: "2001-02-15 13:00" },
+          { _id: 3, _rev: 1, d: "2001-02-18 12:00" }
         ],
-        d: datetime.create().sub(1, "hour").toString()
+        d: "2001-02-15 11:00"
       },
       {
         attachedDocs: [
-          { _id: 0, _rev: 1, d: datetime.create().sub(2, "days").toString() },
-          { _id: 1, _rev: 1, d: datetime.create().sub(1, "hour").toString() },
-          { _id: 2, _rev: 1, d: datetime.create().add(1, "hour").toString() },
-          { _id: 3, _rev: 1, d: datetime.create().add(2, "days").toString() }
+          { _id: 0, _rev: 1, d: "2001-02-12 12:00" },
+          { _id: 1, _rev: 1, d: "2001-02-15 11:00" },
+          { _id: 2, _rev: 1, d: "2001-02-15 13:00" },
+          { _id: 3, _rev: 1, d: "2001-02-18 12:00" }
         ],
-        d: datetime.create().add(1, "hour").toString()
+        d: "2001-02-15 13:00"
       },
       {
         attachedDocs: [
-          { _id: 0, _rev: 1, d: datetime.create().sub(2, "days").toString() },
-          { _id: 1, _rev: 1, d: datetime.create().sub(1, "hour").toString() },
-          { _id: 2, _rev: 1, d: datetime.create().add(1, "hour").toString() },
-          { _id: 3, _rev: 1, d: datetime.create().add(2, "days").toString() }
+          { _id: 0, _rev: 1, d: "2001-02-12 12:00" },
+          { _id: 1, _rev: 1, d: "2001-02-15 11:00" },
+          { _id: 2, _rev: 1, d: "2001-02-15 13:00" },
+          { _id: 3, _rev: 1, d: "2001-02-18 12:00" }
         ],
-        d: datetime.create().add(2, "days").toString()
+        d: "2001-02-18 12:00"
       }
     ]);
 
     await Promise.all([
-      subtest({ d: { dgt: 0 } }, { d: { dgt: 0 } }, 9),
-      subtest({ d: { dgt: 0 } }, { d: { dlt: 0 } }, 12),
-      subtest({ d: { dlt: 0 } }, { d: { dgt: 0 } }, 12),
-      subtest({ d: { dlt: 0 } }, { d: { dlt: 0 } }, 15)
+      subtest({ d: { dateGt: ["now"] } }, { d: { dateGt: ["now"] } }, 9),
+      subtest({ d: { dateGt: ["now"] } }, { d: { dateLt: ["now"] } }, 12),
+      subtest({ d: { dateLt: ["now"] } }, { d: { dateGt: ["now"] } }, 12),
+      subtest({ d: { dateLt: ["now"] } }, { d: { dateLt: ["now"] } }, 15)
     ]);
 
-    await wait(24.5 * 3600 * 1000);
+    await wait(49.5 * 3600 * 1000);
 
     await Promise.all([
-      subtest({ d: { dgt: 0 } }, { d: { dgt: 0 } }, 4),
-      subtest({ d: { dgt: 0 } }, { d: { dlt: 0 } }, 8),
-      subtest({ d: { dlt: 0 } }, { d: { dgt: 0 } }, 8),
-      subtest({ d: { dlt: 0 } }, { d: { dlt: 0 } }, 12)
+      subtest({ d: { dateGt: ["now"] } }, { d: { dateGt: ["now"] } }, 4),
+      subtest({ d: { dateGt: ["now"] } }, { d: { dateLt: ["now"] } }, 8),
+      subtest({ d: { dateLt: ["now"] } }, { d: { dateGt: ["now"] } }, 8),
+      subtest({ d: { dateLt: ["now"] } }, { d: { dateLt: ["now"] } }, 12)
     ]);
 
     await wait(2 * 3600 * 1000);
 
     await Promise.all([
-      subtest({ d: { dgt: 0 } }, { d: { dgt: 0 } }, 1),
-      subtest({ d: { dgt: 0 } }, { d: { dlt: 0 } }, 4),
-      subtest({ d: { dlt: 0 } }, { d: { dgt: 0 } }, 4),
-      subtest({ d: { dlt: 0 } }, { d: { dlt: 0 } }, 7)
+      subtest({ d: { dateGt: ["now"] } }, { d: { dateGt: ["now"] } }, 1),
+      subtest({ d: { dateGt: ["now"] } }, { d: { dateLt: ["now"] } }, 4),
+      subtest({ d: { dateLt: ["now"] } }, { d: { dateGt: ["now"] } }, 4),
+      subtest({ d: { dateLt: ["now"] } }, { d: { dateLt: ["now"] } }, 7)
     ]);
 
     async function subtest(
