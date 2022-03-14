@@ -82,6 +82,13 @@ export class AttachedItem<T extends Item = Item> {
   public readonly updatedAt: stringU;
 
   /**
+   * Parent ID + attached item ID.
+   */
+  public get id(): string {
+    return `${this._parentDoc._id}:${this._id}`;
+  }
+
+  /**
    * Returns parent item.
    */
   public get parent(): T {

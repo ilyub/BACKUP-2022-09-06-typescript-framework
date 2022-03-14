@@ -1,5 +1,6 @@
 module.exports = [
   "Action",
+  "AttachedItem",
   "Confirmable",
   "Delayed",
   "EmitUpdates",
