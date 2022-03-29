@@ -16,10 +16,7 @@ export const implementation = fn.run<Facade>(() => {
 
     const reactive = new Proxy(
       obj,
-      wrapProxyHandler("reflectStorage", "doDefault", {
-        get,
-        set
-      })
+      wrapProxyHandler("reflectStorage", "doDefault", { get, set })
     );
 
     reflect.defineMetadata(callbacksKey, new Map(), reactive);

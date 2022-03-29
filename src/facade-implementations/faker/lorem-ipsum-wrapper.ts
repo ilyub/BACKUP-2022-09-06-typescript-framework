@@ -72,10 +72,7 @@ export const loremIpsumWrapper: Configurable & Facade = {
     });
   },
   word(): string {
-    return loremIpsum({
-      suffix: "\n",
-      units: "words"
-    });
+    return loremIpsum({ suffix: "\n", units: "words" });
   }
 };
 

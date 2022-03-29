@@ -237,7 +237,11 @@ export class Database implements DatabaseInterface {
 
         const rev = (_rev ?? 0) + 1;
 
-        const attachedDoc = { ...content, _id: id, _rev: rev };
+        const attachedDoc = {
+          ...content,
+          _id: id,
+          _rev: rev
+        };
 
         if (id < attachedDocs.length) attachedDocs[id] = attachedDoc;
         else attachedDocs.push(attachedDoc);
@@ -286,10 +290,7 @@ export class Database implements DatabaseInterface {
     return responses
       .map(response =>
         "ok" in response && response.ok
-          ? {
-              id: response.id,
-              rev: response.rev
-            }
+          ? { id: response.id, rev: response.rev }
           : undefined
       )
       .filter(is.not.empty);
@@ -419,10 +420,7 @@ export class Database implements DatabaseInterface {
 
     assert.toBeTrue(response.ok);
 
-    return {
-      id: response.id,
-      rev: response.rev
-    };
+    return { id: response.id, rev: response.rev };
   }
 
   public async putAttached(
@@ -461,10 +459,7 @@ export class Database implements DatabaseInterface {
     conditions: Conditions = {},
     options: QueryOptions = {}
   ): Promise<ExistingDocuments> {
-    const response = await this.rawQuery(options, {
-      conditions,
-      docs: true
-    });
+    const response = await this.rawQuery(options, { conditions, docs: true });
 
     assert.array.of(response.docs, isExistingDocument);
 
@@ -883,10 +878,7 @@ export class Database implements DatabaseInterface {
     return {
       groupLevel: rawQueryOptions.count ?? false ? 1 : 3,
       id: sha256(json.encode(idParams)),
-      mapReduce: {
-        map,
-        reduce
-      },
+      mapReduce: { map, reduce },
       output: createFilter(conds.toOutput),
       settle: createFilter(conds.toSettle)
     };
@@ -1003,10 +995,7 @@ export class Database implements DatabaseInterface {
     return {
       groupLevel: rawQueryOptions.count ?? false ? 1 : 4,
       id: sha256(json.encode(idParams)),
-      mapReduce: {
-        map,
-        reduce
-      },
+      mapReduce: { map, reduce },
       output: createFilter(conds.toOutput, parentConds.toOutput),
       settle: createFilter(conds.toSettle, parentConds.toSettle)
     };
@@ -1044,10 +1033,7 @@ export class Database implements DatabaseInterface {
           }
 
           {
-            migrations = {
-              ...migrations,
-              [migration.id]: true
-            };
+            migrations = { ...migrations, [migration.id]: true };
 
             // eslint-disable-next-line no-await-in-loop
             const { id, rev } = await this.put(migrations);
@@ -1088,7 +1074,7 @@ export class Database implements DatabaseInterface {
 
     const toSettle = _.flatten(
       response.rows
-        // eslint-disable-next-line no-type-assertion/no-type-assertion
+
         .map(row => row.value as unknown)
         .filter(isDocsResponse)
         .filter(docsResponse => !docsResponse.settled)
@@ -1121,7 +1107,7 @@ export class Database implements DatabaseInterface {
       return rawQueryOptions.count ?? false
         ? num.sum(
             ...response.rows
-              // eslint-disable-next-line no-type-assertion/no-type-assertion
+
               .map(row => row.value as unknown)
               .filter(isDocsResponse)
               .map(docsResponse =>
@@ -1139,7 +1125,7 @@ export class Database implements DatabaseInterface {
       if (rawQueryOptions.docs ?? false) {
         const docResponses = _.flatten(
           response.rows
-            // eslint-disable-next-line no-type-assertion/no-type-assertion
+
             .map(row => row.value as unknown)
             .filter(isDocsResponse)
             .map(docsResponse => docsResponse.docs)
@@ -1162,7 +1148,7 @@ export class Database implements DatabaseInterface {
         ? num.sum(
             0,
             ...response.rows
-              // eslint-disable-next-line no-type-assertion/no-type-assertion
+
               .map(row => row.value as unknown)
               .filter(isDocsResponse)
               .filter(docsResponse => !docsResponse.settled)
@@ -1194,10 +1180,7 @@ export class Database implements DatabaseInterface {
     async function rebuildIndex(): Promise<void> {
       const doc = await db.get(`_design/${mapReduce.id}`);
 
-      await db.put({
-        ...doc,
-        views: { default: mapReduce.mapReduce }
-      });
+      await db.put({ ...doc, views: { default: mapReduce.mapReduce } });
     }
 
     function sliceDocs<T>(docs: readonly T[]): readonly T[] {
@@ -1724,7 +1707,11 @@ interface DocsResponse {
 
 const isDocsResponse: is.Guard<DocsResponse> = is.factory(
   is.object.of,
-  { count: is.number, docs: isDocResponses, settled: is.boolean },
+  {
+    count: is.number,
+    docs: isDocResponses,
+    settled: is.boolean
+  },
   {}
 );
 
@@ -1747,10 +1734,7 @@ const isStoredDocumentAttachedArray = is.factory(
 
 const isExistingDocument: is.Guard<ExistingDocument> = is.factory(
   is.object.of,
-  {
-    _id: is.string,
-    _rev: is.string
-  },
+  { _id: is.string, _rev: is.string },
   {
     _deleted: is.true,
     attachedDocs: isStoredDocumentAttachedArray,
@@ -1766,9 +1750,7 @@ const isExistingDocumentAttached: is.Guard<ExistingAttachedDocument> =
       _rev: is.number,
       parentDoc: isExistingDocument
     },
-    {
-      _deleted: is.true
-    }
+    { _deleted: is.true }
   );
 
 /**
@@ -2045,10 +2027,7 @@ function extractDocAttached(
     () => new PouchNotFoundError("Missing attached document")
   );
 
-  return {
-    ...attachedDoc,
-    parentDoc: { ...parentDoc, attachedDocs: [] }
-  };
+  return { ...attachedDoc, parentDoc: { ...parentDoc, attachedDocs: [] } };
 }
 
 /**

@@ -15,10 +15,7 @@ const definitions: ReadonlyRecord<LocaleName, Definitions> = {
     words: {
       Confirm: "Password confirm",
       Correct: "Correct",
-      Day: {
-        1: "Day",
-        2: "Days"
-      },
+      Day: { 1: "Day", 2: "Days" },
       FieldIsTooShort: "<Field> must have at least @min characters",
       In: "In",
       Must: "Must",
@@ -40,9 +37,7 @@ const definitions: ReadonlyRecord<LocaleName, Definitions> = {
       "кто-что": ["кто-что-он", "кто-что-она", "кто-что-оно"]
     },
     words: {
-      Confirm: {
-        "кто-что-оно": "Подтверждение пароля"
-      },
+      Confirm: { "кто-что-оно": "Подтверждение пароля" },
       Correct: [
         "кого-что-его",
         {
@@ -65,9 +60,7 @@ const definitions: ReadonlyRecord<LocaleName, Definitions> = {
             5: "Дней"
           }
         },
-        {
-          InXDays: "кого-чего-его"
-        }
+        { InXDays: "кого-чего-его" }
       ],
       FieldIsTooShort:
         "<Field:кто-что> {must} содержать не менее @min символов",
@@ -85,10 +78,7 @@ const definitions: ReadonlyRecord<LocaleName, Definitions> = {
       MustBeValidString: "Введите {correct.кого-что-ее} строку",
       Password: [
         "кто-что-он",
-        {
-          "кем-чем-им": "Паролем",
-          "кто-что-он": "Пароль"
-        }
+        { "кем-чем-им": "Паролем", "кто-что-он": "Пароль" }
       ],
       String: [
         "кто-что-она",

@@ -6,19 +6,13 @@ test.each<AttachedItemDoc>([
   {
     _id: 0,
     _rev: 1,
-    parentDoc: {
-      _id: "test-id",
-      _rev: "test-rev"
-    }
+    parentDoc: { _id: "test-id", _rev: "test-rev" }
   },
   {
     _deleted: true,
     _id: 0,
     _rev: 1,
-    parentDoc: {
-      _id: "test-id",
-      _rev: "test-rev"
-    },
+    parentDoc: { _id: "test-id", _rev: "test-rev" },
     softDeleted: true
   }
 ])("attachedItem", doc => {

@@ -2,10 +2,7 @@ import type { ItemDoc } from "@/classes/database/Item";
 import { Item } from "@/classes/database/Item";
 
 test.each<ItemDoc>([
-  {
-    _id: "test-id",
-    _rev: "test-rev"
-  },
+  { _id: "test-id", _rev: "test-rev" },
   {
     _deleted: true,
     _id: "test-id",

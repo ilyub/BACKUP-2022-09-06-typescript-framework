@@ -43,10 +43,7 @@ const getScript = jest
               onFailure: (reason: Reason) => void
             ) {
               if (clientId === "init_error")
-                onFailure({
-                  details: "Init error",
-                  error: "init_error"
-                });
+                onFailure({ details: "Init error", error: "init_error" });
               else {
                 // eslint-disable-next-line no-type-assertion/no-type-assertion
                 const googleAuth = {

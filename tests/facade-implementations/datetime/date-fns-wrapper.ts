@@ -142,10 +142,7 @@ test.each(firstDayOfWeekOptions)("dateTime.dayOfWeek", firstDayOfWeek => {
 });
 
 test("dateTime.format: English", () => {
-  dateFnsWrapper.configure({
-    locale: enUS,
-    pm: true
-  });
+  dateFnsWrapper.configure({ locale: enUS, pm: true });
   expect(d().format("d MMM yyyy")).toBe("15 Jun 1950");
   expect(d().format("HHHH:mm A")).toBe("02:30 PM");
   expect(d().format("HHH:mm A")).toBe("2:30 PM");
@@ -156,10 +153,7 @@ test("dateTime.format: English", () => {
 });
 
 test("dateTime.format: Russian", () => {
-  dateFnsWrapper.configure({
-    locale: ru,
-    pm: false
-  });
+  dateFnsWrapper.configure({ locale: ru, pm: false });
   expect(d().format("d MMM yyyy")).toBe("15 июн. 1950");
   expect(d().format("HHHH:mm A")).toBe("14:30");
   expect(d().format("HHH:mm A")).toBe("14:30");

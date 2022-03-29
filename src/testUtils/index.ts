@@ -161,9 +161,7 @@ export function jestSetup(): void {
       readonly datetimeToEqual: testUtils.ExpectFromMatcher<"datetimeToEqual">;
     }
 
-    const expectExtend: ExpectExtendMap = {
-      datetimeToEqual
-    };
+    const expectExtend: ExpectExtendMap = { datetimeToEqual };
 
     // eslint-disable-next-line no-type-assertion/no-type-assertion
     expect.extend(expectExtend as ExpectExtendMap & jest.ExpectExtendMap);

@@ -119,7 +119,11 @@ test("get|getIfExists", async () => {
   {
     const { id, rev } = await db.put({ value: 1 });
 
-    const expected = { _id: id, _rev: rev, value: 1 };
+    const expected = {
+      _id: id,
+      _rev: rev,
+      value: 1
+    };
 
     await expect(
       Promise.all([db.get(id), db.getIfExists(id)])
@@ -128,19 +132,36 @@ test("get|getIfExists", async () => {
     {
       const error = new PouchNotFoundError("missing");
 
-      await db.put({ _deleted: true, _id: id, _rev: rev });
+      await db.put({
+        _deleted: true,
+        _id: id,
+        _rev: rev
+      });
+
       await expect(db.get(id)).rejects.toStrictEqual(error);
+
       await expect(db.getIfExists(id)).resolves.toBeUndefined();
     }
   }
 
   {
     const { id, rev } = await db.put({
-      attachedDocs: [{ _id: 0, _rev: 1, b: false }],
+      attachedDocs: [
+        {
+          _id: 0,
+          _rev: 1,
+          b: false
+        }
+      ],
       value: 1
     });
 
-    const expected = { _id: id, _rev: rev, attachedDocs: [], value: 1 };
+    const expected = {
+      _id: id,
+      _rev: rev,
+      attachedDocs: [],
+      value: 1
+    };
 
     await expect(
       Promise.all([db.get(id), db.getIfExists(id)])
@@ -149,8 +170,14 @@ test("get|getIfExists", async () => {
     {
       const error = new PouchNotFoundError("missing");
 
-      await db.put({ _deleted: true, _id: id, _rev: rev });
+      await db.put({
+        _deleted: true,
+        _id: id,
+        _rev: rev
+      });
+
       await expect(db.get(id)).rejects.toStrictEqual(error);
+
       await expect(db.getIfExists(id)).resolves.toBeUndefined();
     }
   }
@@ -211,8 +238,14 @@ test("getAttached|getAttachedIfExists", async () => {
   {
     const error = new PouchNotFoundError("Missing attached document");
 
-    await db.putAttached(parentId, { _deleted: true, _id: 0, _rev: 1 });
+    await db.putAttached(parentId, {
+      _deleted: true,
+      _id: 0,
+      _rev: 1
+    });
+
     await expect(db.getAttached(0, parentId)).rejects.toStrictEqual(error);
+
     await expect(db.getAttachedIfExists(0, parentId)).resolves.toBeUndefined();
   }
 
@@ -230,7 +263,13 @@ test("put", async () => {
   const db = database.create(uniqueId());
 
   const response1 = await db.put({
-    attachedDocs: [{ _id: 0, _rev: 1, value: 1 }],
+    attachedDocs: [
+      {
+        _id: 0,
+        _rev: 1,
+        value: 1
+      }
+    ],
     value: 1
   });
 

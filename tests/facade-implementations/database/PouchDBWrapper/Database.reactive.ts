@@ -224,10 +224,19 @@ test.each([false, true])("database.reactiveGet", async async => {
       const error = new PouchNotFoundError("Missing document");
 
       errorHandler.mockImplementationOnce(fn.noop);
-      await db.put({ _deleted: true, _id: id, _rev: rev2 });
+
+      await db.put({
+        _deleted: true,
+        _id: id,
+        _rev: rev2
+      });
+
       await wait(1000);
+
       expect(errorHandler).toHaveBeenCalledTimes(1);
+
       expect(errorHandler).toHaveBeenCalledWith(error);
+
       errorHandler.mockClear();
     }
 
@@ -295,10 +304,19 @@ test.each([false, true])("database.reactiveGetAttached", async async => {
       const error = new PouchNotFoundError("Missing attached document");
 
       errorHandler.mockImplementationOnce(fn.noop);
-      await db.putAttached(parentId, { _deleted: true, _id: 0, _rev: 2 });
+
+      await db.putAttached(parentId, {
+        _deleted: true,
+        _id: 0,
+        _rev: 2
+      });
+
       await wait(1000);
+
       expect(errorHandler).toHaveBeenCalledTimes(1);
+
       expect(errorHandler).toHaveBeenCalledWith(error);
+
       errorHandler.mockClear();
     }
 
@@ -349,8 +367,14 @@ test.each([false, true])(
       }
 
       {
-        await db.putAttached(parentId, { _deleted: true, _id: 0, _rev: 1 });
+        await db.putAttached(parentId, {
+          _deleted: true,
+          _id: 0,
+          _rev: 1
+        });
+
         await wait(1000);
+
         expect(result.value).toBeUndefined();
       }
 
@@ -389,8 +413,14 @@ test.each([false, true])("database.reactiveGetIfExists", async async => {
     }
 
     {
-      await db.put({ _deleted: true, _id: id, _rev: rev });
+      await db.put({
+        _deleted: true,
+        _id: id,
+        _rev: rev
+      });
+
       await wait(1000);
+
       expect(result.value).toBeUndefined();
     }
 
@@ -429,7 +459,14 @@ test.each([false, true])("database.reactiveQuery", async async => {
       const { id, rev } = await db.put({ type: "a" });
 
       await wait(1000);
-      expect(result.value).toStrictEqual([{ _id: id, _rev: rev, type: "a" }]);
+
+      expect(result.value).toStrictEqual([
+        {
+          _id: id,
+          _rev: rev,
+          type: "a"
+        }
+      ]);
     }
 
     {
@@ -466,9 +503,7 @@ test.each([false, true])("database.reactiveQueryAttached", async async => {
     }
 
     {
-      const { parentRev } = await db.putAttached(parentId, {
-        type: "a"
-      });
+      const { parentRev } = await db.putAttached(parentId, { type: "a" });
 
       const expected = [
         {

@@ -6,7 +6,7 @@
  */
 module.exports = importPrefix => {
   return {
-    importSources: [
+    consistentImport: [
       {
         autoImportSource: `${importPrefix}/facade-implementations/compare/natural-compare-wrapper`,
         sourcePattern:

@@ -11,7 +11,6 @@ export class Engine<T extends object> extends BaseEngine<
 > {
   public search(query: string): readonly T[] {
     const ids = new Set(
-      // eslint-disable-next-line no-type-assertion/no-type-assertion
       this.index.search(query).map(result => result.id as unknown)
     );
 

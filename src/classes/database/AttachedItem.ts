@@ -29,9 +29,7 @@ export type AttachedItems = readonly AttachedItems[];
 
 export const isPutAttachedItemDoc: is.Guard<PutAttachedItemDoc> = is.factory(
   is.object.of,
-  {
-    parentDoc: isItemDoc
-  },
+  { parentDoc: isItemDoc },
   {
     _deleted: is.true,
     _id: is.number,

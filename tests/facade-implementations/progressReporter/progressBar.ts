@@ -68,10 +68,7 @@ test("process.done", () => {
 
 test("process.done: Final easing", async () => {
   await testUtils.run(async () => {
-    progressBar.configure({
-      finalEasing: true,
-      finalEasingSpeed: 3000
-    });
+    progressBar.configure({ finalEasing: true, finalEasingSpeed: 3000 });
 
     {
       progressReporter.spawn().setProgress(0.5).done();
@@ -88,9 +85,7 @@ test("process.done: Final easing", async () => {
 
 test("process.done: Latency", async () => {
   await testUtils.run(async () => {
-    progressBar.configure({
-      latency: 1500
-    });
+    progressBar.configure({ latency: 1500 });
 
     const progress = progressReporter.spawn().setProgress(0.5);
 
@@ -113,9 +108,7 @@ test("process.done: Latency", async () => {
 
 test("process.done: Latency overdue", async () => {
   await testUtils.run(async () => {
-    progressBar.configure({
-      latency: 1500
-    });
+    progressBar.configure({ latency: 1500 });
 
     const progress = progressReporter.spawn().setProgress(0.5);
 

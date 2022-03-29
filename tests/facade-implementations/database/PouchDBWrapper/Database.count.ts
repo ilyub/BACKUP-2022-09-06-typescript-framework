@@ -50,17 +50,41 @@ test("countAttached", async () => {
   await db.bulkDocs([
     {
       attachedDocs: [
-        { _id: 0, _rev: 1, b: true },
-        { _id: 1, _rev: 1, b: false },
-        { _id: 2, _rev: 1, d: "2001-02-15 11:40" },
-        { _id: 3, _rev: 1, d: "2001-02-15 11:50" }
+        {
+          _id: 0,
+          _rev: 1,
+          b: true
+        },
+        {
+          _id: 1,
+          _rev: 1,
+          b: false
+        },
+        {
+          _id: 2,
+          _rev: 1,
+          d: "2001-02-15 11:40"
+        },
+        {
+          _id: 3,
+          _rev: 1,
+          d: "2001-02-15 11:50"
+        }
       ],
       b: true
     },
     {
       attachedDocs: [
-        { _id: 0, _rev: 1, d: "2001-02-15 12:10" },
-        { _id: 1, _rev: 1, d: "2001-02-15 12:20" }
+        {
+          _id: 0,
+          _rev: 1,
+          d: "2001-02-15 12:10"
+        },
+        {
+          _id: 1,
+          _rev: 1,
+          d: "2001-02-15 12:20"
+        }
       ],
       b: false
     }
@@ -105,22 +129,46 @@ test("countAttached: Combined", async () => {
   await db.bulkDocs([
     {
       _id: "d1",
-      attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 11:50" }],
+      attachedDocs: [
+        {
+          _id: 0,
+          _rev: 1,
+          d: "2001-02-15 11:50"
+        }
+      ],
       d: "2001-02-15 11:50"
     },
     {
       _id: "d2",
-      attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 11:50" }],
+      attachedDocs: [
+        {
+          _id: 0,
+          _rev: 1,
+          d: "2001-02-15 11:50"
+        }
+      ],
       d: "2001-02-15 12:10"
     },
     {
       _id: "d3",
-      attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 12:10" }],
+      attachedDocs: [
+        {
+          _id: 0,
+          _rev: 1,
+          d: "2001-02-15 12:10"
+        }
+      ],
       d: "2001-02-15 11:50"
     },
     {
       _id: "d4",
-      attachedDocs: [{ _id: 0, _rev: 1, d: "2001-02-15 12:10" }],
+      attachedDocs: [
+        {
+          _id: 0,
+          _rev: 1,
+          d: "2001-02-15 12:10"
+        }
+      ],
       d: "2001-02-15 12:10"
     }
   ]);

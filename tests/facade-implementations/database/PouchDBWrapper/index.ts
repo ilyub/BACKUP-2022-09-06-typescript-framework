@@ -25,17 +25,35 @@ test("create: options.caseSensitiveSorting", async () => {
   const docs: PutDocument[] = [
     {
       _id: "id1",
-      attachedDocs: [{ _id: 0, _rev: 1, value: "eee" }],
+      attachedDocs: [
+        {
+          _id: 0,
+          _rev: 1,
+          value: "eee"
+        }
+      ],
       value: "bbb"
     },
     {
       _id: "id2",
-      attachedDocs: [{ _id: 0, _rev: 1, value: "DDD" }],
+      attachedDocs: [
+        {
+          _id: 0,
+          _rev: 1,
+          value: "DDD"
+        }
+      ],
       value: "AAA"
     },
     {
       _id: "id3",
-      attachedDocs: [{ _id: 0, _rev: 1, value: "FFF" }],
+      attachedDocs: [
+        {
+          _id: 0,
+          _rev: 1,
+          value: "FFF"
+        }
+      ],
       value: "CCC"
     }
   ];

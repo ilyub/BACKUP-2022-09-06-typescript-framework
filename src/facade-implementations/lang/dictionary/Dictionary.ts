@@ -218,9 +218,7 @@ export class Dictionary implements DictionaryInterface {
 |*/
 
 const moduleConfig = onDemand(() =>
-  reactiveStorage<Dictionary.Configuration>({
-    localeName: "en-US"
-  })
+  reactiveStorage<Dictionary.Configuration>({ localeName: "en-US" })
 );
 
 const replacementsPool = new Map<string, string>();

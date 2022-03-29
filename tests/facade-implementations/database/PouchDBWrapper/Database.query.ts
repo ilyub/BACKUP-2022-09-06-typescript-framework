@@ -157,28 +157,81 @@ test("query: Options", async () => {
   const db = database.create(uniqueId());
 
   await db.bulkDocs([
-    { _id: "id1", d: "2001-02-13 12:00", s: 3 },
-    { _id: "id2", d: "2001-02-13 12:00", s: 3 },
-    { _id: "id3", d: "2001-02-13 12:00", s: undefined },
-    { _id: "id4", d: "2001-02-15 11:50", s: 2 },
-    { _id: "id5", d: "2001-02-15 12:10", s: 1 }
+    {
+      _id: "id1",
+      d: "2001-02-13 12:00",
+      s: 3
+    },
+    {
+      _id: "id2",
+      d: "2001-02-13 12:00",
+      s: 3
+    },
+    {
+      _id: "id3",
+      d: "2001-02-13 12:00",
+      s: undefined
+    },
+    {
+      _id: "id4",
+      d: "2001-02-15 11:50",
+      s: 2
+    },
+    {
+      _id: "id5",
+      d: "2001-02-15 12:10",
+      s: 1
+    }
   ]);
 
   await Promise.all([
     subtest({ limit: 2 }, ["id1", "id2"]),
     subtest({ limit: 2, skip: 1 }, ["id2", "id3"]),
-    subtest({ limit: 2, skip: 1, sortBy: "s" }, ["id4", "id1"]),
-    subtest({ descending: true, limit: 2, skip: 1, sortBy: "s" }, [
-      "id2",
-      "id1"
-    ]),
-    subtest({ descending: true, limit: 2, skip: 1 }, ["id3", "id2"]),
+    subtest(
+      {
+        limit: 2,
+        skip: 1,
+        sortBy: "s"
+      },
+      ["id4", "id1"]
+    ),
+    subtest(
+      {
+        descending: true,
+        limit: 2,
+        skip: 1,
+        sortBy: "s"
+      },
+      ["id2", "id1"]
+    ),
+    subtest(
+      {
+        descending: true,
+        limit: 2,
+        skip: 1
+      },
+      ["id3", "id2"]
+    ),
     subtest({ limit: 2, sortBy: "s" }, ["id3", "id4"]),
-    subtest({ descending: true, limit: 2, sortBy: "s" }, ["id3", "id2"]),
+    subtest(
+      {
+        descending: true,
+        limit: 2,
+        sortBy: "s"
+      },
+      ["id3", "id2"]
+    ),
     subtest({ descending: true, limit: 2 }, ["id4", "id3"]),
     subtest({ skip: 1 }, ["id2", "id3", "id4"]),
     subtest({ skip: 1, sortBy: "s" }, ["id4", "id1", "id2"]),
-    subtest({ descending: true, skip: 1, sortBy: "s" }, ["id2", "id1", "id4"]),
+    subtest(
+      {
+        descending: true,
+        skip: 1,
+        sortBy: "s"
+      },
+      ["id2", "id1", "id4"]
+    ),
     subtest({ descending: true, skip: 1 }, ["id3", "id2", "id1"]),
     subtest({ sortBy: "s" }, ["id3", "id4", "id1", "id2"]),
     subtest({ descending: true, sortBy: "s" }, ["id3", "id2", "id1", "id4"]),

@@ -41,7 +41,4 @@ export function getConfiguration(): Configuration {
 |*******************************************************************************
 |*/
 
-export const moduleConfig: Configuration = {
-  enabled: false,
-  timeout: 100
-};
+export const moduleConfig: Configuration = { enabled: false, timeout: 100 };

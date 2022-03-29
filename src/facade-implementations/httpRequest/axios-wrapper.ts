@@ -51,7 +51,6 @@ export const implementation: Facade = {
       url
     });
 
-    // eslint-disable-next-line no-type-assertion/no-type-assertion
     return response.data as unknown;
   }
 };
@@ -62,6 +61,4 @@ export const implementation: Facade = {
 |*******************************************************************************
 |*/
 
-const moduleConfig: Configuration = {
-  timeout: 30_000
-};
+const moduleConfig: Configuration = { timeout: 30_000 };

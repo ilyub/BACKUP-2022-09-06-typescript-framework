@@ -18,10 +18,7 @@ test("request", async () => {
   const promise = httpRequest.send("http://localhost/");
 
   jestMockAxios.mockResponseFor(
-    {
-      method: "get",
-      url: "http://localhost/"
-    },
+    { method: "get", url: "http://localhost/" },
     {
       config: {},
       data,
