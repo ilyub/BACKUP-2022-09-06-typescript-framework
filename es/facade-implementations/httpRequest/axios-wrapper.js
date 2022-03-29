@@ -25,7 +25,6 @@ export const implementation = {
             timeout: moduleConfig.timeout,
             url
         });
-        // eslint-disable-next-line no-type-assertion/no-type-assertion
         return response.data;
     }
 };
@@ -34,7 +33,5 @@ export const implementation = {
 |* Private
 |*******************************************************************************
 |*/
-const moduleConfig = {
-    timeout: 30000
-};
+const moduleConfig = { timeout: 30000 };
 //# sourceMappingURL=axios-wrapper.js.map

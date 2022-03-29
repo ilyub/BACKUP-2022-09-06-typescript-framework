@@ -38,10 +38,7 @@ exports.loremIpsumWrapper = {
         });
     },
     word() {
-        return (0, lorem_ipsum_1.loremIpsum)({
-            suffix: "\n",
-            units: "words"
-        });
+        return (0, lorem_ipsum_1.loremIpsum)({ suffix: "\n", units: "words" });
     }
 };
 /*

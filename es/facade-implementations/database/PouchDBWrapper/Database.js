@@ -153,10 +153,7 @@ export class Database {
         const responses = await db.bulkDocs(docs);
         return responses
             .map(response => "ok" in response && response.ok
-            ? {
-                id: response.id,
-                rev: response.rev
-            }
+            ? { id: response.id, rev: response.rev }
             : undefined)
             .filter(is.not.empty);
     }
@@ -238,10 +235,7 @@ export class Database {
         }
         const response = await db.post(o.omit(doc, "lastAttachedDocs"));
         assert.toBeTrue(response.ok);
-        return {
-            id: response.id,
-            rev: response.rev
-        };
+        return { id: response.id, rev: response.rev };
     }
     async putAttached(parentId, doc) {
         return a.first(await this.bulkAttachedDocs(parentId, [doc]));
@@ -265,10 +259,7 @@ export class Database {
         }
     }
     async query(conditions = {}, options = {}) {
-        const response = await this.rawQuery(options, {
-            conditions,
-            docs: true
-        });
+        const response = await this.rawQuery(options, { conditions, docs: true });
         assert.array.of(response.docs, isExistingDocument);
         return response.docs;
     }
@@ -493,10 +484,7 @@ export class Database {
         return {
             groupLevel: ((_b = rawQueryOptions.count) !== null && _b !== void 0 ? _b : false) ? 1 : 3,
             id: sha256(json.encode(idParams)),
-            mapReduce: {
-                map,
-                reduce
-            },
+            mapReduce: { map, reduce },
             output: createFilter(conds.toOutput),
             settle: createFilter(conds.toSettle)
         };
@@ -596,10 +584,7 @@ export class Database {
         return {
             groupLevel: ((_b = rawQueryOptions.count) !== null && _b !== void 0 ? _b : false) ? 1 : 4,
             id: sha256(json.encode(idParams)),
-            mapReduce: {
-                map,
-                reduce
-            },
+            mapReduce: { map, reduce },
             output: createFilter(conds.toOutput, parentConds.toOutput),
             settle: createFilter(conds.toSettle, parentConds.toSettle)
         };
@@ -654,7 +639,6 @@ export class Database {
         const skip = (_a = options.skip) !== null && _a !== void 0 ? _a : 0;
         const response = await query();
         const toSettle = _.flatten(response.rows
-            // eslint-disable-next-line no-type-assertion/no-type-assertion
             .map(row => row.value)
             .filter(isDocsResponse)
             .filter(docsResponse => !docsResponse.settled)
@@ -684,7 +668,6 @@ export class Database {
             var _a;
             return ((_a = rawQueryOptions.count) !== null && _a !== void 0 ? _a : false)
                 ? num.sum(...response.rows
-                    // eslint-disable-next-line no-type-assertion/no-type-assertion
                     .map(row => row.value)
                     .filter(isDocsResponse)
                     .map(docsResponse => docsResponse.settled
@@ -698,7 +681,6 @@ export class Database {
             var _a, _b;
             if ((_a = rawQueryOptions.docs) !== null && _a !== void 0 ? _a : false) {
                 const docResponses = _.flatten(response.rows
-                    // eslint-disable-next-line no-type-assertion/no-type-assertion
                     .map(row => row.value)
                     .filter(isDocsResponse)
                     .map(docsResponse => docsResponse.docs)).filter(docResponse => mapReduce.output(docResponse.doc));
@@ -713,7 +695,6 @@ export class Database {
             var _a;
             return ((_a = rawQueryOptions.unsettledCount) !== null && _a !== void 0 ? _a : false)
                 ? num.sum(0, ...response.rows
-                    // eslint-disable-next-line no-type-assertion/no-type-assertion
                     .map(row => row.value)
                     .filter(isDocsResponse)
                     .filter(docsResponse => !docsResponse.settled)
@@ -1115,13 +1096,14 @@ export class Database {
 }
 const isDocResponse = is.factory(is.object.of, { doc: is.unknown, key: is.unknown }, {});
 const isDocResponses = is.factory(is.array.of, isDocResponse);
-const isDocsResponse = is.factory(is.object.of, { count: is.number, docs: isDocResponses, settled: is.boolean }, {});
+const isDocsResponse = is.factory(is.object.of, {
+    count: is.number,
+    docs: isDocResponses,
+    settled: is.boolean
+}, {});
 const isStoredDocumentAttached = is.factory(is.object.of, { _id: is.number, _rev: is.number }, { _deleted: is.true });
 const isStoredDocumentAttachedArray = is.factory(is.array.of, isStoredDocumentAttached);
-const isExistingDocument = is.factory(is.object.of, {
-    _id: is.string,
-    _rev: is.string
-}, {
+const isExistingDocument = is.factory(is.object.of, { _id: is.string, _rev: is.string }, {
     _deleted: is.true,
     attachedDocs: isStoredDocumentAttachedArray,
     lastAttachedDocs: is.numbers
@@ -1130,9 +1112,7 @@ const isExistingDocumentAttached = is.factory(is.object.of, {
     _id: is.number,
     _rev: is.number,
     parentDoc: isExistingDocument
-}, {
-    _deleted: is.true
-});
+}, { _deleted: is.true });
 /**
  * Joins condition strings with boolean "and" operator.
  *

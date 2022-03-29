@@ -166,8 +166,6 @@ export class Dictionary {
 |* Private
 |*******************************************************************************
 |*/
-const moduleConfig = onDemand(() => reactiveStorage({
-    localeName: "en-US"
-}));
+const moduleConfig = onDemand(() => reactiveStorage({ localeName: "en-US" }));
 const replacementsPool = new Map();
 //# sourceMappingURL=Dictionary.js.map

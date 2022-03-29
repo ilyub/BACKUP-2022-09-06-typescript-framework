@@ -30,6 +30,7 @@
 
 ### Accessors
 
+- [id](classes_database_AttachedItem.AttachedItem.md#id)
 - [parent](classes_database_AttachedItem.AttachedItem.md#parent)
 
 ### Methods
@@ -112,6 +113,18 @@ ___
 • `Readonly` **updatedAt**: `stringU`
 
 ## Accessors
+
+### id
+
+• `get` **id**(): `string`
+
+Parent ID + attached item ID.
+
+#### Returns
+
+`string`
+
+___
 
 ### parent
 

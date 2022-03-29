@@ -32,8 +32,5 @@ exports.getConfiguration = getConfiguration;
 |* Private
 |*******************************************************************************
 |*/
-exports.moduleConfig = {
-    enabled: false,
-    timeout: 100
-};
+exports.moduleConfig = { enabled: false, timeout: 100 };
 //# sourceMappingURL=configurableTestDelay.js.map

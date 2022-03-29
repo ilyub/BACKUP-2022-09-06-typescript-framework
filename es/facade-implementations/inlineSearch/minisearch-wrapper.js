@@ -3,9 +3,7 @@ import * as a from "@skylib/functions/es/array";
 import { createImplementation, Engine as BaseEngine } from "./api/template";
 export class Engine extends BaseEngine {
     search(query) {
-        const ids = new Set(
-        // eslint-disable-next-line no-type-assertion/no-type-assertion
-        this.index.search(query).map(result => result.id));
+        const ids = new Set(this.index.search(query).map(result => result.id));
         return this.items.filter(item => ids.has(item[this.idField]));
     }
     /*

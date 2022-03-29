@@ -31,6 +31,10 @@ export declare class AttachedItem<T extends Item = Item> {
     readonly softDeleted: boolean;
     readonly updatedAt: stringU;
     /**
+     * Parent ID + attached item ID.
+     */
+    get id(): string;
+    /**
      * Returns parent item.
      */
     get parent(): T;

@@ -10,6 +10,7 @@
 - [actions/Confirmable](modules/actions_Confirmable.md)
 - [classes/database/AttachedItem](modules/classes_database_AttachedItem.md)
 - [classes/database/Item](modules/classes_database_Item.md)
+- [configs/eslintrc.options](modules/configs_eslintrc_options.md)
 - [decorators/Enumerable](modules/decorators_Enumerable.md)
 - [decorators/MustBeDefined](modules/decorators_MustBeDefined.md)
 - [decorators/OwnProperty](modules/decorators_OwnProperty.md)

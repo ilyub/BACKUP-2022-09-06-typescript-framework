@@ -34,10 +34,7 @@ export const loremIpsumWrapper = {
         });
     },
     word() {
-        return loremIpsum({
-            suffix: "\n",
-            units: "words"
-        });
+        return loremIpsum({ suffix: "\n", units: "words" });
     }
 };
 /*

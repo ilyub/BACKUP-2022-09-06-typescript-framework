@@ -13,10 +13,7 @@ export const isPutItemDoc = is.factory(is.object.of, {}, {
     updatedAt: is.string
 });
 export const isPutItemDocs = is.factory(is.array.of, isPutItemDoc);
-export const isItemDoc = is.factory(is.object.of, {
-    _id: is.string,
-    _rev: is.string
-}, {
+export const isItemDoc = is.factory(is.object.of, { _id: is.string, _rev: is.string }, {
     _deleted: is.true,
     attachedDocs: isStoredAttachedDocuments,
     createdAt: is.string,

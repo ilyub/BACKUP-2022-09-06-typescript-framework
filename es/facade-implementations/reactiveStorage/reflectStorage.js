@@ -8,10 +8,7 @@ export const implementation = fn.run(() => {
     function reflectStorage(obj) {
         if (reflect.hasMetadata(callbacksKey, obj))
             return obj;
-        const reactive = new Proxy(obj, wrapProxyHandler("reflectStorage", "doDefault", {
-            get,
-            set
-        }));
+        const reactive = new Proxy(obj, wrapProxyHandler("reflectStorage", "doDefault", { get, set }));
         reflect.defineMetadata(callbacksKey, new Map(), reactive);
         return reactive;
         function get(target, key) {

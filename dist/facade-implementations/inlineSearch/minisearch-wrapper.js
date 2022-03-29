@@ -7,9 +7,7 @@ const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
 const template_1 = require("./api/template");
 class Engine extends template_1.Engine {
     search(query) {
-        const ids = new Set(
-        // eslint-disable-next-line no-type-assertion/no-type-assertion
-        this.index.search(query).map(result => result.id));
+        const ids = new Set(this.index.search(query).map(result => result.id));
         return this.items.filter(item => ids.has(item[this.idField]));
     }
     /*

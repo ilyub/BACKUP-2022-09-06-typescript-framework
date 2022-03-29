@@ -25,8 +25,5 @@ export function getConfiguration() {
 |* Private
 |*******************************************************************************
 |*/
-export const moduleConfig = {
-    enabled: false,
-    timeout: 100
-};
+export const moduleConfig = { enabled: false, timeout: 100 };
 //# sourceMappingURL=configurableTestDelay.js.map

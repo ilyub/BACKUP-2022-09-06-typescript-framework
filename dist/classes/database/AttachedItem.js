@@ -5,9 +5,7 @@ const tslib_1 = require("tslib");
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
 const Item_1 = require("./Item");
-exports.isPutAttachedItemDoc = is.factory(is.object.of, {
-    parentDoc: Item_1.isItemDoc
-}, {
+exports.isPutAttachedItemDoc = is.factory(is.object.of, { parentDoc: Item_1.isItemDoc }, {
     _deleted: is.true,
     _id: is.number,
     _rev: is.number,
@@ -104,6 +102,12 @@ class AttachedItem {
         this._parentDoc = source.parentDoc;
         this.softDeleted = (_b = source.softDeleted) !== null && _b !== void 0 ? _b : false;
         this.updatedAt = source.updatedAt;
+    }
+    /**
+     * Parent ID + attached item ID.
+     */
+    get id() {
+        return `${this._parentDoc._id}:${this._id}`;
     }
     /**
      * Returns parent item.

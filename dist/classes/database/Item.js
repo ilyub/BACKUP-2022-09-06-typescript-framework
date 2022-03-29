@@ -17,10 +17,7 @@ exports.isPutItemDoc = is.factory(is.object.of, {}, {
     updatedAt: is.string
 });
 exports.isPutItemDocs = is.factory(is.array.of, exports.isPutItemDoc);
-exports.isItemDoc = is.factory(is.object.of, {
-    _id: is.string,
-    _rev: is.string
-}, {
+exports.isItemDoc = is.factory(is.object.of, { _id: is.string, _rev: is.string }, {
     _deleted: is.true,
     attachedDocs: database_1.isStoredAttachedDocuments,
     createdAt: is.string,

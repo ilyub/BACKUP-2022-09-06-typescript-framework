@@ -1,9 +1,7 @@
 import * as is from "@skylib/functions/es/guards";
 import * as o from "@skylib/functions/es/object";
 import { isItemDoc } from "./Item";
-export const isPutAttachedItemDoc = is.factory(is.object.of, {
-    parentDoc: isItemDoc
-}, {
+export const isPutAttachedItemDoc = is.factory(is.object.of, { parentDoc: isItemDoc }, {
     _deleted: is.true,
     _id: is.number,
     _rev: is.number,
@@ -100,6 +98,12 @@ export class AttachedItem {
         this._parentDoc = source.parentDoc;
         this.softDeleted = (_b = source.softDeleted) !== null && _b !== void 0 ? _b : false;
         this.updatedAt = source.updatedAt;
+    }
+    /**
+     * Parent ID + attached item ID.
+     */
+    get id() {
+        return `${this._parentDoc._id}:${this._id}`;
     }
     /**
      * Returns parent item.
