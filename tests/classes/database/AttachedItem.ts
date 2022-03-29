@@ -32,6 +32,7 @@ test.each<AttachedItemDoc>([
 
     const item = new TestAttachedItem(doc);
 
+    expect(item.id).toBe("test-id:0");
     expect(item.parent.doc()).toStrictEqual(doc.parentDoc);
     expect(item.parent.doc()).toStrictEqual(doc.parentDoc);
   }
