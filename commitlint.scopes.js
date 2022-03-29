@@ -27,6 +27,7 @@ module.exports = [
   "classes.database",
   "classes.database.AttachedItem",
   "classes.database.Item",
+  "configs",
   "configurableTestDelay",
   "date-fns-wrapper",
   "datetime",
