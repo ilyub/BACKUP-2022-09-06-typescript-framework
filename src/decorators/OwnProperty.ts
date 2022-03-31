@@ -124,7 +124,7 @@ function getOwnProperties(ctor: Function): Writable<strings> {
 }
 
 /**
- * Checks if class decorator flag is set.
+ * Checks that class decorator flag is set.
  *
  * @param ctor - Constructor.
  * @returns _True_ if class decorator flag is set, _false_ otherwise.

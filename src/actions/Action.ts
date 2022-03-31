@@ -8,7 +8,7 @@ export class Action<A extends unknown[], R> {
   public readonly type: TaskType | undefined = undefined;
 
   /**
-   * Checks if action is running.
+   * Checks that action is running.
    *
    * @returns _True_ if action is running, _false_ otherwise.
    */

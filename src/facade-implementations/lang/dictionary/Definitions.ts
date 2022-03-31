@@ -64,7 +64,7 @@ export class Definitions {
   }
 
   /**
-   * Checks if dictionary has word.
+   * Checks that dictionary has word.
    *
    * @param key - Word ID.
    * @returns _True_ if dictionary has word, _false_ otherwise.
