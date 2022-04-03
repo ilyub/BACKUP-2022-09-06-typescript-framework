@@ -1,6 +1,6 @@
 import * as functionsTestUtils from "@skylib/functions/dist/testUtils";
-import type { ReadonlyRecord } from "@skylib/functions/dist/types/core";
-import type { LocaleName } from "@skylib/functions/dist/types/locales";
+import type { LocaleName } from "@skylib/functions/dist/types/configurable";
+import type { TypedObject } from "@skylib/functions/dist/types/core";
 
 import {
   Definitions,
@@ -8,7 +8,7 @@ import {
 } from "./src/facade-implementations/lang/dictionary";
 import * as testUtils from "./src/testUtils";
 
-const definitions: ReadonlyRecord<LocaleName, Definitions> = {
+const definitions: TypedObject<LocaleName, Definitions> = {
   "en-US": new Definitions({
     pluralReduce,
     wordForms: {},
@@ -101,16 +101,11 @@ const definitions: ReadonlyRecord<LocaleName, Definitions> = {
 
 functionsTestUtils.jestSetup();
 testUtils.jestSetup();
+testUtils.jestSetup.dom();
 testUtils.jestSetup.dictionary("en-US", definitions);
 beforeEach(functionsTestUtils.jestReset);
 beforeEach(testUtils.jestReset);
+beforeEach(testUtils.jestReset.dom);
 beforeEach(() => {
   testUtils.jestReset.dictionary("en-US", definitions);
 });
-
-if (JEST_ENV === "jsdom") {
-  functionsTestUtils.jestSetup.dom();
-  testUtils.jestSetup.dom();
-  beforeEach(functionsTestUtils.jestReset.dom);
-  beforeEach(testUtils.jestReset.dom);
-}

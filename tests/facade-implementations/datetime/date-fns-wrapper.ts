@@ -42,15 +42,19 @@ test("implementation.create", () => {
 
   const dt3 = datetime.create(dt1.toDate());
 
+  const dt4 = datetime.create(dt1.toTime());
+
   expect(dt1).datetimeToEqual("1950-06-15 14:30");
   expect(dt2).datetimeToEqual("1950-06-15 14:30");
   expect(dt3).datetimeToEqual("1950-06-15 14:30");
+  expect(dt4).datetimeToEqual("1950-06-15 14:30");
 
   {
     dt1.add(1, "minute");
     expect(dt1).datetimeToEqual("1950-06-15 14:31");
     expect(dt2).datetimeToEqual("1950-06-15 14:30");
     expect(dt3).datetimeToEqual("1950-06-15 14:30");
+    expect(dt4).datetimeToEqual("1950-06-15 14:30");
   }
 
   {
@@ -58,6 +62,7 @@ test("implementation.create", () => {
     expect(dt1).datetimeToEqual("1950-06-15 14:31");
     expect(dt2).datetimeToEqual("1950-06-15 15:30");
     expect(dt3).datetimeToEqual("1950-06-15 14:30");
+    expect(dt4).datetimeToEqual("1950-06-15 14:30");
   }
 
   {
@@ -65,6 +70,15 @@ test("implementation.create", () => {
     expect(dt1).datetimeToEqual("1950-06-15 14:31");
     expect(dt2).datetimeToEqual("1950-06-15 15:30");
     expect(dt3).datetimeToEqual("1950-06-16 14:30");
+    expect(dt4).datetimeToEqual("1950-06-15 14:30");
+  }
+
+  {
+    dt4.add(1, "month");
+    expect(dt1).datetimeToEqual("1950-06-15 14:31");
+    expect(dt2).datetimeToEqual("1950-06-15 15:30");
+    expect(dt3).datetimeToEqual("1950-06-16 14:30");
+    expect(dt4).datetimeToEqual("1950-07-15 14:30");
   }
 
   {

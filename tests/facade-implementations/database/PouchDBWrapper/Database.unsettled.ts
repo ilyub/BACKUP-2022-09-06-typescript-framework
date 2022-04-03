@@ -10,9 +10,7 @@ testUtils.installFakeTimer({ shouldAdvanceTime: true });
 test("unsettled", async () => {
   expect.hasAssertions();
 
-  testUtils
-    .getClock()
-    .setSystemTime(datetime.create("2001-02-14 12:00").toDate());
+  testUtils.clock.setSystemTime(datetime.create("2001-02-14 12:00").toDate());
 
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
@@ -59,9 +57,7 @@ test("unsettled", async () => {
 test("unsettledAttached", async () => {
   expect.hasAssertions();
 
-  testUtils
-    .getClock()
-    .setSystemTime(datetime.create("2001-02-16 12:00").toDate());
+  testUtils.clock.setSystemTime(datetime.create("2001-02-16 12:00").toDate());
 
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
@@ -142,9 +138,7 @@ test("unsettledAttached", async () => {
 test("unsettledAttached: Combined", async () => {
   expect.hasAssertions();
 
-  testUtils
-    .getClock()
-    .setSystemTime(datetime.create("2001-02-15 12:00").toDate());
+  testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:00").toDate());
 
   await testUtils.run(async () => {
     const db = database.create(uniqueId());

@@ -5,8 +5,8 @@ import * as o from "@skylib/functions/dist/object";
 import * as s from "@skylib/functions/dist/string";
 import type {
   IndexedObject,
-  ReadonlyIndexedObject,
-  strings
+  strings,
+  Writable
 } from "@skylib/functions/dist/types/core";
 
 import { Definition } from ".";
@@ -79,9 +79,9 @@ export class Definitions {
   |*****************************************************************************
   |*/
 
-  protected wordForms: ReadonlyIndexedObject<strings>;
+  protected wordForms: IndexedObject<strings>;
 
-  protected words: ReadonlyIndexedObject<Definition> = {};
+  protected words: IndexedObject<Definition> = {};
 }
 
 /*
@@ -137,10 +137,9 @@ function mapDefinitions(
   callback: Callback
 ): RawDefinitions {
   return o.fromEntries.exhaustive(
-    Object.entries(definitions).map(([key, definition]) => [
-      key,
-      map(definition, callback)
-    ])
+    o
+      .entries(definitions)
+      .map(([key, definition]) => [key, map(definition, callback)])
   );
 }
 
@@ -150,10 +149,10 @@ function mapDefinitions(
  * @param raw - Language definition.
  * @returns Word forms.
  */
-function getWords(raw: RawLanguage): ReadonlyIndexedObject<Definition> {
-  const result: IndexedObject<Definition> = {};
+function getWords(raw: RawLanguage): IndexedObject<Definition> {
+  const result: Writable<IndexedObject<Definition>> = {};
 
-  for (const [key, value] of Object.entries(raw.words)) {
+  for (const [key, value] of o.entries(raw.words)) {
     result[s.lcFirst(key)] = new Definition(
       map(value, x => s.lcFirst(x)),
       s.lcFirst(key)
@@ -185,11 +184,13 @@ function getWords(raw: RawLanguage): ReadonlyIndexedObject<Definition> {
  */
 function validate(raw: RawLanguage): void {
   assert.toBeTrue(
-    Object.entries(raw.wordForms).every(
-      ([key, forms]) =>
-        key === key.toLowerCase() &&
-        forms.every(form => form === form.toLowerCase())
-    ),
+    o
+      .entries(raw.wordForms)
+      .every(
+        ([key, forms]) =>
+          key === key.toLowerCase() &&
+          forms.every(form => form === form.toLowerCase())
+      ),
     "Expecting lowercase word forms"
   );
 }

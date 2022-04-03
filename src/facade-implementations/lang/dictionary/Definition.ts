@@ -6,8 +6,8 @@ import * as is from "@skylib/functions/dist/guards";
 import * as o from "@skylib/functions/dist/object";
 import * as regexp from "@skylib/functions/dist/regexp";
 import type {
+  IndexedObject,
   NumStr,
-  ReadonlyIndexedObject,
   strings
 } from "@skylib/functions/dist/types/core";
 
@@ -21,7 +21,7 @@ export class Definition {
    * @param raw - Raw definition.
    * @param id - ID.
    */
-  public constructor(raw: RawDefinition, id: string) {
+  public constructor(raw: RawDefinition, id: NumStr) {
     this.id = id;
 
     switch (typeof raw) {
@@ -149,9 +149,9 @@ export class Definition {
   |*****************************************************************************
   |*/
 
-  protected contexts: ReadonlyIndexedObject<NumStr> = {};
+  protected contexts: IndexedObject<NumStr> = {};
 
-  protected id: string;
+  protected id: NumStr;
 
   protected rulesRef: readonly strings[];
 
@@ -167,7 +167,7 @@ export class Definition {
 
   protected sub: Definition | undefined = undefined;
 
-  protected subs: ReadonlyIndexedObject<Definition> = {};
+  protected subs: IndexedObject<Definition> = {};
 
   protected value: string;
 

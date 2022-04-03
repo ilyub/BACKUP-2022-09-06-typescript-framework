@@ -116,4 +116,4 @@ export const implementation = fn.run<Facade>(() => {
 
 const callbacksKey = Symbol("Callbacks");
 
-const isCallbacks = is.factory(is.map, is.symbol, is.callable);
+const isCallbacks = is.factory(is.map.of, is.symbol, is.callable);

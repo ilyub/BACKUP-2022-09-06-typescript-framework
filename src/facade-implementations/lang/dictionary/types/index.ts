@@ -1,10 +1,10 @@
 import type { Context, Word } from "@skylib/facades/dist/lang";
 import type {
+  IndexedObject,
   NumStr,
-  ReadonlyIndexedObject,
-  ReadonlyPartialRecord,
-  ReadonlyRecord,
-  strings
+  PartialTypedObject,
+  strings,
+  TypedObject
 } from "@skylib/functions/dist/types/core";
 
 export interface PluralReduce {
@@ -20,7 +20,7 @@ export interface PluralReduce {
 export type RawDefinition =
   | RawDefinitions
   | string
-  | readonly [NumStr, RawDefinitions, ReadonlyPartialRecord<Context, NumStr>]
+  | readonly [NumStr, RawDefinitions, PartialTypedObject<Context, NumStr>]
   | readonly [NumStr, RawDefinitions];
 
 // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
@@ -30,8 +30,8 @@ export interface RawDefinitions {
 
 export interface RawLanguage {
   readonly pluralReduce: PluralReduce;
-  readonly wordForms: ReadonlyIndexedObject<strings>;
-  readonly words: ReadonlyRecord<Word, RawDefinition>;
+  readonly wordForms: IndexedObject<strings>;
+  readonly words: TypedObject<Word, RawDefinition>;
 }
 
 export interface WordInfo {

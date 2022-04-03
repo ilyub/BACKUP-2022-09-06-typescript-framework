@@ -48,11 +48,11 @@ import * as is from "@skylib/functions/dist/guards";
 import * as json from "@skylib/functions/dist/json";
 import * as num from "@skylib/functions/dist/number";
 import * as o from "@skylib/functions/dist/object";
-import * as timer from "@skylib/functions/dist/timer";
+import * as programFlow from "@skylib/functions/dist/programFlow";
 import type {
   numbers,
+  numberU,
   strings,
-  Timeout,
   unknowns,
   Writable
 } from "@skylib/functions/dist/types/core";
@@ -1252,7 +1252,7 @@ export class Database implements DatabaseInterface {
     assert.toBeTrue(result.loaded);
 
     const subscription = this.subscribe(doc => {
-      assert.not.undefined(result);
+      assert.not.empty(result);
       assert.toBeTrue(result.loaded);
       handler(doc, result);
     });
@@ -1319,7 +1319,7 @@ export class Database implements DatabaseInterface {
     assert.toBeTrue(result.loaded);
 
     const subscription = this.subscribeAttached(doc => {
-      assert.not.undefined(result);
+      assert.not.empty(result);
       assert.toBeTrue(result.loaded);
       handler(doc, result);
     });
@@ -1382,7 +1382,7 @@ export class Database implements DatabaseInterface {
       unsubscribe: (): void => {
         reactiveStorage.unwatch(config, observer);
         this.unsubscribe(subscription);
-        timer.removeTimeout(timeout);
+        programFlow.clearTimeout(timeout);
       },
       value: await request(config.conditions, config.options)
     });
@@ -1395,34 +1395,32 @@ export class Database implements DatabaseInterface {
       if (config.updateFn && config.updateFn(doc)) refresh();
     });
 
-    let timeout: Timeout | undefined;
+    let timeout: numberU;
 
     updateTimeout();
 
     return result;
 
     function refresh(): void {
-      handlePromise.silent(
-        fn.doNotRunParallel(async () => {
-          assert.not.undefined(result);
-          assert.toBeTrue(result.loaded);
-          result.loading = true;
+      handlePromise.silent(async () => {
+        assert.not.empty(result);
+        assert.toBeTrue(result.loaded);
+        result.loading = true;
 
-          const value = await request(config.conditions, config.options);
+        const value = await request(config.conditions, config.options);
 
-          assert.not.undefined(result);
-          assert.toBeTrue(result.loaded);
-          result.loading = false;
-          result.value = value;
-          updateTimeout();
-        })
-      );
+        assert.not.empty(result);
+        assert.toBeTrue(result.loaded);
+        result.loading = false;
+        result.value = value;
+        updateTimeout();
+      });
     }
 
     function updateTimeout(): void {
-      timer.removeTimeout(timeout);
+      programFlow.clearTimeout(timeout);
       timeout = is.not.empty(config.updateInterval)
-        ? timer.addTimeout(refresh, config.updateInterval)
+        ? programFlow.setTimeout(refresh, config.updateInterval)
         : undefined;
     }
   }
@@ -1482,7 +1480,7 @@ export class Database implements DatabaseInterface {
       unsubscribe: (): void => {
         reactiveStorage.unwatch(config, observer);
         this.unsubscribeAttached(subscription);
-        timer.removeTimeout(timeout);
+        programFlow.clearTimeout(timeout);
       },
       value: await request(
         config.conditions,
@@ -1499,38 +1497,36 @@ export class Database implements DatabaseInterface {
       if (config.updateFn && config.updateFn(doc)) refresh();
     });
 
-    let timeout: Timeout | undefined;
+    let timeout: numberU;
 
     updateTimeout();
 
     return result;
 
     function refresh(): void {
-      handlePromise.silent(
-        fn.doNotRunParallel(async () => {
-          assert.not.undefined(result);
-          assert.toBeTrue(result.loaded);
-          result.loading = true;
+      handlePromise.silent(async () => {
+        assert.not.empty(result);
+        assert.toBeTrue(result.loaded);
+        result.loading = true;
 
-          const value = await request(
-            config.conditions,
-            config.parentConditions,
-            config.options
-          );
+        const value = await request(
+          config.conditions,
+          config.parentConditions,
+          config.options
+        );
 
-          assert.not.undefined(result);
-          assert.toBeTrue(result.loaded);
-          result.loading = false;
-          result.value = value;
-          updateTimeout();
-        })
-      );
+        assert.not.empty(result);
+        assert.toBeTrue(result.loaded);
+        result.loading = false;
+        result.value = value;
+        updateTimeout();
+      });
     }
 
     function updateTimeout(): void {
-      timer.removeTimeout(timeout);
+      programFlow.clearTimeout(timeout);
       timeout = is.not.empty(config.updateInterval)
-        ? timer.addTimeout(refresh, config.updateInterval)
+        ? programFlow.setTimeout(refresh, config.updateInterval)
         : undefined;
     }
   }
@@ -1691,8 +1687,7 @@ interface DocResponse {
 
 type DocResponses = readonly DocResponse[];
 
-const isDocResponse: is.Guard<DocResponse> = is.factory(
-  is.object.of,
+const isDocResponse = is.object.of.factory<DocResponse>(
   { doc: is.unknown, key: is.unknown },
   {}
 );
@@ -1705,8 +1700,7 @@ interface DocsResponse {
   readonly settled: boolean;
 }
 
-const isDocsResponse: is.Guard<DocsResponse> = is.factory(
-  is.object.of,
+const isDocsResponse = is.object.of.factory<DocsResponse>(
   {
     count: is.number,
     docs: isDocResponses,
@@ -1721,8 +1715,7 @@ interface StrConds {
   readonly toSettle: string;
 }
 
-const isStoredDocumentAttached: is.Guard<StoredAttachedDocument> = is.factory(
-  is.object.of,
+const isStoredDocumentAttached = is.object.of.factory<StoredAttachedDocument>(
   { _id: is.number, _rev: is.number },
   { _deleted: is.true }
 );
@@ -1732,8 +1725,7 @@ const isStoredDocumentAttachedArray = is.factory(
   isStoredDocumentAttached
 );
 
-const isExistingDocument: is.Guard<ExistingDocument> = is.factory(
-  is.object.of,
+const isExistingDocument = is.object.of.factory<ExistingDocument>(
   { _id: is.string, _rev: is.string },
   {
     _deleted: is.true,
@@ -1742,9 +1734,8 @@ const isExistingDocument: is.Guard<ExistingDocument> = is.factory(
   }
 );
 
-const isExistingDocumentAttached: is.Guard<ExistingAttachedDocument> =
-  is.factory(
-    is.object.of,
+const isExistingDocumentAttached =
+  is.object.of.factory<ExistingAttachedDocument>(
     {
       _id: is.number,
       _rev: is.number,
@@ -1789,7 +1780,7 @@ function condsToStr(
   const toSettle: string[] = [];
 
   for (const conditionsGroup of conditions)
-    for (const [key, fieldConditions] of Object.entries(conditionsGroup)) {
+    for (const [key, fieldConditions] of o.entries(conditionsGroup)) {
       const dest = `${source}.${key}`;
 
       const destDelta = `new Date(${dest}).getTime() - Date.now()`;

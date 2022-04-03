@@ -533,9 +533,7 @@ test.each([false, true])("database.reactiveQueryAttached", async async => {
 test.each([false, true])("database.reactiveUnsettled", async async => {
   expect.hasAssertions();
 
-  testUtils
-    .getClock()
-    .setSystemTime(datetime.create("2001-02-15 12:00").toDate());
+  testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:00").toDate());
 
   await testUtils.run(async () => {
     const config: ReactiveConfig = {
@@ -573,9 +571,7 @@ test.each([false, true])("database.reactiveUnsettled", async async => {
 test.each([false, true])("database.reactiveUnsettledAttached", async async => {
   expect.hasAssertions();
 
-  testUtils
-    .getClock()
-    .setSystemTime(datetime.create("2001-02-15 12:00").toDate());
+  testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:00").toDate());
 
   await testUtils.run(async () => {
     const config: ReactiveConfigAttached = {

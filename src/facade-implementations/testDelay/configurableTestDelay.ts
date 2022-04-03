@@ -7,10 +7,6 @@ export interface Configuration {
   readonly timeout: number;
 }
 
-export type PartialConfiguration<K extends keyof Configuration> = {
-  readonly [L in K]: Configuration[L];
-};
-
 export const implementation: Facade = async () => {
   if (moduleConfig.enabled) await wait(moduleConfig.timeout);
 };
@@ -20,9 +16,7 @@ export const implementation: Facade = async () => {
  *
  * @param config - Plugin configuration.
  */
-export function configure<K extends keyof Configuration>(
-  config: PartialConfiguration<K>
-): void {
+export function configure(config: Partial<Configuration>): void {
   o.assign(moduleConfig, config);
 }
 

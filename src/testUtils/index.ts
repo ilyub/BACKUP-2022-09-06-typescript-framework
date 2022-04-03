@@ -18,8 +18,8 @@ import { testDelay } from "@skylib/facades/dist/testDelay";
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
 import * as assert from "@skylib/functions/dist/assertions";
 import type * as testUtils from "@skylib/functions/dist/testUtils";
-import type { ReadonlyRecord } from "@skylib/functions/dist/types/core";
-import type { LocaleName } from "@skylib/functions/dist/types/locales";
+import type { LocaleName } from "@skylib/functions/dist/types/configurable";
+import type { TypedObject } from "@skylib/functions/dist/types/core";
 
 import * as naturalCompareWrapper from "../facade-implementations/compare/natural-compare-wrapper";
 import { PouchDBWrapper } from "../facade-implementations/database/PouchDBWrapper";
@@ -120,7 +120,7 @@ export function jestReset(): void {
  */
 export function jestResetDictionary(
   localeName: LocaleName,
-  definitions: ReadonlyRecord<LocaleName, Definitions>
+  definitions: TypedObject<LocaleName, Definitions>
 ): void {
   const config: Dictionary.Configuration = { localeName };
 
@@ -178,7 +178,7 @@ export function jestSetup(): void {
  */
 export function jestSetupDictionary(
   localeName: LocaleName,
-  definitions: ReadonlyRecord<LocaleName, Definitions>
+  definitions: TypedObject<LocaleName, Definitions>
 ): void {
   jestReset.dictionary(localeName, definitions);
 }

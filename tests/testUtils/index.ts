@@ -2,7 +2,7 @@ import { datetime } from "@skylib/facades/dist/datetime";
 
 import * as testUtils from "@/testUtils";
 
-test("executionTimeToEqual", () => {
+test("executionTimeToBe", () => {
   {
     const result = testUtils.datetimeToEqual(
       datetime.create("1950-01-01 14:30"),

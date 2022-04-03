@@ -3,13 +3,11 @@ import { progressReporter } from "@skylib/facades/dist/progressReporter";
 import { showAlert } from "@skylib/facades/dist/showAlert";
 import * as fn from "@skylib/functions/dist/function";
 import * as o from "@skylib/functions/dist/object";
-import type {
-  PromiseAsync,
-  ReadonlyRecord
-} from "@skylib/functions/dist/types/core";
+import type { TypedObject } from "@skylib/functions/dist/types/core";
+import type { AsyncPromise } from "@skylib/functions/dist/types/function";
 
 export interface Configuration {
-  readonly expectedDurations: ReadonlyRecord<TaskType, number>;
+  readonly expectedDurations: TypedObject<TaskType, number>;
 }
 
 export type PartialConfiguration<K extends keyof Configuration> = {
@@ -27,9 +25,7 @@ export const handlers = o.freeze({
  *
  * @param config - Plugin configuration.
  */
-export function configure<K extends keyof Configuration>(
-  config: PartialConfiguration<K>
-): void {
+export function configure(config: Partial<Configuration>): void {
   o.assign(moduleConfig, config);
 }
 
@@ -49,10 +45,10 @@ export const implementation: Facade = {
   running() {
     return promisesPool.size > 0;
   },
-  silent<T>(promiseAsync: PromiseAsync<T>, errorMessage = "") {
+  silent<T>(promiseAsync: AsyncPromise<T>, errorMessage = "") {
     handle(promiseAsync, undefined, errorMessage);
   },
-  verbose<T>(promiseAsync: PromiseAsync<T>, type: TaskType, errorMessage = "") {
+  verbose<T>(promiseAsync: AsyncPromise<T>, type: TaskType, errorMessage = "") {
     handle(promiseAsync, type, errorMessage);
   }
 };
@@ -83,7 +79,7 @@ const moduleConfig: Configuration = {
  * @param errorMessage - Error message (used to alert user on error).
  */
 function handle<T>(
-  promiseAsync: PromiseAsync<T>,
+  promiseAsync: AsyncPromise<T>,
   type: TaskType | undefined,
   errorMessage: string
 ): void {

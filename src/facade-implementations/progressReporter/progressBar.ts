@@ -6,8 +6,8 @@ import type {
 } from "@skylib/facades/dist/progressReporter";
 import * as num from "@skylib/functions/dist/number";
 import * as o from "@skylib/functions/dist/object";
-import * as timer from "@skylib/functions/dist/timer";
-import type { Timeout } from "@skylib/functions/dist/types/core";
+import * as programFlow from "@skylib/functions/dist/programFlow";
+import type { numberU } from "@skylib/functions/dist/types/core";
 
 export interface Configuration {
   readonly activeClass: string;
@@ -20,10 +20,6 @@ export interface Configuration {
   readonly updateInterval: number;
 }
 
-export type PartialConfiguration<K extends keyof Configuration> = {
-  readonly [L in K]: Configuration[L];
-};
-
 export type State = "auto" | "done" | "manual";
 
 /**
@@ -31,9 +27,7 @@ export type State = "auto" | "done" | "manual";
  *
  * @param config - Plugin configuration.
  */
-export function configure<K extends keyof Configuration>(
-  config: PartialConfiguration<K>
-): void {
+export function configure(config: Partial<Configuration>): void {
   o.assign(moduleConfig, config);
 }
 
@@ -54,7 +48,7 @@ export const implementation: Facade = {
     lastEasingUpdate = 0;
     processesPool.clear();
     progress = 0;
-    timer.removeTimeout(timeout);
+    programFlow.clearTimeout(timeout);
     $(moduleConfig.selector)
       .removeClass(moduleConfig.activeClass)
       .css("width", "");
@@ -178,8 +172,11 @@ export class Process implements ProcessInterface {
     } else implementation.reset();
 
     if (processesPool.size) {
-      timer.removeTimeout(timeout);
-      timeout = timer.addTimeout(Process.update, moduleConfig.updateInterval);
+      programFlow.clearTimeout(timeout);
+      timeout = programFlow.setTimeout(
+        Process.update,
+        moduleConfig.updateInterval
+      );
     }
   }
 
@@ -221,4 +218,4 @@ const processesPool = new Map<symbol, Process>();
 
 let progress = 0;
 
-let timeout: Timeout | undefined;
+let timeout: numberU;

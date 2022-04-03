@@ -66,9 +66,7 @@ test("query: Date condition 1", async () => {
 });
 
 test("query: Date condition 2", async () => {
-  testUtils
-    .getClock()
-    .setSystemTime(datetime.create("2001-02-15 12:30").toDate());
+  testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:30").toDate());
 
   const db = database.create(uniqueId());
 
@@ -107,9 +105,7 @@ test("query: Date condition 2", async () => {
 });
 
 test("query: Date condition 3", async () => {
-  testUtils
-    .getClock()
-    .setSystemTime(datetime.create("2001-02-15 12:30").toDate());
+  testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:30").toDate());
 
   const db = database.create(uniqueId());
 
@@ -251,9 +247,7 @@ test("query: Options", async () => {
 test("query: Time evolution", async () => {
   expect.hasAssertions();
 
-  testUtils
-    .getClock()
-    .setSystemTime(datetime.create("2001-02-15 12:00").toDate());
+  testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:00").toDate());
 
   await testUtils.run(async () => {
     const db = database.create(uniqueId());

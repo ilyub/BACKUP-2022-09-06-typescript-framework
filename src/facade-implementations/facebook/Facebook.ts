@@ -4,7 +4,8 @@ import type { Facade } from "@skylib/facades/dist/facebook";
 import * as assert from "@skylib/functions/dist/assertions";
 import * as fn from "@skylib/functions/dist/function";
 import * as is from "@skylib/functions/dist/guards";
-import type { PromiseAsync, stringU } from "@skylib/functions/dist/types/core";
+import type { stringU } from "@skylib/functions/dist/types/core";
+import type { AsyncPromise } from "@skylib/functions/dist/types/function";
 
 export class Facebook implements Facade {
   /**
@@ -13,7 +14,7 @@ export class Facebook implements Facade {
    * @param appId - Facebook app ID.
    * @param version - Version.
    */
-  public constructor(appId: PromiseAsync<stringU> | stringU, version: string) {
+  public constructor(appId: AsyncPromise<stringU> | stringU, version: string) {
     this.appId = appId;
     this.version = version;
   }
@@ -72,7 +73,7 @@ export class Facebook implements Facade {
   |*****************************************************************************
   |*/
 
-  protected appId: PromiseAsync<stringU> | stringU;
+  protected appId: AsyncPromise<stringU> | stringU;
 
   protected sdk: Promise<void> | undefined = undefined;
 

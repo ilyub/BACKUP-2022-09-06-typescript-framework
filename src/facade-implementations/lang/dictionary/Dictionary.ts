@@ -13,8 +13,8 @@ import { onDemand, wrapProxyHandler } from "@skylib/functions/dist/helpers";
 import * as o from "@skylib/functions/dist/object";
 import * as reflect from "@skylib/functions/dist/reflect";
 import * as s from "@skylib/functions/dist/string";
-import type { NumStr, ReadonlyRecord } from "@skylib/functions/dist/types/core";
-import type { LocaleName } from "@skylib/functions/dist/types/locales";
+import type { LocaleName } from "@skylib/functions/dist/types/configurable";
+import type { NumStr, TypedObject } from "@skylib/functions/dist/types/core";
 
 import type { Definitions } from ".";
 
@@ -23,10 +23,6 @@ export namespace Dictionary {
   export interface Configuration {
     readonly localeName: LocaleName;
   }
-
-  export type PartialConfiguration<K extends keyof Configuration> = {
-    readonly [L in K]: Configuration[L];
-  };
 }
 
 // eslint-disable-next-line import/export
@@ -36,9 +32,7 @@ export class Dictionary implements DictionaryInterface {
    *
    * @param config - Plugin configuration.
    */
-  public static configure<K extends keyof Dictionary.Configuration>(
-    config: Dictionary.PartialConfiguration<K>
-  ): void {
+  public static configure(config: Partial<Dictionary.Configuration>): void {
     o.assign(moduleConfig, config);
   }
 
@@ -51,7 +45,7 @@ export class Dictionary implements DictionaryInterface {
    * @returns Dictionary.
    */
   public static create(
-    definitions: ReadonlyRecord<LocaleName, Definitions>,
+    definitions: TypedObject<LocaleName, Definitions>,
     context?: Context,
     count?: number
   ): Facade {
@@ -146,7 +140,7 @@ export class Dictionary implements DictionaryInterface {
 
   protected count: number;
 
-  protected definitions: ReadonlyRecord<LocaleName, Definitions>;
+  protected definitions: TypedObject<LocaleName, Definitions>;
 
   /*
   |*****************************************************************************
@@ -166,7 +160,7 @@ export class Dictionary implements DictionaryInterface {
    * @param count - Count for plural form.
    */
   protected constructor(
-    definitions: ReadonlyRecord<LocaleName, Definitions>,
+    definitions: TypedObject<LocaleName, Definitions>,
     context?: Context,
     count = 1
   ) {

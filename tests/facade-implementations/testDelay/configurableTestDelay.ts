@@ -15,10 +15,10 @@ test("testDelay", async () => {
   expect.assertions(1);
   await testUtils.run(async () => {
     configurableTestDelay.configure({ enabled: true });
-    await expect(testDelay).executionTimeToEqual(1000);
+    await expect(testDelay).executionTimeToBe(1000);
   });
 });
 
 test("testDelay: Disabled", async () => {
-  await expect(testDelay).executionTimeToEqual(0);
+  await expect(testDelay).executionTimeToBe(0);
 });

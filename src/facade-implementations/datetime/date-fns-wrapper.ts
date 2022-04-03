@@ -37,11 +37,11 @@ import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
 import * as is from "@skylib/functions/dist/guards";
 import { onDemand } from "@skylib/functions/dist/helpers";
 import * as o from "@skylib/functions/dist/object";
-import type { DeepReadonly, strings } from "@skylib/functions/dist/types/core";
+import type { NumStr, strings } from "@skylib/functions/dist/types/core";
 
 export interface Configuration {
   readonly firstDayOfWeek: FirstDayOfWeek;
-  readonly locale: DeepReadonly<Locale>;
+  readonly locale: Locale;
   readonly pm: boolean;
 }
 
@@ -56,9 +56,7 @@ export type FirstDayOfWeek = 0 | 1;
  *
  * @param config - Plugin configuration.
  */
-export function configure<K extends keyof Configuration>(
-  config: PartialConfiguration<K>
-): void {
+export function configure(config: Partial<Configuration>): void {
   o.assign(moduleConfig, config);
 }
 
@@ -72,7 +70,7 @@ export function getConfiguration(): Configuration {
 }
 
 export const implementation: Facade = {
-  create(dt?: Date | DateTimeInterface | string) {
+  create(dt?: Date | DateTimeInterface | NumStr) {
     return new DateTime(dt);
   },
   now() {
@@ -99,9 +97,10 @@ export class DateTime implements DateTimeInterface {
    *
    * @param dt - Date/time.
    */
-  public constructor(dt?: Date | DateTimeInterface | string) {
+  public constructor(dt?: Date | DateTimeInterface | NumStr) {
     if (dt instanceof Date) this.value = dt;
     else if (dt instanceof DateTime) this.value = new Date(dt.value);
+    else if (is.number(dt)) this.value = new Date(dt);
     else if (is.string(dt)) this.value = parseString(dt);
     else this.value = new Date();
   }

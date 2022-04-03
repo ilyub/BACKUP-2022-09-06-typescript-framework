@@ -6,7 +6,7 @@ import type {
   HttpRequestMethod
 } from "@skylib/facades/dist/httpRequest";
 import * as o from "@skylib/functions/dist/object";
-import type { ReadonlyIndexedObject } from "@skylib/functions/dist/types/core";
+import type { IndexedObject } from "@skylib/functions/dist/types/core";
 
 export interface Configuration {
   readonly timeout: number;
@@ -21,9 +21,7 @@ export type PartialConfiguration<K extends keyof Configuration> = {
  *
  * @param config - Plugin configuration.
  */
-export function configure<K extends keyof Configuration>(
-  config: PartialConfiguration<K>
-): void {
+export function configure(config: Partial<Configuration>): void {
   o.assign(moduleConfig, config);
 }
 
@@ -40,7 +38,7 @@ export const implementation: Facade = {
   async send(
     url: string,
     method: HttpRequestMethod = "get",
-    data: ReadonlyIndexedObject = {},
+    data: IndexedObject = {},
     headers: HttpHeaders = {}
   ): Promise<unknown> {
     const response = await axios({

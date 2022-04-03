@@ -4,11 +4,8 @@ import type { Facade } from "@skylib/facades/dist/google";
 import * as assert from "@skylib/functions/dist/assertions";
 import * as fn from "@skylib/functions/dist/function";
 import * as is from "@skylib/functions/dist/guards";
-import type {
-  DeepReadonly,
-  PromiseAsync,
-  stringU
-} from "@skylib/functions/dist/types/core";
+import type { stringU } from "@skylib/functions/dist/types/core";
+import type { AsyncPromise } from "@skylib/functions/dist/types/function";
 
 export class Google implements Facade {
   /**
@@ -16,7 +13,7 @@ export class Google implements Facade {
    *
    * @param clientId - Client ID.
    */
-  public constructor(clientId: PromiseAsync<stringU> | stringU) {
+  public constructor(clientId: AsyncPromise<stringU> | stringU) {
     this.clientId = clientId;
   }
 
@@ -84,7 +81,7 @@ export class Google implements Facade {
   |*****************************************************************************
   |*/
 
-  protected clientId: PromiseAsync<stringU> | stringU;
+  protected clientId: AsyncPromise<stringU> | stringU;
 
   protected sdk: Promise<GoogleAuth> | undefined = undefined;
 }
@@ -95,4 +92,4 @@ export class Google implements Facade {
 |*****************************************************************************
 |*/
 
-export type GoogleAuth = DeepReadonly<Omit<gapi.auth2.GoogleAuth, "then">>;
+export type GoogleAuth = Omit<gapi.auth2.GoogleAuth, "then">;

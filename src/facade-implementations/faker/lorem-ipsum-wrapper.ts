@@ -1,6 +1,12 @@
+import * as _ from "lodash";
 import { loremIpsum } from "lorem-ipsum";
 
-import type { Facade } from "@skylib/facades/dist/faker";
+import { datetime } from "@skylib/facades/dist/datetime";
+import type { Facade, Unit } from "@skylib/facades/dist/faker";
+import * as a from "@skylib/functions/dist/array";
+import * as fn from "@skylib/functions/dist/function";
+import * as is from "@skylib/functions/dist/guards";
+import * as num from "@skylib/functions/dist/number";
 import * as o from "@skylib/functions/dist/object";
 
 export interface Configurable {
@@ -9,9 +15,7 @@ export interface Configurable {
    *
    * @param config - Plugin configuration.
    */
-  readonly configure: <K extends keyof Configuration>(
-    config: PartialConfiguration<K>
-  ) => void;
+  readonly configure: (config: Partial<Configuration>) => void;
   /**
    * Returns plugin configuration.
    *
@@ -27,18 +31,61 @@ export interface Configuration {
   readonly minWords: number;
 }
 
-export type PartialConfiguration<K extends keyof Configuration> = {
-  readonly [L in K]: Configuration[L];
-};
-
 export const loremIpsumWrapper: Configurable & Facade = {
-  configure<K extends keyof Configuration>(
-    config: PartialConfiguration<K>
-  ): void {
+  boolean(): boolean {
+    return this.oneOf([true, false]);
+  },
+  configure(config: Partial<Configuration>): void {
     o.assign(moduleConfig, config);
+  },
+  date(
+    from: string | readonly [number, Unit],
+    to: string | readonly [number, Unit],
+    step = 1,
+    unit: Unit = "minute"
+  ): string {
+    const fromTime = is.string(from)
+      ? datetime.create(from).toTime()
+      : datetime
+          .create()
+          .add(...from)
+          .toTime();
+
+    const toTime = is.string(to)
+      ? datetime.create(to).toTime()
+      : datetime
+          .create()
+          .add(...to)
+          .toTime();
+
+    const stepTime = fn.run(() => {
+      switch (unit) {
+        case "day":
+        case "days":
+          return step * 24 * 3600 * 1000;
+
+        case "hour":
+        case "hours":
+          return step * 3600 * 1000;
+
+        case "minute":
+        case "minutes":
+          return step * 60 * 1000;
+      }
+    });
+
+    const time = num.floor.step(_.random(fromTime, toTime), stepTime);
+
+    return datetime.create(new Date(time)).toString();
   },
   getConfiguration(): Configuration {
     return moduleConfig;
+  },
+  number(from: number, to: number, step = 1): number {
+    return num.floor.step(_.random(from, to), step);
+  },
+  oneOf<T>(values: readonly T[]): T {
+    return a.get(values, _.random(0, values.length - 1));
   },
   paragraph(
     minSentences?: number,

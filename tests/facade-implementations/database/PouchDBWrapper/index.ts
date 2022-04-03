@@ -174,9 +174,7 @@ test("create: options.retries = 3", async () => {
 test("create: config.reindexThreshold", async () => {
   expect.hasAssertions();
 
-  testUtils
-    .getClock()
-    .setSystemTime(datetime.create("2001-02-15 12:00").toDate());
+  testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:00").toDate());
 
   await testUtils.run(async () => {
     const db1 = new Database(uniqueId());

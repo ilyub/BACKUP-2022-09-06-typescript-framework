@@ -4,7 +4,7 @@ import type { StoredAttachedDocument } from "@skylib/facades/dist/database";
 import { testDelay } from "@skylib/facades/dist/testDelay";
 import * as is from "@skylib/functions/dist/guards";
 import * as o from "@skylib/functions/dist/object";
-import type { DeepReadonly, numbers } from "@skylib/functions/dist/types/core";
+import type { numbers } from "@skylib/functions/dist/types/core";
 
 import { PouchConflictError } from "./errors/PouchConflictError";
 import { PouchNotFoundError } from "./errors/PouchNotFoundError";
@@ -22,9 +22,7 @@ export interface Content {
   readonly lastAttachedDocs?: numbers;
 }
 
-export type PouchChange = DeepReadonly<
-  PouchDB.Core.ChangesResponseChange<Content>
->;
+export type PouchChange = PouchDB.Core.ChangesResponseChange<Content>;
 
 export interface PouchChangesHandler {
   /**
@@ -35,28 +33,26 @@ export interface PouchChangesHandler {
   (change: PouchChange): void;
 }
 
-export type PouchChangesOptions = DeepReadonly<PouchDB.Core.ChangesOptions>;
+export type PouchChangesOptions = PouchDB.Core.ChangesOptions;
 
 export type PouchDatabaseConfiguration =
-  DeepReadonly<PouchDB.Configuration.DatabaseConfiguration>;
+  PouchDB.Configuration.DatabaseConfiguration;
 
-export type PouchGetMeta = DeepReadonly<PouchDB.Core.GetMeta>;
+export type PouchGetMeta = PouchDB.Core.GetMeta;
 
-export type PouchIdMeta = Readonly<PouchDB.Core.IdMeta>;
+export type PouchIdMeta = PouchDB.Core.IdMeta;
 
-export type PouchDatabase = DeepReadonly<PouchDB.Database<Content>>;
+export type PouchDatabase = PouchDB.Database<Content>;
 
-export type PouchError = Readonly<PouchDB.Core.Error>;
+export type PouchError = PouchDB.Core.Error;
 
-export type PouchResponse = Readonly<PouchDB.Core.Response>;
+export type PouchResponse = PouchDB.Core.Response;
 
-export type PouchPutDocument = DeepReadonly<PouchDB.Core.PutDocument<Content>>;
+export type PouchPutDocument = PouchDB.Core.PutDocument<Content>;
 
-export type PouchQueryOptions = DeepReadonly<
-  PouchDB.Query.Options<Content, Content>
->;
+export type PouchQueryOptions = PouchDB.Query.Options<Content, Content>;
 
-export type PouchQueryResponse = DeepReadonly<PouchDB.Query.Response<Content>>;
+export type PouchQueryResponse = PouchDB.Query.Response<Content>;
 
 export const handlers = o.freeze({
   error(error: unknown): void {
@@ -89,7 +85,7 @@ export class PouchDBProxy {
     await testDelay();
 
     try {
-      return await this.db.bulkDocs(o.unfreeze.deep(docs));
+      return await this.db.bulkDocs(o.unfreeze(docs));
     } catch (e) {
       throw wrapPouchError(e);
     }
@@ -107,7 +103,7 @@ export class PouchDBProxy {
     options: PouchChangesOptions
   ): Changes {
     const changes = this.db
-      .changes(o.unfreeze.deep(options))
+      .changes(o.unfreeze(options))
       .on("change", changesHandler)
       .on("error", handlers.error);
 
@@ -173,7 +169,7 @@ export class PouchDBProxy {
     await testDelay();
 
     try {
-      return await this.db.put(o.unfreeze.deep(doc));
+      return await this.db.put(o.unfreeze(doc));
     } catch (e) {
       throw wrapPouchError(e);
     }
@@ -193,7 +189,7 @@ export class PouchDBProxy {
     await testDelay();
 
     try {
-      return await this.db.query(mapReduce, o.unfreeze.deep(options));
+      return await this.db.query(mapReduce, o.unfreeze(options));
     } catch (e) {
       throw wrapPouchError(e);
     }
@@ -213,8 +209,7 @@ interface WrappablePouchError {
   readonly status: number;
 }
 
-const isWrappablePouchError: is.Guard<WrappablePouchError> = is.factory(
-  is.object.of,
+const isWrappablePouchError = is.object.of.factory<WrappablePouchError>(
   {
     error: is.true,
     message: is.string,

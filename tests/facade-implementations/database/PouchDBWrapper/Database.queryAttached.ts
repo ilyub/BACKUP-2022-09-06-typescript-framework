@@ -385,9 +385,7 @@ test("queryAttached: Options", async () => {
 test("queryAttached: Time evolution", async () => {
   expect.hasAssertions();
 
-  testUtils
-    .getClock()
-    .setSystemTime(datetime.create("2001-02-15 12:00").toDate());
+  testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:00").toDate());
 
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
