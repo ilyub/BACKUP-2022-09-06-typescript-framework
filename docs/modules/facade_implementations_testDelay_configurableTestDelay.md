@@ -8,10 +8,6 @@
 
 - [Configuration](../interfaces/facade_implementations_testDelay_configurableTestDelay.Configuration.md)
 
-### Type aliases
-
-- [PartialConfiguration](facade_implementations_testDelay_configurableTestDelay.md#partialconfiguration)
-
 ### Variables
 
 - [moduleConfig](facade_implementations_testDelay_configurableTestDelay.md#moduleconfig)
@@ -21,18 +17,6 @@
 - [configure](facade_implementations_testDelay_configurableTestDelay.md#configure)
 - [getConfiguration](facade_implementations_testDelay_configurableTestDelay.md#getconfiguration)
 - [implementation](facade_implementations_testDelay_configurableTestDelay.md#implementation)
-
-## Type aliases
-
-### PartialConfiguration
-
-Ƭ **PartialConfiguration**<`K`\>: { readonly [L in K]: Configuration[L] }
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `K` | extends keyof [`Configuration`](../interfaces/facade_implementations_testDelay_configurableTestDelay.Configuration.md) |
 
 ## Variables
 
@@ -44,21 +28,15 @@
 
 ### configure
 
-▸ **configure**<`K`\>(`config`): `void`
+▸ **configure**(`config`): `void`
 
 Configures plugin.
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `K` | extends keyof [`Configuration`](../interfaces/facade_implementations_testDelay_configurableTestDelay.Configuration.md) |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `config` | [`PartialConfiguration`](facade_implementations_testDelay_configurableTestDelay.md#partialconfiguration)<`K`\> | Plugin configuration. |
+| `config` | `Partial`<[`Configuration`](../interfaces/facade_implementations_testDelay_configurableTestDelay.Configuration.md)\> | Plugin configuration. |
 
 #### Returns
 

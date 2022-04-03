@@ -54,21 +54,15 @@ ___
 
 ### configure
 
-▸ **configure**<`K`\>(`config`): `void`
+▸ **configure**(`config`): `void`
 
 Configures plugin.
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `K` | extends keyof [`Configuration`](../interfaces/facade_implementations_datetime_date_fns_wrapper.Configuration.md) |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `config` | [`PartialConfiguration`](facade_implementations_datetime_date_fns_wrapper.md#partialconfiguration)<`K`\> | Plugin configuration. |
+| `config` | `Partial`<[`Configuration`](../interfaces/facade_implementations_datetime_date_fns_wrapper.Configuration.md)\> | Plugin configuration. |
 
 #### Returns
 

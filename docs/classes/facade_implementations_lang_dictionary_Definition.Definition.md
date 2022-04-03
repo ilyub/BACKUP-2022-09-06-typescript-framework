@@ -47,19 +47,19 @@ Creates class instance.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `raw` | [`RawDefinition`](../modules/facade_implementations_lang_dictionary_types.md#rawdefinition) | Raw definition. |
-| `id` | `string` | ID. |
+| `id` | `NumStr` | ID. |
 
 ## Properties
 
 ### contexts
 
-• `Protected` **contexts**: `Readonly`<`IndexedObject`<`NumStr`\>\> = `{}`
+• `Protected` **contexts**: `Readonly`<`TypedObject`<`PropertyKey`, `NumStr`\>\> = `{}`
 
 ___
 
 ### id
 
-• `Protected` **id**: `string`
+• `Protected` **id**: `NumStr`
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 ### subs
 
-• `Protected` **subs**: `Readonly`<`IndexedObject`<[`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)\>\> = `{}`
+• `Protected` **subs**: `Readonly`<`TypedObject`<`PropertyKey`, [`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)\>\> = `{}`
 
 ___
 

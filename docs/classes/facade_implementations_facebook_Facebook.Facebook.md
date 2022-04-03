@@ -37,14 +37,14 @@ Creates class instance.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `appId` | `stringU` \| `PromiseAsync`<`stringU`\> | Facebook app ID. |
+| `appId` | `stringU` \| `AsyncPromise`<`stringU`, `nevers`\> | Facebook app ID. |
 | `version` | `string` | Version. |
 
 ## Properties
 
 ### appId
 
-• `Protected` **appId**: `stringU` \| `PromiseAsync`<`stringU`\>
+• `Protected` **appId**: `stringU` \| `AsyncPromise`<`stringU`, `nevers`\>
 
 ___
 

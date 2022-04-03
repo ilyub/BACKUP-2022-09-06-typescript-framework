@@ -43,19 +43,19 @@ Creates class instance.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `name` | `string` | Database name. |
-| `options` | [`PouchDatabaseConfiguration`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchdatabaseconfiguration) | Database options. |
+| `options` | `DatabaseConfiguration` | Database options. |
 
 ## Properties
 
 ### db
 
-• **db**: `Object`
+• **db**: [`PouchDatabase`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchdatabase)
 
 ## Methods
 
 ### bulkDocs
 
-▸ **bulkDocs**(`docs`): `Promise`<(`Readonly`<`Error`\> \| `Readonly`<`Response`\>)[]\>
+▸ **bulkDocs**(`docs`): `Promise`<(`Error` \| `Response`)[]\>
 
 Creates or updates multiple documents.
 
@@ -63,11 +63,11 @@ Creates or updates multiple documents.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `docs` | readonly { `attachedDocs?`: readonly { readonly [x: string]: unknown; readonly \_id: number; readonly \_rev: number; readonly \_deleted?: true; }[] ; `lastAttachedDocs?`: readonly number[]  }[] | Documents. |
+| `docs` | readonly [`PouchPutDocument`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchputdocument)[] | Documents. |
 
 #### Returns
 
-`Promise`<(`Readonly`<`Error`\> \| `Readonly`<`Response`\>)[]\>
+`Promise`<(`Error` \| `Response`)[]\>
 
 Responses.
 
@@ -84,7 +84,7 @@ Subscribes to changes.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `changesHandler` | [`PouchChangesHandler`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.PouchChangesHandler.md) | Changes handler. |
-| `options` | `Object` | Options. |
+| `options` | `ChangesOptions` | Options. |
 
 #### Returns
 
@@ -108,7 +108,7 @@ ___
 
 ### get
 
-▸ **get**(`id`): `Promise`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md) & {} & `Readonly`<`IdMeta`\>\>
+▸ **get**(`id`): `Promise`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md) & `GetMeta` & `IdMeta`\>
 
 Fetches document.
 
@@ -120,7 +120,7 @@ Fetches document.
 
 #### Returns
 
-`Promise`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md) & {} & `Readonly`<`IdMeta`\>\>
+`Promise`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md) & `GetMeta` & `IdMeta`\>
 
 Document.
 
@@ -128,7 +128,7 @@ ___
 
 ### post
 
-▸ **post**(`doc`): `Promise`<`Readonly`<`Response`\>\>
+▸ **post**(`doc`): `Promise`<`Response`\>
 
 Posts document.
 
@@ -136,13 +136,11 @@ Posts document.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `doc` | `Object` | Document. |
-| `doc.attachedDocs?` | readonly { readonly [x: string]: unknown; readonly \_id: number; readonly \_rev: number; readonly \_deleted?: true; }[] | - |
-| `doc.lastAttachedDocs?` | readonly `number`[] | - |
+| `doc` | [`PouchPutDocument`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchputdocument) | Document. |
 
 #### Returns
 
-`Promise`<`Readonly`<`Response`\>\>
+`Promise`<`Response`\>
 
 Response.
 
@@ -150,7 +148,7 @@ ___
 
 ### put
 
-▸ **put**(`doc`): `Promise`<`Readonly`<`Response`\>\>
+▸ **put**(`doc`): `Promise`<`Response`\>
 
 Puts document.
 
@@ -158,13 +156,11 @@ Puts document.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `doc` | `Object` | Document. |
-| `doc.attachedDocs?` | readonly { readonly [x: string]: unknown; readonly \_id: number; readonly \_rev: number; readonly \_deleted?: true; }[] | - |
-| `doc.lastAttachedDocs?` | readonly `number`[] | - |
+| `doc` | [`PouchPutDocument`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchputdocument) | Document. |
 
 #### Returns
 
-`Promise`<`Readonly`<`Response`\>\>
+`Promise`<`Response`\>
 
 Response.
 
@@ -172,7 +168,7 @@ ___
 
 ### query
 
-▸ **query**(`mapReduce`, `options`): `Promise`<{}\>
+▸ **query**(`mapReduce`, `options`): `Promise`<[`PouchQueryResponse`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchqueryresponse)\>
 
 Queries database.
 
@@ -181,10 +177,10 @@ Queries database.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `mapReduce` | `string` | The name of a view in an existing design document. |
-| `options` | `Object` | Options. |
+| `options` | [`PouchQueryOptions`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchqueryoptions) | Options. |
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<[`PouchQueryResponse`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchqueryresponse)\>
 
 Query response.

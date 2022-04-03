@@ -1,7 +1,7 @@
 import type { Facade, TaskType } from "@skylib/facades/es/handlePromise";
-import type { ReadonlyRecord } from "@skylib/functions/es/types/core";
+import type { TypedObject } from "@skylib/functions/es/types/core";
 export interface Configuration {
-    readonly expectedDurations: ReadonlyRecord<TaskType, number>;
+    readonly expectedDurations: TypedObject<TaskType, number>;
 }
 export declare type PartialConfiguration<K extends keyof Configuration> = {
     readonly [L in K]: Configuration[L];
@@ -14,7 +14,7 @@ export declare const handlers: Readonly<{
  *
  * @param config - Plugin configuration.
  */
-export declare function configure<K extends keyof Configuration>(config: PartialConfiguration<K>): void;
+export declare function configure(config: Partial<Configuration>): void;
 /**
  * Returns plugin configuration.
  *

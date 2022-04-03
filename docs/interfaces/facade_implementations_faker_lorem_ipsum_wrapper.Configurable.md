@@ -15,21 +15,15 @@
 
 ### configure
 
-▸ `Readonly` **configure**<`K`\>(`config`): `void`
+▸ `Readonly` **configure**(`config`): `void`
 
 Configures plugin.
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `K` | extends keyof [`Configuration`](facade_implementations_faker_lorem_ipsum_wrapper.Configuration.md) |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `config` | [`PartialConfiguration`](../modules/facade_implementations_faker_lorem_ipsum_wrapper.md#partialconfiguration)<`K`\> | Plugin configuration. |
+| `config` | `Partial`<[`Configuration`](facade_implementations_faker_lorem_ipsum_wrapper.Configuration.md)\> | Plugin configuration. |
 
 #### Returns
 

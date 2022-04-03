@@ -36,7 +36,7 @@ Creates class instance.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `config` | [`Configuration`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.Configuration.md) | Configuration. |
-| `pouchConfig` | [`PouchDatabaseConfiguration`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchdatabaseconfiguration) | PouchDB configuration. |
+| `pouchConfig` | `DatabaseConfiguration` | PouchDB configuration. |
 
 ## Properties
 
@@ -48,7 +48,7 @@ ___
 
 ### pouchConfig
 
-• `Protected` **pouchConfig**: [`PouchDatabaseConfiguration`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchdatabaseconfiguration)
+• `Protected` **pouchConfig**: `DatabaseConfiguration`
 
 ## Methods
 

@@ -16,7 +16,7 @@ Changes handler.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `change` | `Object` | Change. |
+| `change` | [`PouchChange`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchchange) | Change. |
 
 #### Returns
 

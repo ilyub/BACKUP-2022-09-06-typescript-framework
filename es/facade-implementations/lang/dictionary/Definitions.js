@@ -58,7 +58,7 @@ export class Definitions {
         return definition.get(this, context, forms, count, replacements);
     }
     /**
-     * Checks if dictionary has word.
+     * Checks that dictionary has word.
      *
      * @param key - Word ID.
      * @returns _True_ if dictionary has word, _false_ otherwise.
@@ -96,10 +96,9 @@ function map(definition, callback) {
  * @returns Raw definitions.
  */
 function mapDefinitions(definitions, callback) {
-    return o.fromEntries.exhaustive(Object.entries(definitions).map(([key, definition]) => [
-        key,
-        map(definition, callback)
-    ]));
+    return o.fromEntries.exhaustive(o
+        .entries(definitions)
+        .map(([key, definition]) => [key, map(definition, callback)]));
 }
 /**
  * Builds word forms.
@@ -109,7 +108,7 @@ function mapDefinitions(definitions, callback) {
  */
 function getWords(raw) {
     const result = {};
-    for (const [key, value] of Object.entries(raw.words)) {
+    for (const [key, value] of o.entries(raw.words)) {
         result[s.lcFirst(key)] = new Definition(map(value, x => s.lcFirst(x)), s.lcFirst(key));
         result[s.ucFirst(key)] = new Definition(map(value, x => s.ucFirst(x)), s.ucFirst(key));
         result[key.toLowerCase()] = new Definition(map(value, x => x.toLowerCase()), key.toLowerCase());
@@ -123,7 +122,9 @@ function getWords(raw) {
  * @param raw - Language definition.
  */
 function validate(raw) {
-    assert.toBeTrue(Object.entries(raw.wordForms).every(([key, forms]) => key === key.toLowerCase() &&
+    assert.toBeTrue(o
+        .entries(raw.wordForms)
+        .every(([key, forms]) => key === key.toLowerCase() &&
         forms.every(form => form === form.toLowerCase())), "Expecting lowercase word forms");
 }
 //# sourceMappingURL=Definitions.js.map

@@ -5,7 +5,7 @@ const tslib_1 = require("tslib");
 const jquery_1 = tslib_1.__importDefault(require("jquery"));
 const num = tslib_1.__importStar(require("@skylib/functions/dist/number"));
 const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
-const timer = tslib_1.__importStar(require("@skylib/functions/dist/timer"));
+const programFlow = tslib_1.__importStar(require("@skylib/functions/dist/programFlow"));
 /**
  * Configures plugin.
  *
@@ -32,7 +32,7 @@ exports.implementation = {
         lastEasingUpdate = 0;
         processesPool.clear();
         progress = 0;
-        timer.removeTimeout(timeout);
+        programFlow.clearTimeout(timeout);
         (0, jquery_1.default)(moduleConfig.selector)
             .removeClass(moduleConfig.activeClass)
             .css("width", "");
@@ -174,8 +174,8 @@ class Process {
         else
             exports.implementation.reset();
         if (processesPool.size) {
-            timer.removeTimeout(timeout);
-            timeout = timer.addTimeout(Process.update, moduleConfig.updateInterval);
+            programFlow.clearTimeout(timeout);
+            timeout = programFlow.setTimeout(Process.update, moduleConfig.updateInterval);
         }
     }
 }

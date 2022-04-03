@@ -1,6 +1,6 @@
 import type * as testUtils from "@skylib/functions/dist/testUtils";
-import type { ReadonlyRecord } from "@skylib/functions/dist/types/core";
-import type { LocaleName } from "@skylib/functions/dist/types/locales";
+import type { LocaleName } from "@skylib/functions/dist/types/configurable";
+import type { TypedObject } from "@skylib/functions/dist/types/core";
 import type { Definitions } from "../facade-implementations/lang/dictionary";
 declare global {
     namespace jest {
@@ -29,7 +29,7 @@ export declare namespace jestReset {
  * @param localeName - Locale name.
  * @param definitions - Language definitions.
  */
-export declare function jestResetDictionary(localeName: LocaleName, definitions: ReadonlyRecord<LocaleName, Definitions>): void;
+export declare function jestResetDictionary(localeName: LocaleName, definitions: TypedObject<LocaleName, Definitions>): void;
 /**
  * Jest reset.
  */
@@ -48,7 +48,7 @@ export declare namespace jestSetup {
  * @param localeName - Locale name.
  * @param definitions - Language definitions.
  */
-export declare function jestSetupDictionary(localeName: LocaleName, definitions: ReadonlyRecord<LocaleName, Definitions>): void;
+export declare function jestSetupDictionary(localeName: LocaleName, definitions: TypedObject<LocaleName, Definitions>): void;
 /**
  * Jest setup.
  */

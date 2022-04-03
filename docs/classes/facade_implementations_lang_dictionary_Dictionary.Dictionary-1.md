@@ -46,7 +46,7 @@ Creates class instance.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `definitions` | `Readonly`<`Record`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\>\> | `undefined` | Language definitions. |
+| `definitions` | `TypedObject`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\> | `undefined` | Language definitions. |
 | `context?` | ``"InXDays"`` | `undefined` | Context. |
 | `count` | `number` | `1` | Count for plural form. |
 
@@ -66,7 +66,7 @@ ___
 
 ### definitions
 
-• `Protected` **definitions**: `Readonly`<`Record`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\>\>
+• `Protected` **definitions**: `TypedObject`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\>
 
 ___
 
@@ -205,21 +205,15 @@ ___
 
 ### configure
 
-▸ `Static` **configure**<`K`\>(`config`): `void`
+▸ `Static` **configure**(`config`): `void`
 
 Configures plugin.
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `K` | extends ``"localeName"`` |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `config` | [`PartialConfiguration`](../modules/facade_implementations_lang_dictionary_Dictionary.Dictionary.md#partialconfiguration)<`K`\> | Plugin configuration. |
+| `config` | `Partial`<[`Configuration`](../interfaces/facade_implementations_lang_dictionary_Dictionary.Dictionary.Configuration.md)\> | Plugin configuration. |
 
 #### Returns
 
@@ -237,7 +231,7 @@ Creates class instance.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `definitions` | `Readonly`<`Record`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\>\> | Language definitions. |
+| `definitions` | `TypedObject`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\> | Language definitions. |
 | `context?` | ``"InXDays"`` | Context. |
 | `count?` | `number` | Count for plural form. |
 

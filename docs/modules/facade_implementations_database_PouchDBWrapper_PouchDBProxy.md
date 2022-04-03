@@ -36,67 +36,67 @@
 
 ### PouchChange
 
-Ƭ **PouchChange**: `DeepReadonly`<`PouchDB.Core.ChangesResponseChange`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md)\>\>
+Ƭ **PouchChange**: `PouchDB.Core.ChangesResponseChange`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md)\>
 
 ___
 
 ### PouchChangesOptions
 
-Ƭ **PouchChangesOptions**: `DeepReadonly`<`PouchDB.Core.ChangesOptions`\>
+Ƭ **PouchChangesOptions**: `PouchDB.Core.ChangesOptions`
 
 ___
 
 ### PouchDatabase
 
-Ƭ **PouchDatabase**: `DeepReadonly`<`PouchDB.Database`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md)\>\>
+Ƭ **PouchDatabase**: `PouchDB.Database`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md)\>
 
 ___
 
 ### PouchDatabaseConfiguration
 
-Ƭ **PouchDatabaseConfiguration**: `DeepReadonly`<`PouchDB.Configuration.DatabaseConfiguration`\>
+Ƭ **PouchDatabaseConfiguration**: `PouchDB.Configuration.DatabaseConfiguration`
 
 ___
 
 ### PouchError
 
-Ƭ **PouchError**: `Readonly`<`PouchDB.Core.Error`\>
+Ƭ **PouchError**: `PouchDB.Core.Error`
 
 ___
 
 ### PouchGetMeta
 
-Ƭ **PouchGetMeta**: `DeepReadonly`<`PouchDB.Core.GetMeta`\>
+Ƭ **PouchGetMeta**: `PouchDB.Core.GetMeta`
 
 ___
 
 ### PouchIdMeta
 
-Ƭ **PouchIdMeta**: `Readonly`<`PouchDB.Core.IdMeta`\>
+Ƭ **PouchIdMeta**: `PouchDB.Core.IdMeta`
 
 ___
 
 ### PouchPutDocument
 
-Ƭ **PouchPutDocument**: `DeepReadonly`<`PouchDB.Core.PutDocument`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md)\>\>
+Ƭ **PouchPutDocument**: `PouchDB.Core.PutDocument`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md)\>
 
 ___
 
 ### PouchQueryOptions
 
-Ƭ **PouchQueryOptions**: `DeepReadonly`<`PouchDB.Query.Options`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md), [`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md)\>\>
+Ƭ **PouchQueryOptions**: `PouchDB.Query.Options`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md), [`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md)\>
 
 ___
 
 ### PouchQueryResponse
 
-Ƭ **PouchQueryResponse**: `DeepReadonly`<`PouchDB.Query.Response`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md)\>\>
+Ƭ **PouchQueryResponse**: `PouchDB.Query.Response`<[`Content`](../interfaces/facade_implementations_database_PouchDBWrapper_PouchDBProxy.Content.md)\>
 
 ___
 
 ### PouchResponse
 
-Ƭ **PouchResponse**: `Readonly`<`PouchDB.Core.Response`\>
+Ƭ **PouchResponse**: `PouchDB.Core.Response`
 
 ## Variables
 

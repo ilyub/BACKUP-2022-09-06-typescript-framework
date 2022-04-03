@@ -45,13 +45,13 @@ ___
 
 ### wordForms
 
-• `Protected` **wordForms**: `Readonly`<`IndexedObject`<`strings`\>\>
+• `Protected` **wordForms**: `Readonly`<`TypedObject`<`PropertyKey`, `strings`\>\>
 
 ___
 
 ### words
 
-• `Protected` **words**: `Readonly`<`IndexedObject`<[`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)\>\> = `{}`
+• `Protected` **words**: `Readonly`<`TypedObject`<`PropertyKey`, [`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)\>\> = `{}`
 
 ## Methods
 
@@ -83,7 +83,7 @@ ___
 
 ▸ **has**(`key`): key is Transforms<keyof Word\>
 
-Checks if dictionary has word.
+Checks that dictionary has word.
 
 #### Parameters
 

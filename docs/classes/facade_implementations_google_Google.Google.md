@@ -36,19 +36,19 @@ Creates class instance.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `clientId` | `stringU` \| `PromiseAsync`<`stringU`\> | Client ID. |
+| `clientId` | `stringU` \| `AsyncPromise`<`stringU`, `nevers`\> | Client ID. |
 
 ## Properties
 
 ### clientId
 
-• `Protected` **clientId**: `stringU` \| `PromiseAsync`<`stringU`\>
+• `Protected` **clientId**: `stringU` \| `AsyncPromise`<`stringU`, `nevers`\>
 
 ___
 
 ### sdk
 
-• `Protected` **sdk**: `undefined` \| `Promise`<{}\> = `undefined`
+• `Protected` **sdk**: `undefined` \| `Promise`<[`GoogleAuth`](../modules/facade_implementations_google_Google.md#googleauth)\> = `undefined`
 
 ## Methods
 

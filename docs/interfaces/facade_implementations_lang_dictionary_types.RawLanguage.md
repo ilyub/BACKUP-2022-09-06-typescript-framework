@@ -22,10 +22,10 @@ ___
 
 ### wordForms
 
-• `Readonly` **wordForms**: `Readonly`<`IndexedObject`<`strings`\>\>
+• `Readonly` **wordForms**: `Readonly`<`TypedObject`<`PropertyKey`, `strings`\>\>
 
 ___
 
 ### words
 
-• `Readonly` **words**: `Readonly`<`Record`<keyof `Word`, [`RawDefinition`](../modules/facade_implementations_lang_dictionary_types.md#rawdefinition)\>\>
+• `Readonly` **words**: `TypedObject`<keyof `Word`, [`RawDefinition`](../modules/facade_implementations_lang_dictionary_types.md#rawdefinition)\>

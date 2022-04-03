@@ -14,7 +14,6 @@
 
 ### Type aliases
 
-- [PartialConfiguration](facade_implementations_progressReporter_progressBar.md#partialconfiguration)
 - [State](facade_implementations_progressReporter_progressBar.md#state)
 
 ### Variables
@@ -27,18 +26,6 @@
 - [getConfiguration](facade_implementations_progressReporter_progressBar.md#getconfiguration)
 
 ## Type aliases
-
-### PartialConfiguration
-
-Ƭ **PartialConfiguration**<`K`\>: { readonly [L in K]: Configuration[L] }
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `K` | extends keyof [`Configuration`](../interfaces/facade_implementations_progressReporter_progressBar.Configuration.md) |
-
-___
 
 ### State
 
@@ -54,21 +41,15 @@ ___
 
 ### configure
 
-▸ **configure**<`K`\>(`config`): `void`
+▸ **configure**(`config`): `void`
 
 Configures plugin.
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `K` | extends keyof [`Configuration`](../interfaces/facade_implementations_progressReporter_progressBar.Configuration.md) |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `config` | [`PartialConfiguration`](facade_implementations_progressReporter_progressBar.md#partialconfiguration)<`K`\> | Plugin configuration. |
+| `config` | `Partial`<[`Configuration`](../interfaces/facade_implementations_progressReporter_progressBar.Configuration.md)\> | Plugin configuration. |
 
 #### Returns
 

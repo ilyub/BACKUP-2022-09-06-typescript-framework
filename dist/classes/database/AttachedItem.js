@@ -5,7 +5,7 @@ const tslib_1 = require("tslib");
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
 const Item_1 = require("./Item");
-exports.isPutAttachedItemDoc = is.factory(is.object.of, { parentDoc: Item_1.isItemDoc }, {
+exports.isPutAttachedItemDoc = is.object.of.factory({ parentDoc: Item_1.isItemDoc }, {
     _deleted: is.true,
     _id: is.number,
     _rev: is.number,
@@ -15,7 +15,7 @@ exports.isPutAttachedItemDoc = is.factory(is.object.of, { parentDoc: Item_1.isIt
     updatedAt: is.string
 });
 exports.isPutAttachedItemDocs = is.factory(is.array.of, exports.isPutAttachedItemDoc);
-exports.isAttachedItemDoc = is.factory(is.object.of, {
+exports.isAttachedItemDoc = is.object.of.factory({
     _id: is.number,
     _rev: is.number,
     parentDoc: Item_1.isItemDoc

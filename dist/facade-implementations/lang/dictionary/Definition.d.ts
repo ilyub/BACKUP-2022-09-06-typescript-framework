@@ -1,5 +1,5 @@
 import type { Context } from "@skylib/facades/dist/lang";
-import type { NumStr, ReadonlyIndexedObject, strings } from "@skylib/functions/dist/types/core";
+import type { IndexedObject, NumStr, strings } from "@skylib/functions/dist/types/core";
 import type { Definitions } from ".";
 import type { RawDefinition, WordInfo } from "./types";
 export declare class Definition {
@@ -9,7 +9,7 @@ export declare class Definition {
      * @param raw - Raw definition.
      * @param id - ID.
      */
-    constructor(raw: RawDefinition, id: string);
+    constructor(raw: RawDefinition, id: NumStr);
     /**
      * Returns word based on context, word forms, and count.
      * Applies replacements.
@@ -22,8 +22,8 @@ export declare class Definition {
      * @returns Word.
      */
     get(owner: Definitions, context: Context | undefined, forms: strings, count: number, replacements: ReadonlyMap<string, string>): WordInfo;
-    protected contexts: ReadonlyIndexedObject<NumStr>;
-    protected id: string;
+    protected contexts: IndexedObject<NumStr>;
+    protected id: NumStr;
     protected rulesRef: readonly strings[];
     protected rulesRefDependent: readonly strings[];
     protected rulesRefSecondary: readonly strings[];
@@ -31,7 +31,7 @@ export declare class Definition {
     protected rulesWord: readonly strings[];
     protected rulesWordSecondary: readonly strings[];
     protected sub: Definition | undefined;
-    protected subs: ReadonlyIndexedObject<Definition>;
+    protected subs: IndexedObject<Definition>;
     protected value: string;
     /**
      * Applies rules to the word.

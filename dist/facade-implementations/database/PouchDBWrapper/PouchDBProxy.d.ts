@@ -3,7 +3,7 @@
 /// <reference types="pouchdb-mapreduce" />
 /// <reference types="pouchdb-replication" />
 import type { StoredAttachedDocument } from "@skylib/facades/dist/database";
-import type { DeepReadonly, numbers } from "@skylib/functions/dist/types/core";
+import type { numbers } from "@skylib/functions/dist/types/core";
 export interface Changes {
     /**
      * Cancels changes.
@@ -15,7 +15,7 @@ export interface Content {
     readonly attachedDocs?: readonly StoredAttachedDocument[];
     readonly lastAttachedDocs?: numbers;
 }
-export declare type PouchChange = DeepReadonly<PouchDB.Core.ChangesResponseChange<Content>>;
+export declare type PouchChange = PouchDB.Core.ChangesResponseChange<Content>;
 export interface PouchChangesHandler {
     /**
      * Changes handler.
@@ -24,16 +24,16 @@ export interface PouchChangesHandler {
      */
     (change: PouchChange): void;
 }
-export declare type PouchChangesOptions = DeepReadonly<PouchDB.Core.ChangesOptions>;
-export declare type PouchDatabaseConfiguration = DeepReadonly<PouchDB.Configuration.DatabaseConfiguration>;
-export declare type PouchGetMeta = DeepReadonly<PouchDB.Core.GetMeta>;
-export declare type PouchIdMeta = Readonly<PouchDB.Core.IdMeta>;
-export declare type PouchDatabase = DeepReadonly<PouchDB.Database<Content>>;
-export declare type PouchError = Readonly<PouchDB.Core.Error>;
-export declare type PouchResponse = Readonly<PouchDB.Core.Response>;
-export declare type PouchPutDocument = DeepReadonly<PouchDB.Core.PutDocument<Content>>;
-export declare type PouchQueryOptions = DeepReadonly<PouchDB.Query.Options<Content, Content>>;
-export declare type PouchQueryResponse = DeepReadonly<PouchDB.Query.Response<Content>>;
+export declare type PouchChangesOptions = PouchDB.Core.ChangesOptions;
+export declare type PouchDatabaseConfiguration = PouchDB.Configuration.DatabaseConfiguration;
+export declare type PouchGetMeta = PouchDB.Core.GetMeta;
+export declare type PouchIdMeta = PouchDB.Core.IdMeta;
+export declare type PouchDatabase = PouchDB.Database<Content>;
+export declare type PouchError = PouchDB.Core.Error;
+export declare type PouchResponse = PouchDB.Core.Response;
+export declare type PouchPutDocument = PouchDB.Core.PutDocument<Content>;
+export declare type PouchQueryOptions = PouchDB.Query.Options<Content, Content>;
+export declare type PouchQueryResponse = PouchDB.Query.Response<Content>;
 export declare const handlers: Readonly<{
     error(error: unknown): void;
 }>;

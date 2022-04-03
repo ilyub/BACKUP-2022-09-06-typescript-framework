@@ -112,7 +112,7 @@ Creates class instance.
 | `name` | `string` | Database name. |
 | `options` | `DatabaseOptions` | Database options. |
 | `config` | [`Configuration`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.Configuration.md) | Configuration. |
-| `pouchConfig` | [`PouchDatabaseConfiguration`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchdatabaseconfiguration) | PouchDB configuration. |
+| `pouchConfig` | `DatabaseConfiguration` | PouchDB configuration. |
 
 ## Properties
 
@@ -160,7 +160,7 @@ ___
 
 ### pouchConfig
 
-• `Protected` **pouchConfig**: [`PouchDatabaseConfiguration`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchdatabaseconfiguration)
+• `Protected` **pouchConfig**: `DatabaseConfiguration`
 
 ## Methods
 
@@ -405,13 +405,13 @@ ___
 
 ### getRawDb
 
-▸ **getRawDb**(): `Promise`<{}\>
+▸ **getRawDb**(): `Promise`<[`PouchDatabase`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchdatabase)\>
 
 Returns original PouchDB database.
 
 #### Returns
 
-`Promise`<{}\>
+`Promise`<[`PouchDatabase`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchdatabase)\>
 
 Original PouchDB database.
 

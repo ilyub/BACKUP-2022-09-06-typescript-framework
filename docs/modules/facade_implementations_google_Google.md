@@ -16,4 +16,4 @@
 
 ### GoogleAuth
 
-Ƭ **GoogleAuth**: `DeepReadonly`<`Omit`<`gapi.auth2.GoogleAuth`, ``"then"``\>\>
+Ƭ **GoogleAuth**: `Omit`<`gapi.auth2.GoogleAuth`, ``"then"``\>

@@ -16,7 +16,7 @@ import * as is from "@skylib/functions/es/guards";
 import * as json from "@skylib/functions/es/json";
 import * as num from "@skylib/functions/es/number";
 import * as o from "@skylib/functions/es/object";
-import * as timer from "@skylib/functions/es/timer";
+import * as programFlow from "@skylib/functions/es/programFlow";
 import { PouchConflictError } from "./errors/PouchConflictError";
 import { PouchNotFoundError } from "./errors/PouchNotFoundError";
 import { PouchRetryError } from "./errors/PouchRetryError";
@@ -774,7 +774,7 @@ export class Database {
         });
         assert.toBeTrue(result.loaded);
         const subscription = this.subscribe(doc => {
-            assert.not.undefined(result);
+            assert.not.empty(result);
             assert.toBeTrue(result.loaded);
             handler(doc, result);
         });
@@ -823,7 +823,7 @@ export class Database {
         });
         assert.toBeTrue(result.loaded);
         const subscription = this.subscribeAttached(doc => {
-            assert.not.undefined(result);
+            assert.not.empty(result);
             assert.toBeTrue(result.loaded);
             handler(doc, result);
         });
@@ -869,7 +869,7 @@ export class Database {
             unsubscribe: () => {
                 reactiveStorage.unwatch(config, observer);
                 this.unsubscribe(subscription);
-                timer.removeTimeout(timeout);
+                programFlow.clearTimeout(timeout);
             },
             value: await request(config.conditions, config.options)
         });
@@ -883,22 +883,22 @@ export class Database {
         updateTimeout();
         return result;
         function refresh() {
-            handlePromise.silent(fn.doNotRunParallel(async () => {
-                assert.not.undefined(result);
+            handlePromise.silent(async () => {
+                assert.not.empty(result);
                 assert.toBeTrue(result.loaded);
                 result.loading = true;
                 const value = await request(config.conditions, config.options);
-                assert.not.undefined(result);
+                assert.not.empty(result);
                 assert.toBeTrue(result.loaded);
                 result.loading = false;
                 result.value = value;
                 updateTimeout();
-            }));
+            });
         }
         function updateTimeout() {
-            timer.removeTimeout(timeout);
+            programFlow.clearTimeout(timeout);
             timeout = is.not.empty(config.updateInterval)
-                ? timer.addTimeout(refresh, config.updateInterval)
+                ? programFlow.setTimeout(refresh, config.updateInterval)
                 : undefined;
         }
     }
@@ -942,7 +942,7 @@ export class Database {
             unsubscribe: () => {
                 reactiveStorage.unwatch(config, observer);
                 this.unsubscribeAttached(subscription);
-                timer.removeTimeout(timeout);
+                programFlow.clearTimeout(timeout);
             },
             value: await request(config.conditions, config.parentConditions, config.options)
         });
@@ -956,22 +956,22 @@ export class Database {
         updateTimeout();
         return result;
         function refresh() {
-            handlePromise.silent(fn.doNotRunParallel(async () => {
-                assert.not.undefined(result);
+            handlePromise.silent(async () => {
+                assert.not.empty(result);
                 assert.toBeTrue(result.loaded);
                 result.loading = true;
                 const value = await request(config.conditions, config.parentConditions, config.options);
-                assert.not.undefined(result);
+                assert.not.empty(result);
                 assert.toBeTrue(result.loaded);
                 result.loading = false;
                 result.value = value;
                 updateTimeout();
-            }));
+            });
         }
         function updateTimeout() {
-            timer.removeTimeout(timeout);
+            programFlow.clearTimeout(timeout);
             timeout = is.not.empty(config.updateInterval)
-                ? timer.addTimeout(refresh, config.updateInterval)
+                ? programFlow.setTimeout(refresh, config.updateInterval)
                 : undefined;
         }
     }
@@ -1094,21 +1094,21 @@ export class Database {
         }
     }
 }
-const isDocResponse = is.factory(is.object.of, { doc: is.unknown, key: is.unknown }, {});
+const isDocResponse = is.object.of.factory({ doc: is.unknown, key: is.unknown }, {});
 const isDocResponses = is.factory(is.array.of, isDocResponse);
-const isDocsResponse = is.factory(is.object.of, {
+const isDocsResponse = is.object.of.factory({
     count: is.number,
     docs: isDocResponses,
     settled: is.boolean
 }, {});
-const isStoredDocumentAttached = is.factory(is.object.of, { _id: is.number, _rev: is.number }, { _deleted: is.true });
+const isStoredDocumentAttached = is.object.of.factory({ _id: is.number, _rev: is.number }, { _deleted: is.true });
 const isStoredDocumentAttachedArray = is.factory(is.array.of, isStoredDocumentAttached);
-const isExistingDocument = is.factory(is.object.of, { _id: is.string, _rev: is.string }, {
+const isExistingDocument = is.object.of.factory({ _id: is.string, _rev: is.string }, {
     _deleted: is.true,
     attachedDocs: isStoredDocumentAttachedArray,
     lastAttachedDocs: is.numbers
 });
-const isExistingDocumentAttached = is.factory(is.object.of, {
+const isExistingDocumentAttached = is.object.of.factory({
     _id: is.number,
     _rev: is.number,
     parentDoc: isExistingDocument
@@ -1139,7 +1139,7 @@ function condsToStr(source, conditions) {
     const toOutput = [];
     const toSettle = [];
     for (const conditionsGroup of conditions)
-        for (const [key, fieldConditions] of Object.entries(conditionsGroup)) {
+        for (const [key, fieldConditions] of o.entries(conditionsGroup)) {
             const dest = `${source}.${key}`;
             const destDelta = `new Date(${dest}).getTime() - Date.now()`;
             if ("isSet" in fieldConditions)

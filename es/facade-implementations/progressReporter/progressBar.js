@@ -1,7 +1,7 @@
 import $ from "jquery";
 import * as num from "@skylib/functions/es/number";
 import * as o from "@skylib/functions/es/object";
-import * as timer from "@skylib/functions/es/timer";
+import * as programFlow from "@skylib/functions/es/programFlow";
 /**
  * Configures plugin.
  *
@@ -26,7 +26,7 @@ export const implementation = {
         lastEasingUpdate = 0;
         processesPool.clear();
         progress = 0;
-        timer.removeTimeout(timeout);
+        programFlow.clearTimeout(timeout);
         $(moduleConfig.selector)
             .removeClass(moduleConfig.activeClass)
             .css("width", "");
@@ -168,8 +168,8 @@ export class Process {
         else
             implementation.reset();
         if (processesPool.size) {
-            timer.removeTimeout(timeout);
-            timeout = timer.addTimeout(Process.update, moduleConfig.updateInterval);
+            programFlow.clearTimeout(timeout);
+            timeout = programFlow.setTimeout(Process.update, moduleConfig.updateInterval);
         }
     }
 }

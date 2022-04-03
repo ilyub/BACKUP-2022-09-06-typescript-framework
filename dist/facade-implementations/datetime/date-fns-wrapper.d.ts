@@ -1,8 +1,8 @@
 import type { DateTime as DateTimeInterface, Facade, Unit } from "@skylib/facades/dist/datetime";
-import type { DeepReadonly } from "@skylib/functions/dist/types/core";
+import type { NumStr } from "@skylib/functions/dist/types/core";
 export interface Configuration {
     readonly firstDayOfWeek: FirstDayOfWeek;
-    readonly locale: DeepReadonly<Locale>;
+    readonly locale: Locale;
     readonly pm: boolean;
 }
 export declare type PartialConfiguration<K extends keyof Configuration> = {
@@ -14,7 +14,7 @@ export declare type FirstDayOfWeek = 0 | 1;
  *
  * @param config - Plugin configuration.
  */
-export declare function configure<K extends keyof Configuration>(config: PartialConfiguration<K>): void;
+export declare function configure(config: Partial<Configuration>): void;
 /**
  * Returns plugin configuration.
  *
@@ -28,7 +28,7 @@ export declare class DateTime implements DateTimeInterface {
      *
      * @param dt - Date/time.
      */
-    constructor(dt?: Date | DateTimeInterface | string);
+    constructor(dt?: Date | DateTimeInterface | NumStr);
     add(amount: number, unit: Unit): DateTimeInterface;
     clone(): DateTimeInterface;
     dayOfMonth(): number;

@@ -9,16 +9,13 @@ export interface Configuration {
     readonly selector: string;
     readonly updateInterval: number;
 }
-export declare type PartialConfiguration<K extends keyof Configuration> = {
-    readonly [L in K]: Configuration[L];
-};
 export declare type State = "auto" | "done" | "manual";
 /**
  * Configures plugin.
  *
  * @param config - Plugin configuration.
  */
-export declare function configure<K extends keyof Configuration>(config: PartialConfiguration<K>): void;
+export declare function configure(config: Partial<Configuration>): void;
 /**
  * Returns plugin configuration.
  *

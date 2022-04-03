@@ -19,7 +19,7 @@ const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const json = tslib_1.__importStar(require("@skylib/functions/dist/json"));
 const num = tslib_1.__importStar(require("@skylib/functions/dist/number"));
 const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
-const timer = tslib_1.__importStar(require("@skylib/functions/dist/timer"));
+const programFlow = tslib_1.__importStar(require("@skylib/functions/dist/programFlow"));
 const PouchConflictError_1 = require("./errors/PouchConflictError");
 const PouchNotFoundError_1 = require("./errors/PouchNotFoundError");
 const PouchRetryError_1 = require("./errors/PouchRetryError");
@@ -777,7 +777,7 @@ class Database {
         });
         assert.toBeTrue(result.loaded);
         const subscription = this.subscribe(doc => {
-            assert.not.undefined(result);
+            assert.not.empty(result);
             assert.toBeTrue(result.loaded);
             handler(doc, result);
         });
@@ -826,7 +826,7 @@ class Database {
         });
         assert.toBeTrue(result.loaded);
         const subscription = this.subscribeAttached(doc => {
-            assert.not.undefined(result);
+            assert.not.empty(result);
             assert.toBeTrue(result.loaded);
             handler(doc, result);
         });
@@ -872,7 +872,7 @@ class Database {
             unsubscribe: () => {
                 reactiveStorage_1.reactiveStorage.unwatch(config, observer);
                 this.unsubscribe(subscription);
-                timer.removeTimeout(timeout);
+                programFlow.clearTimeout(timeout);
             },
             value: await request(config.conditions, config.options)
         });
@@ -886,22 +886,22 @@ class Database {
         updateTimeout();
         return result;
         function refresh() {
-            handlePromise_1.handlePromise.silent(fn.doNotRunParallel(async () => {
-                assert.not.undefined(result);
+            handlePromise_1.handlePromise.silent(async () => {
+                assert.not.empty(result);
                 assert.toBeTrue(result.loaded);
                 result.loading = true;
                 const value = await request(config.conditions, config.options);
-                assert.not.undefined(result);
+                assert.not.empty(result);
                 assert.toBeTrue(result.loaded);
                 result.loading = false;
                 result.value = value;
                 updateTimeout();
-            }));
+            });
         }
         function updateTimeout() {
-            timer.removeTimeout(timeout);
+            programFlow.clearTimeout(timeout);
             timeout = is.not.empty(config.updateInterval)
-                ? timer.addTimeout(refresh, config.updateInterval)
+                ? programFlow.setTimeout(refresh, config.updateInterval)
                 : undefined;
         }
     }
@@ -945,7 +945,7 @@ class Database {
             unsubscribe: () => {
                 reactiveStorage_1.reactiveStorage.unwatch(config, observer);
                 this.unsubscribeAttached(subscription);
-                timer.removeTimeout(timeout);
+                programFlow.clearTimeout(timeout);
             },
             value: await request(config.conditions, config.parentConditions, config.options)
         });
@@ -959,22 +959,22 @@ class Database {
         updateTimeout();
         return result;
         function refresh() {
-            handlePromise_1.handlePromise.silent(fn.doNotRunParallel(async () => {
-                assert.not.undefined(result);
+            handlePromise_1.handlePromise.silent(async () => {
+                assert.not.empty(result);
                 assert.toBeTrue(result.loaded);
                 result.loading = true;
                 const value = await request(config.conditions, config.parentConditions, config.options);
-                assert.not.undefined(result);
+                assert.not.empty(result);
                 assert.toBeTrue(result.loaded);
                 result.loading = false;
                 result.value = value;
                 updateTimeout();
-            }));
+            });
         }
         function updateTimeout() {
-            timer.removeTimeout(timeout);
+            programFlow.clearTimeout(timeout);
             timeout = is.not.empty(config.updateInterval)
-                ? timer.addTimeout(refresh, config.updateInterval)
+                ? programFlow.setTimeout(refresh, config.updateInterval)
                 : undefined;
         }
     }
@@ -1098,21 +1098,21 @@ class Database {
     }
 }
 exports.Database = Database;
-const isDocResponse = is.factory(is.object.of, { doc: is.unknown, key: is.unknown }, {});
+const isDocResponse = is.object.of.factory({ doc: is.unknown, key: is.unknown }, {});
 const isDocResponses = is.factory(is.array.of, isDocResponse);
-const isDocsResponse = is.factory(is.object.of, {
+const isDocsResponse = is.object.of.factory({
     count: is.number,
     docs: isDocResponses,
     settled: is.boolean
 }, {});
-const isStoredDocumentAttached = is.factory(is.object.of, { _id: is.number, _rev: is.number }, { _deleted: is.true });
+const isStoredDocumentAttached = is.object.of.factory({ _id: is.number, _rev: is.number }, { _deleted: is.true });
 const isStoredDocumentAttachedArray = is.factory(is.array.of, isStoredDocumentAttached);
-const isExistingDocument = is.factory(is.object.of, { _id: is.string, _rev: is.string }, {
+const isExistingDocument = is.object.of.factory({ _id: is.string, _rev: is.string }, {
     _deleted: is.true,
     attachedDocs: isStoredDocumentAttachedArray,
     lastAttachedDocs: is.numbers
 });
-const isExistingDocumentAttached = is.factory(is.object.of, {
+const isExistingDocumentAttached = is.object.of.factory({
     _id: is.number,
     _rev: is.number,
     parentDoc: isExistingDocument
@@ -1143,7 +1143,7 @@ function condsToStr(source, conditions) {
     const toOutput = [];
     const toSettle = [];
     for (const conditionsGroup of conditions)
-        for (const [key, fieldConditions] of Object.entries(conditionsGroup)) {
+        for (const [key, fieldConditions] of o.entries(conditionsGroup)) {
             const dest = `${source}.${key}`;
             const destDelta = `new Date(${dest}).getTime() - Date.now()`;
             if ("isSet" in fieldConditions)

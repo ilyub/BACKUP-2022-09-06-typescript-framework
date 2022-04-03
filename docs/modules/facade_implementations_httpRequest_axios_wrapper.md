@@ -43,21 +43,15 @@
 
 ### configure
 
-▸ **configure**<`K`\>(`config`): `void`
+▸ **configure**(`config`): `void`
 
 Configures plugin.
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `K` | extends ``"timeout"`` |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `config` | [`PartialConfiguration`](facade_implementations_httpRequest_axios_wrapper.md#partialconfiguration)<`K`\> | Plugin configuration. |
+| `config` | `Partial`<[`Configuration`](../interfaces/facade_implementations_httpRequest_axios_wrapper.Configuration.md)\> | Plugin configuration. |
 
 #### Returns
 

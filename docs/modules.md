@@ -6,15 +6,9 @@
 
 ### Modules
 
-- [actions/Action](modules/actions_Action.md)
-- [actions/Confirmable](modules/actions_Confirmable.md)
 - [classes/database/AttachedItem](modules/classes_database_AttachedItem.md)
 - [classes/database/Item](modules/classes_database_Item.md)
 - [configs/eslintrc.options](modules/configs_eslintrc_options.md)
-- [decorators/Enumerable](modules/decorators_Enumerable.md)
-- [decorators/MustBeDefined](modules/decorators_MustBeDefined.md)
-- [decorators/OwnProperty](modules/decorators_OwnProperty.md)
-- [decorators/errors/MustBeDefinedError](modules/decorators_errors_MustBeDefinedError.md)
 - [facade-implementations/compare/natural-compare-wrapper](modules/facade_implementations_compare_natural_compare_wrapper.md)
 - [facade-implementations/database/PouchDBWrapper](modules/facade_implementations_database_PouchDBWrapper.md)
 - [facade-implementations/database/PouchDBWrapper/Database](modules/facade_implementations_database_PouchDBWrapper_Database.md)
@@ -43,6 +37,5 @@
 - [facade-implementations/showConfirm/jsConfirm](modules/facade_implementations_showConfirm_jsConfirm.md)
 - [facade-implementations/testDelay/configurableTestDelay](modules/facade_implementations_testDelay_configurableTestDelay.md)
 - [facade-implementations/uniqueId/uuidWrapper](modules/facade_implementations_uniqueId_uuidWrapper.md)
-- [plugins/shortcuts](modules/plugins_shortcuts.md)
 - [testUtils](modules/testUtils.md)
 - [typings/pouchdb-collate](modules/typings_pouchdb_collate.md)

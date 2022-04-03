@@ -18,7 +18,15 @@
 
 ### Properties
 
+- [message](facade_implementations_database_PouchDBWrapper_errors_PouchConflictError.PouchConflictError.md#message)
 - [name](facade_implementations_database_PouchDBWrapper_errors_PouchConflictError.PouchConflictError.md#name)
+- [stack](facade_implementations_database_PouchDBWrapper_errors_PouchConflictError.PouchConflictError.md#stack)
+- [stackTraceLimit](facade_implementations_database_PouchDBWrapper_errors_PouchConflictError.PouchConflictError.md#stacktracelimit)
+
+### Methods
+
+- [captureStackTrace](facade_implementations_database_PouchDBWrapper_errors_PouchConflictError.PouchConflictError.md#capturestacktrace)
+- [prepareStackTrace](facade_implementations_database_PouchDBWrapper_errors_PouchConflictError.PouchConflictError.md#preparestacktrace)
 
 ## Constructors
 
@@ -40,6 +48,16 @@ Error.constructor
 
 ## Properties
 
+### message
+
+• **message**: `string`
+
+#### Inherited from
+
+Error.message
+
+___
+
 ### name
 
 • `Readonly` **name**: ``"PouchConflictError"``
@@ -47,3 +65,71 @@ Error.constructor
 #### Overrides
 
 Error.name
+
+___
+
+### stack
+
+• `Optional` **stack**: `string`
+
+#### Inherited from
+
+Error.stack
+
+___
+
+### stackTraceLimit
+
+▪ `Static` **stackTraceLimit**: `number`
+
+#### Inherited from
+
+Error.stackTraceLimit
+
+## Methods
+
+### captureStackTrace
+
+▸ `Static` **captureStackTrace**(`targetObject`, `constructorOpt?`): `void`
+
+Create .stack property on a target object
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `targetObject` | `object` |
+| `constructorOpt?` | `Function` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+Error.captureStackTrace
+
+___
+
+### prepareStackTrace
+
+▸ `Static` `Optional` **prepareStackTrace**(`err`, `stackTraces`): `any`
+
+Optional override for formatting stack traces
+
+**`see`** https://v8.dev/docs/stack-trace-api#customizing-stack-traces
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `err` | `Error` |
+| `stackTraces` | `CallSite`[] |
+
+#### Returns
+
+`any`
+
+#### Inherited from
+
+Error.prepareStackTrace

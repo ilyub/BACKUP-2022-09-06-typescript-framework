@@ -10,7 +10,7 @@ export declare type PartialConfiguration<K extends keyof Configuration> = {
  *
  * @param config - Plugin configuration.
  */
-export declare function configure<K extends keyof Configuration>(config: PartialConfiguration<K>): void;
+export declare function configure(config: Partial<Configuration>): void;
 /**
  * Returns plugin configuration.
  *

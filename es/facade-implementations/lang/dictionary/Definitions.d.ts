@@ -1,5 +1,5 @@
 import type { Context, Transforms, Word } from "@skylib/facades/es/lang";
-import type { ReadonlyIndexedObject, strings } from "@skylib/functions/es/types/core";
+import type { IndexedObject, strings } from "@skylib/functions/es/types/core";
 import { Definition } from ".";
 import type { PluralReduce, RawLanguage, WordInfo } from "./types";
 export declare class Definitions {
@@ -22,13 +22,13 @@ export declare class Definitions {
      */
     get(key: string, context: Context | undefined, forms: strings | string, count: number, replacements: ReadonlyMap<string, string>): WordInfo;
     /**
-     * Checks if dictionary has word.
+     * Checks that dictionary has word.
      *
      * @param key - Word ID.
      * @returns _True_ if dictionary has word, _false_ otherwise.
      */
     has(key: string): key is Transforms<Word>;
-    protected wordForms: ReadonlyIndexedObject<strings>;
-    protected words: ReadonlyIndexedObject<Definition>;
+    protected wordForms: IndexedObject<strings>;
+    protected words: IndexedObject<Definition>;
 }
 //# sourceMappingURL=Definitions.d.ts.map

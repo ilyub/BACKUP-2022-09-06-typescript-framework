@@ -1,7 +1,7 @@
 import * as is from "@skylib/functions/es/guards";
 import * as o from "@skylib/functions/es/object";
 import { isItemDoc } from "./Item";
-export const isPutAttachedItemDoc = is.factory(is.object.of, { parentDoc: isItemDoc }, {
+export const isPutAttachedItemDoc = is.object.of.factory({ parentDoc: isItemDoc }, {
     _deleted: is.true,
     _id: is.number,
     _rev: is.number,
@@ -11,7 +11,7 @@ export const isPutAttachedItemDoc = is.factory(is.object.of, { parentDoc: isItem
     updatedAt: is.string
 });
 export const isPutAttachedItemDocs = is.factory(is.array.of, isPutAttachedItemDoc);
-export const isAttachedItemDoc = is.factory(is.object.of, {
+export const isAttachedItemDoc = is.object.of.factory({
     _id: is.number,
     _rev: is.number,
     parentDoc: isItemDoc

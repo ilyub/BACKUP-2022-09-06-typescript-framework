@@ -1,14 +1,11 @@
 import type { Context, Dictionary as DictionaryInterface, Facade, Transforms, Word } from "@skylib/facades/es/lang";
-import type { NumStr, ReadonlyRecord } from "@skylib/functions/es/types/core";
-import type { LocaleName } from "@skylib/functions/es/types/locales";
+import type { LocaleName } from "@skylib/functions/es/types/configurable";
+import type { NumStr, TypedObject } from "@skylib/functions/es/types/core";
 import type { Definitions } from ".";
 export declare namespace Dictionary {
     interface Configuration {
         readonly localeName: LocaleName;
     }
-    type PartialConfiguration<K extends keyof Configuration> = {
-        readonly [L in K]: Configuration[L];
-    };
 }
 export declare class Dictionary implements DictionaryInterface {
     /**
@@ -16,7 +13,7 @@ export declare class Dictionary implements DictionaryInterface {
      *
      * @param config - Plugin configuration.
      */
-    static configure<K extends keyof Dictionary.Configuration>(config: Dictionary.PartialConfiguration<K>): void;
+    static configure(config: Partial<Dictionary.Configuration>): void;
     /**
      * Creates class instance.
      *
@@ -25,7 +22,7 @@ export declare class Dictionary implements DictionaryInterface {
      * @param count - Count for plural form.
      * @returns Dictionary.
      */
-    static create(definitions: ReadonlyRecord<LocaleName, Definitions>, context?: Context, count?: number): Facade;
+    static create(definitions: TypedObject<LocaleName, Definitions>, context?: Context, count?: number): Facade;
     /**
      * Returns plugin configuration.
      *
@@ -39,7 +36,7 @@ export declare class Dictionary implements DictionaryInterface {
     with(search: string, replace: NumStr): Facade;
     protected _context: Context | undefined;
     protected count: number;
-    protected definitions: ReadonlyRecord<LocaleName, Definitions>;
+    protected definitions: TypedObject<LocaleName, Definitions>;
     protected proxified: Facade;
     protected subsPool: Map<NumStr, Facade>;
     /**
@@ -49,7 +46,7 @@ export declare class Dictionary implements DictionaryInterface {
      * @param context - Context.
      * @param count - Count for plural form.
      */
-    protected constructor(definitions: ReadonlyRecord<LocaleName, Definitions>, context?: Context, count?: number);
+    protected constructor(definitions: TypedObject<LocaleName, Definitions>, context?: Context, count?: number);
     /**
      * Reduces count for plural word form.
      *

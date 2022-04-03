@@ -50,21 +50,15 @@ ___
 
 ### configure
 
-▸ **configure**<`K`\>(`config`): `void`
+▸ **configure**(`config`): `void`
 
 Configures plugin.
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `K` | extends ``"expectedDurations"`` |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `config` | [`PartialConfiguration`](facade_implementations_handlePromise_promiseHandler.md#partialconfiguration)<`K`\> | Plugin configuration. |
+| `config` | `Partial`<[`Configuration`](../interfaces/facade_implementations_handlePromise_promiseHandler.Configuration.md)\> | Plugin configuration. |
 
 #### Returns
 

@@ -19,8 +19,8 @@ export interface ItemDoc extends PutItemDoc {
 }
 export declare type ItemDocs = readonly ItemDoc[];
 export declare type Items = readonly Items[];
-export declare const isPutItemDoc: is.Guard<PutItemDoc>;
-export declare const isPutItemDocs: is.Guard<readonly PutItemDoc[]>;
+export declare const isPutItemDoc: is.Guard;
+export declare const isPutItemDocs: is.Guard<readonly unknown[]>;
 export declare const isItemDoc: is.Guard<ItemDoc>;
 export declare const isItemDocs: is.Guard<readonly ItemDoc[]>;
 export declare class Item {

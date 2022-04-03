@@ -80,7 +80,7 @@ ___
 
 ### isPutItemDoc
 
-▸ **isPutItemDoc**(`value`): value is PutItemDoc
+▸ **isPutItemDoc**(`value`): value is unknown
 
 #### Parameters
 
@@ -90,13 +90,13 @@ ___
 
 #### Returns
 
-value is PutItemDoc
+value is unknown
 
 ___
 
 ### isPutItemDocs
 
-▸ **isPutItemDocs**(`value`): value is readonly PutItemDoc[]
+▸ **isPutItemDocs**(`value`): value is readonly unknown[]
 
 #### Parameters
 
@@ -106,4 +106,4 @@ ___
 
 #### Returns
 
-value is readonly PutItemDoc[]
+value is readonly unknown[]

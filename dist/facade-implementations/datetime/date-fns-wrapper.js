@@ -66,6 +66,8 @@ class DateTime {
             this.value = dt;
         else if (dt instanceof DateTime)
             this.value = new Date(dt.value);
+        else if (is.number(dt))
+            this.value = new Date(dt);
         else if (is.string(dt))
             this.value = parseString(dt);
         else

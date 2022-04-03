@@ -22,7 +22,7 @@ ___
 
 ### locale
 
-• `Readonly` **locale**: `Object`
+• `Readonly` **locale**: `Locale`
 
 ___
 

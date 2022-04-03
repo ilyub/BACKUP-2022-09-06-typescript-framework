@@ -38,7 +38,7 @@ class PouchDBProxy {
     async bulkDocs(docs) {
         await (0, testDelay_1.testDelay)();
         try {
-            return await this.db.bulkDocs(o.unfreeze.deep(docs));
+            return await this.db.bulkDocs(o.unfreeze(docs));
         }
         catch (e) {
             throw wrapPouchError(e);
@@ -53,7 +53,7 @@ class PouchDBProxy {
      */
     changes(changesHandler, options) {
         const changes = this.db
-            .changes(o.unfreeze.deep(options))
+            .changes(o.unfreeze(options))
             .on("change", changesHandler)
             .on("error", exports.handlers.error);
         return {
@@ -113,7 +113,7 @@ class PouchDBProxy {
     async put(doc) {
         await (0, testDelay_1.testDelay)();
         try {
-            return await this.db.put(o.unfreeze.deep(doc));
+            return await this.db.put(o.unfreeze(doc));
         }
         catch (e) {
             throw wrapPouchError(e);
@@ -129,7 +129,7 @@ class PouchDBProxy {
     async query(mapReduce, options) {
         await (0, testDelay_1.testDelay)();
         try {
-            return await this.db.query(mapReduce, o.unfreeze.deep(options));
+            return await this.db.query(mapReduce, o.unfreeze(options));
         }
         catch (e) {
             throw wrapPouchError(e);
@@ -137,7 +137,7 @@ class PouchDBProxy {
     }
 }
 exports.PouchDBProxy = PouchDBProxy;
-const isWrappablePouchError = is.factory(is.object.of, {
+const isWrappablePouchError = is.object.of.factory({
     error: is.true,
     message: is.string,
     name: is.string,
