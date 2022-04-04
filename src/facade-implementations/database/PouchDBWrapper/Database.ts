@@ -170,6 +170,16 @@ export const handlers = o.freeze({
   }
 });
 
+/**
+ * Wraps error.
+ *
+ * @param e - Error.
+ * @returns Wrapped error.
+ */
+export function wrapError<T>(e: T): () => T {
+  return () => e;
+}
+
 export class Database implements DatabaseInterface {
   /**
    * Creates class instance.
@@ -271,7 +281,7 @@ export class Database implements DatabaseInterface {
           return { ...item, parentRev: response.rev };
         });
       } catch (e) {
-        assert.instance(e, PouchConflictError, assert.toErrorArg(e));
+        assert.instance(e, PouchConflictError, wrapError(e));
 
         return "retry";
       }
@@ -374,7 +384,7 @@ export class Database implements DatabaseInterface {
     try {
       return await this.getAttached(id, parentId);
     } catch (e) {
-      assert.instance(e, PouchNotFoundError, assert.toErrorArg(e));
+      assert.instance(e, PouchNotFoundError, wrapError(e));
 
       return undefined;
     }
@@ -384,7 +394,7 @@ export class Database implements DatabaseInterface {
     try {
       return await this.get(id);
     } catch (e) {
-      assert.instance(e, PouchNotFoundError, assert.toErrorArg(e));
+      assert.instance(e, PouchNotFoundError, wrapError(e));
 
       return undefined;
     }
@@ -437,7 +447,7 @@ export class Database implements DatabaseInterface {
     try {
       return await this.putAttached(parentId, doc);
     } catch (e) {
-      assert.instance(e, PouchConflictError, assert.toErrorArg(e));
+      assert.instance(e, PouchConflictError, wrapError(e));
 
       return undefined;
     }
@@ -449,7 +459,7 @@ export class Database implements DatabaseInterface {
     try {
       return await this.put(doc);
     } catch (e) {
-      assert.instance(e, PouchConflictError, assert.toErrorArg(e));
+      assert.instance(e, PouchConflictError, wrapError(e));
 
       return undefined;
     }
@@ -1099,7 +1109,7 @@ export class Database implements DatabaseInterface {
           views: { default: mapReduce.mapReduce }
         });
       } catch (e) {
-        assert.instance(e, PouchConflictError, assert.toErrorArg(e));
+        assert.instance(e, PouchConflictError, wrapError(e));
       }
     }
 
@@ -1161,7 +1171,7 @@ export class Database implements DatabaseInterface {
       try {
         return await queryAttempt();
       } catch (e) {
-        assert.instance(e, PouchNotFoundError, assert.toErrorArg(e));
+        assert.instance(e, PouchNotFoundError, wrapError(e));
         await createDesignDocument();
 
         return queryAttempt();
@@ -1687,7 +1697,7 @@ interface DocResponse {
 
 type DocResponses = readonly DocResponse[];
 
-const isDocResponse = is.object.of.factory<DocResponse>(
+const isDocResponse = is.object.factory<DocResponse>(
   { doc: is.unknown, key: is.unknown },
   {}
 );
@@ -1700,7 +1710,7 @@ interface DocsResponse {
   readonly settled: boolean;
 }
 
-const isDocsResponse = is.object.of.factory<DocsResponse>(
+const isDocsResponse = is.object.factory<DocsResponse>(
   {
     count: is.number,
     docs: isDocResponses,
@@ -1715,7 +1725,7 @@ interface StrConds {
   readonly toSettle: string;
 }
 
-const isStoredDocumentAttached = is.object.of.factory<StoredAttachedDocument>(
+const isStoredDocumentAttached = is.object.factory<StoredAttachedDocument>(
   { _id: is.number, _rev: is.number },
   { _deleted: is.true }
 );
@@ -1725,7 +1735,7 @@ const isStoredDocumentAttachedArray = is.factory(
   isStoredDocumentAttached
 );
 
-const isExistingDocument = is.object.of.factory<ExistingDocument>(
+const isExistingDocument = is.object.factory<ExistingDocument>(
   { _id: is.string, _rev: is.string },
   {
     _deleted: is.true,
@@ -1734,15 +1744,14 @@ const isExistingDocument = is.object.of.factory<ExistingDocument>(
   }
 );
 
-const isExistingDocumentAttached =
-  is.object.of.factory<ExistingAttachedDocument>(
-    {
-      _id: is.number,
-      _rev: is.number,
-      parentDoc: isExistingDocument
-    },
-    { _deleted: is.true }
-  );
+const isExistingDocumentAttached = is.object.factory<ExistingAttachedDocument>(
+  {
+    _id: is.number,
+    _rev: is.number,
+    parentDoc: isExistingDocument
+  },
+  { _deleted: is.true }
+);
 
 /**
  * Joins condition strings with boolean "and" operator.

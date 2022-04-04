@@ -3,11 +3,11 @@ import { progressReporter } from "@skylib/facades/dist/progressReporter";
 import { showAlert } from "@skylib/facades/dist/showAlert";
 import * as fn from "@skylib/functions/dist/function";
 import * as o from "@skylib/functions/dist/object";
-import type { TypedObject } from "@skylib/functions/dist/types/core";
+import type { Rec } from "@skylib/functions/dist/types/core";
 import type { AsyncPromise } from "@skylib/functions/dist/types/function";
 
 export interface Configuration {
-  readonly expectedDurations: TypedObject<TaskType, number>;
+  readonly expectedDurations: Rec<TaskType, number>;
 }
 
 export type PartialConfiguration<K extends keyof Configuration> = {

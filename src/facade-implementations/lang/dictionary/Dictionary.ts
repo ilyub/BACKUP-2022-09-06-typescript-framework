@@ -14,7 +14,7 @@ import * as o from "@skylib/functions/dist/object";
 import * as reflect from "@skylib/functions/dist/reflect";
 import * as s from "@skylib/functions/dist/string";
 import type { LocaleName } from "@skylib/functions/dist/types/configurable";
-import type { NumStr, TypedObject } from "@skylib/functions/dist/types/core";
+import type { NumStr, Rec } from "@skylib/functions/dist/types/core";
 
 import type { Definitions } from ".";
 
@@ -45,7 +45,7 @@ export class Dictionary implements DictionaryInterface {
    * @returns Dictionary.
    */
   public static create(
-    definitions: TypedObject<LocaleName, Definitions>,
+    definitions: Rec<LocaleName, Definitions>,
     context?: Context,
     count?: number
   ): Facade {
@@ -140,7 +140,7 @@ export class Dictionary implements DictionaryInterface {
 
   protected count: number;
 
-  protected definitions: TypedObject<LocaleName, Definitions>;
+  protected definitions: Rec<LocaleName, Definitions>;
 
   /*
   |*****************************************************************************
@@ -160,7 +160,7 @@ export class Dictionary implements DictionaryInterface {
    * @param count - Count for plural form.
    */
   protected constructor(
-    definitions: TypedObject<LocaleName, Definitions>,
+    definitions: Rec<LocaleName, Definitions>,
     context?: Context,
     count = 1
   ) {

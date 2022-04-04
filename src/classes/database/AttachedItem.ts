@@ -1,7 +1,7 @@
 import * as is from "@skylib/functions/dist/guards";
 import * as o from "@skylib/functions/dist/object";
 import type { stringU } from "@skylib/functions/dist/types/core";
-import type { OptionalPropertiesToUndefined } from "@skylib/functions/dist/types/object";
+import type { UndefinedStyle } from "@skylib/functions/dist/types/object";
 
 import type { Item, ItemDoc } from "./Item";
 import { isItemDoc } from "./Item";
@@ -28,7 +28,7 @@ export type AttachedItemDocs = readonly AttachedItemDoc[];
 
 export type AttachedItems = readonly AttachedItems[];
 
-export const isPutAttachedItemDoc = is.object.of.factory<PutAttachedItemDoc>(
+export const isPutAttachedItemDoc = is.object.factory<PutAttachedItemDoc>(
   { parentDoc: isItemDoc },
   {
     _deleted: is.true,
@@ -46,7 +46,7 @@ export const isPutAttachedItemDocs = is.factory(
   isPutAttachedItemDoc
 );
 
-export const isAttachedItemDoc = is.object.of.factory<AttachedItemDoc>(
+export const isAttachedItemDoc = is.object.factory<AttachedItemDoc>(
   {
     _id: is.number,
     _rev: is.number,
@@ -116,9 +116,7 @@ export class AttachedItem<T extends Item = Item> {
    * @returns Database document.
    */
   public doc(): AttachedItemDoc {
-    return o.removeUndefinedKeys<
-      OptionalPropertiesToUndefined<AttachedItemDoc>
-    >({
+    return o.removeUndefinedKeys<UndefinedStyle<AttachedItemDoc>>({
       _deleted: this._deleted ? true : undefined,
       _id: this._id,
       _rev: this._rev,

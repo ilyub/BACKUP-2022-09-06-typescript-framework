@@ -3,7 +3,7 @@ import { isStoredAttachedDocuments } from "@skylib/facades/dist/database";
 import * as is from "@skylib/functions/dist/guards";
 import * as o from "@skylib/functions/dist/object";
 import type { numbers, stringU } from "@skylib/functions/dist/types/core";
-import type { OptionalPropertiesToUndefined } from "@skylib/functions/dist/types/object";
+import type { UndefinedStyle } from "@skylib/functions/dist/types/object";
 
 export interface PutItemDoc {
   readonly _deleted?: true;
@@ -28,7 +28,7 @@ export type ItemDocs = readonly ItemDoc[];
 
 export type Items = readonly Items[];
 
-export const isPutItemDoc: is.Guard = is.object.of.factory<PutItemDoc>(
+export const isPutItemDoc: is.Guard = is.object.factory<PutItemDoc>(
   {},
   {
     _deleted: is.true,
@@ -45,7 +45,7 @@ export const isPutItemDoc: is.Guard = is.object.of.factory<PutItemDoc>(
 
 export const isPutItemDocs = is.factory(is.array.of, isPutItemDoc);
 
-export const isItemDoc = is.object.of.factory<ItemDoc>(
+export const isItemDoc = is.object.factory<ItemDoc>(
   { _id: is.string, _rev: is.string },
   {
     _deleted: is.true,
@@ -98,7 +98,7 @@ export class Item {
    * @returns Database document.
    */
   public doc(): ItemDoc {
-    return o.removeUndefinedKeys<OptionalPropertiesToUndefined<ItemDoc>>({
+    return o.removeUndefinedKeys<UndefinedStyle<ItemDoc>>({
       _deleted: this._deleted ? true : undefined,
       _id: this._id,
       _rev: this._rev,

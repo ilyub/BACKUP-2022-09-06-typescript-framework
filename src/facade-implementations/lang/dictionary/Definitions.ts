@@ -6,7 +6,7 @@ import * as s from "@skylib/functions/dist/string";
 import type {
   IndexedObject,
   strings,
-  Writable
+  WritableIndexedObject
 } from "@skylib/functions/dist/types/core";
 
 import { Definition } from ".";
@@ -150,7 +150,7 @@ function mapDefinitions(
  * @returns Word forms.
  */
 function getWords(raw: RawLanguage): IndexedObject<Definition> {
-  const result: Writable<IndexedObject<Definition>> = {};
+  const result: WritableIndexedObject<Definition> = {};
 
   for (const [key, value] of o.entries(raw.words)) {
     result[s.lcFirst(key)] = new Definition(

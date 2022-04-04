@@ -209,7 +209,7 @@ interface WrappablePouchError {
   readonly status: number;
 }
 
-const isWrappablePouchError = is.object.of.factory<WrappablePouchError>(
+const isWrappablePouchError = is.object.factory<WrappablePouchError>(
   {
     error: is.true,
     message: is.string,

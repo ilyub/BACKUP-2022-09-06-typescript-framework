@@ -4,10 +4,15 @@ import * as assert from "@skylib/functions/dist/assertions";
 import { wait } from "@skylib/functions/dist/helpers";
 import * as testUtils from "@skylib/functions/dist/testUtils";
 
+import { wrapError } from "@/facade-implementations/database/PouchDBWrapper/Database";
 import { PouchConflictError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchConflictError";
 import { PouchNotFoundError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchNotFoundError";
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
+
+test("wrapError", () => {
+  expect(wrapError(1)()).toBe(1);
+});
 
 test("bulkAttachedDocs", async () => {
   const db = database.create(uniqueId());

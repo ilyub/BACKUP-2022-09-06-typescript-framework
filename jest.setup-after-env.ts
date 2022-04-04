@@ -1,6 +1,6 @@
 import * as functionsTestUtils from "@skylib/functions/dist/testUtils";
 import type { LocaleName } from "@skylib/functions/dist/types/configurable";
-import type { TypedObject } from "@skylib/functions/dist/types/core";
+import type { Rec } from "@skylib/functions/dist/types/core";
 
 import {
   Definitions,
@@ -8,7 +8,7 @@ import {
 } from "./src/facade-implementations/lang/dictionary";
 import * as testUtils from "./src/testUtils";
 
-const definitions: TypedObject<LocaleName, Definitions> = {
+const definitions: Rec<LocaleName, Definitions> = {
   "en-US": new Definitions({
     pluralReduce,
     wordForms: {},
