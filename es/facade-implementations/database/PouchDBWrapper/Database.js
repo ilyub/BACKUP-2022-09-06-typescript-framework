@@ -26,6 +26,15 @@ export const handlers = o.freeze({
         throw error;
     }
 });
+/**
+ * Wraps error.
+ *
+ * @param e - Error.
+ * @returns Wrapped error.
+ */
+export function wrapError(e) {
+    return () => e;
+}
 export class Database {
     /**
      * Creates class instance.
@@ -140,7 +149,7 @@ export class Database {
                 });
             }
             catch (e) {
-                assert.instance(e, PouchConflictError, assert.toErrorArg(e));
+                assert.instance(e, PouchConflictError, wrapError(e));
                 return "retry";
             }
         }
@@ -201,7 +210,7 @@ export class Database {
             return await this.getAttached(id, parentId);
         }
         catch (e) {
-            assert.instance(e, PouchNotFoundError, assert.toErrorArg(e));
+            assert.instance(e, PouchNotFoundError, wrapError(e));
             return undefined;
         }
     }
@@ -210,7 +219,7 @@ export class Database {
             return await this.get(id);
         }
         catch (e) {
-            assert.instance(e, PouchNotFoundError, assert.toErrorArg(e));
+            assert.instance(e, PouchNotFoundError, wrapError(e));
             return undefined;
         }
     }
@@ -245,7 +254,7 @@ export class Database {
             return await this.putAttached(parentId, doc);
         }
         catch (e) {
-            assert.instance(e, PouchConflictError, assert.toErrorArg(e));
+            assert.instance(e, PouchConflictError, wrapError(e));
             return undefined;
         }
     }
@@ -254,7 +263,7 @@ export class Database {
             return await this.put(doc);
         }
         catch (e) {
-            assert.instance(e, PouchConflictError, assert.toErrorArg(e));
+            assert.instance(e, PouchConflictError, wrapError(e));
             return undefined;
         }
     }
@@ -661,7 +670,7 @@ export class Database {
                 });
             }
             catch (e) {
-                assert.instance(e, PouchConflictError, assert.toErrorArg(e));
+                assert.instance(e, PouchConflictError, wrapError(e));
             }
         }
         function getCount() {
@@ -706,7 +715,7 @@ export class Database {
                 return await queryAttempt();
             }
             catch (e) {
-                assert.instance(e, PouchNotFoundError, assert.toErrorArg(e));
+                assert.instance(e, PouchNotFoundError, wrapError(e));
                 await createDesignDocument();
                 return queryAttempt();
             }
@@ -1094,21 +1103,21 @@ export class Database {
         }
     }
 }
-const isDocResponse = is.object.of.factory({ doc: is.unknown, key: is.unknown }, {});
+const isDocResponse = is.object.factory({ doc: is.unknown, key: is.unknown }, {});
 const isDocResponses = is.factory(is.array.of, isDocResponse);
-const isDocsResponse = is.object.of.factory({
+const isDocsResponse = is.object.factory({
     count: is.number,
     docs: isDocResponses,
     settled: is.boolean
 }, {});
-const isStoredDocumentAttached = is.object.of.factory({ _id: is.number, _rev: is.number }, { _deleted: is.true });
+const isStoredDocumentAttached = is.object.factory({ _id: is.number, _rev: is.number }, { _deleted: is.true });
 const isStoredDocumentAttachedArray = is.factory(is.array.of, isStoredDocumentAttached);
-const isExistingDocument = is.object.of.factory({ _id: is.string, _rev: is.string }, {
+const isExistingDocument = is.object.factory({ _id: is.string, _rev: is.string }, {
     _deleted: is.true,
     attachedDocs: isStoredDocumentAttachedArray,
     lastAttachedDocs: is.numbers
 });
-const isExistingDocumentAttached = is.object.of.factory({
+const isExistingDocumentAttached = is.object.factory({
     _id: is.number,
     _rev: is.number,
     parentDoc: isExistingDocument

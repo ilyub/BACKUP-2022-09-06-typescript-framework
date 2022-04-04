@@ -53,7 +53,7 @@ Creates class instance.
 
 ### contexts
 
-• `Protected` **contexts**: `Readonly`<`TypedObject`<`PropertyKey`, `NumStr`\>\> = `{}`
+• `Protected` **contexts**: `IndexedObject`<`NumStr`\> = `{}`
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 ### subs
 
-• `Protected` **subs**: `Readonly`<`TypedObject`<`PropertyKey`, [`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)\>\> = `{}`
+• `Protected` **subs**: `IndexedObject`<[`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)\> = `{}`
 
 ___
 

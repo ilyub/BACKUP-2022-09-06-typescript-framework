@@ -45,13 +45,13 @@ ___
 
 ### wordForms
 
-• `Protected` **wordForms**: `Readonly`<`TypedObject`<`PropertyKey`, `strings`\>\>
+• `Protected` **wordForms**: `IndexedObject`<`strings`\>
 
 ___
 
 ### words
 
-• `Protected` **words**: `Readonly`<`TypedObject`<`PropertyKey`, [`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)\>\> = `{}`
+• `Protected` **words**: `IndexedObject`<[`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)\> = `{}`
 
 ## Methods
 

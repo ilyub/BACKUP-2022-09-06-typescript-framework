@@ -19,4 +19,4 @@
 
 ### RawDefinition
 
-Ƭ **RawDefinition**: [`RawDefinitions`](../interfaces/facade_implementations_lang_dictionary_types.RawDefinitions.md) \| `string` \| readonly [`NumStr`, [`RawDefinitions`](../interfaces/facade_implementations_lang_dictionary_types.RawDefinitions.md), `PartialTypedObject`<`Context`, `NumStr`\>] \| readonly [`NumStr`, [`RawDefinitions`](../interfaces/facade_implementations_lang_dictionary_types.RawDefinitions.md)]
+Ƭ **RawDefinition**: [`RawDefinitions`](../interfaces/facade_implementations_lang_dictionary_types.RawDefinitions.md) \| `string` \| readonly [`NumStr`, [`RawDefinitions`](../interfaces/facade_implementations_lang_dictionary_types.RawDefinitions.md), `PartialRecord`<`Context`, `NumStr`\>] \| readonly [`NumStr`, [`RawDefinitions`](../interfaces/facade_implementations_lang_dictionary_types.RawDefinitions.md)]

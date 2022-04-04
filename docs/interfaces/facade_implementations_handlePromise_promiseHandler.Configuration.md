@@ -14,4 +14,4 @@
 
 ### expectedDurations
 
-• `Readonly` **expectedDurations**: `TypedObject`<`TaskType`, `number`\>
+• `Readonly` **expectedDurations**: `Rec`<`TaskType`, `number`\>

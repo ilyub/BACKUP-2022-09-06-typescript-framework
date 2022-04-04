@@ -1,7 +1,7 @@
 import { isStoredAttachedDocuments } from "@skylib/facades/es/database";
 import * as is from "@skylib/functions/es/guards";
 import * as o from "@skylib/functions/es/object";
-export const isPutItemDoc = is.object.of.factory({}, {
+export const isPutItemDoc = is.object.factory({}, {
     _deleted: is.true,
     _id: is.string,
     _rev: is.string,
@@ -13,7 +13,7 @@ export const isPutItemDoc = is.object.of.factory({}, {
     updatedAt: is.string
 });
 export const isPutItemDocs = is.factory(is.array.of, isPutItemDoc);
-export const isItemDoc = is.object.of.factory({ _id: is.string, _rev: is.string }, {
+export const isItemDoc = is.object.factory({ _id: is.string, _rev: is.string }, {
     _deleted: is.true,
     attachedDocs: isStoredAttachedDocuments,
     createdAt: is.string,

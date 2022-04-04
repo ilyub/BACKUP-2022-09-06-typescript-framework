@@ -25,8 +25,48 @@
 
 - [handlers](facade_implementations_database_PouchDBWrapper_Database.md#handlers)
 
+### Functions
+
+- [wrapError](facade_implementations_database_PouchDBWrapper_Database.md#wraperror)
+
 ## Variables
 
 ### handlers
 
 • `Const` **handlers**: `Readonly`<{ `error`: (`error`: `unknown`) => `void`  }\>
+
+## Functions
+
+### wrapError
+
+▸ **wrapError**<`T`\>(`e`): () => `T`
+
+Wraps error.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `e` | `T` | Error. |
+
+#### Returns
+
+`fn`
+
+Wrapped error.
+
+▸ (): `T`
+
+Wraps error.
+
+##### Returns
+
+`T`
+
+Wrapped error.

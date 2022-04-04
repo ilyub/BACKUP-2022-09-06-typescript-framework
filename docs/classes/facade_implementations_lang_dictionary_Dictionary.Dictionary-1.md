@@ -46,7 +46,7 @@ Creates class instance.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `definitions` | `TypedObject`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\> | `undefined` | Language definitions. |
+| `definitions` | `Rec`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\> | `undefined` | Language definitions. |
 | `context?` | ``"InXDays"`` | `undefined` | Context. |
 | `count` | `number` | `1` | Count for plural form. |
 
@@ -66,7 +66,7 @@ ___
 
 ### definitions
 
-• `Protected` **definitions**: `TypedObject`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\>
+• `Protected` **definitions**: `Rec`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\>
 
 ___
 
@@ -231,7 +231,7 @@ Creates class instance.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `definitions` | `TypedObject`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\> | Language definitions. |
+| `definitions` | `Rec`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\> | Language definitions. |
 | `context?` | ``"InXDays"`` | Context. |
 | `count?` | `number` | Count for plural form. |
 

@@ -5,7 +5,7 @@ const tslib_1 = require("tslib");
 const database_1 = require("@skylib/facades/dist/database");
 const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
-exports.isPutItemDoc = is.object.of.factory({}, {
+exports.isPutItemDoc = is.object.factory({}, {
     _deleted: is.true,
     _id: is.string,
     _rev: is.string,
@@ -17,7 +17,7 @@ exports.isPutItemDoc = is.object.of.factory({}, {
     updatedAt: is.string
 });
 exports.isPutItemDocs = is.factory(is.array.of, exports.isPutItemDoc);
-exports.isItemDoc = is.object.of.factory({ _id: is.string, _rev: is.string }, {
+exports.isItemDoc = is.object.factory({ _id: is.string, _rev: is.string }, {
     _deleted: is.true,
     attachedDocs: database_1.isStoredAttachedDocuments,
     createdAt: is.string,

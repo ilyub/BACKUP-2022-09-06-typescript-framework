@@ -1,5 +1,5 @@
 import type { Context, Word } from "@skylib/facades/es/lang";
-import type { IndexedObject, NumStr, PartialTypedObject, strings, TypedObject } from "@skylib/functions/es/types/core";
+import type { IndexedObject, NumStr, PartialRecord, Rec, strings } from "@skylib/functions/es/types/core";
 export interface PluralReduce {
     /**
      * Reduces count for plural form.
@@ -9,14 +9,14 @@ export interface PluralReduce {
      */
     (count: number): number;
 }
-export declare type RawDefinition = RawDefinitions | string | readonly [NumStr, RawDefinitions, PartialTypedObject<Context, NumStr>] | readonly [NumStr, RawDefinitions];
+export declare type RawDefinition = RawDefinitions | string | readonly [NumStr, RawDefinitions, PartialRecord<Context, NumStr>] | readonly [NumStr, RawDefinitions];
 export interface RawDefinitions {
     readonly [key: string]: RawDefinition;
 }
 export interface RawLanguage {
     readonly pluralReduce: PluralReduce;
     readonly wordForms: IndexedObject<strings>;
-    readonly words: TypedObject<Word, RawDefinition>;
+    readonly words: Rec<Word, RawDefinition>;
 }
 export interface WordInfo {
     readonly context: Context | undefined;

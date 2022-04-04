@@ -15,7 +15,7 @@
 
 ### dictionary
 
-• **dictionary**: (`localeName`: keyof `LocaleName`, `definitions`: `TypedObject`<keyof `LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\>) => `void`
+• **dictionary**: (`localeName`: keyof `LocaleName`, `definitions`: `Rec`<keyof `LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\>) => `void`
 
 #### Type declaration
 
@@ -28,7 +28,7 @@ Jest reset.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `localeName` | keyof `LocaleName` | Locale name. |
-| `definitions` | `TypedObject`<keyof `LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\> | Language definitions. |
+| `definitions` | `Rec`<keyof `LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\> | Language definitions. |
 
 ##### Returns
 

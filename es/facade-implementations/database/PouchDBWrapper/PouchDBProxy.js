@@ -132,7 +132,7 @@ export class PouchDBProxy {
         }
     }
 }
-const isWrappablePouchError = is.object.of.factory({
+const isWrappablePouchError = is.object.factory({
     error: is.true,
     message: is.string,
     name: is.string,

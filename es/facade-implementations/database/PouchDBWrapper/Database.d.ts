@@ -81,6 +81,13 @@ export interface ReactiveHandlerAttached<T> {
 export declare const handlers: Readonly<{
     error(error: unknown): void;
 }>;
+/**
+ * Wraps error.
+ *
+ * @param e - Error.
+ * @returns Wrapped error.
+ */
+export declare function wrapError<T>(e: T): () => T;
 export declare class Database implements DatabaseInterface {
     /**
      * Creates class instance.

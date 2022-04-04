@@ -1,7 +1,7 @@
 import type { Facade, TaskType } from "@skylib/facades/es/handlePromise";
-import type { TypedObject } from "@skylib/functions/es/types/core";
+import type { Rec } from "@skylib/functions/es/types/core";
 export interface Configuration {
-    readonly expectedDurations: TypedObject<TaskType, number>;
+    readonly expectedDurations: Rec<TaskType, number>;
 }
 export declare type PartialConfiguration<K extends keyof Configuration> = {
     readonly [L in K]: Configuration[L];
