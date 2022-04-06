@@ -1,67 +1,34 @@
-import * as is from "@skylib/functions/dist/guards";
+import type {
+  BaseExistingAttachedDocument,
+  BasePutAttachedDocument,
+  ExistingDocument
+} from "@skylib/facades/dist/database";
 import * as o from "@skylib/functions/dist/object";
 import type { stringU } from "@skylib/functions/dist/types/core";
 import type { UndefinedStyle } from "@skylib/functions/dist/types/object";
 
-import type { Item, ItemDoc } from "./Item";
-import { isItemDoc } from "./Item";
+import type { Item } from "./Item";
 
-export interface PutAttachedItemDoc {
-  readonly _deleted?: true;
-  readonly _id?: number;
-  readonly _rev?: number;
+export type AttachedItems = readonly AttachedItems[];
+
+export interface BaseAttachedItemDoc {
   readonly createdAt?: string;
   readonly deletedAt?: string;
-  readonly parentDoc: ItemDoc;
   readonly softDeleted?: true;
   readonly updatedAt?: string;
 }
 
-export type PutAttachedItemDocs = readonly AttachedItemDoc[];
+export interface ExistingAttachedItemDoc
+  extends BaseExistingAttachedDocument,
+    BaseAttachedItemDoc {}
 
-export interface AttachedItemDoc extends PutAttachedItemDoc {
-  readonly _id: number;
-  readonly _rev: number;
-}
+export type ExistingAttachedItemDocs = readonly ExistingAttachedItemDoc[];
 
-export type AttachedItemDocs = readonly AttachedItemDoc[];
+export interface PutAttachedItemDoc
+  extends BasePutAttachedDocument,
+    BaseAttachedItemDoc {}
 
-export type AttachedItems = readonly AttachedItems[];
-
-export const isPutAttachedItemDoc = is.object.factory<PutAttachedItemDoc>(
-  { parentDoc: isItemDoc },
-  {
-    _deleted: is.true,
-    _id: is.number,
-    _rev: is.number,
-    createdAt: is.string,
-    deletedAt: is.string,
-    softDeleted: is.true,
-    updatedAt: is.string
-  }
-);
-
-export const isPutAttachedItemDocs = is.factory(
-  is.array.of,
-  isPutAttachedItemDoc
-);
-
-export const isAttachedItemDoc = is.object.factory<AttachedItemDoc>(
-  {
-    _id: is.number,
-    _rev: is.number,
-    parentDoc: isItemDoc
-  },
-  {
-    _deleted: is.true,
-    createdAt: is.string,
-    deletedAt: is.string,
-    softDeleted: is.true,
-    updatedAt: is.string
-  }
-);
-
-export const isAttachedItemDocs = is.factory(is.array.of, isAttachedItemDoc);
+export type PutAttachedItemDocs = readonly ExistingAttachedItemDoc[];
 
 export class AttachedItem<T extends Item = Item> {
   public readonly _deleted: boolean;
@@ -99,7 +66,7 @@ export class AttachedItem<T extends Item = Item> {
    *
    * @param source - Source.
    */
-  public constructor(source: AttachedItemDoc) {
+  public constructor(source: ExistingAttachedItemDoc) {
     this._deleted = source._deleted ?? false;
     this._id = source._id;
     this._rev = source._rev;
@@ -115,8 +82,8 @@ export class AttachedItem<T extends Item = Item> {
    *
    * @returns Database document.
    */
-  public doc(): AttachedItemDoc {
-    return o.removeUndefinedKeys<UndefinedStyle<AttachedItemDoc>>({
+  public doc(): ExistingAttachedItemDoc {
+    return o.removeUndefinedKeys<UndefinedStyle<ExistingAttachedItemDoc>>({
       _deleted: this._deleted ? true : undefined,
       _id: this._id,
       _rev: this._rev,
@@ -136,7 +103,7 @@ export class AttachedItem<T extends Item = Item> {
 
   protected _parent: T | undefined = undefined;
 
-  protected _parentDoc: ItemDoc;
+  protected _parentDoc: ExistingDocument;
 
   /**
    * Initializes parent.

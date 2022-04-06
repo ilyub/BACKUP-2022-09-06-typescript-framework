@@ -1,64 +1,28 @@
-import type { StoredAttachedDocuments } from "@skylib/facades/dist/database";
-import { isStoredAttachedDocuments } from "@skylib/facades/dist/database";
-import * as is from "@skylib/functions/dist/guards";
+import type {
+  BaseExistingDocument,
+  BasePutDocument,
+  StoredAttachedDocuments
+} from "@skylib/facades/dist/database";
 import * as o from "@skylib/functions/dist/object";
 import type { numbers, stringU } from "@skylib/functions/dist/types/core";
 import type { UndefinedStyle } from "@skylib/functions/dist/types/object";
 
-export interface PutItemDoc {
-  readonly _deleted?: true;
-  readonly _id?: string;
-  readonly _rev?: string;
-  readonly attachedDocs?: StoredAttachedDocuments;
+export interface BaseItemDoc {
   readonly createdAt?: string;
   readonly deletedAt?: string;
-  readonly lastAttachedDocs?: numbers;
   readonly softDeleted?: true;
   readonly updatedAt?: string;
 }
 
-export type PutItemDocs = readonly ItemDoc[];
+export interface PutItemDoc extends BasePutDocument, BaseItemDoc {}
 
-export interface ItemDoc extends PutItemDoc {
-  readonly _id: string;
-  readonly _rev: string;
-}
+export type PutItemDocs = readonly PutItemDoc[];
 
-export type ItemDocs = readonly ItemDoc[];
+export interface ExistingItemDoc extends BaseExistingDocument, BaseItemDoc {}
+
+export type ExistingItemDocs = readonly ExistingItemDoc[];
 
 export type Items = readonly Items[];
-
-export const isPutItemDoc: is.Guard = is.object.factory<PutItemDoc>(
-  {},
-  {
-    _deleted: is.true,
-    _id: is.string,
-    _rev: is.string,
-    attachedDocs: isStoredAttachedDocuments,
-    createdAt: is.string,
-    deletedAt: is.string,
-    lastAttachedDocs: is.numbers,
-    softDeleted: is.true,
-    updatedAt: is.string
-  }
-);
-
-export const isPutItemDocs = is.factory(is.array.of, isPutItemDoc);
-
-export const isItemDoc = is.object.factory<ItemDoc>(
-  { _id: is.string, _rev: is.string },
-  {
-    _deleted: is.true,
-    attachedDocs: isStoredAttachedDocuments,
-    createdAt: is.string,
-    deletedAt: is.string,
-    lastAttachedDocs: is.numbers,
-    softDeleted: is.true,
-    updatedAt: is.string
-  }
-);
-
-export const isItemDocs = is.factory(is.array.of, isItemDoc);
 
 export class Item {
   public readonly _deleted: boolean;
@@ -80,7 +44,7 @@ export class Item {
    *
    * @param source - Source.
    */
-  public constructor(source: ItemDoc) {
+  public constructor(source: ExistingItemDoc) {
     this._deleted = source._deleted ?? false;
     this._id = source._id;
     this._rev = source._rev;
@@ -97,8 +61,8 @@ export class Item {
    *
    * @returns Database document.
    */
-  public doc(): ItemDoc {
-    return o.removeUndefinedKeys<UndefinedStyle<ItemDoc>>({
+  public doc(): ExistingItemDoc {
+    return o.removeUndefinedKeys<UndefinedStyle<ExistingItemDoc>>({
       _deleted: this._deleted ? true : undefined,
       _id: this._id,
       _rev: this._rev,

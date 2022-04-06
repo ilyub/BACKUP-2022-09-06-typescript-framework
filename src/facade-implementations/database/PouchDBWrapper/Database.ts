@@ -5,6 +5,7 @@ import sha256 from "sha256";
 import type {
   AttachedChangesHandler,
   AttachedSubscriptionId,
+  BulkAttachedDocuments,
   ChangesHandler,
   Conditions,
   Database as DatabaseInterface,
@@ -26,7 +27,7 @@ import type {
   ReactiveConfig,
   ReactiveConfigAttached,
   ReactiveResponse,
-  ReactiveResponseAsync,
+  ReactiveResponseLoaded,
   ResetCallback,
   StoredAttachedDocument,
   SubscriptionId
@@ -40,7 +41,6 @@ import { handlePromise } from "@skylib/facades/dist/handlePromise";
 import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
 import * as a from "@skylib/functions/dist/array";
-import * as arrayMap from "@skylib/functions/dist/arrayMap";
 import * as assert from "@skylib/functions/dist/assertions";
 import * as cast from "@skylib/functions/dist/converters";
 import * as fn from "@skylib/functions/dist/function";
@@ -147,7 +147,7 @@ export interface ReactiveHandler<T> {
    */
   (
     doc: ExistingDocument,
-    mutableResult: Writable<ReactiveResponseAsync<T>>
+    mutableResult: Writable<ReactiveResponseLoaded<T>>
   ): void;
 }
 
@@ -160,7 +160,7 @@ export interface ReactiveHandlerAttached<T> {
    */
   (
     doc: ExistingAttachedDocument,
-    mutableResult: Writable<ReactiveResponseAsync<T>>
+    mutableResult: Writable<ReactiveResponseLoaded<T>>
   ): void;
 }
 
@@ -213,81 +213,6 @@ export class Database implements DatabaseInterface {
     this.pouchConfig = pouchConfig;
   }
 
-  public async bulkAttachedDocs(
-    parentId: string,
-    docs: PutAttachedDocuments
-  ): Promise<PutAttachedResponses> {
-    const db = await this.getDb();
-
-    for (let i = 0; i < 1 + this.options.retries; i++) {
-      // eslint-disable-next-line no-await-in-loop
-      const result = await attempt();
-
-      if (is.object(result)) return result;
-    }
-
-    throw new PouchRetryError(`Failed after ${this.options.retries} retries`);
-
-    async function attempt(): Promise<PutAttachedResponses | "retry"> {
-      const parentDoc = await db.get(parentId);
-
-      const attachedDocs = a.clone(parentDoc.attachedDocs ?? []);
-
-      const lastAttachedDocs: Writable<numbers> = [];
-
-      const result: Writable<PutAttachedResponses> = [];
-
-      for (const doc of docs) {
-        const { _id, _rev, parentDoc: omitParentDoc, ...content } = doc;
-
-        if (is.not.empty(_id) && _rev !== a.get(attachedDocs, _id)._rev)
-          throw new PouchConflictError("Attached document update conflict");
-
-        const id = _id ?? attachedDocs.length;
-
-        const rev = (_rev ?? 0) + 1;
-
-        const attachedDoc = {
-          ...content,
-          _id: id,
-          _rev: rev
-        };
-
-        if (id < attachedDocs.length) attachedDocs[id] = attachedDoc;
-        else attachedDocs.push(attachedDoc);
-
-        lastAttachedDocs.push(id);
-
-        result.push({
-          id,
-          parentId,
-          parentRev: "",
-          rev
-        });
-      }
-
-      try {
-        const response = await db.put(
-          o.omit({
-            ...parentDoc,
-            attachedDocs,
-            lastAttachedDocs
-          })
-        );
-
-        assert.toBeTrue(response.ok, "Database request failed");
-
-        return result.map(item => {
-          return { ...item, parentRev: response.rev };
-        });
-      } catch (e) {
-        assert.instance(e, PouchConflictError, wrapError(e));
-
-        return "retry";
-      }
-    }
-  }
-
   public async bulkDocs(docs: PutDocuments): Promise<PutResponses> {
     for (const doc of docs) validatePutDocument(doc);
 
@@ -306,22 +231,21 @@ export class Database implements DatabaseInterface {
       .filter(is.not.empty);
   }
 
-  public async bulkExistingAttachedDocs(
-    docs: ExistingAttachedDocuments
+  public async bulkDocsAttached(
+    docs: BulkAttachedDocuments
   ): Promise<PutAttachedResponses> {
-    const docsMap = new Map<string, Writable<ExistingAttachedDocuments>>();
-
-    for (const doc of docs) arrayMap.push(doc.parentDoc._id, doc, docsMap);
-
-    const result = await Promise.all(
-      a
-        .fromIterable(docsMap.entries())
-        .map(async ([parentId, docs2]) =>
-          this.bulkAttachedDocs(parentId, docs2)
+    const responses = await Promise.all(
+      _.uniq(docs.map(doc => doc.parentDoc._id)).map(async parentId =>
+        fn.run(async () =>
+          this.putAttachedBulk(
+            parentId,
+            docs.filter(doc => doc.parentDoc._id === parentId)
+          )
         )
+      )
     );
 
-    return _.flatten(result);
+    return _.flatten(responses);
   }
 
   public async count(conditions: Conditions = {}): Promise<number> {
@@ -353,7 +277,7 @@ export class Database implements DatabaseInterface {
   }
 
   public async existsAttached(id: number, parentId: string): Promise<boolean> {
-    const doc = await this.getAttachedIfExists(id, parentId);
+    const doc = await this.getIfExistsAttached(id, parentId);
 
     return is.not.empty(doc);
   }
@@ -377,12 +301,9 @@ export class Database implements DatabaseInterface {
     return extractDocAttached(doc, id);
   }
 
-  public async getAttachedIfExists(
-    id: number,
-    parentId: string
-  ): Promise<ExistingAttachedDocument | undefined> {
+  public async getIfExists(id: string): Promise<ExistingDocument | undefined> {
     try {
-      return await this.getAttached(id, parentId);
+      return await this.get(id);
     } catch (e) {
       assert.instance(e, PouchNotFoundError, wrapError(e));
 
@@ -390,9 +311,12 @@ export class Database implements DatabaseInterface {
     }
   }
 
-  public async getIfExists(id: string): Promise<ExistingDocument | undefined> {
+  public async getIfExistsAttached(
+    id: number,
+    parentId: string
+  ): Promise<ExistingAttachedDocument | undefined> {
     try {
-      return await this.get(id);
+      return await this.getAttached(id, parentId);
     } catch (e) {
       assert.instance(e, PouchNotFoundError, wrapError(e));
 
@@ -437,19 +361,81 @@ export class Database implements DatabaseInterface {
     parentId: string,
     doc: PutAttachedDocument
   ): Promise<PutAttachedResponse> {
-    return a.first(await this.bulkAttachedDocs(parentId, [doc]));
+    return a.first(await this.putAttachedBulk(parentId, [doc]));
   }
 
-  public async putAttachedIfNotExists(
+  public async putAttachedBulk(
     parentId: string,
-    doc: PutAttachedDocument
-  ): Promise<PutAttachedResponse | undefined> {
-    try {
-      return await this.putAttached(parentId, doc);
-    } catch (e) {
-      assert.instance(e, PouchConflictError, wrapError(e));
+    docs: PutAttachedDocuments
+  ): Promise<PutAttachedResponses> {
+    const db = await this.getDb();
 
-      return undefined;
+    for (let i = 0; i < 1 + this.options.retries; i++) {
+      // eslint-disable-next-line no-await-in-loop
+      const result = await attempt();
+
+      if (result) return result;
+    }
+
+    throw new PouchRetryError(`Failed after ${this.options.retries} retries`);
+
+    async function attempt(): Promise<PutAttachedResponses | undefined> {
+      const parentDoc = await db.get(parentId);
+
+      const attachedDocs = a.clone(parentDoc.attachedDocs ?? []);
+
+      const lastAttachedDocs: Writable<numbers> = [];
+
+      const result: Writable<PutAttachedResponses> = [];
+
+      for (const doc of docs) {
+        const { _id, _rev, parentDoc: omitParentDoc, ...content } = doc;
+
+        if (is.not.empty(_id) && _rev !== a.get(attachedDocs, _id)._rev)
+          throw new PouchConflictError("Attached document update conflict");
+
+        const id = _id ?? attachedDocs.length;
+
+        const rev = (_rev ?? 0) + 1;
+
+        const attachedDoc: StoredAttachedDocument = {
+          ...content,
+          _id: id,
+          _rev: rev
+        };
+
+        if (id < attachedDocs.length) attachedDocs[id] = attachedDoc;
+        else attachedDocs.push(attachedDoc);
+
+        lastAttachedDocs.push(id);
+
+        result.push({
+          id,
+          parentId,
+          parentRev: "",
+          rev
+        });
+      }
+
+      try {
+        const response = await db.put(
+          o.omit({
+            ...parentDoc,
+            attachedDocs,
+            lastAttachedDocs
+          })
+        );
+
+        assert.toBeTrue(response.ok, "Database request failed");
+
+        return result.map(item => {
+          return { ...item, parentRev: response.rev };
+        });
+      } catch (e) {
+        assert.instance(e, PouchConflictError, wrapError(e));
+
+        return undefined;
+      }
     }
   }
 
@@ -458,6 +444,19 @@ export class Database implements DatabaseInterface {
   ): Promise<PutResponse | undefined> {
     try {
       return await this.put(doc);
+    } catch (e) {
+      assert.instance(e, PouchConflictError, wrapError(e));
+
+      return undefined;
+    }
+  }
+
+  public async putIfNotExistsAttached(
+    parentId: string,
+    doc: PutAttachedDocument
+  ): Promise<PutAttachedResponse | undefined> {
+    try {
+      return await this.putAttached(parentId, doc);
     } catch (e) {
       assert.instance(e, PouchConflictError, wrapError(e));
 
@@ -496,12 +495,6 @@ export class Database implements DatabaseInterface {
     return this.reactiveFactoryQuery(this.count.bind(this), config);
   }
 
-  public async reactiveCountAsync(
-    config: ReactiveConfig
-  ): Promise<ReactiveResponseAsync<number>> {
-    return this.reactiveFactoryQueryAsync(this.count.bind(this), config);
-  }
-
   public reactiveCountAttached(
     config: ReactiveConfigAttached
   ): ReactiveResponse<number> {
@@ -511,26 +504,8 @@ export class Database implements DatabaseInterface {
     );
   }
 
-  public async reactiveCountAttachedAsync(
-    config: ReactiveConfigAttached
-  ): Promise<ReactiveResponseAsync<number>> {
-    return this.reactiveFactoryQueryAttachedAsync(
-      this.countAttached.bind(this),
-      config
-    );
-  }
-
   public reactiveExists(id: string): ReactiveResponse<boolean> {
     return this.reactiveFactoryGet(
-      this.exists(id),
-      this.reactiveHandlerExists(id)
-    );
-  }
-
-  public async reactiveExistsAsync(
-    id: string
-  ): Promise<ReactiveResponseAsync<boolean>> {
-    return this.reactiveFactoryGetAsync(
       this.exists(id),
       this.reactiveHandlerExists(id)
     );
@@ -546,27 +521,8 @@ export class Database implements DatabaseInterface {
     );
   }
 
-  public async reactiveExistsAttachedAsync(
-    id: number,
-    parentId: string
-  ): Promise<ReactiveResponseAsync<boolean>> {
-    return this.reactiveFactoryGetAttachedAsync(
-      this.existsAttached(id, parentId),
-      this.reactiveHandlerExistsAttached(id, parentId)
-    );
-  }
-
   public reactiveGet(id: string): ReactiveResponse<ExistingDocument> {
     return this.reactiveFactoryGet(this.get(id), this.reactiveHandlerGet(id));
-  }
-
-  public async reactiveGetAsync(
-    id: string
-  ): Promise<ReactiveResponseAsync<ExistingDocument>> {
-    return this.reactiveFactoryGetAsync(
-      this.get(id),
-      this.reactiveHandlerGet(id)
-    );
   }
 
   public reactiveGetAttached(
@@ -579,36 +535,6 @@ export class Database implements DatabaseInterface {
     );
   }
 
-  public async reactiveGetAttachedAsync(
-    id: number,
-    parentId: string
-  ): Promise<ReactiveResponseAsync<ExistingAttachedDocument>> {
-    return this.reactiveFactoryGetAttachedAsync(
-      this.getAttached(id, parentId),
-      this.reactiveHandlerGetAttached(id, parentId)
-    );
-  }
-
-  public reactiveGetAttachedIfExists(
-    id: number,
-    parentId: string
-  ): ReactiveResponse<ExistingAttachedDocument | undefined> {
-    return this.reactiveFactoryGetAttached(
-      this.getAttachedIfExists(id, parentId),
-      this.reactiveHandlerGetAttachedIfExists(id, parentId)
-    );
-  }
-
-  public async reactiveGetAttachedIfExistsAsync(
-    id: number,
-    parentId: string
-  ): Promise<ReactiveResponseAsync<ExistingAttachedDocument | undefined>> {
-    return this.reactiveFactoryGetAttachedAsync(
-      this.getAttachedIfExists(id, parentId),
-      this.reactiveHandlerGetAttachedIfExists(id, parentId)
-    );
-  }
-
   public reactiveGetIfExists(
     id: string
   ): ReactiveResponse<ExistingDocument | undefined> {
@@ -618,12 +544,13 @@ export class Database implements DatabaseInterface {
     );
   }
 
-  public async reactiveGetIfExistsAsync(
-    id: string
-  ): Promise<ReactiveResponseAsync<ExistingDocument | undefined>> {
-    return this.reactiveFactoryGetAsync(
-      this.getIfExists(id),
-      this.reactiveHandlerGetIfExists(id)
+  public reactiveGetIfExistsAttached(
+    id: number,
+    parentId: string
+  ): ReactiveResponse<ExistingAttachedDocument | undefined> {
+    return this.reactiveFactoryGetAttached(
+      this.getIfExistsAttached(id, parentId),
+      this.reactiveHandlerGetAttachedIfExists(id, parentId)
     );
   }
 
@@ -631,12 +558,6 @@ export class Database implements DatabaseInterface {
     config: ReactiveConfig
   ): ReactiveResponse<ExistingDocuments> {
     return this.reactiveFactoryQuery(this.query.bind(this), config);
-  }
-
-  public async reactiveQueryAsync(
-    config: ReactiveConfig
-  ): Promise<ReactiveResponseAsync<ExistingDocuments>> {
-    return this.reactiveFactoryQueryAsync(this.query.bind(this), config);
   }
 
   public reactiveQueryAttached(
@@ -648,38 +569,14 @@ export class Database implements DatabaseInterface {
     );
   }
 
-  public async reactiveQueryAttachedAsync(
-    config: ReactiveConfigAttached
-  ): Promise<ReactiveResponseAsync<ExistingAttachedDocuments>> {
-    return this.reactiveFactoryQueryAttachedAsync(
-      this.queryAttached.bind(this),
-      config
-    );
-  }
-
   public reactiveUnsettled(config: ReactiveConfig): ReactiveResponse<number> {
     return this.reactiveFactoryQuery(this.unsettled.bind(this), config);
-  }
-
-  public async reactiveUnsettledAsync(
-    config: ReactiveConfig
-  ): Promise<ReactiveResponseAsync<number>> {
-    return this.reactiveFactoryQueryAsync(this.unsettled.bind(this), config);
   }
 
   public reactiveUnsettledAttached(
     config: ReactiveConfigAttached
   ): ReactiveResponse<number> {
     return this.reactiveFactoryQueryAttached(
-      this.unsettledAttached.bind(this),
-      config
-    );
-  }
-
-  public async reactiveUnsettledAttachedAsync(
-    config: ReactiveConfigAttached
-  ): Promise<ReactiveResponseAsync<number>> {
-    return this.reactiveFactoryQueryAttachedAsync(
       this.unsettledAttached.bind(this),
       config
     );
@@ -1239,17 +1136,8 @@ export class Database implements DatabaseInterface {
   protected async reactiveFactoryGetAsync<T>(
     request: Promise<T>,
     handler: ReactiveHandler<T>,
-    result?: Writable<ReactiveResponse<T>>
-  ): Promise<ReactiveResponseAsync<T>> {
-    result =
-      result ??
-      reactiveStorage<ReactiveResponse<T>>({
-        loaded: false,
-        loading: true,
-        refresh: fn.noop,
-        unsubscribe: fn.noop
-      });
-
+    result: Writable<ReactiveResponse<T>>
+  ): Promise<ReactiveResponseLoaded<T>> {
     o.assign(result, {
       loaded: true,
       loading: false,
@@ -1306,17 +1194,8 @@ export class Database implements DatabaseInterface {
   protected async reactiveFactoryGetAttachedAsync<T>(
     request: Promise<T>,
     handler: ReactiveHandlerAttached<T>,
-    result?: Writable<ReactiveResponse<T>>
-  ): Promise<ReactiveResponseAsync<T>> {
-    result =
-      result ??
-      reactiveStorage<ReactiveResponse<T>>({
-        loaded: false,
-        loading: true,
-        refresh: fn.noop,
-        unsubscribe: fn.noop
-      });
-
+    result: Writable<ReactiveResponse<T>>
+  ): Promise<ReactiveResponseLoaded<T>> {
     o.assign(result, {
       loaded: true,
       loading: false,
@@ -1373,18 +1252,9 @@ export class Database implements DatabaseInterface {
   protected async reactiveFactoryQueryAsync<T>(
     request: ReactiveRequest<T>,
     config: ReactiveConfig,
-    result?: Writable<ReactiveResponse<T>>
-  ): Promise<ReactiveResponseAsync<T>> {
+    result: Writable<ReactiveResponse<T>>
+  ): Promise<ReactiveResponseLoaded<T>> {
     config = reactiveStorage(config);
-
-    result =
-      result ??
-      reactiveStorage<ReactiveResponse<T>>({
-        loaded: false,
-        loading: true,
-        refresh: fn.noop,
-        unsubscribe: fn.noop
-      });
 
     o.assign(result, {
       loaded: true,
@@ -1402,7 +1272,7 @@ export class Database implements DatabaseInterface {
     const observer = reactiveStorage.watch(config, refresh);
 
     const subscription = this.subscribe(doc => {
-      if (config.updateFn && config.updateFn(doc)) refresh();
+      if (config.update && config.update(doc)) refresh();
     });
 
     let timeout: numberU;
@@ -1471,18 +1341,9 @@ export class Database implements DatabaseInterface {
   protected async reactiveFactoryQueryAttachedAsync<T>(
     request: ReactiveRequestAttached<T>,
     config: ReactiveConfigAttached,
-    result?: Writable<ReactiveResponse<T>>
-  ): Promise<ReactiveResponseAsync<T>> {
+    result: Writable<ReactiveResponse<T>>
+  ): Promise<ReactiveResponseLoaded<T>> {
     config = reactiveStorage(config);
-
-    result =
-      result ??
-      reactiveStorage<ReactiveResponse<T>>({
-        loaded: false,
-        loading: true,
-        refresh: fn.noop,
-        unsubscribe: fn.noop
-      });
 
     o.assign(result, {
       loaded: true,
@@ -1504,7 +1365,7 @@ export class Database implements DatabaseInterface {
     const observer = reactiveStorage.watch(config, refresh);
 
     const subscription = this.subscribeAttached(doc => {
-      if (config.updateFn && config.updateFn(doc)) refresh();
+      if (config.update && config.update(doc)) refresh();
     });
 
     let timeout: numberU;

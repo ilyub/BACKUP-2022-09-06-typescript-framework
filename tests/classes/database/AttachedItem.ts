@@ -1,8 +1,8 @@
-import type { AttachedItemDoc } from "@/classes/database/AttachedItem";
+import type { ExistingAttachedItemDoc } from "@/classes/database/AttachedItem";
 import { AttachedItem } from "@/classes/database/AttachedItem";
 import { Item } from "@/classes/database/Item";
 
-test.each<AttachedItemDoc>([
+test.each<ExistingAttachedItemDoc>([
   {
     _id: 0,
     _rev: 1,

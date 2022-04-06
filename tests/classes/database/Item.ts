@@ -1,7 +1,7 @@
-import type { ItemDoc } from "@/classes/database/Item";
+import type { ExistingItemDoc } from "@/classes/database/Item";
 import { Item } from "@/classes/database/Item";
 
-test.each<ItemDoc>([
+test.each<ExistingItemDoc>([
   { _id: "test-id", _rev: "test-rev" },
   {
     _deleted: true,

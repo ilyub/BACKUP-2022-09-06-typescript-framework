@@ -1,6 +1,7 @@
 import type {
   Facade,
   Handler,
+  Observer,
   Reducer
 } from "@skylib/facades/dist/reactiveStorage";
 import * as assert from "@skylib/functions/dist/assertions";
@@ -9,6 +10,16 @@ import * as is from "@skylib/functions/dist/guards";
 import { wrapProxyHandler } from "@skylib/functions/dist/helpers";
 import * as map from "@skylib/functions/dist/map";
 import * as reflect from "@skylib/functions/dist/reflect";
+
+declare global {
+  namespace facades {
+    namespace reactiveStorage {
+      interface Observer {
+        readonly symbol: symbol;
+      }
+    }
+  }
+}
 
 export const implementation = fn.run<Facade>(() => {
   function reflectStorage<T extends object>(obj: T): T {
@@ -60,20 +71,27 @@ export const implementation = fn.run<Facade>(() => {
     }
   }
 
-  reflectStorage.unwatch = (obj: object, observer: unknown): void => {
+  reflectStorage.unwatch = (obj: object, observer: Observer): void => {
     const callbacks = reflect.getMetadata(callbacksKey, obj);
 
     assert.byGuard(callbacks, isCallbacks);
-    assert.byGuard(observer, is.symbol);
-    reflect.defineMetadata(callbacksKey, map.delete(callbacks, observer), obj);
+
+    reflect.defineMetadata(
+      callbacksKey,
+      map.delete(callbacks, observer.symbol),
+      obj
+    );
   };
 
   reflectStorage.watch = <T extends object>(
     obj: T,
     handler: Handler<T>,
     reducer?: Reducer<T>
-  ): unknown => {
-    const observer = Symbol("Callback");
+  ): Observer => {
+    const observer: Observer = {
+      _type: "ReactiveStorageObserver",
+      symbol: Symbol("Callback")
+    };
 
     const callbacks = reflect.getMetadata(callbacksKey, obj);
 
@@ -84,7 +102,7 @@ export const implementation = fn.run<Facade>(() => {
 
       reflect.defineMetadata(
         callbacksKey,
-        map.set(callbacks, observer, () => {
+        map.set(callbacks, observer.symbol, () => {
           const oldReduced = reduced;
 
           reduced = reducer(obj);
@@ -96,7 +114,7 @@ export const implementation = fn.run<Facade>(() => {
     } else
       reflect.defineMetadata(
         callbacksKey,
-        map.set(callbacks, observer, () => {
+        map.set(callbacks, observer.symbol, () => {
           handler(obj);
         }),
         obj

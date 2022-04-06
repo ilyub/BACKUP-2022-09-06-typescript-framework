@@ -18,15 +18,14 @@ import type { NumStr, Rec } from "@skylib/functions/dist/types/core";
 
 import type { Definitions } from ".";
 
-// eslint-disable-next-line @typescript-eslint/no-namespace, import/export
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Dictionary {
   export interface Configuration {
     readonly localeName: LocaleName;
   }
 }
 
-// eslint-disable-next-line import/export
-export class Dictionary implements DictionaryInterface {
+export class Dictionary implements DictionaryInterface<Word, Context> {
   /**
    * Configures plugin.
    *

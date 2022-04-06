@@ -1,4 +1,4 @@
-import type { Facade, TaskType } from "@skylib/facades/dist/handlePromise";
+import type { Facade, Type } from "@skylib/facades/dist/handlePromise";
 import { progressReporter } from "@skylib/facades/dist/progressReporter";
 import { showAlert } from "@skylib/facades/dist/showAlert";
 import * as fn from "@skylib/functions/dist/function";
@@ -7,7 +7,7 @@ import type { Rec } from "@skylib/functions/dist/types/core";
 import type { AsyncPromise } from "@skylib/functions/dist/types/function";
 
 export interface Configuration {
-  readonly expectedDurations: Rec<TaskType, number>;
+  readonly expectedDurations: Rec<Type, number>;
 }
 
 export type PartialConfiguration<K extends keyof Configuration> = {
@@ -48,7 +48,7 @@ export const implementation: Facade = {
   silent<T>(promiseAsync: AsyncPromise<T>, errorMessage = "") {
     handle(promiseAsync, undefined, errorMessage);
   },
-  verbose<T>(promiseAsync: AsyncPromise<T>, type: TaskType, errorMessage = "") {
+  verbose<T>(promiseAsync: AsyncPromise<T>, type: Type, errorMessage = "") {
     handle(promiseAsync, type, errorMessage);
   }
 };
@@ -80,7 +80,7 @@ const moduleConfig: Configuration = {
  */
 function handle<T>(
   promiseAsync: AsyncPromise<T>,
-  type: TaskType | undefined,
+  type: Type | undefined,
   errorMessage: string
 ): void {
   const id = Symbol("PromiseId");

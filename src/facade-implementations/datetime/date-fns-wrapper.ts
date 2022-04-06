@@ -22,8 +22,10 @@ import {
   setYear,
   startOfDay,
   startOfHour,
+  startOfMinute,
   startOfMonth,
   startOfWeek,
+  startOfYear,
   sub
 } from "date-fns"; // eslint-disable-line import/no-duplicates
 import enUS from "date-fns/locale/en-US"; // eslint-disable-line import/no-duplicates
@@ -262,6 +264,12 @@ export class DateTime implements DateTimeInterface {
     return this;
   }
 
+  public setStartOfMinute(): DateTimeInterface {
+    this.value = startOfMinute(this.value);
+
+    return this;
+  }
+
   public setStartOfMonth(): DateTimeInterface {
     this.value = startOfMonth(this.value);
 
@@ -278,6 +286,12 @@ export class DateTime implements DateTimeInterface {
     const weekStartsOn = moduleConfig.firstDayOfWeek;
 
     this.value = startOfWeek(this.value, { weekStartsOn });
+
+    return this;
+  }
+
+  public setStartOfYear(): DateTimeInterface {
+    this.value = startOfYear(this.value);
 
     return this;
   }
