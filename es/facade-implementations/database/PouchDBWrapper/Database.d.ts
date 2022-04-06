@@ -1,4 +1,4 @@
-import type { AttachedChangesHandler, AttachedSubscriptionId, ChangesHandler, Conditions, Database as DatabaseInterface, DatabaseOptions, ExistingAttachedDocument, ExistingAttachedDocuments, ExistingDocument, ExistingDocuments, PutAttachedDocument, PutAttachedDocuments, PutAttachedResponse, PutAttachedResponses, PutDocument, PutDocuments, PutResponse, PutResponses, QueryOptions, ReactiveConfig, ReactiveConfigAttached, ReactiveResponse, ReactiveResponseAsync, ResetCallback, SubscriptionId } from "@skylib/facades/es/database";
+import type { AttachedChangesHandler, AttachedSubscriptionId, BulkAttachedDocuments, ChangesHandler, Conditions, Database as DatabaseInterface, DatabaseOptions, ExistingAttachedDocument, ExistingAttachedDocuments, ExistingDocument, ExistingDocuments, PutAttachedDocument, PutAttachedDocuments, PutAttachedResponse, PutAttachedResponses, PutDocument, PutDocuments, PutResponse, PutResponses, QueryOptions, ReactiveConfig, ReactiveConfigAttached, ReactiveResponse, ReactiveResponseLoaded, ResetCallback, SubscriptionId } from "@skylib/facades/es/database";
 import type { unknowns, Writable } from "@skylib/functions/es/types/core";
 import type { Changes, PouchDatabase, PouchDatabaseConfiguration } from "./PouchDBProxy";
 import { PouchDBProxy } from "./PouchDBProxy";
@@ -67,7 +67,7 @@ export interface ReactiveHandler<T> {
      * @param doc - Document.
      * @param mutableResult - Mutable result.
      */
-    (doc: ExistingDocument, mutableResult: Writable<ReactiveResponseAsync<T>>): void;
+    (doc: ExistingDocument, mutableResult: Writable<ReactiveResponseLoaded<T>>): void;
 }
 export interface ReactiveHandlerAttached<T> {
     /**
@@ -76,7 +76,7 @@ export interface ReactiveHandlerAttached<T> {
      * @param doc - Document.
      * @param mutableResult - Mutable result.
      */
-    (doc: ExistingAttachedDocument, mutableResult: Writable<ReactiveResponseAsync<T>>): void;
+    (doc: ExistingAttachedDocument, mutableResult: Writable<ReactiveResponseLoaded<T>>): void;
 }
 export declare const handlers: Readonly<{
     error(error: unknown): void;
@@ -98,17 +98,16 @@ export declare class Database implements DatabaseInterface {
      * @param pouchConfig - PouchDB configuration.
      */
     constructor(name: string, options?: DatabaseOptions, config?: Configuration, pouchConfig?: PouchDatabaseConfiguration);
-    bulkAttachedDocs(parentId: string, docs: PutAttachedDocuments): Promise<PutAttachedResponses>;
     bulkDocs(docs: PutDocuments): Promise<PutResponses>;
-    bulkExistingAttachedDocs(docs: ExistingAttachedDocuments): Promise<PutAttachedResponses>;
+    bulkDocsAttached(docs: BulkAttachedDocuments): Promise<PutAttachedResponses>;
     count(conditions?: Conditions): Promise<number>;
     countAttached(conditions?: Conditions, parentConditions?: Conditions): Promise<number>;
     exists(id: string): Promise<boolean>;
     existsAttached(id: number, parentId: string): Promise<boolean>;
     get(id: string): Promise<ExistingDocument>;
     getAttached(id: number, parentId: string): Promise<ExistingAttachedDocument>;
-    getAttachedIfExists(id: number, parentId: string): Promise<ExistingAttachedDocument | undefined>;
     getIfExists(id: string): Promise<ExistingDocument | undefined>;
+    getIfExistsAttached(id: number, parentId: string): Promise<ExistingAttachedDocument | undefined>;
     /**
      * Returns original PouchDB database.
      *
@@ -117,34 +116,23 @@ export declare class Database implements DatabaseInterface {
     getRawDb(): Promise<PouchDatabase>;
     put(doc: PutDocument): Promise<PutResponse>;
     putAttached(parentId: string, doc: PutAttachedDocument): Promise<PutAttachedResponse>;
-    putAttachedIfNotExists(parentId: string, doc: PutAttachedDocument): Promise<PutAttachedResponse | undefined>;
+    putAttachedBulk(parentId: string, docs: PutAttachedDocuments): Promise<PutAttachedResponses>;
     putIfNotExists(doc: PutDocument): Promise<PutResponse | undefined>;
+    putIfNotExistsAttached(parentId: string, doc: PutAttachedDocument): Promise<PutAttachedResponse | undefined>;
     query(conditions?: Conditions, options?: QueryOptions): Promise<ExistingDocuments>;
     queryAttached(conditions?: Conditions, parentConditions?: Conditions, options?: QueryOptions): Promise<ExistingAttachedDocuments>;
     reactiveCount(config: ReactiveConfig): ReactiveResponse<number>;
-    reactiveCountAsync(config: ReactiveConfig): Promise<ReactiveResponseAsync<number>>;
     reactiveCountAttached(config: ReactiveConfigAttached): ReactiveResponse<number>;
-    reactiveCountAttachedAsync(config: ReactiveConfigAttached): Promise<ReactiveResponseAsync<number>>;
     reactiveExists(id: string): ReactiveResponse<boolean>;
-    reactiveExistsAsync(id: string): Promise<ReactiveResponseAsync<boolean>>;
     reactiveExistsAttached(id: number, parentId: string): ReactiveResponse<boolean>;
-    reactiveExistsAttachedAsync(id: number, parentId: string): Promise<ReactiveResponseAsync<boolean>>;
     reactiveGet(id: string): ReactiveResponse<ExistingDocument>;
-    reactiveGetAsync(id: string): Promise<ReactiveResponseAsync<ExistingDocument>>;
     reactiveGetAttached(id: number, parentId: string): ReactiveResponse<ExistingAttachedDocument>;
-    reactiveGetAttachedAsync(id: number, parentId: string): Promise<ReactiveResponseAsync<ExistingAttachedDocument>>;
-    reactiveGetAttachedIfExists(id: number, parentId: string): ReactiveResponse<ExistingAttachedDocument | undefined>;
-    reactiveGetAttachedIfExistsAsync(id: number, parentId: string): Promise<ReactiveResponseAsync<ExistingAttachedDocument | undefined>>;
     reactiveGetIfExists(id: string): ReactiveResponse<ExistingDocument | undefined>;
-    reactiveGetIfExistsAsync(id: string): Promise<ReactiveResponseAsync<ExistingDocument | undefined>>;
+    reactiveGetIfExistsAttached(id: number, parentId: string): ReactiveResponse<ExistingAttachedDocument | undefined>;
     reactiveQuery(config: ReactiveConfig): ReactiveResponse<ExistingDocuments>;
-    reactiveQueryAsync(config: ReactiveConfig): Promise<ReactiveResponseAsync<ExistingDocuments>>;
     reactiveQueryAttached(config: ReactiveConfigAttached): ReactiveResponse<ExistingAttachedDocuments>;
-    reactiveQueryAttachedAsync(config: ReactiveConfigAttached): Promise<ReactiveResponseAsync<ExistingAttachedDocuments>>;
     reactiveUnsettled(config: ReactiveConfig): ReactiveResponse<number>;
-    reactiveUnsettledAsync(config: ReactiveConfig): Promise<ReactiveResponseAsync<number>>;
     reactiveUnsettledAttached(config: ReactiveConfigAttached): ReactiveResponse<number>;
-    reactiveUnsettledAttachedAsync(config: ReactiveConfigAttached): Promise<ReactiveResponseAsync<number>>;
     reset(callback?: ResetCallback): Promise<void>;
     subscribe(handler: ChangesHandler): SubscriptionId;
     subscribeAttached(handler: AttachedChangesHandler): AttachedSubscriptionId;
@@ -210,7 +198,7 @@ export declare class Database implements DatabaseInterface {
      * @param result - Reactive result.
      * @returns Reactive response.
      */
-    protected reactiveFactoryGetAsync<T>(request: Promise<T>, handler: ReactiveHandler<T>, result?: Writable<ReactiveResponse<T>>): Promise<ReactiveResponseAsync<T>>;
+    protected reactiveFactoryGetAsync<T>(request: Promise<T>, handler: ReactiveHandler<T>, result: Writable<ReactiveResponse<T>>): Promise<ReactiveResponseLoaded<T>>;
     /**
      * Reactive factory.
      *
@@ -227,7 +215,7 @@ export declare class Database implements DatabaseInterface {
      * @param result - Reactive result.
      * @returns Reactive response.
      */
-    protected reactiveFactoryGetAttachedAsync<T>(request: Promise<T>, handler: ReactiveHandlerAttached<T>, result?: Writable<ReactiveResponse<T>>): Promise<ReactiveResponseAsync<T>>;
+    protected reactiveFactoryGetAttachedAsync<T>(request: Promise<T>, handler: ReactiveHandlerAttached<T>, result: Writable<ReactiveResponse<T>>): Promise<ReactiveResponseLoaded<T>>;
     /**
      * Reactive factory.
      *
@@ -244,7 +232,7 @@ export declare class Database implements DatabaseInterface {
      * @param result - Reactive result.
      * @returns Reactive response.
      */
-    protected reactiveFactoryQueryAsync<T>(request: ReactiveRequest<T>, config: ReactiveConfig, result?: Writable<ReactiveResponse<T>>): Promise<ReactiveResponseAsync<T>>;
+    protected reactiveFactoryQueryAsync<T>(request: ReactiveRequest<T>, config: ReactiveConfig, result: Writable<ReactiveResponse<T>>): Promise<ReactiveResponseLoaded<T>>;
     /**
      * Reactive factory.
      *
@@ -261,7 +249,7 @@ export declare class Database implements DatabaseInterface {
      * @param result - Reactive result.
      * @returns Reactive response.
      */
-    protected reactiveFactoryQueryAttachedAsync<T>(request: ReactiveRequestAttached<T>, config: ReactiveConfigAttached, result?: Writable<ReactiveResponse<T>>): Promise<ReactiveResponseAsync<T>>;
+    protected reactiveFactoryQueryAttachedAsync<T>(request: ReactiveRequestAttached<T>, config: ReactiveConfigAttached, result: Writable<ReactiveResponse<T>>): Promise<ReactiveResponseLoaded<T>>;
     /**
      * Reactive handler factory.
      *

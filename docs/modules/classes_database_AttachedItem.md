@@ -10,29 +10,17 @@
 
 ### Interfaces
 
-- [AttachedItemDoc](../interfaces/classes_database_AttachedItem.AttachedItemDoc.md)
+- [BaseAttachedItemDoc](../interfaces/classes_database_AttachedItem.BaseAttachedItemDoc.md)
+- [ExistingAttachedItemDoc](../interfaces/classes_database_AttachedItem.ExistingAttachedItemDoc.md)
 - [PutAttachedItemDoc](../interfaces/classes_database_AttachedItem.PutAttachedItemDoc.md)
 
 ### Type aliases
 
-- [AttachedItemDocs](classes_database_AttachedItem.md#attacheditemdocs)
 - [AttachedItems](classes_database_AttachedItem.md#attacheditems)
+- [ExistingAttachedItemDocs](classes_database_AttachedItem.md#existingattacheditemdocs)
 - [PutAttachedItemDocs](classes_database_AttachedItem.md#putattacheditemdocs)
 
-### Functions
-
-- [isAttachedItemDoc](classes_database_AttachedItem.md#isattacheditemdoc)
-- [isAttachedItemDocs](classes_database_AttachedItem.md#isattacheditemdocs)
-- [isPutAttachedItemDoc](classes_database_AttachedItem.md#isputattacheditemdoc)
-- [isPutAttachedItemDocs](classes_database_AttachedItem.md#isputattacheditemdocs)
-
 ## Type aliases
-
-### AttachedItemDocs
-
-Ƭ **AttachedItemDocs**: readonly [`AttachedItemDoc`](../interfaces/classes_database_AttachedItem.AttachedItemDoc.md)[]
-
-___
 
 ### AttachedItems
 
@@ -40,70 +28,12 @@ ___
 
 ___
 
+### ExistingAttachedItemDocs
+
+Ƭ **ExistingAttachedItemDocs**: readonly [`ExistingAttachedItemDoc`](../interfaces/classes_database_AttachedItem.ExistingAttachedItemDoc.md)[]
+
+___
+
 ### PutAttachedItemDocs
 
-Ƭ **PutAttachedItemDocs**: readonly [`AttachedItemDoc`](../interfaces/classes_database_AttachedItem.AttachedItemDoc.md)[]
-
-## Functions
-
-### isAttachedItemDoc
-
-▸ **isAttachedItemDoc**(`value`): value is AttachedItemDoc
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
-
-#### Returns
-
-value is AttachedItemDoc
-
-___
-
-### isAttachedItemDocs
-
-▸ **isAttachedItemDocs**(`value`): value is readonly AttachedItemDoc[]
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
-
-#### Returns
-
-value is readonly AttachedItemDoc[]
-
-___
-
-### isPutAttachedItemDoc
-
-▸ **isPutAttachedItemDoc**(`value`): value is PutAttachedItemDoc
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
-
-#### Returns
-
-value is PutAttachedItemDoc
-
-___
-
-### isPutAttachedItemDocs
-
-▸ **isPutAttachedItemDocs**(`value`): value is readonly PutAttachedItemDoc[]
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
-
-#### Returns
-
-value is readonly PutAttachedItemDoc[]
+Ƭ **PutAttachedItemDocs**: readonly [`ExistingAttachedItemDoc`](../interfaces/classes_database_AttachedItem.ExistingAttachedItemDoc.md)[]

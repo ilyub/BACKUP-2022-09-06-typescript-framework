@@ -38,7 +38,7 @@ Creates class instance.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `source` | [`ItemDoc`](../interfaces/classes_database_Item.ItemDoc.md) | Source. |
+| `source` | [`ExistingItemDoc`](../interfaces/classes_database_Item.ExistingItemDoc.md) | Source. |
 
 ## Properties
 
@@ -98,12 +98,12 @@ ___
 
 ### doc
 
-▸ **doc**(): [`ItemDoc`](../interfaces/classes_database_Item.ItemDoc.md)
+▸ **doc**(): [`ExistingItemDoc`](../interfaces/classes_database_Item.ExistingItemDoc.md)
 
 Returns database document.
 
 #### Returns
 
-[`ItemDoc`](../interfaces/classes_database_Item.ItemDoc.md)
+[`ExistingItemDoc`](../interfaces/classes_database_Item.ExistingItemDoc.md)
 
 Database document.

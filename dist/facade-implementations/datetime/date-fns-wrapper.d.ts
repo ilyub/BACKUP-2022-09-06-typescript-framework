@@ -50,9 +50,11 @@ export declare class DateTime implements DateTimeInterface {
     setMonth(month: number): DateTimeInterface;
     setStartOfDay(): DateTimeInterface;
     setStartOfHour(): DateTimeInterface;
+    setStartOfMinute(): DateTimeInterface;
     setStartOfMonth(): DateTimeInterface;
     setStartOfWeek(weekStartsOn: FirstDayOfWeek): DateTimeInterface;
     setStartOfWeekLocale(): DateTimeInterface;
+    setStartOfYear(): DateTimeInterface;
     setYear(year: number): DateTimeInterface;
     sub(amount: number, unit: Unit): DateTimeInterface;
     toDate(): Date;

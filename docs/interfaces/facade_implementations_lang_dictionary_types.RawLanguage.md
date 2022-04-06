@@ -28,4 +28,4 @@ ___
 
 ### words
 
-• `Readonly` **words**: `Rec`<keyof `Word`, [`RawDefinition`](../modules/facade_implementations_lang_dictionary_types.md#rawdefinition)\>
+• `Readonly` **words**: `Rec`<`Word`, [`RawDefinition`](../modules/facade_implementations_lang_dictionary_types.md#rawdefinition)\>

@@ -1,28 +1,4 @@
-import * as is from "@skylib/functions/es/guards";
 import * as o from "@skylib/functions/es/object";
-import { isItemDoc } from "./Item";
-export const isPutAttachedItemDoc = is.object.factory({ parentDoc: isItemDoc }, {
-    _deleted: is.true,
-    _id: is.number,
-    _rev: is.number,
-    createdAt: is.string,
-    deletedAt: is.string,
-    softDeleted: is.true,
-    updatedAt: is.string
-});
-export const isPutAttachedItemDocs = is.factory(is.array.of, isPutAttachedItemDoc);
-export const isAttachedItemDoc = is.object.factory({
-    _id: is.number,
-    _rev: is.number,
-    parentDoc: isItemDoc
-}, {
-    _deleted: is.true,
-    createdAt: is.string,
-    deletedAt: is.string,
-    softDeleted: is.true,
-    updatedAt: is.string
-});
-export const isAttachedItemDocs = is.factory(is.array.of, isAttachedItemDoc);
 export class AttachedItem {
     /**
      * Creates class instance.

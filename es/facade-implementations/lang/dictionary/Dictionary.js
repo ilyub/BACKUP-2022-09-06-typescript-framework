@@ -6,7 +6,6 @@ import { onDemand, wrapProxyHandler } from "@skylib/functions/es/helpers";
 import * as o from "@skylib/functions/es/object";
 import * as reflect from "@skylib/functions/es/reflect";
 import * as s from "@skylib/functions/es/string";
-// eslint-disable-next-line import/export
 export class Dictionary {
     /**
      * Creates class instance.

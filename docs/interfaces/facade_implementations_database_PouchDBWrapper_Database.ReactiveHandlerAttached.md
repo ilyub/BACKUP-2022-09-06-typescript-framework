@@ -23,7 +23,7 @@ Reactive handler.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `doc` | `ExistingAttachedDocument` | Document. |
-| `mutableResult` | `Writable`<`ReactiveResponseAsync`<`T`\>\> | Mutable result. |
+| `mutableResult` | `Writable`<`ReactiveResponseLoaded`<`T`\>\> | Mutable result. |
 
 #### Returns
 

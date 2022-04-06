@@ -11,7 +11,6 @@ const handlePromise_1 = require("@skylib/facades/dist/handlePromise");
 const reactiveStorage_1 = require("@skylib/facades/dist/reactiveStorage");
 const uniqueId_1 = require("@skylib/facades/dist/uniqueId");
 const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
-const arrayMap = tslib_1.__importStar(require("@skylib/functions/dist/arrayMap"));
 const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
 const cast = tslib_1.__importStar(require("@skylib/functions/dist/converters"));
 const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
@@ -110,12 +109,102 @@ class Database {
         this.config = configWithDefaults;
         this.pouchConfig = pouchConfig;
     }
-    async bulkAttachedDocs(parentId, docs) {
+    async bulkDocs(docs) {
+        for (const doc of docs)
+            validatePutDocument(doc);
+        docs = docs.map(doc => o.omit(doc, "lastAttachedDocs"));
+        const db = await this.getDb();
+        const responses = await db.bulkDocs(docs);
+        return responses
+            .map(response => "ok" in response && response.ok
+            ? { id: response.id, rev: response.rev }
+            : undefined)
+            .filter(is.not.empty);
+    }
+    async bulkDocsAttached(docs) {
+        const responses = await Promise.all(_.uniq(docs.map(doc => doc.parentDoc._id)).map(async (parentId) => fn.run(async () => this.putAttachedBulk(parentId, docs.filter(doc => doc.parentDoc._id === parentId)))));
+        return _.flatten(responses);
+    }
+    async count(conditions = {}) {
+        const response = await this.rawQuery({}, { conditions, count: true });
+        return response.count;
+    }
+    async countAttached(conditions = {}, parentConditions = {}) {
+        const response = await this.rawQuery({}, {
+            conditions,
+            count: true,
+            parentConditions
+        });
+        return response.count;
+    }
+    async exists(id) {
+        const doc = await this.getIfExists(id);
+        return is.not.empty(doc);
+    }
+    async existsAttached(id, parentId) {
+        const doc = await this.getIfExistsAttached(id, parentId);
+        return is.not.empty(doc);
+    }
+    async get(id) {
+        const db = await this.getDb();
+        const doc = await db.get(id);
+        return extractDoc(doc);
+    }
+    async getAttached(id, parentId) {
+        const db = await this.getDb();
+        const doc = await db.get(parentId);
+        return extractDocAttached(doc, id);
+    }
+    async getIfExists(id) {
+        try {
+            return await this.get(id);
+        }
+        catch (e) {
+            assert.instance(e, PouchNotFoundError_1.PouchNotFoundError, wrapError(e));
+            return undefined;
+        }
+    }
+    async getIfExistsAttached(id, parentId) {
+        try {
+            return await this.getAttached(id, parentId);
+        }
+        catch (e) {
+            assert.instance(e, PouchNotFoundError_1.PouchNotFoundError, wrapError(e));
+            return undefined;
+        }
+    }
+    /**
+     * Returns original PouchDB database.
+     *
+     * @returns Original PouchDB database.
+     */
+    async getRawDb() {
+        const db = await this.getDb();
+        return db.db;
+    }
+    async put(doc) {
+        validatePutDocument(doc);
+        const db = await this.getDb();
+        if (doc.attachedDocs && doc.attachedDocs.length === 0) {
+            assert.not.empty(doc._id);
+            assert.not.empty(doc._rev);
+            const storedDoc = await db.get(doc._id);
+            assert.not.empty(storedDoc.attachedDocs);
+            doc = Object.assign(Object.assign({}, doc), { attachedDocs: storedDoc.attachedDocs });
+        }
+        const response = await db.post(o.omit(doc, "lastAttachedDocs"));
+        assert.toBeTrue(response.ok);
+        return { id: response.id, rev: response.rev };
+    }
+    async putAttached(parentId, doc) {
+        return a.first(await this.putAttachedBulk(parentId, [doc]));
+    }
+    async putAttachedBulk(parentId, docs) {
         const db = await this.getDb();
         for (let i = 0; i < 1 + this.options.retries; i++) {
             // eslint-disable-next-line no-await-in-loop
             const result = await attempt();
-            if (is.object(result))
+            if (result)
                 return result;
         }
         throw new PouchRetryError_1.PouchRetryError(`Failed after ${this.options.retries} retries`);
@@ -154,117 +243,22 @@ class Database {
             }
             catch (e) {
                 assert.instance(e, PouchConflictError_1.PouchConflictError, wrapError(e));
-                return "retry";
+                return undefined;
             }
         }
     }
-    async bulkDocs(docs) {
-        for (const doc of docs)
-            validatePutDocument(doc);
-        docs = docs.map(doc => o.omit(doc, "lastAttachedDocs"));
-        const db = await this.getDb();
-        const responses = await db.bulkDocs(docs);
-        return responses
-            .map(response => "ok" in response && response.ok
-            ? { id: response.id, rev: response.rev }
-            : undefined)
-            .filter(is.not.empty);
-    }
-    async bulkExistingAttachedDocs(docs) {
-        const docsMap = new Map();
-        for (const doc of docs)
-            arrayMap.push(doc.parentDoc._id, doc, docsMap);
-        const result = await Promise.all(a
-            .fromIterable(docsMap.entries())
-            .map(async ([parentId, docs2]) => this.bulkAttachedDocs(parentId, docs2)));
-        return _.flatten(result);
-    }
-    async count(conditions = {}) {
-        const response = await this.rawQuery({}, { conditions, count: true });
-        return response.count;
-    }
-    async countAttached(conditions = {}, parentConditions = {}) {
-        const response = await this.rawQuery({}, {
-            conditions,
-            count: true,
-            parentConditions
-        });
-        return response.count;
-    }
-    async exists(id) {
-        const doc = await this.getIfExists(id);
-        return is.not.empty(doc);
-    }
-    async existsAttached(id, parentId) {
-        const doc = await this.getAttachedIfExists(id, parentId);
-        return is.not.empty(doc);
-    }
-    async get(id) {
-        const db = await this.getDb();
-        const doc = await db.get(id);
-        return extractDoc(doc);
-    }
-    async getAttached(id, parentId) {
-        const db = await this.getDb();
-        const doc = await db.get(parentId);
-        return extractDocAttached(doc, id);
-    }
-    async getAttachedIfExists(id, parentId) {
+    async putIfNotExists(doc) {
         try {
-            return await this.getAttached(id, parentId);
-        }
-        catch (e) {
-            assert.instance(e, PouchNotFoundError_1.PouchNotFoundError, wrapError(e));
-            return undefined;
-        }
-    }
-    async getIfExists(id) {
-        try {
-            return await this.get(id);
-        }
-        catch (e) {
-            assert.instance(e, PouchNotFoundError_1.PouchNotFoundError, wrapError(e));
-            return undefined;
-        }
-    }
-    /**
-     * Returns original PouchDB database.
-     *
-     * @returns Original PouchDB database.
-     */
-    async getRawDb() {
-        const db = await this.getDb();
-        return db.db;
-    }
-    async put(doc) {
-        validatePutDocument(doc);
-        const db = await this.getDb();
-        if (doc.attachedDocs && doc.attachedDocs.length === 0) {
-            assert.not.empty(doc._id);
-            assert.not.empty(doc._rev);
-            const storedDoc = await db.get(doc._id);
-            assert.not.empty(storedDoc.attachedDocs);
-            doc = Object.assign(Object.assign({}, doc), { attachedDocs: storedDoc.attachedDocs });
-        }
-        const response = await db.post(o.omit(doc, "lastAttachedDocs"));
-        assert.toBeTrue(response.ok);
-        return { id: response.id, rev: response.rev };
-    }
-    async putAttached(parentId, doc) {
-        return a.first(await this.bulkAttachedDocs(parentId, [doc]));
-    }
-    async putAttachedIfNotExists(parentId, doc) {
-        try {
-            return await this.putAttached(parentId, doc);
+            return await this.put(doc);
         }
         catch (e) {
             assert.instance(e, PouchConflictError_1.PouchConflictError, wrapError(e));
             return undefined;
         }
     }
-    async putIfNotExists(doc) {
+    async putIfNotExistsAttached(parentId, doc) {
         try {
-            return await this.put(doc);
+            return await this.putAttached(parentId, doc);
         }
         catch (e) {
             assert.instance(e, PouchConflictError_1.PouchConflictError, wrapError(e));
@@ -288,74 +282,38 @@ class Database {
     reactiveCount(config) {
         return this.reactiveFactoryQuery(this.count.bind(this), config);
     }
-    async reactiveCountAsync(config) {
-        return this.reactiveFactoryQueryAsync(this.count.bind(this), config);
-    }
     reactiveCountAttached(config) {
         return this.reactiveFactoryQueryAttached(this.countAttached.bind(this), config);
-    }
-    async reactiveCountAttachedAsync(config) {
-        return this.reactiveFactoryQueryAttachedAsync(this.countAttached.bind(this), config);
     }
     reactiveExists(id) {
         return this.reactiveFactoryGet(this.exists(id), this.reactiveHandlerExists(id));
     }
-    async reactiveExistsAsync(id) {
-        return this.reactiveFactoryGetAsync(this.exists(id), this.reactiveHandlerExists(id));
-    }
     reactiveExistsAttached(id, parentId) {
         return this.reactiveFactoryGetAttached(this.existsAttached(id, parentId), this.reactiveHandlerExistsAttached(id, parentId));
-    }
-    async reactiveExistsAttachedAsync(id, parentId) {
-        return this.reactiveFactoryGetAttachedAsync(this.existsAttached(id, parentId), this.reactiveHandlerExistsAttached(id, parentId));
     }
     reactiveGet(id) {
         return this.reactiveFactoryGet(this.get(id), this.reactiveHandlerGet(id));
     }
-    async reactiveGetAsync(id) {
-        return this.reactiveFactoryGetAsync(this.get(id), this.reactiveHandlerGet(id));
-    }
     reactiveGetAttached(id, parentId) {
         return this.reactiveFactoryGetAttached(this.getAttached(id, parentId), this.reactiveHandlerGetAttached(id, parentId));
-    }
-    async reactiveGetAttachedAsync(id, parentId) {
-        return this.reactiveFactoryGetAttachedAsync(this.getAttached(id, parentId), this.reactiveHandlerGetAttached(id, parentId));
-    }
-    reactiveGetAttachedIfExists(id, parentId) {
-        return this.reactiveFactoryGetAttached(this.getAttachedIfExists(id, parentId), this.reactiveHandlerGetAttachedIfExists(id, parentId));
-    }
-    async reactiveGetAttachedIfExistsAsync(id, parentId) {
-        return this.reactiveFactoryGetAttachedAsync(this.getAttachedIfExists(id, parentId), this.reactiveHandlerGetAttachedIfExists(id, parentId));
     }
     reactiveGetIfExists(id) {
         return this.reactiveFactoryGet(this.getIfExists(id), this.reactiveHandlerGetIfExists(id));
     }
-    async reactiveGetIfExistsAsync(id) {
-        return this.reactiveFactoryGetAsync(this.getIfExists(id), this.reactiveHandlerGetIfExists(id));
+    reactiveGetIfExistsAttached(id, parentId) {
+        return this.reactiveFactoryGetAttached(this.getIfExistsAttached(id, parentId), this.reactiveHandlerGetAttachedIfExists(id, parentId));
     }
     reactiveQuery(config) {
         return this.reactiveFactoryQuery(this.query.bind(this), config);
     }
-    async reactiveQueryAsync(config) {
-        return this.reactiveFactoryQueryAsync(this.query.bind(this), config);
-    }
     reactiveQueryAttached(config) {
         return this.reactiveFactoryQueryAttached(this.queryAttached.bind(this), config);
-    }
-    async reactiveQueryAttachedAsync(config) {
-        return this.reactiveFactoryQueryAttachedAsync(this.queryAttached.bind(this), config);
     }
     reactiveUnsettled(config) {
         return this.reactiveFactoryQuery(this.unsettled.bind(this), config);
     }
-    async reactiveUnsettledAsync(config) {
-        return this.reactiveFactoryQueryAsync(this.unsettled.bind(this), config);
-    }
     reactiveUnsettledAttached(config) {
         return this.reactiveFactoryQueryAttached(this.unsettledAttached.bind(this), config);
-    }
-    async reactiveUnsettledAttachedAsync(config) {
-        return this.reactiveFactoryQueryAttachedAsync(this.unsettledAttached.bind(this), config);
     }
     async reset(callback) {
         const db = await this.getDb();
@@ -770,13 +728,6 @@ class Database {
      * @returns Reactive response.
      */
     async reactiveFactoryGetAsync(request, handler, result) {
-        result =
-            result !== null && result !== void 0 ? result : (0, reactiveStorage_1.reactiveStorage)({
-                loaded: false,
-                loading: true,
-                refresh: fn.noop,
-                unsubscribe: fn.noop
-            });
         o.assign(result, {
             loaded: true,
             loading: false,
@@ -819,13 +770,6 @@ class Database {
      * @returns Reactive response.
      */
     async reactiveFactoryGetAttachedAsync(request, handler, result) {
-        result =
-            result !== null && result !== void 0 ? result : (0, reactiveStorage_1.reactiveStorage)({
-                loaded: false,
-                loading: true,
-                refresh: fn.noop,
-                unsubscribe: fn.noop
-            });
         o.assign(result, {
             loaded: true,
             loading: false,
@@ -869,13 +813,6 @@ class Database {
      */
     async reactiveFactoryQueryAsync(request, config, result) {
         config = (0, reactiveStorage_1.reactiveStorage)(config);
-        result =
-            result !== null && result !== void 0 ? result : (0, reactiveStorage_1.reactiveStorage)({
-                loaded: false,
-                loading: true,
-                refresh: fn.noop,
-                unsubscribe: fn.noop
-            });
         o.assign(result, {
             loaded: true,
             loading: false,
@@ -889,7 +826,7 @@ class Database {
         assert.toBeTrue(result.loaded);
         const observer = reactiveStorage_1.reactiveStorage.watch(config, refresh);
         const subscription = this.subscribe(doc => {
-            if (config.updateFn && config.updateFn(doc))
+            if (config.update && config.update(doc))
                 refresh();
         });
         let timeout;
@@ -942,13 +879,6 @@ class Database {
      */
     async reactiveFactoryQueryAttachedAsync(request, config, result) {
         config = (0, reactiveStorage_1.reactiveStorage)(config);
-        result =
-            result !== null && result !== void 0 ? result : (0, reactiveStorage_1.reactiveStorage)({
-                loaded: false,
-                loading: true,
-                refresh: fn.noop,
-                unsubscribe: fn.noop
-            });
         o.assign(result, {
             loaded: true,
             loading: false,
@@ -962,7 +892,7 @@ class Database {
         assert.toBeTrue(result.loaded);
         const observer = reactiveStorage_1.reactiveStorage.watch(config, refresh);
         const subscription = this.subscribeAttached(doc => {
-            if (config.updateFn && config.updateFn(doc))
+            if (config.update && config.update(doc))
                 refresh();
         });
         let timeout;

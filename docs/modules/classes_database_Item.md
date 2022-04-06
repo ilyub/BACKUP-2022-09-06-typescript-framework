@@ -10,27 +10,21 @@
 
 ### Interfaces
 
-- [ItemDoc](../interfaces/classes_database_Item.ItemDoc.md)
+- [BaseItemDoc](../interfaces/classes_database_Item.BaseItemDoc.md)
+- [ExistingItemDoc](../interfaces/classes_database_Item.ExistingItemDoc.md)
 - [PutItemDoc](../interfaces/classes_database_Item.PutItemDoc.md)
 
 ### Type aliases
 
-- [ItemDocs](classes_database_Item.md#itemdocs)
+- [ExistingItemDocs](classes_database_Item.md#existingitemdocs)
 - [Items](classes_database_Item.md#items)
 - [PutItemDocs](classes_database_Item.md#putitemdocs)
 
-### Functions
-
-- [isItemDoc](classes_database_Item.md#isitemdoc)
-- [isItemDocs](classes_database_Item.md#isitemdocs)
-- [isPutItemDoc](classes_database_Item.md#isputitemdoc)
-- [isPutItemDocs](classes_database_Item.md#isputitemdocs)
-
 ## Type aliases
 
-### ItemDocs
+### ExistingItemDocs
 
-Ƭ **ItemDocs**: readonly [`ItemDoc`](../interfaces/classes_database_Item.ItemDoc.md)[]
+Ƭ **ExistingItemDocs**: readonly [`ExistingItemDoc`](../interfaces/classes_database_Item.ExistingItemDoc.md)[]
 
 ___
 
@@ -42,68 +36,4 @@ ___
 
 ### PutItemDocs
 
-Ƭ **PutItemDocs**: readonly [`ItemDoc`](../interfaces/classes_database_Item.ItemDoc.md)[]
-
-## Functions
-
-### isItemDoc
-
-▸ **isItemDoc**(`value`): value is ItemDoc
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
-
-#### Returns
-
-value is ItemDoc
-
-___
-
-### isItemDocs
-
-▸ **isItemDocs**(`value`): value is readonly ItemDoc[]
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
-
-#### Returns
-
-value is readonly ItemDoc[]
-
-___
-
-### isPutItemDoc
-
-▸ **isPutItemDoc**(`value`): value is unknown
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
-
-#### Returns
-
-value is unknown
-
-___
-
-### isPutItemDocs
-
-▸ **isPutItemDocs**(`value`): value is readonly unknown[]
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
-
-#### Returns
-
-value is readonly unknown[]
+Ƭ **PutItemDocs**: readonly [`PutItemDoc`](../interfaces/classes_database_Item.PutItemDoc.md)[]

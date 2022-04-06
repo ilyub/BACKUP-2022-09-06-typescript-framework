@@ -56,7 +56,7 @@ Creates class instance.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `source` | [`AttachedItemDoc`](../interfaces/classes_database_AttachedItem.AttachedItemDoc.md) | Source. |
+| `source` | [`ExistingAttachedItemDoc`](../interfaces/classes_database_AttachedItem.ExistingAttachedItemDoc.md) | Source. |
 
 ## Properties
 
@@ -80,7 +80,7 @@ ___
 
 ### \_parentDoc
 
-• `Protected` **\_parentDoc**: [`ItemDoc`](../interfaces/classes_database_Item.ItemDoc.md)
+• `Protected` **\_parentDoc**: `ExistingDocument`
 
 ___
 
@@ -140,13 +140,13 @@ Returns parent item.
 
 ### doc
 
-▸ **doc**(): [`AttachedItemDoc`](../interfaces/classes_database_AttachedItem.AttachedItemDoc.md)
+▸ **doc**(): [`ExistingAttachedItemDoc`](../interfaces/classes_database_AttachedItem.ExistingAttachedItemDoc.md)
 
 Returns database document.
 
 #### Returns
 
-[`AttachedItemDoc`](../interfaces/classes_database_AttachedItem.AttachedItemDoc.md)
+[`ExistingAttachedItemDoc`](../interfaces/classes_database_AttachedItem.ExistingAttachedItemDoc.md)
 
 Database document.
 

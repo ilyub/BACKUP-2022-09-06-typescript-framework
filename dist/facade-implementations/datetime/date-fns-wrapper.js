@@ -183,6 +183,10 @@ class DateTime {
         this.value = (0, date_fns_1.startOfHour)(this.value);
         return this;
     }
+    setStartOfMinute() {
+        this.value = (0, date_fns_1.startOfMinute)(this.value);
+        return this;
+    }
     setStartOfMonth() {
         this.value = (0, date_fns_1.startOfMonth)(this.value);
         return this;
@@ -194,6 +198,10 @@ class DateTime {
     setStartOfWeekLocale() {
         const weekStartsOn = moduleConfig.firstDayOfWeek;
         this.value = (0, date_fns_1.startOfWeek)(this.value, { weekStartsOn });
+        return this;
+    }
+    setStartOfYear() {
+        this.value = (0, date_fns_1.startOfYear)(this.value);
         return this;
     }
     setYear(year) {

@@ -81,7 +81,7 @@ ___
 
 ### has
 
-▸ **has**(`key`): key is Transforms<keyof Word\>
+▸ **has**(`key`): key is Transforms<Word\>
 
 Checks that dictionary has word.
 
@@ -93,6 +93,6 @@ Checks that dictionary has word.
 
 #### Returns
 
-key is Transforms<keyof Word\>
+key is Transforms<Word\>
 
 _True_ if dictionary has word, _false_ otherwise.

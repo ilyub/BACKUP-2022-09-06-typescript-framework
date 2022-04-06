@@ -1,29 +1,29 @@
-[Typescript framework](../index.md) / [Exports](../modules.md) / [classes/database/AttachedItem](../modules/classes_database_AttachedItem.md) / PutAttachedItemDoc
+[Typescript framework](../index.md) / [Exports](../modules.md) / [classes/database/AttachedItem](../modules/classes_database_AttachedItem.md) / ExistingAttachedItemDoc
 
-# Interface: PutAttachedItemDoc
+# Interface: ExistingAttachedItemDoc
 
-[classes/database/AttachedItem](../modules/classes_database_AttachedItem.md).PutAttachedItemDoc
+[classes/database/AttachedItem](../modules/classes_database_AttachedItem.md).ExistingAttachedItemDoc
 
 ## Hierarchy
 
-- `BasePutAttachedDocument`
+- `BaseExistingAttachedDocument`
 
 - [`BaseAttachedItemDoc`](classes_database_AttachedItem.BaseAttachedItemDoc.md)
 
-  ↳ **`PutAttachedItemDoc`**
+  ↳ **`ExistingAttachedItemDoc`**
 
 ## Table of contents
 
 ### Properties
 
-- [\_deleted](classes_database_AttachedItem.PutAttachedItemDoc.md#_deleted)
-- [\_id](classes_database_AttachedItem.PutAttachedItemDoc.md#_id)
-- [\_rev](classes_database_AttachedItem.PutAttachedItemDoc.md#_rev)
-- [createdAt](classes_database_AttachedItem.PutAttachedItemDoc.md#createdat)
-- [deletedAt](classes_database_AttachedItem.PutAttachedItemDoc.md#deletedat)
-- [parentDoc](classes_database_AttachedItem.PutAttachedItemDoc.md#parentdoc)
-- [softDeleted](classes_database_AttachedItem.PutAttachedItemDoc.md#softdeleted)
-- [updatedAt](classes_database_AttachedItem.PutAttachedItemDoc.md#updatedat)
+- [\_deleted](classes_database_AttachedItem.ExistingAttachedItemDoc.md#_deleted)
+- [\_id](classes_database_AttachedItem.ExistingAttachedItemDoc.md#_id)
+- [\_rev](classes_database_AttachedItem.ExistingAttachedItemDoc.md#_rev)
+- [createdAt](classes_database_AttachedItem.ExistingAttachedItemDoc.md#createdat)
+- [deletedAt](classes_database_AttachedItem.ExistingAttachedItemDoc.md#deletedat)
+- [parentDoc](classes_database_AttachedItem.ExistingAttachedItemDoc.md#parentdoc)
+- [softDeleted](classes_database_AttachedItem.ExistingAttachedItemDoc.md#softdeleted)
+- [updatedAt](classes_database_AttachedItem.ExistingAttachedItemDoc.md#updatedat)
 
 ## Properties
 
@@ -33,27 +33,27 @@
 
 #### Inherited from
 
-BasePutAttachedDocument.\_deleted
+BaseExistingAttachedDocument.\_deleted
 
 ___
 
 ### \_id
 
-• `Optional` `Readonly` **\_id**: `number`
+• `Readonly` **\_id**: `number`
 
 #### Inherited from
 
-BasePutAttachedDocument.\_id
+BaseExistingAttachedDocument.\_id
 
 ___
 
 ### \_rev
 
-• `Optional` `Readonly` **\_rev**: `number`
+• `Readonly` **\_rev**: `number`
 
 #### Inherited from
 
-BasePutAttachedDocument.\_rev
+BaseExistingAttachedDocument.\_rev
 
 ___
 
@@ -79,11 +79,11 @@ ___
 
 ### parentDoc
 
-• `Optional` `Readonly` **parentDoc**: `ExistingDocument`
+• `Readonly` **parentDoc**: `ExistingDocument`
 
 #### Inherited from
 
-BasePutAttachedDocument.parentDoc
+BaseExistingAttachedDocument.parentDoc
 
 ___
 

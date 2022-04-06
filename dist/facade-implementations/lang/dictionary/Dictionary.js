@@ -10,7 +10,6 @@ const helpers_1 = require("@skylib/functions/dist/helpers");
 const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
 const reflect = tslib_1.__importStar(require("@skylib/functions/dist/reflect"));
 const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
-// eslint-disable-next-line import/export
 class Dictionary {
     /**
      * Creates class instance.

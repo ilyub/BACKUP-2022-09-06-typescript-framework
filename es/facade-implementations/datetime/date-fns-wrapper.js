@@ -1,4 +1,4 @@
-import { add, format, getDate, getDay, getHours, getMinutes, getMonth, getYear, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameYear, isValid, parse, setDate, setDay, setHours, setMinutes, setMonth, setYear, startOfDay, startOfHour, startOfMonth, startOfWeek, sub } from "date-fns"; // eslint-disable-line import/no-duplicates
+import { add, format, getDate, getDay, getHours, getMinutes, getMonth, getYear, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameYear, isValid, parse, setDate, setDay, setHours, setMinutes, setMonth, setYear, startOfDay, startOfHour, startOfMinute, startOfMonth, startOfWeek, startOfYear, sub } from "date-fns"; // eslint-disable-line import/no-duplicates
 import enUS from "date-fns/locale/en-US"; // eslint-disable-line import/no-duplicates
 import { reactiveStorage } from "@skylib/facades/es/reactiveStorage";
 import * as is from "@skylib/functions/es/guards";
@@ -177,6 +177,10 @@ export class DateTime {
         this.value = startOfHour(this.value);
         return this;
     }
+    setStartOfMinute() {
+        this.value = startOfMinute(this.value);
+        return this;
+    }
     setStartOfMonth() {
         this.value = startOfMonth(this.value);
         return this;
@@ -188,6 +192,10 @@ export class DateTime {
     setStartOfWeekLocale() {
         const weekStartsOn = moduleConfig.firstDayOfWeek;
         this.value = startOfWeek(this.value, { weekStartsOn });
+        return this;
+    }
+    setStartOfYear() {
+        this.value = startOfYear(this.value);
         return this;
     }
     setYear(year) {

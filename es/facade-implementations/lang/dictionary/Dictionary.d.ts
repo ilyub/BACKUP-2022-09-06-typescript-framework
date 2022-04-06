@@ -7,7 +7,7 @@ export declare namespace Dictionary {
         readonly localeName: LocaleName;
     }
 }
-export declare class Dictionary implements DictionaryInterface {
+export declare class Dictionary implements DictionaryInterface<Word, Context> {
     /**
      * Configures plugin.
      *

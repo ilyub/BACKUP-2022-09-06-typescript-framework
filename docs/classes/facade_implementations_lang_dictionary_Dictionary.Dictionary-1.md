@@ -6,7 +6,7 @@
 
 ## Implements
 
-- `Dictionary`
+- `Dictionary`<`Word`, `Context`\>
 
 ## Table of contents
 
@@ -124,7 +124,7 @@ ___
 
 ### has
 
-▸ **has**(`key`): key is Transforms<keyof Word\>
+▸ **has**(`key`): key is Transforms<Word\>
 
 #### Parameters
 
@@ -134,7 +134,7 @@ ___
 
 #### Returns
 
-key is Transforms<keyof Word\>
+key is Transforms<Word\>
 
 #### Implementation of
 

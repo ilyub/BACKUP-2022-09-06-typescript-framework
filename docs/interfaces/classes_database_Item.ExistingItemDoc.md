@@ -1,30 +1,30 @@
-[Typescript framework](../index.md) / [Exports](../modules.md) / [classes/database/Item](../modules/classes_database_Item.md) / PutItemDoc
+[Typescript framework](../index.md) / [Exports](../modules.md) / [classes/database/Item](../modules/classes_database_Item.md) / ExistingItemDoc
 
-# Interface: PutItemDoc
+# Interface: ExistingItemDoc
 
-[classes/database/Item](../modules/classes_database_Item.md).PutItemDoc
+[classes/database/Item](../modules/classes_database_Item.md).ExistingItemDoc
 
 ## Hierarchy
 
-- `BasePutDocument`
+- `BaseExistingDocument`
 
 - [`BaseItemDoc`](classes_database_Item.BaseItemDoc.md)
 
-  ↳ **`PutItemDoc`**
+  ↳ **`ExistingItemDoc`**
 
 ## Table of contents
 
 ### Properties
 
-- [\_deleted](classes_database_Item.PutItemDoc.md#_deleted)
-- [\_id](classes_database_Item.PutItemDoc.md#_id)
-- [\_rev](classes_database_Item.PutItemDoc.md#_rev)
-- [attachedDocs](classes_database_Item.PutItemDoc.md#attacheddocs)
-- [createdAt](classes_database_Item.PutItemDoc.md#createdat)
-- [deletedAt](classes_database_Item.PutItemDoc.md#deletedat)
-- [lastAttachedDocs](classes_database_Item.PutItemDoc.md#lastattacheddocs)
-- [softDeleted](classes_database_Item.PutItemDoc.md#softdeleted)
-- [updatedAt](classes_database_Item.PutItemDoc.md#updatedat)
+- [\_deleted](classes_database_Item.ExistingItemDoc.md#_deleted)
+- [\_id](classes_database_Item.ExistingItemDoc.md#_id)
+- [\_rev](classes_database_Item.ExistingItemDoc.md#_rev)
+- [attachedDocs](classes_database_Item.ExistingItemDoc.md#attacheddocs)
+- [createdAt](classes_database_Item.ExistingItemDoc.md#createdat)
+- [deletedAt](classes_database_Item.ExistingItemDoc.md#deletedat)
+- [lastAttachedDocs](classes_database_Item.ExistingItemDoc.md#lastattacheddocs)
+- [softDeleted](classes_database_Item.ExistingItemDoc.md#softdeleted)
+- [updatedAt](classes_database_Item.ExistingItemDoc.md#updatedat)
 
 ## Properties
 
@@ -34,27 +34,27 @@
 
 #### Inherited from
 
-BasePutDocument.\_deleted
+BaseExistingDocument.\_deleted
 
 ___
 
 ### \_id
 
-• `Optional` `Readonly` **\_id**: `string`
+• `Readonly` **\_id**: `string`
 
 #### Inherited from
 
-BasePutDocument.\_id
+BaseExistingDocument.\_id
 
 ___
 
 ### \_rev
 
-• `Optional` `Readonly` **\_rev**: `string`
+• `Readonly` **\_rev**: `string`
 
 #### Inherited from
 
-BasePutDocument.\_rev
+BaseExistingDocument.\_rev
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Inherited from
 
-BasePutDocument.attachedDocs
+BaseExistingDocument.attachedDocs
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Inherited from
 
-BasePutDocument.lastAttachedDocs
+BaseExistingDocument.lastAttachedDocs
 
 ___
 

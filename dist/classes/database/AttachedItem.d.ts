@@ -1,27 +1,19 @@
-import * as is from "@skylib/functions/dist/guards";
+import type { BaseExistingAttachedDocument, BasePutAttachedDocument, ExistingDocument } from "@skylib/facades/dist/database";
 import type { stringU } from "@skylib/functions/dist/types/core";
-import type { Item, ItemDoc } from "./Item";
-export interface PutAttachedItemDoc {
-    readonly _deleted?: true;
-    readonly _id?: number;
-    readonly _rev?: number;
+import type { Item } from "./Item";
+export declare type AttachedItems = readonly AttachedItems[];
+export interface BaseAttachedItemDoc {
     readonly createdAt?: string;
     readonly deletedAt?: string;
-    readonly parentDoc: ItemDoc;
     readonly softDeleted?: true;
     readonly updatedAt?: string;
 }
-export declare type PutAttachedItemDocs = readonly AttachedItemDoc[];
-export interface AttachedItemDoc extends PutAttachedItemDoc {
-    readonly _id: number;
-    readonly _rev: number;
+export interface ExistingAttachedItemDoc extends BaseExistingAttachedDocument, BaseAttachedItemDoc {
 }
-export declare type AttachedItemDocs = readonly AttachedItemDoc[];
-export declare type AttachedItems = readonly AttachedItems[];
-export declare const isPutAttachedItemDoc: is.Guard<PutAttachedItemDoc>;
-export declare const isPutAttachedItemDocs: is.Guard<readonly PutAttachedItemDoc[]>;
-export declare const isAttachedItemDoc: is.Guard<AttachedItemDoc>;
-export declare const isAttachedItemDocs: is.Guard<readonly AttachedItemDoc[]>;
+export declare type ExistingAttachedItemDocs = readonly ExistingAttachedItemDoc[];
+export interface PutAttachedItemDoc extends BasePutAttachedDocument, BaseAttachedItemDoc {
+}
+export declare type PutAttachedItemDocs = readonly ExistingAttachedItemDoc[];
 export declare class AttachedItem<T extends Item = Item> {
     readonly _deleted: boolean;
     readonly _id: number;
@@ -43,15 +35,15 @@ export declare class AttachedItem<T extends Item = Item> {
      *
      * @param source - Source.
      */
-    constructor(source: AttachedItemDoc);
+    constructor(source: ExistingAttachedItemDoc);
     /**
      * Returns database document.
      *
      * @returns Database document.
      */
-    doc(): AttachedItemDoc;
+    doc(): ExistingAttachedItemDoc;
     protected _parent: T | undefined;
-    protected _parentDoc: ItemDoc;
+    protected _parentDoc: ExistingDocument;
     /**
      * Initializes parent.
      */

@@ -1,28 +1,18 @@
-import type { StoredAttachedDocuments } from "@skylib/facades/es/database";
-import * as is from "@skylib/functions/es/guards";
+import type { BaseExistingDocument, BasePutDocument, StoredAttachedDocuments } from "@skylib/facades/es/database";
 import type { numbers, stringU } from "@skylib/functions/es/types/core";
-export interface PutItemDoc {
-    readonly _deleted?: true;
-    readonly _id?: string;
-    readonly _rev?: string;
-    readonly attachedDocs?: StoredAttachedDocuments;
+export interface BaseItemDoc {
     readonly createdAt?: string;
     readonly deletedAt?: string;
-    readonly lastAttachedDocs?: numbers;
     readonly softDeleted?: true;
     readonly updatedAt?: string;
 }
-export declare type PutItemDocs = readonly ItemDoc[];
-export interface ItemDoc extends PutItemDoc {
-    readonly _id: string;
-    readonly _rev: string;
+export interface PutItemDoc extends BasePutDocument, BaseItemDoc {
 }
-export declare type ItemDocs = readonly ItemDoc[];
+export declare type PutItemDocs = readonly PutItemDoc[];
+export interface ExistingItemDoc extends BaseExistingDocument, BaseItemDoc {
+}
+export declare type ExistingItemDocs = readonly ExistingItemDoc[];
 export declare type Items = readonly Items[];
-export declare const isPutItemDoc: is.Guard;
-export declare const isPutItemDocs: is.Guard<readonly unknown[]>;
-export declare const isItemDoc: is.Guard<ItemDoc>;
-export declare const isItemDocs: is.Guard<readonly ItemDoc[]>;
 export declare class Item {
     readonly _deleted: boolean;
     readonly _id: string;
@@ -36,13 +26,13 @@ export declare class Item {
      *
      * @param source - Source.
      */
-    constructor(source: ItemDoc);
+    constructor(source: ExistingItemDoc);
     /**
      * Returns database document.
      *
      * @returns Database document.
      */
-    doc(): ItemDoc;
+    doc(): ExistingItemDoc;
     protected readonly attachedDocs: StoredAttachedDocuments | undefined;
     protected readonly lastAttachedDocs: numbers | undefined;
 }

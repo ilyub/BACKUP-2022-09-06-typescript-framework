@@ -1,32 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AttachedItem = exports.isAttachedItemDocs = exports.isAttachedItemDoc = exports.isPutAttachedItemDocs = exports.isPutAttachedItemDoc = void 0;
+exports.AttachedItem = void 0;
 const tslib_1 = require("tslib");
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
-const Item_1 = require("./Item");
-exports.isPutAttachedItemDoc = is.object.factory({ parentDoc: Item_1.isItemDoc }, {
-    _deleted: is.true,
-    _id: is.number,
-    _rev: is.number,
-    createdAt: is.string,
-    deletedAt: is.string,
-    softDeleted: is.true,
-    updatedAt: is.string
-});
-exports.isPutAttachedItemDocs = is.factory(is.array.of, exports.isPutAttachedItemDoc);
-exports.isAttachedItemDoc = is.object.factory({
-    _id: is.number,
-    _rev: is.number,
-    parentDoc: Item_1.isItemDoc
-}, {
-    _deleted: is.true,
-    createdAt: is.string,
-    deletedAt: is.string,
-    softDeleted: is.true,
-    updatedAt: is.string
-});
-exports.isAttachedItemDocs = is.factory(is.array.of, exports.isAttachedItemDoc);
 class AttachedItem {
     /**
      * Creates class instance.

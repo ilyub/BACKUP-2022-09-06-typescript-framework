@@ -41,9 +41,11 @@
 - [setMonth](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setmonth)
 - [setStartOfDay](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setstartofday)
 - [setStartOfHour](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setstartofhour)
+- [setStartOfMinute](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setstartofminute)
 - [setStartOfMonth](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setstartofmonth)
 - [setStartOfWeek](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setstartofweek)
 - [setStartOfWeekLocale](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setstartofweeklocale)
+- [setStartOfYear](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setstartofyear)
 - [setYear](facade_implementations_datetime_date_fns_wrapper.DateTime.md#setyear)
 - [sub](facade_implementations_datetime_date_fns_wrapper.DateTime.md#sub)
 - [toDate](facade_implementations_datetime_date_fns_wrapper.DateTime.md#todate)
@@ -448,6 +450,20 @@ DateTimeInterface.setStartOfHour
 
 ___
 
+### setStartOfMinute
+
+▸ **setStartOfMinute**(): `DateTime`
+
+#### Returns
+
+`DateTime`
+
+#### Implementation of
+
+DateTimeInterface.setStartOfMinute
+
+___
+
 ### setStartOfMonth
 
 ▸ **setStartOfMonth**(): `DateTime`
@@ -493,6 +509,20 @@ ___
 #### Implementation of
 
 DateTimeInterface.setStartOfWeekLocale
+
+___
+
+### setStartOfYear
+
+▸ **setStartOfYear**(): `DateTime`
+
+#### Returns
+
+`DateTime`
+
+#### Implementation of
+
+DateTimeInterface.setStartOfYear
 
 ___
 
