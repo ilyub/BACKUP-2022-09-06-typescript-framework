@@ -97,13 +97,13 @@
     "ts-jest": "^27.1.4",
     "ts-transform-import-path-rewrite": "^0.3.0",
     "ttypescript": "^1.5.13",
-    "typedoc": "^0.22.13",
+    "typedoc": "^0.22.14",
     "typedoc-plugin-markdown": "^3.11.14",
     "typescript": "^4.6.3",
     "vue-eslint-parser": "^8.3.0"
   },
   "peerDependencies": {
-    "@skylib/facades": "^1.0.0",
+    "@skylib/facades": "^1.0.1",
     "@skylib/functions": "^1.1.0",
     "@skylib/typescript-types": "^1.0.0",
     "@types/facebook-js-sdk": "^3.3.5",
