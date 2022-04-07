@@ -1,9 +1,7 @@
 import type {
   Context,
   Dictionary as DictionaryInterface,
-  Facade,
-  Transforms,
-  Word
+  Facade
 } from "@skylib/facades/dist/lang";
 import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
 import * as assert from "@skylib/functions/dist/assertions";
@@ -25,7 +23,7 @@ export namespace Dictionary {
   }
 }
 
-export class Dictionary implements DictionaryInterface<Word, Context> {
+export class Dictionary implements DictionaryInterface<Context> {
   /**
    * Configures plugin.
    *
@@ -87,7 +85,7 @@ export class Dictionary implements DictionaryInterface<Word, Context> {
       .value;
   }
 
-  public has(key: string): key is Transforms<Word> {
+  public has(key: string): boolean {
     const definitions = this.definitions[moduleConfig.localeName];
 
     assert.not.empty(
