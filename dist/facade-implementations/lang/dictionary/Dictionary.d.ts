@@ -1,4 +1,4 @@
-import type { Context, Dictionary as DictionaryInterface, Facade, Transforms, Word } from "@skylib/facades/dist/lang";
+import type { Context, Dictionary as DictionaryInterface, Facade } from "@skylib/facades/dist/lang";
 import type { LocaleName } from "@skylib/functions/dist/types/configurable";
 import type { NumStr, Rec } from "@skylib/functions/dist/types/core";
 import type { Definitions } from ".";
@@ -7,7 +7,7 @@ export declare namespace Dictionary {
         readonly localeName: LocaleName;
     }
 }
-export declare class Dictionary implements DictionaryInterface<Word, Context> {
+export declare class Dictionary implements DictionaryInterface<Context> {
     /**
      * Configures plugin.
      *
@@ -31,7 +31,7 @@ export declare class Dictionary implements DictionaryInterface<Word, Context> {
     static getConfiguration(): Dictionary.Configuration;
     context(context: Context): Facade;
     get(key: string): string;
-    has(key: string): key is Transforms<Word>;
+    has(key: string): boolean;
     plural(count: number): Facade;
     with(search: string, replace: NumStr): Facade;
     protected _context: Context | undefined;

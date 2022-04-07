@@ -6,7 +6,7 @@
 
 ## Implements
 
-- `Dictionary`<`Word`, `Context`\>
+- `Dictionary`<`Context`\>
 
 ## Table of contents
 
@@ -124,7 +124,7 @@ ___
 
 ### has
 
-▸ **has**(`key`): key is Transforms<Word\>
+▸ **has**(`key`): `boolean`
 
 #### Parameters
 
@@ -134,7 +134,7 @@ ___
 
 #### Returns
 
-key is Transforms<Word\>
+`boolean`
 
 #### Implementation of
 
