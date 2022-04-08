@@ -1,4 +1,5 @@
 import type {
+  BaseBulkAttachedDocument,
   BaseExistingAttachedDocument,
   BasePutAttachedDocument,
   ExistingDocument
@@ -18,6 +19,12 @@ export interface BaseAttachedItemDoc {
   readonly updatedAt?: string;
 }
 
+export interface BulkAttachedItemDoc
+  extends BaseBulkAttachedDocument,
+    BaseAttachedItemDoc {}
+
+export type BulkAttachedItemDocs = readonly BulkAttachedItemDoc[];
+
 export interface ExistingAttachedItemDoc
   extends BaseExistingAttachedDocument,
     BaseAttachedItemDoc {}
@@ -28,7 +35,7 @@ export interface PutAttachedItemDoc
   extends BasePutAttachedDocument,
     BaseAttachedItemDoc {}
 
-export type PutAttachedItemDocs = readonly ExistingAttachedItemDoc[];
+export type PutAttachedItemDocs = readonly PutAttachedItemDoc[];
 
 export class AttachedItem<T extends Item = Item> {
   public readonly _deleted: boolean;
