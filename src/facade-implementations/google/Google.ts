@@ -54,15 +54,17 @@ export class Google implements Facade {
 
         return new Promise(
           (
+            // eslint-disable-next-line @skylib/prefer-readonly -- ??
             resolve: (value: GoogleAuth) => void,
             reject: (reason: unknown) => void
           ) => {
             gapi.load("auth2", () => {
-              // eslint-disable-next-line github/no-then, promise/prefer-await-to-then
+              // eslint-disable-next-line github/no-then, promise/prefer-await-to-then -- ???
               gapi.auth2.init({ client_id: clientId }).then(
                 googleAuth => {
                   resolve(googleAuth);
                 },
+                // eslint-disable-next-line @skylib/prefer-readonly -- ??
                 e => {
                   reject(new Error(`Error ${e.error}: ${e.details}`));
                 }
@@ -75,21 +77,10 @@ export class Google implements Facade {
     await this.sdk;
   }
 
-  /*
-  |*****************************************************************************
-  |* Protected
-  |*****************************************************************************
-  |*/
-
   protected clientId: AsyncPromise<stringU> | stringU;
 
   protected sdk: Promise<GoogleAuth> | undefined = undefined;
 }
 
-/*
-|*****************************************************************************
-|* Private
-|*****************************************************************************
-|*/
-
+// eslint-disable-next-line @skylib/prefer-readonly -- ??
 export type GoogleAuth = Omit<gapi.auth2.GoogleAuth, "then">;

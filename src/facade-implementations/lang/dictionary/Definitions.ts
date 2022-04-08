@@ -73,22 +73,10 @@ export class Definitions {
     return is.not.empty(this.words[key]);
   }
 
-  /*
-  |*****************************************************************************
-  |* Protected
-  |*****************************************************************************
-  |*/
-
   protected wordForms: IndexedObject<strings>;
 
   protected words: IndexedObject<Definition> = {};
 }
-
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
 
 interface Callback {
   /**
@@ -98,6 +86,41 @@ interface Callback {
    * @returns Result.
    */
   (str: string): string;
+}
+
+/**
+ * Builds word forms.
+ *
+ * @param raw - Language definition.
+ * @returns Word forms.
+ */
+function getWords(raw: RawLanguage): IndexedObject<Definition> {
+  // eslint-disable-next-line @skylib/no-mutable-signature -- ???
+  const result: WritableIndexedObject<Definition> = {};
+
+  for (const [key, value] of o.entries(raw.words)) {
+    result[s.lcFirst(key)] = new Definition(
+      map(value, x => s.lcFirst(x)),
+      s.lcFirst(key)
+    );
+
+    result[s.ucFirst(key)] = new Definition(
+      map(value, x => s.ucFirst(x)),
+      s.ucFirst(key)
+    );
+
+    result[key.toLowerCase()] = new Definition(
+      map(value, x => x.toLowerCase()),
+      key.toLowerCase()
+    );
+
+    result[key.toUpperCase()] = new Definition(
+      map(value, x => x.toUpperCase()),
+      key.toUpperCase()
+    );
+  }
+
+  return result;
 }
 
 /**
@@ -141,40 +164,6 @@ function mapDefinitions(
       .entries(definitions)
       .map(([key, definition]) => [key, map(definition, callback)])
   );
-}
-
-/**
- * Builds word forms.
- *
- * @param raw - Language definition.
- * @returns Word forms.
- */
-function getWords(raw: RawLanguage): IndexedObject<Definition> {
-  const result: WritableIndexedObject<Definition> = {};
-
-  for (const [key, value] of o.entries(raw.words)) {
-    result[s.lcFirst(key)] = new Definition(
-      map(value, x => s.lcFirst(x)),
-      s.lcFirst(key)
-    );
-
-    result[s.ucFirst(key)] = new Definition(
-      map(value, x => s.ucFirst(x)),
-      s.ucFirst(key)
-    );
-
-    result[key.toLowerCase()] = new Definition(
-      map(value, x => x.toLowerCase()),
-      key.toLowerCase()
-    );
-
-    result[key.toUpperCase()] = new Definition(
-      map(value, x => x.toUpperCase()),
-      key.toUpperCase()
-    );
-  }
-
-  return result;
 }
 
 /**

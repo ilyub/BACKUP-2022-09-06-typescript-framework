@@ -5,10 +5,10 @@ import type {
   Reducer
 } from "@skylib/facades/dist/reactiveStorage";
 import * as assert from "@skylib/functions/dist/assertions";
-import * as fn from "@skylib/functions/dist/function";
 import * as is from "@skylib/functions/dist/guards";
 import { wrapProxyHandler } from "@skylib/functions/dist/helpers";
 import * as map from "@skylib/functions/dist/map";
+import * as o from "@skylib/functions/dist/object";
 import * as reflect from "@skylib/functions/dist/reflect";
 
 declare global {
@@ -21,8 +21,8 @@ declare global {
   }
 }
 
-export const implementation = fn.run<Facade>(() => {
-  function reflectStorage<T extends object>(obj: T): T {
+export const implementation: Facade = o.extend(
+  <T extends object>(obj: T): T => {
     if (reflect.hasMetadata(callbacksKey, obj)) return obj;
 
     const reactive = new Proxy(
@@ -69,68 +69,60 @@ export const implementation = fn.run<Facade>(() => {
 
       return false;
     }
+  },
+  {
+    unwatch(obj: object, observer: Observer): void {
+      const callbacks = reflect.getMetadata(callbacksKey, obj);
+
+      assert.byGuard(callbacks, isCallbacks);
+
+      reflect.defineMetadata(
+        callbacksKey,
+        map.delete(callbacks, observer.symbol),
+        obj
+      );
+    },
+    watch<T extends object>(
+      obj: T,
+      handler: Handler<T>,
+      reducer?: Reducer<T>
+    ): Observer {
+      const observer: Observer = {
+        _type: "ReactiveStorageObserver",
+        symbol: Symbol("Callback")
+      };
+
+      const callbacks = reflect.getMetadata(callbacksKey, obj);
+
+      assert.byGuard(callbacks, isCallbacks);
+
+      if (reducer) {
+        let reduced = reducer(obj);
+
+        reflect.defineMetadata(
+          callbacksKey,
+          map.set(callbacks, observer.symbol, () => {
+            const oldReduced = reduced;
+
+            reduced = reducer(obj);
+
+            if (reduced !== oldReduced) handler(obj);
+          }),
+          obj
+        );
+      } else
+        reflect.defineMetadata(
+          callbacksKey,
+          map.set(callbacks, observer.symbol, () => {
+            handler(obj);
+          }),
+          obj
+        );
+
+      return observer;
+    }
   }
-
-  reflectStorage.unwatch = (obj: object, observer: Observer): void => {
-    const callbacks = reflect.getMetadata(callbacksKey, obj);
-
-    assert.byGuard(callbacks, isCallbacks);
-
-    reflect.defineMetadata(
-      callbacksKey,
-      map.delete(callbacks, observer.symbol),
-      obj
-    );
-  };
-
-  reflectStorage.watch = <T extends object>(
-    obj: T,
-    handler: Handler<T>,
-    reducer?: Reducer<T>
-  ): Observer => {
-    const observer: Observer = {
-      _type: "ReactiveStorageObserver",
-      symbol: Symbol("Callback")
-    };
-
-    const callbacks = reflect.getMetadata(callbacksKey, obj);
-
-    assert.byGuard(callbacks, isCallbacks);
-
-    if (reducer) {
-      let reduced = reducer(obj);
-
-      reflect.defineMetadata(
-        callbacksKey,
-        map.set(callbacks, observer.symbol, () => {
-          const oldReduced = reduced;
-
-          reduced = reducer(obj);
-
-          if (reduced !== oldReduced) handler(obj);
-        }),
-        obj
-      );
-    } else
-      reflect.defineMetadata(
-        callbacksKey,
-        map.set(callbacks, observer.symbol, () => {
-          handler(obj);
-        }),
-        obj
-      );
-
-    return observer;
-  };
-
-  return reflectStorage;
-});
-
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
+);
 
 const callbacksKey = Symbol("Callbacks");
 

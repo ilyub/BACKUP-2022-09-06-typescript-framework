@@ -3,30 +3,6 @@ import type {
   Facade
 } from "@skylib/facades/dist/inlineSearch";
 
-export type Constructor = new <T extends object>(
-  idField: string & keyof T,
-  fields: ReadonlyArray<string & keyof T>,
-  items: readonly T[]
-) => EngineInterface<T>;
-
-/**
- * Creates search engine.
- *
- * @param ctor - Search engine constructor.
- * @returns Search engine.
- */
-export function createImplementation(ctor: Constructor): Facade {
-  return {
-    create<T extends object>(
-      idField: string & keyof T,
-      fields: ReadonlyArray<string & keyof T>,
-      items: readonly T[]
-    ): EngineInterface<T> {
-      return new ctor<T>(idField, fields, items);
-    }
-  };
-}
-
 export abstract class Engine<T extends object, I>
   implements EngineInterface<T>
 {
@@ -55,12 +31,6 @@ export abstract class Engine<T extends object, I>
 
   protected items: readonly T[];
 
-  /*
-  |*****************************************************************************
-  |* Protected
-  |*****************************************************************************
-  |*/
-
   /**
    * Builds index.
    *
@@ -74,4 +44,28 @@ export abstract class Engine<T extends object, I>
     fields: ReadonlyArray<string & keyof T>,
     items: readonly T[]
   ): I;
+}
+
+export type Constructor = new <T extends object>(
+  idField: string & keyof T,
+  fields: ReadonlyArray<string & keyof T>,
+  items: readonly T[]
+) => EngineInterface<T>;
+
+/**
+ * Creates search engine.
+ *
+ * @param ctor - Search engine constructor.
+ * @returns Search engine.
+ */
+export function createImplementation(ctor: Constructor): Facade {
+  return {
+    create<T extends object>(
+      idField: string & keyof T,
+      fields: ReadonlyArray<string & keyof T>,
+      items: readonly T[]
+    ): EngineInterface<T> {
+      return new ctor<T>(idField, fields, items);
+    }
+  };
 }

@@ -8,6 +8,25 @@ import type {
 import * as o from "@skylib/functions/dist/object";
 import type { IndexedObject } from "@skylib/functions/dist/types/core";
 
+export const implementation: Facade = {
+  async send(
+    url: string,
+    method: HttpRequestMethod = "get",
+    data: IndexedObject = {},
+    headers: HttpHeaders = {}
+  ): Promise<unknown> {
+    const response = await axios({
+      data,
+      headers,
+      method,
+      timeout: moduleConfig.timeout,
+      url
+    });
+
+    return response.data as unknown;
+  }
+};
+
 export interface Configuration {
   readonly timeout: number;
 }
@@ -33,30 +52,5 @@ export function configure(config: Partial<Configuration>): void {
 export function getConfiguration(): Configuration {
   return moduleConfig;
 }
-
-export const implementation: Facade = {
-  async send(
-    url: string,
-    method: HttpRequestMethod = "get",
-    data: IndexedObject = {},
-    headers: HttpHeaders = {}
-  ): Promise<unknown> {
-    const response = await axios({
-      data,
-      headers,
-      method,
-      timeout: moduleConfig.timeout,
-      url
-    });
-
-    return response.data as unknown;
-  }
-};
-
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
 
 const moduleConfig: Configuration = { timeout: 30_000 };

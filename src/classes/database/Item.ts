@@ -7,23 +7,6 @@ import * as o from "@skylib/functions/dist/object";
 import type { numbers, stringU } from "@skylib/functions/dist/types/core";
 import type { UndefinedStyle } from "@skylib/functions/dist/types/object";
 
-export interface BaseItemDoc {
-  readonly createdAt?: string;
-  readonly deletedAt?: string;
-  readonly softDeleted?: true;
-  readonly updatedAt?: string;
-}
-
-export interface PutItemDoc extends BasePutDocument, BaseItemDoc {}
-
-export type PutItemDocs = readonly PutItemDoc[];
-
-export interface ExistingItemDoc extends BaseExistingDocument, BaseItemDoc {}
-
-export type ExistingItemDocs = readonly ExistingItemDoc[];
-
-export type Items = readonly Items[];
-
 export class Item {
   public readonly _deleted: boolean;
 
@@ -75,13 +58,24 @@ export class Item {
     });
   }
 
-  /*
-  |*******************************************************************************
-  |* Protected
-  |*******************************************************************************
-  |*/
-
   protected readonly attachedDocs: StoredAttachedDocuments | undefined;
 
   protected readonly lastAttachedDocs: numbers | undefined;
 }
+
+export interface BaseItemDoc {
+  readonly createdAt?: string;
+  readonly deletedAt?: string;
+  readonly softDeleted?: true;
+  readonly updatedAt?: string;
+}
+
+export interface ExistingItemDoc extends BaseExistingDocument, BaseItemDoc {}
+
+export type ExistingItemDocs = readonly ExistingItemDoc[];
+
+export type Items = readonly Items[];
+
+export interface PutItemDoc extends BasePutDocument, BaseItemDoc {}
+
+export type PutItemDocs = readonly PutItemDoc[];

@@ -68,117 +68,11 @@ import type {
 } from "./PouchDBProxy";
 import { PouchDBProxy } from "./PouchDBProxy";
 
-export interface Configuration {
-  readonly reindexThreshold?: number;
-}
-
-export interface Filter {
-  /**
-   * Filter function.
-   *
-   * @param doc - Document.
-   * @returns Result.
-   */
-  (doc: unknown): boolean;
-}
-
-export interface MapReduce {
-  readonly groupLevel: number;
-  readonly id: string;
-  readonly mapReduce: {
-    readonly map: string;
-    readonly reduce: string;
-  };
-  readonly output: Filter;
-  readonly settle: Filter;
-}
-
-export interface RawQueryOptions {
-  readonly conditions: Conditions;
-  readonly count?: true;
-  readonly docs?: true;
-  readonly unsettledCount?: true;
-}
-
-export interface RawQueryOptionsAttached extends RawQueryOptions {
-  readonly parentConditions: Conditions;
-}
-
-export interface RawQueryResponse {
-  readonly count: number;
-  readonly docs: unknowns;
-  readonly mapReduce: MapReduce;
-  readonly unsettledCount: number;
-}
-
-export interface ReactiveRequest<T> {
-  /**
-   * Reactive request.
-   *
-   * @param conditions - Conditions.
-   * @param options - Options.
-   * @returns Promise.
-   */
-  (conditions?: Conditions, options?: QueryOptions): Promise<T>;
-}
-
-export interface ReactiveRequestAttached<T> {
-  /**
-   * Reactive request.
-   *
-   * @param conditions - Conditions.
-   * @param parentConditions - Parent conditions.
-   * @param options - Options.
-   * @returns Promise.
-   */
-  (
-    conditions?: Conditions,
-    parentConditions?: Conditions,
-    options?: QueryOptions
-  ): Promise<T>;
-}
-
-export interface ReactiveHandler<T> {
-  /**
-   * Reactive handler.
-   *
-   * @param doc - Document.
-   * @param mutableResult - Mutable result.
-   */
-  (
-    doc: ExistingDocument,
-    mutableResult: Writable<ReactiveResponseLoaded<T>>
-  ): void;
-}
-
-export interface ReactiveHandlerAttached<T> {
-  /**
-   * Reactive handler.
-   *
-   * @param doc - Document.
-   * @param mutableResult - Mutable result.
-   */
-  (
-    doc: ExistingAttachedDocument,
-    mutableResult: Writable<ReactiveResponseLoaded<T>>
-  ): void;
-}
-
 export const handlers = o.freeze({
   error(error: unknown): void {
     throw error;
   }
 });
-
-/**
- * Wraps error.
- *
- * @param e - Error.
- * @returns Wrapped error.
- */
-export function wrapError<T>(e: T): () => T {
-  return () => e;
-}
 
 export class Database implements DatabaseInterface {
   /**
@@ -371,7 +265,7 @@ export class Database implements DatabaseInterface {
     const db = await this.getDb();
 
     for (let i = 0; i < 1 + this.options.retries; i++) {
-      // eslint-disable-next-line no-await-in-loop
+      // eslint-disable-next-line no-await-in-loop -- ???
       const result = await attempt();
 
       if (result) return result;
@@ -650,12 +544,6 @@ export class Database implements DatabaseInterface {
     this.refreshSubscription();
   }
 
-  /*
-  |*****************************************************************************
-  |* Protected
-  |*****************************************************************************
-  |*/
-
   protected changes: Changes | undefined = undefined;
 
   protected changesHandlersAttachedPool = new Map<
@@ -791,7 +679,7 @@ export class Database implements DatabaseInterface {
     };
 
     function createFilter(cond: string): Filter {
-      // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion
+      // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion -- ???
       return new Function("doc", `return ${cond};`) as Filter;
     }
   }
@@ -908,7 +796,7 @@ export class Database implements DatabaseInterface {
     };
 
     function createFilter(cond1: string, cond2: string): Filter {
-      // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion
+      // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion -- ???
       return new Function(
         "attached",
         uglify(`
@@ -935,14 +823,14 @@ export class Database implements DatabaseInterface {
           // Already executed
         } else {
           {
-            // eslint-disable-next-line no-await-in-loop
+            // eslint-disable-next-line no-await-in-loop -- ??
             await migration.callback.call(this);
           }
 
           {
             migrations = { ...migrations, [migration.id]: true };
 
-            // eslint-disable-next-line no-await-in-loop
+            // eslint-disable-next-line no-await-in-loop -- ??
             const { id, rev } = await this.put(migrations);
 
             migrations = {
@@ -981,7 +869,7 @@ export class Database implements DatabaseInterface {
 
     const toSettle = _.flatten(
       response.rows
-
+        // eslint-disable-next-line @skylib/prefer-readonly -- ??
         .map(row => row.value as unknown)
         .filter(isDocsResponse)
         .filter(docsResponse => !docsResponse.settled)
@@ -1014,7 +902,7 @@ export class Database implements DatabaseInterface {
       return rawQueryOptions.count ?? false
         ? num.sum(
             ...response.rows
-
+              // eslint-disable-next-line @skylib/prefer-readonly -- ??
               .map(row => row.value as unknown)
               .filter(isDocsResponse)
               .map(docsResponse =>
@@ -1032,7 +920,7 @@ export class Database implements DatabaseInterface {
       if (rawQueryOptions.docs ?? false) {
         const docResponses = _.flatten(
           response.rows
-
+            // eslint-disable-next-line @skylib/prefer-readonly -- ??
             .map(row => row.value as unknown)
             .filter(isDocsResponse)
             .map(docsResponse => docsResponse.docs)
@@ -1055,7 +943,7 @@ export class Database implements DatabaseInterface {
         ? num.sum(
             0,
             ...response.rows
-
+              // eslint-disable-next-line @skylib/prefer-readonly -- ??
               .map(row => row.value as unknown)
               .filter(isDocsResponse)
               .filter(docsResponse => !docsResponse.settled)
@@ -1136,6 +1024,7 @@ export class Database implements DatabaseInterface {
   protected async reactiveFactoryGetAsync<T>(
     request: Promise<T>,
     handler: ReactiveHandler<T>,
+    // eslint-disable-next-line @skylib/prefer-readonly -- ??
     result: Writable<ReactiveResponse<T>>
   ): Promise<ReactiveResponseLoaded<T>> {
     o.assign(result, {
@@ -1194,6 +1083,7 @@ export class Database implements DatabaseInterface {
   protected async reactiveFactoryGetAttachedAsync<T>(
     request: Promise<T>,
     handler: ReactiveHandlerAttached<T>,
+    // eslint-disable-next-line @skylib/prefer-readonly -- ??
     result: Writable<ReactiveResponse<T>>
   ): Promise<ReactiveResponseLoaded<T>> {
     o.assign(result, {
@@ -1252,6 +1142,7 @@ export class Database implements DatabaseInterface {
   protected async reactiveFactoryQueryAsync<T>(
     request: ReactiveRequest<T>,
     config: ReactiveConfig,
+    // eslint-disable-next-line @skylib/prefer-readonly -- ??
     result: Writable<ReactiveResponse<T>>
   ): Promise<ReactiveResponseLoaded<T>> {
     config = reactiveStorage(config);
@@ -1341,6 +1232,7 @@ export class Database implements DatabaseInterface {
   protected async reactiveFactoryQueryAttachedAsync<T>(
     request: ReactiveRequestAttached<T>,
     config: ReactiveConfigAttached,
+    // eslint-disable-next-line @skylib/prefer-readonly -- ??
     result: Writable<ReactiveResponse<T>>
   ): Promise<ReactiveResponseLoaded<T>> {
     config = reactiveStorage(config);
@@ -1508,6 +1400,7 @@ export class Database implements DatabaseInterface {
         // Already exists
       } else
         this.changes = this.db.changes(
+          // eslint-disable-next-line @skylib/prefer-readonly -- ??
           value => {
             assert.byGuard(value.doc, isExistingDocument);
 
@@ -1545,18 +1438,111 @@ export class Database implements DatabaseInterface {
   }
 }
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
-
-interface DocResponse {
-  readonly doc: unknown;
-  readonly key: unknown;
+export interface Configuration {
+  readonly reindexThreshold?: number;
 }
 
-type DocResponses = readonly DocResponse[];
+export interface Filter {
+  /**
+   * Filter function.
+   *
+   * @param doc - Document.
+   * @returns Result.
+   */
+  (doc: unknown): boolean;
+}
+
+export interface MapReduce {
+  readonly groupLevel: number;
+  readonly id: string;
+  readonly mapReduce: {
+    readonly map: string;
+    readonly reduce: string;
+  };
+  readonly output: Filter;
+  readonly settle: Filter;
+}
+
+export interface RawQueryOptions {
+  readonly conditions: Conditions;
+  readonly count?: true;
+  readonly docs?: true;
+  readonly unsettledCount?: true;
+}
+
+export interface RawQueryOptionsAttached extends RawQueryOptions {
+  readonly parentConditions: Conditions;
+}
+
+export interface RawQueryResponse {
+  readonly count: number;
+  readonly docs: unknowns;
+  readonly mapReduce: MapReduce;
+  readonly unsettledCount: number;
+}
+
+export interface ReactiveHandler<T> {
+  /**
+   * Reactive handler.
+   *
+   * @param doc - Document.
+   * @param mutableResult - Mutable result.
+   */
+  (
+    doc: ExistingDocument,
+    mutableResult: Writable<ReactiveResponseLoaded<T>>
+  ): void;
+}
+
+export interface ReactiveHandlerAttached<T> {
+  /**
+   * Reactive handler.
+   *
+   * @param doc - Document.
+   * @param mutableResult - Mutable result.
+   */
+  (
+    doc: ExistingAttachedDocument,
+    mutableResult: Writable<ReactiveResponseLoaded<T>>
+  ): void;
+}
+
+export interface ReactiveRequest<T> {
+  /**
+   * Reactive request.
+   *
+   * @param conditions - Conditions.
+   * @param options - Options.
+   * @returns Promise.
+   */
+  (conditions?: Conditions, options?: QueryOptions): Promise<T>;
+}
+
+export interface ReactiveRequestAttached<T> {
+  /**
+   * Reactive request.
+   *
+   * @param conditions - Conditions.
+   * @param parentConditions - Parent conditions.
+   * @param options - Options.
+   * @returns Promise.
+   */
+  (
+    conditions?: Conditions,
+    parentConditions?: Conditions,
+    options?: QueryOptions
+  ): Promise<T>;
+}
+
+/**
+ * Wraps error.
+ *
+ * @param e - Error.
+ * @returns Wrapped error.
+ */
+export function wrapError<T>(e: T): () => T {
+  return () => e;
+}
 
 const isDocResponse = is.object.factory<DocResponse>(
   { doc: is.unknown, key: is.unknown },
@@ -1564,12 +1550,6 @@ const isDocResponse = is.object.factory<DocResponse>(
 );
 
 const isDocResponses = is.factory(is.array.of, isDocResponse);
-
-interface DocsResponse {
-  readonly count: number;
-  readonly docs: DocResponses;
-  readonly settled: boolean;
-}
 
 const isDocsResponse = is.object.factory<DocsResponse>(
   {
@@ -1579,12 +1559,6 @@ const isDocsResponse = is.object.factory<DocsResponse>(
   },
   {}
 );
-
-interface StrConds {
-  readonly toEmit: string;
-  readonly toOutput: string;
-  readonly toSettle: string;
-}
 
 const isStoredDocumentAttached = is.object.factory<StoredAttachedDocument>(
   { _id: is.number, _rev: is.number },
@@ -1613,6 +1587,25 @@ const isExistingDocumentAttached = is.object.factory<ExistingAttachedDocument>(
   },
   { _deleted: is.true }
 );
+
+interface DocResponse {
+  readonly doc: unknown;
+  readonly key: unknown;
+}
+
+type DocResponses = readonly DocResponse[];
+
+interface DocsResponse {
+  readonly count: number;
+  readonly docs: DocResponses;
+  readonly settled: boolean;
+}
+
+interface StrConds {
+  readonly toEmit: string;
+  readonly toOutput: string;
+  readonly toSettle: string;
+}
 
 /**
  * Joins condition strings with boolean "and" operator.
@@ -1748,7 +1741,7 @@ function condsToStr(
   };
 }
 
-// eslint-disable-next-line @skylib/require-jsdoc
+// eslint-disable-next-line @skylib/require-jsdoc -- ???
 function dateDelta(date: string): number {
   return num.round.step(
     datetime.create(date).toTime() - datetime.time() - 50 * 3600 * 1000,
@@ -1756,7 +1749,7 @@ function dateDelta(date: string): number {
   );
 }
 
-// eslint-disable-next-line @skylib/require-jsdoc
+// eslint-disable-next-line @skylib/require-jsdoc -- ???
 function dateValue(date: DateCondition): string {
   if (is.string(date)) return date;
 
@@ -1892,6 +1885,16 @@ function extractDocAttached(
 }
 
 /**
+ * Uglify javascript code.
+ *
+ * @param code - Code.
+ * @returns Uglified code.
+ */
+function uglify(code: string): string {
+  return code.trim().replace(/\s+/gu, " ");
+}
+
+/**
  * Validates document.
  *
  * @param doc - Document.
@@ -1914,14 +1917,4 @@ function validatePutDocument(doc: PutDocument): void {
     false
   )
     throw new Error("Invalid attached document");
-}
-
-/**
- * Uglify javascript code.
- *
- * @param code - Code.
- * @returns Uglified code.
- */
-function uglify(code: string): string {
-  return code.trim().replace(/\s+/gu, " ");
 }

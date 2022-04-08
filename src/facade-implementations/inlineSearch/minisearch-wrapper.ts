@@ -11,17 +11,12 @@ export class Engine<T extends object> extends BaseEngine<
 > {
   public search(query: string): readonly T[] {
     const ids = new Set(
+      // eslint-disable-next-line @skylib/prefer-readonly -- ???
       this.index.search(query).map(result => result.id as unknown)
     );
 
     return this.items.filter(item => ids.has(item[this.idField]));
   }
-
-  /*
-  |*****************************************************************************
-  |* Protected
-  |*****************************************************************************
-  |*/
 
   protected buildIndex(
     idField: string & keyof T,

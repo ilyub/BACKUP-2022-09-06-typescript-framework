@@ -7,34 +7,6 @@ import type { stringU } from "@skylib/functions/dist/types/core";
 
 import { Facebook } from "@/facade-implementations/facebook/Facebook";
 
-const getScript = jest
-  .spyOn($, "getScript")
-  .mockImplementation((...args: unknown[]) => {
-    assert.toBeTrue(args.length === 1);
-    assert.toBeTrue(args[0] === "https://connect.facebook.net/en_US/sdk.js");
-
-    let appId: stringU;
-
-    // eslint-disable-next-line no-type-assertion/no-type-assertion
-    globalThis.FB = {
-      getAuthResponse() {
-        return appId === "loggedIn" ? getAuthResponse(appId) : null;
-      },
-      init(params) {
-        appId = params.appId;
-      },
-      login(callback: (response: fb.StatusResponse) => void) {
-        callback({
-          authResponse: getAuthResponse(appId),
-          status: getLoginStatus(appId)
-        });
-      }
-    } as fb.FacebookStatic;
-
-    // eslint-disable-next-line no-type-assertion/no-type-assertion
-    return {} as JQuery.jqXHR<stringU>;
-  });
-
 function getAuthResponse(appId: stringU): fb.AuthResponse {
   assert.not.empty(appId);
 
@@ -64,6 +36,34 @@ function getLoginStatus(appId: stringU): fb.LoginStatus {
       throw new Error("Unexpected app ID");
   }
 }
+
+const getScript = jest
+  .spyOn($, "getScript")
+  .mockImplementation((...args: unknown[]) => {
+    assert.toBeTrue(args.length === 1);
+    assert.toBeTrue(args[0] === "https://connect.facebook.net/en_US/sdk.js");
+
+    let appId: stringU;
+
+    // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
+    globalThis.FB = {
+      getAuthResponse() {
+        return appId === "loggedIn" ? getAuthResponse(appId) : null;
+      },
+      init(params) {
+        appId = params.appId;
+      },
+      login(callback: (response: fb.StatusResponse) => void) {
+        callback({
+          authResponse: getAuthResponse(appId),
+          status: getLoginStatus(appId)
+        });
+      }
+    } as fb.FacebookStatic;
+
+    // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
+    return {} as JQuery.jqXHR<stringU>;
+  });
 
 test("facebook.accessToken", async () => {
   const error = new AssertionError("Missing Facebook app ID");

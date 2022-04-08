@@ -16,7 +16,7 @@ import type { NumStr, Rec } from "@skylib/functions/dist/types/core";
 
 import type { Definitions } from ".";
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
+// eslint-disable-next-line @typescript-eslint/no-namespace -- ???
 export namespace Dictionary {
   export interface Configuration {
     readonly localeName: LocaleName;
@@ -139,12 +139,6 @@ export class Dictionary implements DictionaryInterface<Context> {
 
   protected definitions: Rec<LocaleName, Definitions>;
 
-  /*
-  |*****************************************************************************
-  |* Protected
-  |*****************************************************************************
-  |*/
-
   protected proxified: Facade;
 
   protected subsPool = new Map<NumStr, Facade>();
@@ -179,7 +173,7 @@ export class Dictionary implements DictionaryInterface<Context> {
         }
       });
 
-      // eslint-disable-next-line no-type-assertion/no-type-assertion
+      // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
       return new Proxy(this, handler) as unknown as Facade;
     });
   }
@@ -201,12 +195,6 @@ export class Dictionary implements DictionaryInterface<Context> {
     return definitions.pluralReduce(count);
   }
 }
-
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
 
 const moduleConfig = onDemand(() =>
   reactiveStorage<Dictionary.Configuration>({ localeName: "en-US" })

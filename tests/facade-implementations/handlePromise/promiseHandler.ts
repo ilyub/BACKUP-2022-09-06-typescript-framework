@@ -7,17 +7,17 @@ import type { booleanU } from "@skylib/functions/dist/types/core";
 
 import * as promiseHandler from "@/facade-implementations/handlePromise/promiseHandler";
 
-const alertMock = jest.fn();
-
-const errorHandler = jest.spyOn(promiseHandler.handlers, "error");
-
-const testError = new Error("Sample error");
-
 async function fail(): Promise<void> {
   await wait(500);
 
   throw testError;
 }
+
+const alertMock = jest.fn();
+
+const errorHandler = jest.spyOn(promiseHandler.handlers, "error");
+
+const testError = new Error("Sample error");
 
 {
   testUtils.installFakeTimer();
@@ -55,7 +55,7 @@ test("runAll", async () => {
 
     {
       handlePromise.silent(wait(1000));
-      // eslint-disable-next-line github/no-then
+      // eslint-disable-next-line github/no-then -- ???
       handlePromise.runAll().then(fulfilled).catch(rejected);
       expect(done).toBeUndefined();
     }

@@ -48,7 +48,7 @@ test("pouchDBProxy.bulkDocs", async () => {
   const db = new PouchDBProxy(uniqueId(), {});
 
   await expect(
-    // eslint-disable-next-line no-type-assertion/no-type-assertion
+    // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
     db.bulkDocs(undefined as unknown as PouchPutDocument[])
   ).rejects.toStrictEqual(new Error("Missing JSON list of 'docs'"));
 });

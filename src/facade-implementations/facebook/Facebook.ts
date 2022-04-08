@@ -67,12 +67,6 @@ export class Facebook implements Facade {
     await this.sdk;
   }
 
-  /*
-  |*****************************************************************************
-  |* Protected
-  |*****************************************************************************
-  |*/
-
   protected appId: AsyncPromise<stringU> | stringU;
 
   protected sdk: Promise<void> | undefined = undefined;

@@ -13,12 +13,6 @@ export class Engine<T extends object> extends BaseEngine<T, lunr.Index> {
     return this.items.filter(item => refs.has(item[this.idField]));
   }
 
-  /*
-  |*****************************************************************************
-  |* Protected
-  |*****************************************************************************
-  |*/
-
   protected buildIndex(
     idField: string & keyof T,
     fields: ReadonlyArray<string & keyof T>,

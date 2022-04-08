@@ -10,33 +10,6 @@ import type { UndefinedStyle } from "@skylib/functions/dist/types/object";
 
 import type { Item } from "./Item";
 
-export type AttachedItems = readonly AttachedItems[];
-
-export interface BaseAttachedItemDoc {
-  readonly createdAt?: string;
-  readonly deletedAt?: string;
-  readonly softDeleted?: true;
-  readonly updatedAt?: string;
-}
-
-export interface BulkAttachedItemDoc
-  extends BaseBulkAttachedDocument,
-    BaseAttachedItemDoc {}
-
-export type BulkAttachedItemDocs = readonly BulkAttachedItemDoc[];
-
-export interface ExistingAttachedItemDoc
-  extends BaseExistingAttachedDocument,
-    BaseAttachedItemDoc {}
-
-export type ExistingAttachedItemDocs = readonly ExistingAttachedItemDoc[];
-
-export interface PutAttachedItemDoc
-  extends BasePutAttachedDocument,
-    BaseAttachedItemDoc {}
-
-export type PutAttachedItemDocs = readonly PutAttachedItemDoc[];
-
 export class AttachedItem<T extends Item = Item> {
   public readonly _deleted: boolean;
 
@@ -102,12 +75,6 @@ export class AttachedItem<T extends Item = Item> {
     });
   }
 
-  /*
-  |*******************************************************************************
-  |* Protected
-  |*******************************************************************************
-  |*/
-
   protected _parent: T | undefined = undefined;
 
   protected _parentDoc: ExistingDocument;
@@ -119,3 +86,30 @@ export class AttachedItem<T extends Item = Item> {
     throw new Error("Not implemented");
   }
 }
+
+export type AttachedItems = readonly AttachedItems[];
+
+export interface BaseAttachedItemDoc {
+  readonly createdAt?: string;
+  readonly deletedAt?: string;
+  readonly softDeleted?: true;
+  readonly updatedAt?: string;
+}
+
+export interface BulkAttachedItemDoc
+  extends BaseBulkAttachedDocument,
+    BaseAttachedItemDoc {}
+
+export type BulkAttachedItemDocs = readonly BulkAttachedItemDoc[];
+
+export interface ExistingAttachedItemDoc
+  extends BaseExistingAttachedDocument,
+    BaseAttachedItemDoc {}
+
+export type ExistingAttachedItemDocs = readonly ExistingAttachedItemDoc[];
+
+export interface PutAttachedItemDoc
+  extends BasePutAttachedDocument,
+    BaseAttachedItemDoc {}
+
+export type PutAttachedItemDocs = readonly PutAttachedItemDoc[];

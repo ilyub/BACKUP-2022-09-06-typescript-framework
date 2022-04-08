@@ -27,8 +27,8 @@ import {
   startOfWeek,
   startOfYear,
   sub
-} from "date-fns"; // eslint-disable-line import/no-duplicates
-import enUS from "date-fns/locale/en-US"; // eslint-disable-line import/no-duplicates
+} from "date-fns"; // eslint-disable-line import/no-duplicates -- ???
+import enUS from "date-fns/locale/en-US"; // eslint-disable-line import/no-duplicates -- ???
 
 import type {
   DateTime as DateTimeInterface,
@@ -40,36 +40,6 @@ import * as is from "@skylib/functions/dist/guards";
 import { onDemand } from "@skylib/functions/dist/helpers";
 import * as o from "@skylib/functions/dist/object";
 import type { NumStr, strings } from "@skylib/functions/dist/types/core";
-
-export interface Configuration {
-  readonly firstDayOfWeek: FirstDayOfWeek;
-  readonly locale: Locale;
-  readonly pm: boolean;
-}
-
-export type PartialConfiguration<K extends keyof Configuration> = {
-  readonly [L in K]: Configuration[L];
-};
-
-export type FirstDayOfWeek = 0 | 1;
-
-/**
- * Configures plugin.
- *
- * @param config - Plugin configuration.
- */
-export function configure(config: Partial<Configuration>): void {
-  o.assign(moduleConfig, config);
-}
-
-/**
- * Returns plugin configuration.
- *
- * @returns Plugin configuration.
- */
-export function getConfiguration(): Configuration {
-  return moduleConfig;
-}
 
 export const implementation: Facade = {
   create(dt?: Date | DateTimeInterface | NumStr) {
@@ -366,20 +336,35 @@ export class DateTime implements DateTimeInterface {
     return getYear(this.value);
   }
 
-  /*
-  |*****************************************************************************
-  |* Protected
-  |*****************************************************************************
-  |*/
-
   protected value: Date;
 }
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
+export interface Configuration {
+  readonly firstDayOfWeek: FirstDayOfWeek;
+  readonly locale: Locale;
+  readonly pm: boolean;
+}
+
+export type FirstDayOfWeek = 0 | 1;
+
+/**
+ * Configures plugin.
+ *
+ * @param config - Plugin configuration.
+ */
+// eslint-disable-next-line @skylib/prefer-readonly -- ??
+export function configure(config: Partial<Configuration>): void {
+  o.assign(moduleConfig, config);
+}
+
+/**
+ * Returns plugin configuration.
+ *
+ * @returns Plugin configuration.
+ */
+export function getConfiguration(): Configuration {
+  return moduleConfig;
+}
 
 const formatStrings: strings = [
   "yyyy-M-d h:m:s a",

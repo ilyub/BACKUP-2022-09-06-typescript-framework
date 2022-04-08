@@ -30,12 +30,6 @@ export class PouchDBWrapper implements Facade {
     return new Database(name, options, this.config, this.pouchConfig);
   }
 
-  /*
-  |*****************************************************************************
-  |* Protected
-  |*****************************************************************************
-  |*/
-
   protected config: Configuration;
 
   protected pouchConfig: PouchDatabaseConfiguration;

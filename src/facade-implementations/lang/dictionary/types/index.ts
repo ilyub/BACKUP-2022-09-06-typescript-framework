@@ -23,7 +23,6 @@ export type RawDefinition =
   | readonly [NumStr, RawDefinitions, PartialRecord<Context, NumStr>]
   | readonly [NumStr, RawDefinitions];
 
-// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 export interface RawDefinitions {
   readonly [key: string]: RawDefinition;
 }

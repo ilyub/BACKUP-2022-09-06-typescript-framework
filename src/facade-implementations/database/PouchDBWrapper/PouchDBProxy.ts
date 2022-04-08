@@ -9,51 +9,6 @@ import type { numbers } from "@skylib/functions/dist/types/core";
 import { PouchConflictError } from "./errors/PouchConflictError";
 import { PouchNotFoundError } from "./errors/PouchNotFoundError";
 
-export interface Changes {
-  /**
-   * Cancels changes.
-   */
-  readonly cancel: () => void;
-}
-
-export interface Content {
-  readonly [key: string]: unknown;
-  readonly attachedDocs?: readonly StoredAttachedDocument[];
-  readonly lastAttachedDocs?: numbers;
-}
-
-export type PouchChange = PouchDB.Core.ChangesResponseChange<Content>;
-
-export interface PouchChangesHandler {
-  /**
-   * Changes handler.
-   *
-   * @param change - Change.
-   */
-  (change: PouchChange): void;
-}
-
-export type PouchChangesOptions = PouchDB.Core.ChangesOptions;
-
-export type PouchDatabaseConfiguration =
-  PouchDB.Configuration.DatabaseConfiguration;
-
-export type PouchGetMeta = PouchDB.Core.GetMeta;
-
-export type PouchIdMeta = PouchDB.Core.IdMeta;
-
-export type PouchDatabase = PouchDB.Database<Content>;
-
-export type PouchError = PouchDB.Core.Error;
-
-export type PouchResponse = PouchDB.Core.Response;
-
-export type PouchPutDocument = PouchDB.Core.PutDocument<Content>;
-
-export type PouchQueryOptions = PouchDB.Query.Options<Content, Content>;
-
-export type PouchQueryResponse = PouchDB.Query.Response<Content>;
-
 export const handlers = o.freeze({
   error(error: unknown): void {
     throw wrapPouchError(error);
@@ -80,6 +35,7 @@ export class PouchDBProxy {
    * @returns Responses.
    */
   public async bulkDocs(
+    // eslint-disable-next-line @skylib/no-mutable-signature, @skylib/prefer-readonly -- ??
     docs: readonly PouchPutDocument[]
   ): Promise<Array<PouchError | PouchResponse>> {
     await testDelay();
@@ -149,6 +105,7 @@ export class PouchDBProxy {
    * @param doc - Document.
    * @returns Response.
    */
+  // eslint-disable-next-line @skylib/no-mutable-signature, @skylib/prefer-readonly -- ??
   public async post(doc: PouchPutDocument): Promise<PouchResponse> {
     await testDelay();
 
@@ -165,6 +122,7 @@ export class PouchDBProxy {
    * @param doc - Document.
    * @returns Response.
    */
+  // eslint-disable-next-line @skylib/no-mutable-signature, @skylib/prefer-readonly -- ??
   public async put(doc: PouchPutDocument): Promise<PouchResponse> {
     await testDelay();
 
@@ -184,6 +142,7 @@ export class PouchDBProxy {
    */
   public async query(
     mapReduce: string,
+    // eslint-disable-next-line @skylib/prefer-readonly -- ??
     options: PouchQueryOptions
   ): Promise<PouchQueryResponse> {
     await testDelay();
@@ -196,18 +155,56 @@ export class PouchDBProxy {
   }
 }
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
-
-interface WrappablePouchError {
-  readonly error: true;
-  readonly message: string;
-  readonly name: string;
-  readonly status: number;
+export interface Changes {
+  /**
+   * Cancels changes.
+   */
+  readonly cancel: () => void;
 }
+
+export interface Content {
+  readonly [key: string]: unknown;
+  readonly attachedDocs?: readonly StoredAttachedDocument[];
+  readonly lastAttachedDocs?: numbers;
+}
+
+// eslint-disable-next-line @skylib/prefer-readonly -- ??
+export type PouchChange = PouchDB.Core.ChangesResponseChange<Content>;
+
+export interface PouchChangesHandler {
+  /**
+   * Changes handler.
+   *
+   * @param change - Change.
+   */
+  // eslint-disable-next-line @skylib/prefer-readonly -- ??
+  (change: PouchChange): void;
+}
+
+export type PouchChangesOptions = PouchDB.Core.ChangesOptions;
+
+// eslint-disable-next-line @skylib/prefer-readonly -- ??
+export type PouchDatabase = PouchDB.Database<Content>;
+
+export type PouchDatabaseConfiguration =
+  PouchDB.Configuration.DatabaseConfiguration;
+
+export type PouchError = PouchDB.Core.Error;
+
+export type PouchGetMeta = PouchDB.Core.GetMeta;
+
+export type PouchIdMeta = PouchDB.Core.IdMeta;
+
+// eslint-disable-next-line @skylib/prefer-readonly -- ??
+export type PouchPutDocument = PouchDB.Core.PutDocument<Content>;
+
+// eslint-disable-next-line @skylib/prefer-readonly -- ??
+export type PouchQueryOptions = PouchDB.Query.Options<Content, Content>;
+
+// eslint-disable-next-line @skylib/prefer-readonly -- ??
+export type PouchQueryResponse = PouchDB.Query.Response<Content>;
+
+export type PouchResponse = PouchDB.Core.Response;
 
 const isWrappablePouchError = is.object.factory<WrappablePouchError>(
   {
@@ -218,6 +215,13 @@ const isWrappablePouchError = is.object.factory<WrappablePouchError>(
   },
   {}
 );
+
+interface WrappablePouchError {
+  readonly error: true;
+  readonly message: string;
+  readonly name: string;
+  readonly status: number;
+}
 
 /**
  * Converts pouch error to conventional error.

@@ -80,7 +80,7 @@ test("create: options.caseSensitiveSorting", async () => {
       async (): Promise<
         ReadonlyArray<ExistingAttachedDocument | ExistingDocument>
       > => {
-        // eslint-disable-next-line jest/no-conditional-in-test
+        // eslint-disable-next-line jest/no-conditional-in-test -- ???
         switch (method) {
           case "query1":
             return db.query({});

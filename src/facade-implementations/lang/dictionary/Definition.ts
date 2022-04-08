@@ -143,12 +143,6 @@ export class Definition {
     return word;
   }
 
-  /*
-  |*****************************************************************************
-  |* Protected
-  |*****************************************************************************
-  |*/
-
   protected contexts: IndexedObject<NumStr> = {};
 
   protected id: NumStr;

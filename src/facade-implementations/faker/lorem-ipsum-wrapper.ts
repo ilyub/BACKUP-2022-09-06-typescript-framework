@@ -9,28 +9,6 @@ import * as is from "@skylib/functions/dist/guards";
 import * as num from "@skylib/functions/dist/number";
 import * as o from "@skylib/functions/dist/object";
 
-export interface Configurable {
-  /**
-   * Configures plugin.
-   *
-   * @param config - Plugin configuration.
-   */
-  readonly configure: (config: Partial<Configuration>) => void;
-  /**
-   * Returns plugin configuration.
-   *
-   * @returns Plugin configuration.
-   */
-  readonly getConfiguration: () => Configuration;
-}
-
-export interface Configuration {
-  readonly maxSentences: number;
-  readonly maxWords: number;
-  readonly minSentences: number;
-  readonly minWords: number;
-}
-
 export const loremIpsumWrapper: Configurable & Facade = {
   boolean(): boolean {
     return this.oneOf([true, false]);
@@ -123,11 +101,27 @@ export const loremIpsumWrapper: Configurable & Facade = {
   }
 };
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
+export interface Configurable {
+  /**
+   * Configures plugin.
+   *
+   * @param config - Plugin configuration.
+   */
+  readonly configure: (config: Partial<Configuration>) => void;
+  /**
+   * Returns plugin configuration.
+   *
+   * @returns Plugin configuration.
+   */
+  readonly getConfiguration: () => Configuration;
+}
+
+export interface Configuration {
+  readonly maxSentences: number;
+  readonly maxWords: number;
+  readonly minSentences: number;
+  readonly minWords: number;
+}
 
 const moduleConfig: Configuration = {
   maxSentences: 5,

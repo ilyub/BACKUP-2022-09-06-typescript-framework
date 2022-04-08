@@ -6,6 +6,27 @@ import * as o from "@skylib/functions/dist/object";
 import type { Rec } from "@skylib/functions/dist/types/core";
 import type { AsyncPromise } from "@skylib/functions/dist/types/function";
 
+export const handlers = o.freeze({
+  error(error: unknown): void {
+    throw error;
+  }
+});
+
+export const implementation: Facade = {
+  async runAll() {
+    await Promise.all(promisesPool.values());
+  },
+  running() {
+    return promisesPool.size > 0;
+  },
+  silent<T>(promiseAsync: AsyncPromise<T>, errorMessage = "") {
+    handle(promiseAsync, undefined, errorMessage);
+  },
+  verbose<T>(promiseAsync: AsyncPromise<T>, type: Type, errorMessage = "") {
+    handle(promiseAsync, type, errorMessage);
+  }
+};
+
 export interface Configuration {
   readonly expectedDurations: Rec<Type, number>;
 }
@@ -13,12 +34,6 @@ export interface Configuration {
 export type PartialConfiguration<K extends keyof Configuration> = {
   readonly [L in K]: Configuration[L];
 };
-
-export const handlers = o.freeze({
-  error(error: unknown): void {
-    throw error;
-  }
-});
 
 /**
  * Configures plugin.
@@ -37,27 +52,6 @@ export function configure(config: Partial<Configuration>): void {
 export function getConfiguration(): Configuration {
   return moduleConfig;
 }
-
-export const implementation: Facade = {
-  async runAll() {
-    await Promise.all(promisesPool.values());
-  },
-  running() {
-    return promisesPool.size > 0;
-  },
-  silent<T>(promiseAsync: AsyncPromise<T>, errorMessage = "") {
-    handle(promiseAsync, undefined, errorMessage);
-  },
-  verbose<T>(promiseAsync: AsyncPromise<T>, type: Type, errorMessage = "") {
-    handle(promiseAsync, type, errorMessage);
-  }
-};
-
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
 
 const promisesPool = new Map<symbol, Promise<unknown>>();
 
@@ -92,7 +86,7 @@ function handle<T>(
     : undefined;
 
   promisesPool.set(id, promise);
-  // eslint-disable-next-line github/no-then, promise/prefer-await-to-then
+  // eslint-disable-next-line github/no-then, promise/prefer-await-to-then -- ???
   promise.catch(rejected).then(fulfilled).catch(rejected);
 
   /**

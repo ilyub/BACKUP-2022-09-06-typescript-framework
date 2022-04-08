@@ -17,6 +17,7 @@ import { showConfirm } from "@skylib/facades/dist/showConfirm";
 import { testDelay } from "@skylib/facades/dist/testDelay";
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
 import * as assert from "@skylib/functions/dist/assertions";
+import * as o from "@skylib/functions/dist/object";
 import type * as testUtils from "@skylib/functions/dist/testUtils";
 import type { LocaleName } from "@skylib/functions/dist/types/configurable";
 import type { Rec } from "@skylib/functions/dist/types/core";
@@ -56,143 +57,147 @@ declare global {
 /**
  * Jest reset.
  */
-export function jestReset(): void {
-  faker.setImplementation(loremIpsumWrapper);
-  compare.setImplementation(naturalCompareWrapper.implementation);
-  database.setImplementation(new PouchDBWrapper());
-  facebook.setImplementation(new Facebook(undefined, "10.0"));
-  google.setImplementation(new Google(undefined));
-  inlineSearch.setImplementation(lunrWrapper.implementation);
-  reactiveStorage.setImplementation(reflectStorage.implementation);
-  showAlert.setImplementation(jsAlert.implementation);
-  showConfirm.setImplementation(jsConfirm.implementation);
-  uniqueId.setImplementation(uuidWrapper.implementation);
+export const jestReset = o.extend(
+  (): void => {
+    faker.setImplementation(loremIpsumWrapper);
+    compare.setImplementation(naturalCompareWrapper.implementation);
+    database.setImplementation(new PouchDBWrapper());
+    facebook.setImplementation(new Facebook(undefined, "10.0"));
+    google.setImplementation(new Google(undefined));
+    inlineSearch.setImplementation(lunrWrapper.implementation);
+    reactiveStorage.setImplementation(reflectStorage.implementation);
+    showAlert.setImplementation(jsAlert.implementation);
+    showConfirm.setImplementation(jsConfirm.implementation);
+    uniqueId.setImplementation(uuidWrapper.implementation);
 
-  {
-    const config: dateFnsWrapper.Configuration = {
-      firstDayOfWeek: 0,
-      locale: enUS,
-      pm: true
-    };
+    {
+      const config: dateFnsWrapper.Configuration = {
+        firstDayOfWeek: 0,
+        locale: enUS,
+        pm: true
+      };
 
-    dateFnsWrapper.configure(config);
-    datetime.setImplementation(dateFnsWrapper.implementation);
-  }
-
-  {
-    const config: promiseHandler.Configuration = {
-      expectedDurations: {
-        createDb: 1000,
-        dbRequest: 1000,
-        destroyDb: 1000,
-        httpRequest: 1000,
-        navigation: 1000
-      }
-    };
-
-    promiseHandler.configure(config);
-    handlePromise.setImplementation(promiseHandler.implementation);
-  }
-
-  {
-    const config: axiosWrapper.Configuration = { timeout: 30_000 };
-
-    axiosWrapper.configure(config);
-    httpRequest.setImplementation(axiosWrapper.implementation);
-  }
-
-  {
-    const config: configurableTestDelay.Configuration = {
-      enabled: false,
-      timeout: 1000
-    };
-
-    configurableTestDelay.configure(config);
-    testDelay.setImplementation(configurableTestDelay.implementation);
-  }
-}
-
-/**
- * Jest reset.
- *
- * @param localeName - Locale name.
- * @param definitions - Language definitions.
- */
-export function jestResetDictionary(
-  localeName: LocaleName,
-  definitions: Rec<LocaleName, Definitions>
-): void {
-  const config: Dictionary.Configuration = { localeName };
-
-  Dictionary.configure(config);
-  lang.setImplementation(Dictionary.create(definitions));
-}
-
-jestReset.dictionary = jestResetDictionary;
-
-/**
- * Jest reset.
- */
-export function jestResetDom(): void {
-  const config: progressBar.Configuration = {
-    activeClass: "progress-bar-active",
-    enabled: true,
-    finalEasing: false,
-    finalEasingSpeed: 500,
-    latency: 0,
-    precision: 3,
-    selector: "#progressBar",
-    updateInterval: 100
-  };
-
-  progressBar.configure(config);
-  progressReporter.setImplementation(progressBar.implementation);
-  progressReporter.reset();
-}
-
-jestReset.dom = jestResetDom;
-
-/**
- * Jest setup.
- */
-export function jestSetup(): void {
-  {
-    interface ExpectExtendMap {
-      readonly datetimeToEqual: testUtils.ExpectFromMatcher<"datetimeToEqual">;
+      dateFnsWrapper.configure(config);
+      datetime.setImplementation(dateFnsWrapper.implementation);
     }
 
-    const expectExtend: ExpectExtendMap = { datetimeToEqual };
+    {
+      const config: promiseHandler.Configuration = {
+        expectedDurations: {
+          createDb: 1000,
+          dbRequest: 1000,
+          destroyDb: 1000,
+          httpRequest: 1000,
+          navigation: 1000
+        }
+      };
 
-    // eslint-disable-next-line no-type-assertion/no-type-assertion
-    expect.extend(expectExtend as ExpectExtendMap & jest.ExpectExtendMap);
+      promiseHandler.configure(config);
+      handlePromise.setImplementation(promiseHandler.implementation);
+    }
+
+    {
+      const config: axiosWrapper.Configuration = { timeout: 30_000 };
+
+      axiosWrapper.configure(config);
+      httpRequest.setImplementation(axiosWrapper.implementation);
+    }
+
+    {
+      const config: configurableTestDelay.Configuration = {
+        enabled: false,
+        timeout: 1000
+      };
+
+      configurableTestDelay.configure(config);
+      testDelay.setImplementation(configurableTestDelay.implementation);
+    }
+  },
+  {
+    /**
+     * Jest reset.
+     *
+     * @param this - No this.
+     * @param localeName - Locale name.
+     * @param definitions - Language definitions.
+     */
+    dictionary(
+      this: void,
+      localeName: LocaleName,
+      definitions: Rec<LocaleName, Definitions>
+    ): void {
+      const config: Dictionary.Configuration = { localeName };
+
+      Dictionary.configure(config);
+      lang.setImplementation(Dictionary.create(definitions));
+    },
+    /**
+     * Jest reset.
+     *
+     * @param this - No this.
+     */
+    dom(this: void): void {
+      const config: progressBar.Configuration = {
+        activeClass: "progress-bar-active",
+        enabled: true,
+        finalEasing: false,
+        finalEasingSpeed: 500,
+        latency: 0,
+        precision: 3,
+        selector: "#progressBar",
+        updateInterval: 100
+      };
+
+      progressBar.configure(config);
+      progressReporter.setImplementation(progressBar.implementation);
+      progressReporter.reset();
+    }
   }
-
-  jestReset();
-}
-
-/**
- * Jest setup.
- *
- * @param localeName - Locale name.
- * @param definitions - Language definitions.
- */
-export function jestSetupDictionary(
-  localeName: LocaleName,
-  definitions: Rec<LocaleName, Definitions>
-): void {
-  jestReset.dictionary(localeName, definitions);
-}
-
-jestSetup.dictionary = jestSetupDictionary;
+);
 
 /**
  * Jest setup.
  */
-export function jestSetupDom(): void {
-  jestReset.dom();
-}
+export const jestSetup = o.extend(
+  (): void => {
+    {
+      const expectExtend: ExpectExtendMap = { datetimeToEqual };
 
-jestSetup.dom = jestSetupDom;
+      // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
+      expect.extend(expectExtend as ExpectExtendMap & jest.ExpectExtendMap);
+
+      interface ExpectExtendMap {
+        readonly datetimeToEqual: testUtils.ExpectFromMatcher<"datetimeToEqual">;
+      }
+    }
+
+    jestReset();
+  },
+  {
+    /**
+     * Jest setup.
+     *
+     * @param this - No this.
+     * @param localeName - Locale name.
+     * @param definitions - Language definitions.
+     */
+    dictionary(
+      this: void,
+      localeName: LocaleName,
+      definitions: Rec<LocaleName, Definitions>
+    ): void {
+      jestReset.dictionary(localeName, definitions);
+    },
+    /**
+     * Jest setup.
+     *
+     * @param this - No this.
+     */
+    dom(this: void): void {
+      jestReset.dom();
+    }
+  }
+);
 
 /**
  * Checks that datetime equals expected value.

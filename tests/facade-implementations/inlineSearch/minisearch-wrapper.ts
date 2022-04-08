@@ -11,14 +11,6 @@ test.each([
   { ids: ["b", "c"], searchString: "d4" },
   { ids: ["c"], searchString: "d5" }
 ])("engine.search", ({ ids, searchString }) => {
-  interface Item {
-    readonly description: string;
-    readonly id: string;
-    readonly name: string;
-  }
-
-  type Items = readonly Item[];
-
   const items: Items = [
     {
       description: "D1 d2 d3",
@@ -46,4 +38,12 @@ test.each([
   const expected = items.filter(item => ids.includes(item.id));
 
   expect(engine.search(searchString)).toStrictEqual(expected);
+
+  interface Item {
+    readonly description: string;
+    readonly id: string;
+    readonly name: string;
+  }
+
+  type Items = readonly Item[];
 });

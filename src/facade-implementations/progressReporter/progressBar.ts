@@ -9,37 +9,6 @@ import * as o from "@skylib/functions/dist/object";
 import * as programFlow from "@skylib/functions/dist/programFlow";
 import type { numberU } from "@skylib/functions/dist/types/core";
 
-export interface Configuration {
-  readonly activeClass: string;
-  readonly enabled: boolean;
-  readonly finalEasing: boolean;
-  readonly finalEasingSpeed: number;
-  readonly latency: number;
-  readonly precision: number;
-  readonly selector: string;
-  readonly updateInterval: number;
-}
-
-export type State = "auto" | "done" | "manual";
-
-/**
- * Configures plugin.
- *
- * @param config - Plugin configuration.
- */
-export function configure(config: Partial<Configuration>): void {
-  o.assign(moduleConfig, config);
-}
-
-/**
- * Returns plugin configuration.
- *
- * @returns Plugin configuration.
- */
-export function getConfiguration(): Configuration {
-  return moduleConfig;
-}
-
 export const implementation: Facade = {
   getProgress() {
     return num.round(progress, moduleConfig.precision);
@@ -98,12 +67,6 @@ export class Process implements ProcessInterface {
 
     return this;
   }
-
-  /*
-  |*****************************************************************************
-  |* Protected
-  |*****************************************************************************
-  |*/
 
   /**
    * Updates progress bar state.
@@ -195,11 +158,36 @@ export class Process implements ProcessInterface {
   protected weight = 1;
 }
 
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
+export interface Configuration {
+  readonly activeClass: string;
+  readonly enabled: boolean;
+  readonly finalEasing: boolean;
+  readonly finalEasingSpeed: number;
+  readonly latency: number;
+  readonly precision: number;
+  readonly selector: string;
+  readonly updateInterval: number;
+}
+
+export type State = "auto" | "done" | "manual";
+
+/**
+ * Configures plugin.
+ *
+ * @param config - Plugin configuration.
+ */
+export function configure(config: Partial<Configuration>): void {
+  o.assign(moduleConfig, config);
+}
+
+/**
+ * Returns plugin configuration.
+ *
+ * @returns Plugin configuration.
+ */
+export function getConfiguration(): Configuration {
+  return moduleConfig;
+}
 
 let lastEasingUpdate = 0;
 
