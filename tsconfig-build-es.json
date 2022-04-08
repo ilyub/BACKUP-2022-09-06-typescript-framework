@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "module": "ES2020",
+    "module": "ES2015",
     "outDir": "es",
     "plugins": [
       {
         "after": true,
         "afterDeclarations": false,
         "alias": {
-          "^@skylib/([^/]*)/dist/(.*)": "@skylib/$1/es/$2",
+          "^@skylib/([^/]+)/dist/(.+)": "@skylib/$1/es/$2",
           "^lodash$": "lodash-es"
         },
         "import": "transform",
@@ -18,7 +18,7 @@
         "after": false,
         "afterDeclarations": true,
         "alias": {
-          "^@skylib/([^/]*)/dist/(.*)": "@skylib/$1/es/$2",
+          "^@skylib/([^/]+)/dist/(.+)": "@skylib/$1/es/$2",
           "^lodash$": "lodash-es"
         },
         "import": "transform",

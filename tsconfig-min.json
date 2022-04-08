@@ -12,7 +12,6 @@
       "node_modules/@types"
     ],
     "types": [
-      "config",
       "facebook-js-sdk",
       "gapi.auth2",
       "typescript-types"
@@ -40,7 +39,9 @@
     "__mocks__/**/*.js",
     "__mocks__/**/*.ts",
     "__mocks__/**/*.vue",
+    "fixtures/*.js",
     "fixtures/*.ts",
+    "fixtures/*.vue",
     "src/**/*.js",
     "src/**/*.ts",
     "src/**/*.vue",
