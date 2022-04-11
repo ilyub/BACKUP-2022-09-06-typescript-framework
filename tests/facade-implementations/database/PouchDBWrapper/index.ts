@@ -9,7 +9,7 @@ import { database } from "@skylib/facades/dist/database";
 import { datetime } from "@skylib/facades/dist/datetime";
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
 import * as fn from "@skylib/functions/dist/function";
-import { wait } from "@skylib/functions/dist/helpers";
+import { typedef, wait } from "@skylib/functions/dist/helpers";
 import * as testUtils from "@skylib/functions/dist/testUtils";
 
 import { Database } from "@/facade-implementations/database/PouchDBWrapper/Database";
@@ -22,7 +22,7 @@ test("create: options.caseSensitiveSorting", async () => {
 
   const db2 = database.create(uniqueId(), { caseSensitiveSorting: true });
 
-  const docs: PutDocument[] = [
+  const docs: PutDocument[] = typedef([
     {
       _id: "id1",
       attachedDocs: [
@@ -56,7 +56,7 @@ test("create: options.caseSensitiveSorting", async () => {
       ],
       value: "CCC"
     }
-  ];
+  ]);
 
   await Promise.all([db1.bulkDocs(docs), db2.bulkDocs(docs)]);
 

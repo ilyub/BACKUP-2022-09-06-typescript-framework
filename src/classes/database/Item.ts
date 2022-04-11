@@ -1,7 +1,7 @@
 import type {
   BaseExistingDocument,
   BasePutDocument,
-  StoredAttachedDocuments
+  BaseStoredAttachedDocuments
 } from "@skylib/facades/dist/database";
 import * as o from "@skylib/functions/dist/object";
 import type { numbers, stringU } from "@skylib/functions/dist/types/core";
@@ -58,7 +58,7 @@ export class Item {
     });
   }
 
-  protected readonly attachedDocs: StoredAttachedDocuments | undefined;
+  protected readonly attachedDocs: BaseStoredAttachedDocuments | undefined;
 
   protected readonly lastAttachedDocs: numbers | undefined;
 }

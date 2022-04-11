@@ -1,6 +1,6 @@
 import pouchdb from "pouchdb";
 
-import type { StoredAttachedDocument } from "@skylib/facades/dist/database";
+import type { BaseStoredAttachedDocuments } from "@skylib/facades/dist/database";
 import { testDelay } from "@skylib/facades/dist/testDelay";
 import * as is from "@skylib/functions/dist/guards";
 import * as o from "@skylib/functions/dist/object";
@@ -164,7 +164,7 @@ export interface Changes {
 
 export interface Content {
   readonly [key: string]: unknown;
-  readonly attachedDocs?: readonly StoredAttachedDocument[];
+  readonly attachedDocs?: BaseStoredAttachedDocuments;
   readonly lastAttachedDocs?: numbers;
 }
 

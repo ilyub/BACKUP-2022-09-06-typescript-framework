@@ -2,7 +2,7 @@ import type { Conditions } from "@skylib/facades/dist/database";
 import { database } from "@skylib/facades/dist/database";
 import { datetime } from "@skylib/facades/dist/datetime";
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
-import { wait } from "@skylib/functions/dist/helpers";
+import { typedef, wait } from "@skylib/functions/dist/helpers";
 import * as testUtils from "@skylib/functions/dist/testUtils";
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
@@ -62,44 +62,46 @@ test("unsettledAttached", async () => {
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
-    await db.bulkDocs([
-      {
-        attachedDocs: [
-          {
-            _id: 0,
-            _rev: 1,
-            d: "2001-02-12 12:00"
-          }
-        ]
-      },
-      {
-        attachedDocs: [
-          {
-            _id: 0,
-            _rev: 1,
-            d: "2001-02-15 11:00"
-          }
-        ]
-      },
-      {
-        attachedDocs: [
-          {
-            _id: 0,
-            _rev: 1,
-            d: "2001-02-15 13:00"
-          }
-        ]
-      },
-      {
-        attachedDocs: [
-          {
-            _id: 0,
-            _rev: 1,
-            d: "2001-02-18 12:00"
-          }
-        ]
-      }
-    ]);
+    await db.bulkDocs(
+      typedef([
+        {
+          attachedDocs: [
+            {
+              _id: 0,
+              _rev: 1,
+              d: "2001-02-12 12:00"
+            }
+          ]
+        },
+        {
+          attachedDocs: [
+            {
+              _id: 0,
+              _rev: 1,
+              d: "2001-02-15 11:00"
+            }
+          ]
+        },
+        {
+          attachedDocs: [
+            {
+              _id: 0,
+              _rev: 1,
+              d: "2001-02-15 13:00"
+            }
+          ]
+        },
+        {
+          attachedDocs: [
+            {
+              _id: 0,
+              _rev: 1,
+              d: "2001-02-18 12:00"
+            }
+          ]
+        }
+      ])
+    );
 
     await Promise.all([
       subtest(undefined, 0),
@@ -143,108 +145,110 @@ test("unsettledAttached: Combined", async () => {
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
-    await db.bulkDocs([
-      {
-        attachedDocs: [
-          {
-            _id: 0,
-            _rev: 1,
-            d: "2001-02-12 12:00"
-          },
-          {
-            _id: 1,
-            _rev: 1,
-            d: "2001-02-15 11:00"
-          },
-          {
-            _id: 2,
-            _rev: 1,
-            d: "2001-02-15 13:00"
-          },
-          {
-            _id: 3,
-            _rev: 1,
-            d: "2001-02-18 12:00"
-          }
-        ],
-        d: "2001-02-12 12:00"
-      },
-      {
-        attachedDocs: [
-          {
-            _id: 0,
-            _rev: 1,
-            d: "2001-02-12 12:00"
-          },
-          {
-            _id: 1,
-            _rev: 1,
-            d: "2001-02-15 11:00"
-          },
-          {
-            _id: 2,
-            _rev: 1,
-            d: "2001-02-15 13:00"
-          },
-          {
-            _id: 3,
-            _rev: 1,
-            d: "2001-02-18 12:00"
-          }
-        ],
-        d: "2001-02-15 11:00"
-      },
-      {
-        attachedDocs: [
-          {
-            _id: 0,
-            _rev: 1,
-            d: "2001-02-12 12:00"
-          },
-          {
-            _id: 1,
-            _rev: 1,
-            d: "2001-02-15 11:00"
-          },
-          {
-            _id: 2,
-            _rev: 1,
-            d: "2001-02-15 13:00"
-          },
-          {
-            _id: 3,
-            _rev: 1,
-            d: "2001-02-18 12:00"
-          }
-        ],
-        d: "2001-02-15 13:00"
-      },
-      {
-        attachedDocs: [
-          {
-            _id: 0,
-            _rev: 1,
-            d: "2001-02-12 12:00"
-          },
-          {
-            _id: 1,
-            _rev: 1,
-            d: "2001-02-15 11:00"
-          },
-          {
-            _id: 2,
-            _rev: 1,
-            d: "2001-02-15 13:00"
-          },
-          {
-            _id: 3,
-            _rev: 1,
-            d: "2001-02-18 12:00"
-          }
-        ],
-        d: "2001-02-18 12:00"
-      }
-    ]);
+    await db.bulkDocs(
+      typedef([
+        {
+          attachedDocs: [
+            {
+              _id: 0,
+              _rev: 1,
+              d: "2001-02-12 12:00"
+            },
+            {
+              _id: 1,
+              _rev: 1,
+              d: "2001-02-15 11:00"
+            },
+            {
+              _id: 2,
+              _rev: 1,
+              d: "2001-02-15 13:00"
+            },
+            {
+              _id: 3,
+              _rev: 1,
+              d: "2001-02-18 12:00"
+            }
+          ],
+          d: "2001-02-12 12:00"
+        },
+        {
+          attachedDocs: [
+            {
+              _id: 0,
+              _rev: 1,
+              d: "2001-02-12 12:00"
+            },
+            {
+              _id: 1,
+              _rev: 1,
+              d: "2001-02-15 11:00"
+            },
+            {
+              _id: 2,
+              _rev: 1,
+              d: "2001-02-15 13:00"
+            },
+            {
+              _id: 3,
+              _rev: 1,
+              d: "2001-02-18 12:00"
+            }
+          ],
+          d: "2001-02-15 11:00"
+        },
+        {
+          attachedDocs: [
+            {
+              _id: 0,
+              _rev: 1,
+              d: "2001-02-12 12:00"
+            },
+            {
+              _id: 1,
+              _rev: 1,
+              d: "2001-02-15 11:00"
+            },
+            {
+              _id: 2,
+              _rev: 1,
+              d: "2001-02-15 13:00"
+            },
+            {
+              _id: 3,
+              _rev: 1,
+              d: "2001-02-18 12:00"
+            }
+          ],
+          d: "2001-02-15 13:00"
+        },
+        {
+          attachedDocs: [
+            {
+              _id: 0,
+              _rev: 1,
+              d: "2001-02-12 12:00"
+            },
+            {
+              _id: 1,
+              _rev: 1,
+              d: "2001-02-15 11:00"
+            },
+            {
+              _id: 2,
+              _rev: 1,
+              d: "2001-02-15 13:00"
+            },
+            {
+              _id: 3,
+              _rev: 1,
+              d: "2001-02-18 12:00"
+            }
+          ],
+          d: "2001-02-18 12:00"
+        }
+      ])
+    );
 
     await Promise.all([
       subtest({ d: { dateGt: ["now"] } }, { d: { dateGt: ["now"] } }, 9),

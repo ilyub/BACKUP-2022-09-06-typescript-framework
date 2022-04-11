@@ -5,6 +5,9 @@ import sha256 from "sha256";
 import type {
   AttachedChangesHandler,
   AttachedSubscriptionId,
+  BaseExistingDocument,
+  BaseStoredAttachedDocument,
+  BaseStoredAttachedDocuments,
   BulkAttachedDocuments,
   ChangesHandler,
   Conditions,
@@ -29,7 +32,6 @@ import type {
   ReactiveResponse,
   ReactiveResponseLoaded,
   ResetCallback,
-  StoredAttachedDocument,
   SubscriptionId
 } from "@skylib/facades/dist/database";
 import {
@@ -292,7 +294,7 @@ export class Database implements DatabaseInterface {
 
         const rev = (_rev ?? 0) + 1;
 
-        const attachedDoc: StoredAttachedDocument = {
+        const attachedDoc: BaseStoredAttachedDocument = {
           ...content,
           _id: id,
           _rev: rev
@@ -1560,14 +1562,18 @@ const isDocsResponse = is.object.factory<DocsResponse>(
   {}
 );
 
-const isStoredDocumentAttached = is.object.factory<StoredAttachedDocument>(
-  { _id: is.number, _rev: is.number },
-  { _deleted: is.true }
+const isBaseExistingDocument = is.object.factory<BaseExistingDocument>(
+  { _id: is.string, _rev: is.string },
+  {
+    _deleted: is.true,
+    attachedDocs: isStoredDocumentAttachedArray,
+    lastAttachedDocs: is.numbers
+  }
 );
 
-const isStoredDocumentAttachedArray = is.factory(
-  is.array.of,
-  isStoredDocumentAttached
+const isStoredDocumentAttached = is.object.factory<BaseStoredAttachedDocument>(
+  { _id: is.number, _rev: is.number },
+  { _deleted: is.true, parentDoc: isBaseExistingDocument }
 );
 
 const isExistingDocument = is.object.factory<ExistingDocument>(
@@ -1882,6 +1888,13 @@ function extractDocAttached(
   );
 
   return { ...attachedDoc, parentDoc: { ...parentDoc, attachedDocs: [] } };
+}
+
+// eslint-disable-next-line @skylib/require-jsdoc -- ??
+function isStoredDocumentAttachedArray(
+  value: unknown
+): value is BaseStoredAttachedDocuments {
+  return is.array.of(value, isStoredDocumentAttached);
 }
 
 /**

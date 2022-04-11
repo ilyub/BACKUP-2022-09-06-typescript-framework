@@ -1,8 +1,8 @@
 import type {
   BaseBulkAttachedDocument,
   BaseExistingAttachedDocument,
-  BasePutAttachedDocument,
-  ExistingDocument
+  BaseExistingDocument,
+  BasePutAttachedDocument
 } from "@skylib/facades/dist/database";
 import * as o from "@skylib/functions/dist/object";
 import type { stringU } from "@skylib/functions/dist/types/core";
@@ -77,7 +77,7 @@ export class AttachedItem<T extends Item = Item> {
 
   protected _parent: T | undefined = undefined;
 
-  protected _parentDoc: ExistingDocument;
+  protected _parentDoc: BaseExistingDocument;
 
   /**
    * Initializes parent.

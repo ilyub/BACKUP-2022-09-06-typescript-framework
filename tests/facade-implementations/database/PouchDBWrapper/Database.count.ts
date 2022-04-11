@@ -1,6 +1,7 @@
 import type { Conditions } from "@skylib/facades/dist/database";
 import { database } from "@skylib/facades/dist/database";
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
+import { typedef } from "@skylib/functions/dist/helpers";
 
 test("count", async () => {
   const db = database.create(uniqueId());
@@ -47,48 +48,50 @@ test("count", async () => {
 test("countAttached", async () => {
   const db = database.create(uniqueId());
 
-  await db.bulkDocs([
-    {
-      attachedDocs: [
-        {
-          _id: 0,
-          _rev: 1,
-          b: true
-        },
-        {
-          _id: 1,
-          _rev: 1,
-          b: false
-        },
-        {
-          _id: 2,
-          _rev: 1,
-          d: "2001-02-15 11:40"
-        },
-        {
-          _id: 3,
-          _rev: 1,
-          d: "2001-02-15 11:50"
-        }
-      ],
-      b: true
-    },
-    {
-      attachedDocs: [
-        {
-          _id: 0,
-          _rev: 1,
-          d: "2001-02-15 12:10"
-        },
-        {
-          _id: 1,
-          _rev: 1,
-          d: "2001-02-15 12:20"
-        }
-      ],
-      b: false
-    }
-  ]);
+  await db.bulkDocs(
+    typedef([
+      {
+        attachedDocs: [
+          {
+            _id: 0,
+            _rev: 1,
+            b: true
+          },
+          {
+            _id: 1,
+            _rev: 1,
+            b: false
+          },
+          {
+            _id: 2,
+            _rev: 1,
+            d: "2001-02-15 11:40"
+          },
+          {
+            _id: 3,
+            _rev: 1,
+            d: "2001-02-15 11:50"
+          }
+        ],
+        b: true
+      },
+      {
+        attachedDocs: [
+          {
+            _id: 0,
+            _rev: 1,
+            d: "2001-02-15 12:10"
+          },
+          {
+            _id: 1,
+            _rev: 1,
+            d: "2001-02-15 12:20"
+          }
+        ],
+        b: false
+      }
+    ])
+  );
 
   await Promise.all([
     subtest(undefined, undefined, 6),
@@ -126,52 +129,54 @@ test("countAttached", async () => {
 test("countAttached: Combined", async () => {
   const db = database.create(uniqueId());
 
-  await db.bulkDocs([
-    {
-      _id: "d1",
-      attachedDocs: [
-        {
-          _id: 0,
-          _rev: 1,
-          d: "2001-02-15 11:50"
-        }
-      ],
-      d: "2001-02-15 11:50"
-    },
-    {
-      _id: "d2",
-      attachedDocs: [
-        {
-          _id: 0,
-          _rev: 1,
-          d: "2001-02-15 11:50"
-        }
-      ],
-      d: "2001-02-15 12:10"
-    },
-    {
-      _id: "d3",
-      attachedDocs: [
-        {
-          _id: 0,
-          _rev: 1,
-          d: "2001-02-15 12:10"
-        }
-      ],
-      d: "2001-02-15 11:50"
-    },
-    {
-      _id: "d4",
-      attachedDocs: [
-        {
-          _id: 0,
-          _rev: 1,
-          d: "2001-02-15 12:10"
-        }
-      ],
-      d: "2001-02-15 12:10"
-    }
-  ]);
+  await db.bulkDocs(
+    typedef([
+      {
+        _id: "d1",
+        attachedDocs: [
+          {
+            _id: 0,
+            _rev: 1,
+            d: "2001-02-15 11:50"
+          }
+        ],
+        d: "2001-02-15 11:50"
+      },
+      {
+        _id: "d2",
+        attachedDocs: [
+          {
+            _id: 0,
+            _rev: 1,
+            d: "2001-02-15 11:50"
+          }
+        ],
+        d: "2001-02-15 12:10"
+      },
+      {
+        _id: "d3",
+        attachedDocs: [
+          {
+            _id: 0,
+            _rev: 1,
+            d: "2001-02-15 12:10"
+          }
+        ],
+        d: "2001-02-15 11:50"
+      },
+      {
+        _id: "d4",
+        attachedDocs: [
+          {
+            _id: 0,
+            _rev: 1,
+            d: "2001-02-15 12:10"
+          }
+        ],
+        d: "2001-02-15 12:10"
+      }
+    ])
+  );
 
   await Promise.all([
     subtest(

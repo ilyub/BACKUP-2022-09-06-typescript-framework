@@ -1,7 +1,7 @@
 import { database } from "@skylib/facades/dist/database";
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
 import * as assert from "@skylib/functions/dist/assertions";
-import { wait } from "@skylib/functions/dist/helpers";
+import { typedef, wait } from "@skylib/functions/dist/helpers";
 import * as testUtils from "@skylib/functions/dist/testUtils";
 
 import { wrapError } from "@/facade-implementations/database/PouchDBWrapper/Database";
@@ -119,16 +119,18 @@ test("get|getIfExists", async () => {
   }
 
   {
-    const { id, rev } = await db.put({
-      attachedDocs: [
-        {
-          _id: 0,
-          _rev: 1,
-          b: false
-        }
-      ],
-      value: 1
-    });
+    const { id, rev } = await db.put(
+      typedef({
+        attachedDocs: [
+          {
+            _id: 0,
+            _rev: 1,
+            b: false
+          }
+        ],
+        value: 1
+      })
+    );
 
     const expected = {
       _id: id,
@@ -236,16 +238,18 @@ test("getAttached|getIfExistsAttached", async () => {
 test("put", async () => {
   const db = database.create(uniqueId());
 
-  const response1 = await db.put({
-    attachedDocs: [
-      {
-        _id: 0,
-        _rev: 1,
-        value: 1
-      }
-    ],
-    value: 1
-  });
+  const response1 = await db.put(
+    typedef({
+      attachedDocs: [
+        {
+          _id: 0,
+          _rev: 1,
+          value: 1
+        }
+      ],
+      value: 1
+    })
+  );
 
   expect(response1).toContainAllKeys(["id", "rev"]);
   expect(response1.rev).toStartWith("1-");
