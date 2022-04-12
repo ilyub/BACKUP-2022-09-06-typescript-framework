@@ -60,7 +60,7 @@ ___
 
 ### attachedDocs
 
-• `Optional` `Readonly` **attachedDocs**: `StoredAttachedDocuments`
+• `Optional` `Readonly` **attachedDocs**: `BaseStoredAttachedDocuments`
 
 #### Inherited from
 

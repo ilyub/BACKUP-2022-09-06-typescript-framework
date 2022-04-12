@@ -8,6 +8,8 @@
 
 - **`BaseAttachedItemDoc`**
 
+  ↳ [`BulkAttachedItemDoc`](classes_database_AttachedItem.BulkAttachedItemDoc.md)
+
   ↳ [`ExistingAttachedItemDoc`](classes_database_AttachedItem.ExistingAttachedItemDoc.md)
 
   ↳ [`PutAttachedItemDoc`](classes_database_AttachedItem.PutAttachedItemDoc.md)

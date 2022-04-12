@@ -79,7 +79,7 @@ ___
 
 ### parentDoc
 
-• `Readonly` **parentDoc**: `ExistingDocument`
+• `Readonly` **parentDoc**: `BaseExistingDocument`
 
 #### Inherited from
 

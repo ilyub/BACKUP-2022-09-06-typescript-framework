@@ -1,29 +1,29 @@
-[Typescript framework](../index.md) / [Exports](../modules.md) / [classes/database/AttachedItem](../modules/classes_database_AttachedItem.md) / PutAttachedItemDoc
+[Typescript framework](../index.md) / [Exports](../modules.md) / [classes/database/AttachedItem](../modules/classes_database_AttachedItem.md) / BulkAttachedItemDoc
 
-# Interface: PutAttachedItemDoc
+# Interface: BulkAttachedItemDoc
 
-[classes/database/AttachedItem](../modules/classes_database_AttachedItem.md).PutAttachedItemDoc
+[classes/database/AttachedItem](../modules/classes_database_AttachedItem.md).BulkAttachedItemDoc
 
 ## Hierarchy
 
-- `BasePutAttachedDocument`
+- `BaseBulkAttachedDocument`
 
 - [`BaseAttachedItemDoc`](classes_database_AttachedItem.BaseAttachedItemDoc.md)
 
-  ↳ **`PutAttachedItemDoc`**
+  ↳ **`BulkAttachedItemDoc`**
 
 ## Table of contents
 
 ### Properties
 
-- [\_deleted](classes_database_AttachedItem.PutAttachedItemDoc.md#_deleted)
-- [\_id](classes_database_AttachedItem.PutAttachedItemDoc.md#_id)
-- [\_rev](classes_database_AttachedItem.PutAttachedItemDoc.md#_rev)
-- [createdAt](classes_database_AttachedItem.PutAttachedItemDoc.md#createdat)
-- [deletedAt](classes_database_AttachedItem.PutAttachedItemDoc.md#deletedat)
-- [parentDoc](classes_database_AttachedItem.PutAttachedItemDoc.md#parentdoc)
-- [softDeleted](classes_database_AttachedItem.PutAttachedItemDoc.md#softdeleted)
-- [updatedAt](classes_database_AttachedItem.PutAttachedItemDoc.md#updatedat)
+- [\_deleted](classes_database_AttachedItem.BulkAttachedItemDoc.md#_deleted)
+- [\_id](classes_database_AttachedItem.BulkAttachedItemDoc.md#_id)
+- [\_rev](classes_database_AttachedItem.BulkAttachedItemDoc.md#_rev)
+- [createdAt](classes_database_AttachedItem.BulkAttachedItemDoc.md#createdat)
+- [deletedAt](classes_database_AttachedItem.BulkAttachedItemDoc.md#deletedat)
+- [parentDoc](classes_database_AttachedItem.BulkAttachedItemDoc.md#parentdoc)
+- [softDeleted](classes_database_AttachedItem.BulkAttachedItemDoc.md#softdeleted)
+- [updatedAt](classes_database_AttachedItem.BulkAttachedItemDoc.md#updatedat)
 
 ## Properties
 
@@ -33,7 +33,7 @@
 
 #### Inherited from
 
-BasePutAttachedDocument.\_deleted
+BaseBulkAttachedDocument.\_deleted
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Inherited from
 
-BasePutAttachedDocument.\_id
+BaseBulkAttachedDocument.\_id
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Inherited from
 
-BasePutAttachedDocument.\_rev
+BaseBulkAttachedDocument.\_rev
 
 ___
 
@@ -79,11 +79,11 @@ ___
 
 ### parentDoc
 
-• `Optional` `Readonly` **parentDoc**: `BaseExistingDocument`
+• `Readonly` **parentDoc**: `BaseExistingDocument`
 
 #### Inherited from
 
-BasePutAttachedDocument.parentDoc
+BaseBulkAttachedDocument.parentDoc
 
 ___
 

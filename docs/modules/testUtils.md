@@ -4,20 +4,30 @@
 
 ## Table of contents
 
-### Namespaces
+### Variables
 
-- [jestReset](testUtils.jestReset.md)
-- [jestSetup](testUtils.jestSetup.md)
+- [jestReset](testUtils.md#jestreset)
+- [jestSetup](testUtils.md#jestsetup)
 
 ### Functions
 
 - [datetimeToEqual](testUtils.md#datetimetoequal)
-- [jestReset](testUtils.md#jestreset)
-- [jestResetDictionary](testUtils.md#jestresetdictionary)
-- [jestResetDom](testUtils.md#jestresetdom)
-- [jestSetup](testUtils.md#jestsetup)
-- [jestSetupDictionary](testUtils.md#jestsetupdictionary)
-- [jestSetupDom](testUtils.md#jestsetupdom)
+
+## Variables
+
+### jestReset
+
+• `Const` **jestReset**: { `dictionary`: (`this`: `void`, `localeName`: keyof `LocaleName`, `definitions`: `Rec`<keyof `LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\>) => `void` ; `dom`: (`this`: `void`) => `void`  } & () => `void`
+
+Jest reset.
+
+___
+
+### jestSetup
+
+• `Const` **jestSetup**: { `dictionary`: (`this`: `void`, `localeName`: keyof `LocaleName`, `definitions`: `Rec`<keyof `LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\>) => `void` ; `dom`: (`this`: `void`) => `void`  } & () => `void`
+
+Jest setup.
 
 ## Functions
 
@@ -39,89 +49,3 @@ Checks that datetime equals expected value.
 `testUtils.ExpectReturnType`
 
 Result object.
-
-___
-
-### jestReset
-
-▸ **jestReset**(): `void`
-
-Jest reset.
-
-#### Returns
-
-`void`
-
-___
-
-### jestResetDictionary
-
-▸ **jestResetDictionary**(`localeName`, `definitions`): `void`
-
-Jest reset.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `localeName` | keyof `LocaleName` | Locale name. |
-| `definitions` | `Rec`<keyof `LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\> | Language definitions. |
-
-#### Returns
-
-`void`
-
-___
-
-### jestResetDom
-
-▸ **jestResetDom**(): `void`
-
-Jest reset.
-
-#### Returns
-
-`void`
-
-___
-
-### jestSetup
-
-▸ **jestSetup**(): `void`
-
-Jest setup.
-
-#### Returns
-
-`void`
-
-___
-
-### jestSetupDictionary
-
-▸ **jestSetupDictionary**(`localeName`, `definitions`): `void`
-
-Jest setup.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `localeName` | keyof `LocaleName` | Locale name. |
-| `definitions` | `Rec`<keyof `LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\> | Language definitions. |
-
-#### Returns
-
-`void`
-
-___
-
-### jestSetupDom
-
-▸ **jestSetupDom**(): `void`
-
-Jest setup.
-
-#### Returns
-
-`void`

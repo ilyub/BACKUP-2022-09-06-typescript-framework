@@ -62,7 +62,7 @@ ___
 
 ### attachedDocs
 
-• `Protected` `Readonly` **attachedDocs**: `undefined` \| `StoredAttachedDocuments`
+• `Protected` `Readonly` **attachedDocs**: `undefined` \| `BaseStoredAttachedDocuments`
 
 ___
 

@@ -80,7 +80,7 @@ ___
 
 ### \_parentDoc
 
-• `Protected` **\_parentDoc**: `ExistingDocument`
+• `Protected` **\_parentDoc**: `BaseExistingDocument`
 
 ___
 

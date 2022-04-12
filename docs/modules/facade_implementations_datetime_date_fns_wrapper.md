@@ -15,7 +15,6 @@
 ### Type aliases
 
 - [FirstDayOfWeek](facade_implementations_datetime_date_fns_wrapper.md#firstdayofweek)
-- [PartialConfiguration](facade_implementations_datetime_date_fns_wrapper.md#partialconfiguration)
 
 ### Variables
 
@@ -31,18 +30,6 @@
 ### FirstDayOfWeek
 
 Ƭ **FirstDayOfWeek**: ``0`` \| ``1``
-
-___
-
-### PartialConfiguration
-
-Ƭ **PartialConfiguration**<`K`\>: { readonly [L in K]: Configuration[L] }
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `K` | extends keyof [`Configuration`](../interfaces/facade_implementations_datetime_date_fns_wrapper.Configuration.md) |
 
 ## Variables
 
