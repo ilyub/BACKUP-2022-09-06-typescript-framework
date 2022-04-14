@@ -7,6 +7,16 @@ import * as testUtils from "@skylib/functions/dist/testUtils";
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
+test("query: Unexpected value type", async () => {
+  const db = database.create(uniqueId());
+
+  const error = new Error("Unexpected value type: undefined");
+
+  await expect(
+    db.queryAttached({ b: { eq: undefined } })
+  ).rejects.toStrictEqual(error);
+});
+
 test("queryAttached", async () => {
   const db = database.create(uniqueId());
 
@@ -489,14 +499,4 @@ test("queryAttached: Time evolution", async () => {
       expect(docs.map(doc => doc.parentDoc._id)).toStrictEqual(expected);
     }
   });
-});
-
-test("query: Unexpected value type", async () => {
-  const db = database.create(uniqueId());
-
-  const error = new Error("Unexpected value type: undefined");
-
-  await expect(
-    db.queryAttached({ b: { eq: undefined } })
-  ).rejects.toStrictEqual(error);
 });

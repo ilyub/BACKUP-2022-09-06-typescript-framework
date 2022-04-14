@@ -14,7 +14,6 @@ import * as fn from "@skylib/functions/dist/function";
 import { wait } from "@skylib/functions/dist/helpers";
 import * as testUtils from "@skylib/functions/dist/testUtils";
 import type { Writable } from "@skylib/functions/dist/types/core";
-
 import { handlers } from "@/facade-implementations/database/PouchDBWrapper/Database";
 import { PouchNotFoundError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchNotFoundError";
 
@@ -315,6 +314,49 @@ test("database.reactiveGetAttached", async () => {
   });
 });
 
+test("database.reactiveGetIfExists", async () => {
+  expect.hasAssertions();
+
+  await testUtils.run(async () => {
+    const db = database.create(uniqueId());
+
+    const id = uniqueId();
+
+    const result = db.reactiveGetIfExists(id);
+
+    {
+      expect(result.loaded).toBe(false);
+      await handlePromise.runAll();
+      assert.toBeTrue(result.loaded);
+      expect(result.value).toBeUndefined();
+    }
+
+    const { rev } = await db.put({ _id: id });
+
+    {
+      await wait(1000);
+      expect(result.value).toStrictEqual({ _id: id, _rev: rev });
+    }
+
+    {
+      await db.put({
+        _deleted: true,
+        _id: id,
+        _rev: rev
+      });
+
+      await wait(1000);
+
+      expect(result.value).toBeUndefined();
+    }
+
+    {
+      assert.toBeTrue(result.loaded);
+      result.unsubscribe();
+    }
+  });
+});
+
 test("database.reactiveGetIfExistsAttached", async () => {
   expect.hasAssertions();
 
@@ -355,49 +397,6 @@ test("database.reactiveGetIfExistsAttached", async () => {
         _deleted: true,
         _id: 0,
         _rev: 1
-      });
-
-      await wait(1000);
-
-      expect(result.value).toBeUndefined();
-    }
-
-    {
-      assert.toBeTrue(result.loaded);
-      result.unsubscribe();
-    }
-  });
-});
-
-test("database.reactiveGetIfExists", async () => {
-  expect.hasAssertions();
-
-  await testUtils.run(async () => {
-    const db = database.create(uniqueId());
-
-    const id = uniqueId();
-
-    const result = db.reactiveGetIfExists(id);
-
-    {
-      expect(result.loaded).toBe(false);
-      await handlePromise.runAll();
-      assert.toBeTrue(result.loaded);
-      expect(result.value).toBeUndefined();
-    }
-
-    const { rev } = await db.put({ _id: id });
-
-    {
-      await wait(1000);
-      expect(result.value).toStrictEqual({ _id: id, _rev: rev });
-    }
-
-    {
-      await db.put({
-        _deleted: true,
-        _id: id,
-        _rev: rev
       });
 
       await wait(1000);

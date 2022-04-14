@@ -1,6 +1,5 @@
 import { testDelay } from "@skylib/facades/dist/testDelay";
 import * as testUtils from "@skylib/functions/dist/testUtils";
-
 import * as configurableTestDelay from "@/facade-implementations/testDelay/configurableTestDelay";
 
 testUtils.installFakeTimer();

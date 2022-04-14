@@ -1,12 +1,19 @@
 /* eslint-disable jest/expect-expect -- ??? */
 
-import $ from "jquery";
-
 import { progressReporter } from "@skylib/facades/dist/progressReporter";
 import { wait } from "@skylib/functions/dist/helpers";
 import * as testUtils from "@skylib/functions/dist/testUtils";
-
+import $ from "jquery";
 import * as progressBar from "@/facade-implementations/progressReporter/progressBar";
+
+testUtils.installFakeTimer();
+
+beforeEach(() => {
+  const div = document.createElement("div");
+
+  div.setAttribute("id", "progressBar");
+  document.body.append(div);
+});
 
 function expectProgressToEqual(progress: number): void {
   if (progress) {
@@ -21,15 +28,6 @@ function expectProgressToEqual(progress: number): void {
     expect($("#progressBar").attr("style")).toBeOneOf([undefined, ""]);
   }
 }
-
-testUtils.installFakeTimer();
-
-beforeEach(() => {
-  const div = document.createElement("div");
-
-  div.setAttribute("id", "progressBar");
-  document.body.append(div);
-});
 
 test("configure, getConfiguration", () => {
   expect(progressBar.getConfiguration().latency).toBe(0);

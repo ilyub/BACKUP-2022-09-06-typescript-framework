@@ -7,7 +7,6 @@ import type {
 import * as o from "@skylib/functions/dist/object";
 import type { stringU } from "@skylib/functions/dist/types/core";
 import type { UndefinedStyle } from "@skylib/functions/dist/types/object";
-
 import type { Item } from "./Item";
 
 export class AttachedItem<T extends Item = Item> {
@@ -75,9 +74,10 @@ export class AttachedItem<T extends Item = Item> {
     });
   }
 
+  // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected _parent: T | undefined = undefined;
 
-  protected _parentDoc: BaseExistingDocument;
+  protected readonly _parentDoc: BaseExistingDocument;
 
   /**
    * Initializes parent.

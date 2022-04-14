@@ -1,15 +1,14 @@
-import $ from "jquery";
-
 import type {
-  Facade,
-  Process as ProcessInterface
+  Process as ProcessInterface,
+  Facade
 } from "@skylib/facades/dist/progressReporter";
 import * as num from "@skylib/functions/dist/number";
 import * as o from "@skylib/functions/dist/object";
 import * as programFlow from "@skylib/functions/dist/programFlow";
 import type { numberU } from "@skylib/functions/dist/types/core";
+import $ from "jquery";
 
-export const implementation: Facade = {
+export const facade: Facade = {
   getProgress() {
     return num.round(progress, moduleConfig.precision);
   },
@@ -123,16 +122,16 @@ export class Process implements ProcessInterface {
 
         lastEasingUpdate = now;
 
-        if (progress > 1) implementation.reset();
-      } else implementation.reset();
+        if (progress > 1) facade.reset();
+      } else facade.reset();
 
       if (progress)
         $(moduleConfig.selector)
           .addClass(moduleConfig.activeClass)
-          .css("width", `${100 * implementation.getProgress()}%`);
+          .css("width", `${100 * facade.getProgress()}%`);
     } else if (anyUnfinished) {
       // Keep waiting
-    } else implementation.reset();
+    } else facade.reset();
 
     if (processesPool.size) {
       programFlow.clearTimeout(timeout);
@@ -143,18 +142,23 @@ export class Process implements ProcessInterface {
     }
   }
 
-  protected created = Date.now();
+  protected readonly created = Date.now();
 
+  // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected expectedDuration = 0;
 
-  protected id = Symbol("ProgressiveProcessId");
+  protected readonly id = Symbol("ProgressiveProcessId");
 
+  // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected lastAutoGrow = Date.now();
 
+  // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected progress = 0;
 
+  // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected state: State = "manual";
 
+  // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected weight = 1;
 }
 

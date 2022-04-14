@@ -1,6 +1,3 @@
-import * as _ from "lodash";
-import { loremIpsum } from "lorem-ipsum";
-
 import { datetime } from "@skylib/facades/dist/datetime";
 import type { Facade, Unit } from "@skylib/facades/dist/faker";
 import * as a from "@skylib/functions/dist/array";
@@ -8,20 +5,17 @@ import * as fn from "@skylib/functions/dist/function";
 import * as is from "@skylib/functions/dist/guards";
 import * as num from "@skylib/functions/dist/number";
 import * as o from "@skylib/functions/dist/object";
+import * as _ from "lodash";
+import { loremIpsum } from "lorem-ipsum";
 
 export const loremIpsumWrapper: Configurable & Facade = {
   boolean(): boolean {
     return this.oneOf([true, false]);
   },
-  configure(config: Partial<Configuration>): void {
+  configure(config): void {
     o.assign(moduleConfig, config);
   },
-  date(
-    from: string | readonly [number, Unit],
-    to: string | readonly [number, Unit],
-    step = 1,
-    unit: Unit = "minute"
-  ): string {
+  date(from, to, step = 1, unit: Unit = "minute") {
     const fromTime = is.string(from)
       ? datetime.create(from).toTime()
       : datetime
@@ -59,18 +53,13 @@ export const loremIpsumWrapper: Configurable & Facade = {
   getConfiguration(): Configuration {
     return moduleConfig;
   },
-  number(from: number, to: number, step = 1): number {
+  number(from, to, step = 1) {
     return num.floor.step(_.random(from, to), step);
   },
   oneOf<T>(values: readonly T[]): T {
     return a.get(values, _.random(0, values.length - 1));
   },
-  paragraph(
-    minSentences?: number,
-    maxSentences?: number,
-    minWords?: number,
-    maxWords?: number
-  ): string {
+  paragraph(minSentences, maxSentences, minWords, maxWords) {
     return loremIpsum({
       paragraphLowerBound: minSentences ?? moduleConfig.minSentences,
       paragraphUpperBound: maxSentences ?? moduleConfig.maxSentences,
@@ -80,7 +69,7 @@ export const loremIpsumWrapper: Configurable & Facade = {
       units: "paragraphs"
     });
   },
-  phrase(minWords?: number, maxWords?: number): string {
+  phrase(minWords, maxWords) {
     return loremIpsum({
       sentenceLowerBound: minWords ?? moduleConfig.minWords,
       sentenceUpperBound: maxWords ?? moduleConfig.maxWords,
@@ -88,7 +77,7 @@ export const loremIpsumWrapper: Configurable & Facade = {
       units: "sentences"
     }).replace(/\.$/u, "");
   },
-  sentence(minWords?: number, maxWords?: number): string {
+  sentence(minWords, maxWords) {
     return loremIpsum({
       sentenceLowerBound: minWords ?? moduleConfig.minWords,
       sentenceUpperBound: maxWords ?? moduleConfig.maxWords,
@@ -96,7 +85,7 @@ export const loremIpsumWrapper: Configurable & Facade = {
       units: "sentences"
     });
   },
-  word(): string {
+  word() {
     return loremIpsum({ suffix: "\n", units: "words" });
   }
 };

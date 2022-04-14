@@ -56,7 +56,9 @@ export const implementation: Facade = o.extend(
       const oldValue = reflect.get(target, key);
 
       if (reflect.set(target, key, value)) {
-        if (value !== oldValue) {
+        if (value === oldValue) {
+          // Not modified
+        } else {
           const callbacks = reflect.getMetadata(callbacksKey, reactive);
 
           assert.byGuard(callbacks, isCallbacks);
@@ -106,7 +108,9 @@ export const implementation: Facade = o.extend(
 
             reduced = reducer(obj);
 
-            if (reduced !== oldReduced) handler(obj);
+            if (reduced === oldReduced) {
+              // Not modified
+            } else handler(obj);
           }),
           obj
         );

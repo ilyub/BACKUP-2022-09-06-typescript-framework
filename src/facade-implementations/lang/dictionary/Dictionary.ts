@@ -13,15 +13,7 @@ import * as reflect from "@skylib/functions/dist/reflect";
 import * as s from "@skylib/functions/dist/string";
 import type { LocaleName } from "@skylib/functions/dist/types/configurable";
 import type { NumStr, Rec } from "@skylib/functions/dist/types/core";
-
 import type { Definitions } from ".";
-
-// eslint-disable-next-line @typescript-eslint/no-namespace -- ???
-export namespace Dictionary {
-  export interface Configuration {
-    readonly localeName: LocaleName;
-  }
-}
 
 export class Dictionary implements DictionaryInterface<Context> {
   /**
@@ -133,15 +125,15 @@ export class Dictionary implements DictionaryInterface<Context> {
     }
   }
 
-  protected _context: Context | undefined;
+  protected readonly _context: Context | undefined;
 
-  protected count: number;
+  protected readonly count: number;
 
-  protected definitions: Rec<LocaleName, Definitions>;
+  protected readonly definitions: Rec<LocaleName, Definitions>;
 
-  protected proxified: Facade;
+  protected readonly proxified: Facade;
 
-  protected subsPool = new Map<NumStr, Facade>();
+  protected readonly subsPool = new Map<NumStr, Facade>();
 
   /**
    * Creates class instance.
@@ -193,6 +185,13 @@ export class Dictionary implements DictionaryInterface<Context> {
     );
 
     return definitions.pluralReduce(count);
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-namespace -- ???
+export namespace Dictionary {
+  export interface Configuration {
+    readonly localeName: LocaleName;
   }
 }
 

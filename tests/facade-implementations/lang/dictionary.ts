@@ -1,32 +1,8 @@
 import { lang } from "@skylib/facades/dist/lang";
-
 import {
   Dictionary,
   pluralReduce
 } from "@/facade-implementations/lang/dictionary";
-
-test("pluralReduce", () => {
-  expect(pluralReduce(0)).toBe(2);
-  expect(pluralReduce(1)).toBe(1);
-  expect(pluralReduce(2)).toBe(2);
-  expect(pluralReduce(3)).toBe(2);
-});
-
-test("pluralReduce.ru", () => {
-  expect(pluralReduce.ru(0)).toBe(5);
-  expect(pluralReduce.ru(1)).toBe(1);
-  expect(pluralReduce.ru(2)).toBe(2);
-  expect(pluralReduce.ru(3)).toBe(2);
-  expect(pluralReduce.ru(4)).toBe(2);
-  expect(pluralReduce.ru(5)).toBe(5);
-  expect(pluralReduce.ru(10)).toBe(5);
-  expect(pluralReduce.ru(20)).toBe(5);
-  expect(pluralReduce.ru(21)).toBe(1);
-  expect(pluralReduce.ru(22)).toBe(2);
-  expect(pluralReduce.ru(23)).toBe(2);
-  expect(pluralReduce.ru(24)).toBe(2);
-  expect(pluralReduce.ru(25)).toBe(5);
-});
 
 test("dictionary.configure, Dictionary.getConfiguration", () => {
   expect(Dictionary.getConfiguration().localeName).toBe("en-US");
@@ -106,4 +82,27 @@ test("dictionary.with", () => {
   expect(lang.with("field", "string").MustBeValidField).toBe(
     "Введите корректную строку"
   );
+});
+
+test("pluralReduce", () => {
+  expect(pluralReduce(0)).toBe(2);
+  expect(pluralReduce(1)).toBe(1);
+  expect(pluralReduce(2)).toBe(2);
+  expect(pluralReduce(3)).toBe(2);
+});
+
+test("pluralReduce.ru", () => {
+  expect(pluralReduce.ru(0)).toBe(5);
+  expect(pluralReduce.ru(1)).toBe(1);
+  expect(pluralReduce.ru(2)).toBe(2);
+  expect(pluralReduce.ru(3)).toBe(2);
+  expect(pluralReduce.ru(4)).toBe(2);
+  expect(pluralReduce.ru(5)).toBe(5);
+  expect(pluralReduce.ru(10)).toBe(5);
+  expect(pluralReduce.ru(20)).toBe(5);
+  expect(pluralReduce.ru(21)).toBe(1);
+  expect(pluralReduce.ru(22)).toBe(2);
+  expect(pluralReduce.ru(23)).toBe(2);
+  expect(pluralReduce.ru(24)).toBe(2);
+  expect(pluralReduce.ru(25)).toBe(5);
 });

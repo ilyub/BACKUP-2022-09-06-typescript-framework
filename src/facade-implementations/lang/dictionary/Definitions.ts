@@ -8,8 +8,6 @@ import type {
   strings,
   WritableIndexedObject
 } from "@skylib/functions/dist/types/core";
-
-import { Definition } from ".";
 import type {
   PluralReduce,
   RawDefinition,
@@ -17,9 +15,10 @@ import type {
   RawLanguage,
   WordInfo
 } from "./types";
+import { Definition } from ".";
 
 export class Definitions {
-  public pluralReduce: PluralReduce;
+  public readonly pluralReduce: PluralReduce;
 
   /**
    * Creates class instance.
@@ -73,9 +72,9 @@ export class Definitions {
     return is.not.empty(this.words[key]);
   }
 
-  protected wordForms: IndexedObject<strings>;
+  protected readonly wordForms: IndexedObject<strings>;
 
-  protected words: IndexedObject<Definition> = {};
+  protected readonly words: IndexedObject<Definition> = {};
 }
 
 interface Callback {

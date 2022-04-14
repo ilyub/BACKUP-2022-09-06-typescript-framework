@@ -1,11 +1,10 @@
-import $ from "jquery";
-
 import type { Facade } from "@skylib/facades/dist/facebook";
 import * as assert from "@skylib/functions/dist/assertions";
 import * as fn from "@skylib/functions/dist/function";
 import * as is from "@skylib/functions/dist/guards";
 import type { stringU } from "@skylib/functions/dist/types/core";
 import type { AsyncPromise } from "@skylib/functions/dist/types/function";
+import $ from "jquery";
 
 export class Facebook implements Facade {
   /**
@@ -67,9 +66,10 @@ export class Facebook implements Facade {
     await this.sdk;
   }
 
-  protected appId: AsyncPromise<stringU> | stringU;
+  protected readonly appId: AsyncPromise<stringU> | stringU;
 
+  // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected sdk: Promise<void> | undefined = undefined;
 
-  protected version: string;
+  protected readonly version: string;
 }

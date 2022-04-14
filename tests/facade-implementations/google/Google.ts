@@ -1,16 +1,9 @@
-import $ from "jquery";
-
 import { google } from "@skylib/facades/dist/google";
 import * as assert from "@skylib/functions/dist/assertions";
 import { AssertionError } from "@skylib/functions/dist/errors/AssertionError";
 import type { stringU } from "@skylib/functions/dist/types/core";
-
+import $ from "jquery";
 import { Google } from "@/facade-implementations/google/Google";
-
-interface Reason {
-  details: string;
-  error: string;
-}
 
 const getScript = jest
   .spyOn($, "getScript")
@@ -90,6 +83,11 @@ const getScript = jest
     // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
     return {} as JQuery.jqXHR<stringU>;
   });
+
+interface Reason {
+  details: string;
+  error: string;
+}
 
 test("google.idToken", async () => {
   const error = new AssertionError("Missing Google client ID");

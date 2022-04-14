@@ -1,11 +1,10 @@
-import $ from "jquery";
-
 import type { Facade } from "@skylib/facades/dist/google";
 import * as assert from "@skylib/functions/dist/assertions";
 import * as fn from "@skylib/functions/dist/function";
 import * as is from "@skylib/functions/dist/guards";
 import type { stringU } from "@skylib/functions/dist/types/core";
 import type { AsyncPromise } from "@skylib/functions/dist/types/function";
+import $ from "jquery";
 
 export class Google implements Facade {
   /**
@@ -52,19 +51,18 @@ export class Google implements Facade {
 
         assert.not.empty(clientId, "Missing Google client ID");
 
-        return new Promise(
+        return await new Promise(
           (
             // eslint-disable-next-line @skylib/prefer-readonly -- ??
             resolve: (value: GoogleAuth) => void,
             reject: (reason: unknown) => void
           ) => {
             gapi.load("auth2", () => {
-              // eslint-disable-next-line github/no-then, promise/prefer-await-to-then -- ???
+              // eslint-disable-next-line github/no-then -- ???
               gapi.auth2.init({ client_id: clientId }).then(
                 googleAuth => {
                   resolve(googleAuth);
                 },
-                // eslint-disable-next-line @skylib/prefer-readonly -- ??
                 e => {
                   reject(new Error(`Error ${e.error}: ${e.details}`));
                 }
@@ -77,8 +75,9 @@ export class Google implements Facade {
     await this.sdk;
   }
 
-  protected clientId: AsyncPromise<stringU> | stringU;
+  protected readonly clientId: AsyncPromise<stringU> | stringU;
 
+  // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected sdk: Promise<GoogleAuth> | undefined = undefined;
 }
 

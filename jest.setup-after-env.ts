@@ -1,7 +1,6 @@
 import * as functionsTestUtils from "@skylib/functions/dist/testUtils";
 import type { LocaleName } from "@skylib/functions/dist/types/configurable";
 import type { Rec } from "@skylib/functions/dist/types/core";
-
 import {
   Definitions,
   pluralReduce

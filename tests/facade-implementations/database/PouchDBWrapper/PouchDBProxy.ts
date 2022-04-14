@@ -1,12 +1,11 @@
 import { uniqueId } from "@skylib/facades/dist/uniqueId";
-
-import { PouchConflictError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchConflictError";
-import { PouchNotFoundError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchNotFoundError";
 import type { PouchPutDocument } from "@/facade-implementations/database/PouchDBWrapper/PouchDBProxy";
 import {
   handlers,
   PouchDBProxy
 } from "@/facade-implementations/database/PouchDBWrapper/PouchDBProxy";
+import { PouchConflictError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchConflictError";
+import { PouchNotFoundError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchNotFoundError";
 
 test("handlers.error", () => {
   {

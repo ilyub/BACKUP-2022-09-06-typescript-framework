@@ -10,9 +10,8 @@ import type {
   NumStr,
   strings
 } from "@skylib/functions/dist/types/core";
-
-import type { Definitions } from ".";
 import type { RawDefinition, WordInfo } from "./types";
+import type { Definitions } from ".";
 
 export class Definition {
   /**
@@ -115,7 +114,11 @@ export class Definition {
         return definition.get(owner, context, [form], count, replacements);
     }
 
-    if (count !== 1) {
+    // eslint-disable-next-line no-warning-comments -- Compare to dictionary's count
+    // fixme
+    if (count === 1) {
+      // Plural form not needed
+    } else {
       const definition = this.subs[count];
 
       if (definition)
@@ -143,27 +146,27 @@ export class Definition {
     return word;
   }
 
-  protected contexts: IndexedObject<NumStr> = {};
+  protected readonly contexts: IndexedObject<NumStr> = {};
 
-  protected id: NumStr;
+  protected readonly id: NumStr;
 
-  protected rulesRef: readonly strings[];
+  protected readonly rulesRef: readonly strings[];
 
-  protected rulesRefDependent: readonly strings[];
+  protected readonly rulesRefDependent: readonly strings[];
 
-  protected rulesRefSecondary: readonly strings[];
+  protected readonly rulesRefSecondary: readonly strings[];
 
-  protected rulesVal: readonly strings[];
+  protected readonly rulesVal: readonly strings[];
 
-  protected rulesWord: readonly strings[];
+  protected readonly rulesWord: readonly strings[];
 
-  protected rulesWordSecondary: readonly strings[];
+  protected readonly rulesWordSecondary: readonly strings[];
 
-  protected sub: Definition | undefined = undefined;
+  protected readonly sub: Definition | undefined = undefined;
 
-  protected subs: IndexedObject<Definition> = {};
+  protected readonly subs: IndexedObject<Definition> = {};
 
-  protected value: string;
+  protected readonly value: string;
 
   /**
    * Applies rules to the word.

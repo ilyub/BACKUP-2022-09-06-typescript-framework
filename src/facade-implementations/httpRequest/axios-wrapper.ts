@@ -1,5 +1,3 @@
-import axios from "axios";
-
 import type {
   Facade,
   HttpHeaders,
@@ -7,6 +5,7 @@ import type {
 } from "@skylib/facades/dist/httpRequest";
 import * as o from "@skylib/functions/dist/object";
 import type { IndexedObject } from "@skylib/functions/dist/types/core";
+import axios from "axios";
 
 export const implementation: Facade = {
   async send(

@@ -1,5 +1,4 @@
 import type { Unit } from "@skylib/facades/dist/faker";
-
 import { loremIpsumWrapper } from "@/facade-implementations/faker/lorem-ipsum-wrapper";
 
 interface DateTestData {
@@ -8,14 +7,14 @@ interface DateTestData {
   readonly unit: Unit;
 }
 
+test("boolean", () => {
+  expect(loremIpsumWrapper.boolean()).toBeOneOf([true, false]);
+});
+
 test("configure, getConfiguration", () => {
   expect(loremIpsumWrapper.getConfiguration().minSentences).toBe(3);
   loremIpsumWrapper.configure({ minSentences: 2 });
   expect(loremIpsumWrapper.getConfiguration().minSentences).toBe(2);
-});
-
-test("boolean", () => {
-  expect(loremIpsumWrapper.boolean()).toBeOneOf([true, false]);
 });
 
 test.each<DateTestData>([

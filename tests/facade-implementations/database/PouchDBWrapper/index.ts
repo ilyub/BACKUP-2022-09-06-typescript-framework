@@ -11,11 +11,65 @@ import { uniqueId } from "@skylib/facades/dist/uniqueId";
 import * as fn from "@skylib/functions/dist/function";
 import { typedef, wait } from "@skylib/functions/dist/helpers";
 import * as testUtils from "@skylib/functions/dist/testUtils";
-
 import { Database } from "@/facade-implementations/database/PouchDBWrapper/Database";
 import { PouchRetryError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchRetryError";
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
+
+test("create: config.reindexThreshold", async () => {
+  expect.hasAssertions();
+
+  testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:00").toDate());
+
+  await testUtils.run(async () => {
+    const db1 = new Database(uniqueId());
+
+    const db2 = new Database(uniqueId(), {}, { reindexThreshold: 2 });
+
+    const docs = [
+      { d: "2001-02-12 12:00" },
+      { d: "2001-02-15 11:00" },
+      { d: "2001-02-15 13:00" },
+      { d: "2001-02-18 12:00" }
+    ];
+
+    await Promise.all([db1.bulkDocs(docs), db2.bulkDocs(docs)]);
+
+    await Promise.all([
+      subtest(db1, { d: { dateGt: ["now"] } }, 3),
+      subtest(db1, { d: { dateLt: ["now"] } }, 3),
+      subtest(db2, { d: { dateGt: ["now"] } }, 3),
+      subtest(db2, { d: { dateLt: ["now"] } }, 3)
+    ]);
+
+    await wait(49.5 * 3600 * 1000);
+
+    await Promise.all([
+      subtest(db1, { d: { dateGt: ["now"] } }, 2),
+      subtest(db1, { d: { dateLt: ["now"] } }, 2),
+      subtest(db2, { d: { dateGt: ["now"] } }, 3),
+      subtest(db2, { d: { dateLt: ["now"] } }, 3)
+    ]);
+
+    await wait(2 * 3600 * 1000);
+
+    await Promise.all([
+      subtest(db1, { d: { dateGt: ["now"] } }, 1),
+      subtest(db1, { d: { dateLt: ["now"] } }, 1),
+      subtest(db2, { d: { dateGt: ["now"] } }, 1),
+      subtest(db2, { d: { dateLt: ["now"] } }, 1)
+    ]);
+
+    async function subtest(
+      db: Database,
+      conditions: Conditions,
+      expected: number
+    ): Promise<void> {
+      await db.query(conditions);
+      await expect(db.unsettled(conditions)).resolves.toStrictEqual(expected);
+    }
+  });
+});
 
 test("create: options.caseSensitiveSorting", async () => {
   const db1 = database.create(uniqueId());
@@ -83,16 +137,16 @@ test("create: options.caseSensitiveSorting", async () => {
         // eslint-disable-next-line jest/no-conditional-in-test -- ???
         switch (method) {
           case "query1":
-            return db.query({});
+            return await db.query({});
 
           case "query2":
-            return db.query({}, { sortBy: "value" });
+            return await db.query({}, { sortBy: "value" });
 
           case "queryAttached1":
-            return db.queryAttached({});
+            return await db.queryAttached({});
 
           case "queryAttached2":
-            return db.queryAttached({}, {}, { sortBy: "value" });
+            return await db.queryAttached({}, {}, { sortBy: "value" });
         }
       }
     );
@@ -169,61 +223,6 @@ test("create: options.retries = 3", async () => {
   expect(responses).toHaveLength(2);
   expect(responses[0]).toContainAllKeys(["id", "parentId", "parentRev", "rev"]);
   expect(responses[1]).toContainAllKeys(["id", "parentId", "parentRev", "rev"]);
-});
-
-test("create: config.reindexThreshold", async () => {
-  expect.hasAssertions();
-
-  testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:00").toDate());
-
-  await testUtils.run(async () => {
-    const db1 = new Database(uniqueId());
-
-    const db2 = new Database(uniqueId(), {}, { reindexThreshold: 2 });
-
-    const docs = [
-      { d: "2001-02-12 12:00" },
-      { d: "2001-02-15 11:00" },
-      { d: "2001-02-15 13:00" },
-      { d: "2001-02-18 12:00" }
-    ];
-
-    await Promise.all([db1.bulkDocs(docs), db2.bulkDocs(docs)]);
-
-    await Promise.all([
-      subtest(db1, { d: { dateGt: ["now"] } }, 3),
-      subtest(db1, { d: { dateLt: ["now"] } }, 3),
-      subtest(db2, { d: { dateGt: ["now"] } }, 3),
-      subtest(db2, { d: { dateLt: ["now"] } }, 3)
-    ]);
-
-    await wait(49.5 * 3600 * 1000);
-
-    await Promise.all([
-      subtest(db1, { d: { dateGt: ["now"] } }, 2),
-      subtest(db1, { d: { dateLt: ["now"] } }, 2),
-      subtest(db2, { d: { dateGt: ["now"] } }, 3),
-      subtest(db2, { d: { dateLt: ["now"] } }, 3)
-    ]);
-
-    await wait(2 * 3600 * 1000);
-
-    await Promise.all([
-      subtest(db1, { d: { dateGt: ["now"] } }, 1),
-      subtest(db1, { d: { dateLt: ["now"] } }, 1),
-      subtest(db2, { d: { dateGt: ["now"] } }, 1),
-      subtest(db2, { d: { dateLt: ["now"] } }, 1)
-    ]);
-
-    async function subtest(
-      db: Database,
-      conditions: Conditions,
-      expected: number
-    ): Promise<void> {
-      await db.query(conditions);
-      await expect(db.unsettled(conditions)).resolves.toStrictEqual(expected);
-    }
-  });
 });
 
 test("create: pouchConfig.revsLimit", async () => {

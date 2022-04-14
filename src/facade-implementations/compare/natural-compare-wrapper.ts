@@ -1,7 +1,6 @@
-import naturalCompare from "natural-compare";
-
 import type { Facade } from "@skylib/facades/dist/compare";
 import * as o from "@skylib/functions/dist/object";
+import naturalCompare from "natural-compare";
 
 export const implementation: Facade = o.extend(
   (x: unknown, y: unknown): number => {

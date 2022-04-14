@@ -1,11 +1,9 @@
-import pouchdb from "pouchdb";
-
 import type { BaseStoredAttachedDocuments } from "@skylib/facades/dist/database";
 import { testDelay } from "@skylib/facades/dist/testDelay";
 import * as is from "@skylib/functions/dist/guards";
 import * as o from "@skylib/functions/dist/object";
 import type { numbers } from "@skylib/functions/dist/types/core";
-
+import pouchdb from "pouchdb";
 import { PouchConflictError } from "./errors/PouchConflictError";
 import { PouchNotFoundError } from "./errors/PouchNotFoundError";
 
@@ -16,7 +14,7 @@ export const handlers = o.freeze({
 });
 
 export class PouchDBProxy {
-  public db: PouchDatabase;
+  public readonly db: PouchDatabase;
 
   /**
    * Creates class instance.

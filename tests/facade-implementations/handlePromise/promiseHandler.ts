@@ -4,14 +4,7 @@ import * as fn from "@skylib/functions/dist/function";
 import { wait } from "@skylib/functions/dist/helpers";
 import * as testUtils from "@skylib/functions/dist/testUtils";
 import type { booleanU } from "@skylib/functions/dist/types/core";
-
 import * as promiseHandler from "@/facade-implementations/handlePromise/promiseHandler";
-
-async function fail(): Promise<void> {
-  await wait(500);
-
-  throw testError;
-}
 
 const alertMock = jest.fn();
 
@@ -22,6 +15,12 @@ const testError = new Error("Sample error");
 {
   testUtils.installFakeTimer();
   globalThis.alert = alertMock;
+}
+
+async function fail(): Promise<void> {
+  await wait(500);
+
+  throw testError;
 }
 
 test("configure, getConfiguration", () => {
@@ -96,7 +95,9 @@ test("silent: Async", async () => {
   expect.hasAssertions();
 
   await testUtils.run(async () => {
-    handlePromise.silent(async () => wait(1500));
+    handlePromise.silent(async () => {
+      await wait(1500);
+    });
 
     {
       await wait(1000);
@@ -154,7 +155,9 @@ test("verbose: Async", async () => {
   expect.hasAssertions();
 
   await testUtils.run(async () => {
-    handlePromise.verbose(async () => wait(1500), "createDb");
+    handlePromise.verbose(async () => {
+      await wait(1500);
+    }, "createDb");
 
     {
       await wait(1000);

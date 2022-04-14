@@ -1,5 +1,4 @@
 import { datetime } from "@skylib/facades/dist/datetime";
-
 import * as testUtils from "@/testUtils";
 
 test("executionTimeToBe", () => {

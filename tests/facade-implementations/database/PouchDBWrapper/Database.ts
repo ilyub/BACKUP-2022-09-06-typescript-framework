@@ -3,16 +3,11 @@ import { uniqueId } from "@skylib/facades/dist/uniqueId";
 import * as assert from "@skylib/functions/dist/assertions";
 import { typedef, wait } from "@skylib/functions/dist/helpers";
 import * as testUtils from "@skylib/functions/dist/testUtils";
-
 import { wrapError } from "@/facade-implementations/database/PouchDBWrapper/Database";
 import { PouchConflictError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchConflictError";
 import { PouchNotFoundError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchNotFoundError";
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
-
-test("wrapError", () => {
-  expect(wrapError(1)()).toBe(1);
-});
 
 test("bulkDocs", async () => {
   const db = database.create(uniqueId());
@@ -85,6 +80,73 @@ test("existsAttached", async () => {
   expect(id).toBe(0);
   await expect(db.existsAttached(0, parentId)).resolves.toBeTrue();
   await expect(db.existsAttached(1, parentId)).resolves.toBeFalse();
+});
+
+test("getAttached|getIfExistsAttached", async () => {
+  const db = database.create(uniqueId());
+
+  const { id: parentId } = await db.put({ value: 1 });
+
+  {
+    const error = new PouchNotFoundError("Missing attached document");
+
+    await expect(db.getAttached(0, parentId)).rejects.toStrictEqual(error);
+    await expect(db.getIfExistsAttached(0, parentId)).resolves.toBeUndefined();
+  }
+
+  const { parentRev } = await db.putAttached(parentId, { value: 2 });
+
+  {
+    const expected = {
+      _id: 0,
+      _rev: 1,
+      parentDoc: {
+        _id: parentId,
+        _rev: parentRev,
+        attachedDocs: [],
+        lastAttachedDocs: [0],
+        value: 1
+      },
+      value: 2
+    };
+
+    await expect(
+      Promise.all([
+        db.getAttached(0, parentId),
+        db.getIfExistsAttached(0, parentId)
+      ])
+    ).resolves.toStrictEqual([expected, expected]);
+  }
+
+  {
+    const error = new PouchNotFoundError("Missing attached document");
+
+    await expect(db.getAttached(1, parentId)).rejects.toStrictEqual(error);
+    await expect(db.getIfExistsAttached(1, parentId)).resolves.toBeUndefined();
+  }
+
+  {
+    const error = new PouchNotFoundError("Missing attached document");
+
+    await db.putAttached(parentId, {
+      _deleted: true,
+      _id: 0,
+      _rev: 1
+    });
+
+    await expect(db.getAttached(0, parentId)).rejects.toStrictEqual(error);
+
+    await expect(db.getIfExistsAttached(0, parentId)).resolves.toBeUndefined();
+  }
+
+  {
+    const error = new PouchNotFoundError("missing");
+
+    await expect(db.getAttached(0, uniqueId())).rejects.toStrictEqual(error);
+    await expect(
+      db.getIfExistsAttached(0, uniqueId())
+    ).resolves.toBeUndefined();
+  }
 });
 
 test("get|getIfExists", async () => {
@@ -165,73 +227,6 @@ test("get|getIfExists", async () => {
 
     await expect(db.get(id)).rejects.toStrictEqual(error);
     await expect(db.getIfExists(id)).resolves.toBeUndefined();
-  }
-});
-
-test("getAttached|getIfExistsAttached", async () => {
-  const db = database.create(uniqueId());
-
-  const { id: parentId } = await db.put({ value: 1 });
-
-  {
-    const error = new PouchNotFoundError("Missing attached document");
-
-    await expect(db.getAttached(0, parentId)).rejects.toStrictEqual(error);
-    await expect(db.getIfExistsAttached(0, parentId)).resolves.toBeUndefined();
-  }
-
-  const { parentRev } = await db.putAttached(parentId, { value: 2 });
-
-  {
-    const expected = {
-      _id: 0,
-      _rev: 1,
-      parentDoc: {
-        _id: parentId,
-        _rev: parentRev,
-        attachedDocs: [],
-        lastAttachedDocs: [0],
-        value: 1
-      },
-      value: 2
-    };
-
-    await expect(
-      Promise.all([
-        db.getAttached(0, parentId),
-        db.getIfExistsAttached(0, parentId)
-      ])
-    ).resolves.toStrictEqual([expected, expected]);
-  }
-
-  {
-    const error = new PouchNotFoundError("Missing attached document");
-
-    await expect(db.getAttached(1, parentId)).rejects.toStrictEqual(error);
-    await expect(db.getIfExistsAttached(1, parentId)).resolves.toBeUndefined();
-  }
-
-  {
-    const error = new PouchNotFoundError("Missing attached document");
-
-    await db.putAttached(parentId, {
-      _deleted: true,
-      _id: 0,
-      _rev: 1
-    });
-
-    await expect(db.getAttached(0, parentId)).rejects.toStrictEqual(error);
-
-    await expect(db.getIfExistsAttached(0, parentId)).resolves.toBeUndefined();
-  }
-
-  {
-    const error = new PouchNotFoundError("missing");
-
-    await expect(db.getAttached(0, uniqueId())).rejects.toStrictEqual(error);
-    await expect(
-      db.getIfExistsAttached(0, uniqueId())
-    ).resolves.toBeUndefined();
   }
 });
 
@@ -613,4 +608,8 @@ test("subscribe|subscribeAttached|unsubscribe|unsubscribeAttached", async () => 
       expect(handlerAttached).not.toHaveBeenCalled();
     }
   });
+});
+
+test("wrapError", () => {
+  expect(wrapError(1)()).toBe(1);
 });

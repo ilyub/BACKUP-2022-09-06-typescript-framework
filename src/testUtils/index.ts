@@ -1,5 +1,3 @@
-import enUS from "date-fns/locale/en-US";
-
 import { compare } from "@skylib/facades/dist/compare";
 import { database } from "@skylib/facades/dist/database";
 import { datetime } from "@skylib/facades/dist/datetime";
@@ -21,7 +19,7 @@ import * as o from "@skylib/functions/dist/object";
 import type * as testUtils from "@skylib/functions/dist/testUtils";
 import type { LocaleName } from "@skylib/functions/dist/types/configurable";
 import type { Rec } from "@skylib/functions/dist/types/core";
-
+import enUS from "date-fns/locale/en-US";
 import * as naturalCompareWrapper from "../facade-implementations/compare/natural-compare-wrapper";
 import { PouchDBWrapper } from "../facade-implementations/database/PouchDBWrapper";
 import * as dateFnsWrapper from "../facade-implementations/datetime/date-fns-wrapper";

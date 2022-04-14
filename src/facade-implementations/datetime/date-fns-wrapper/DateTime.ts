@@ -1,3 +1,12 @@
+import type {
+  DateTime as DateTimeInterface,
+  Unit
+} from "@skylib/facades/dist/datetime";
+import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
+import * as is from "@skylib/functions/dist/guards";
+import { onDemand } from "@skylib/functions/dist/helpers";
+import * as o from "@skylib/functions/dist/object";
+import type { NumStr, strings } from "@skylib/functions/dist/types/core";
 import {
   add,
   format,
@@ -27,41 +36,26 @@ import {
   startOfWeek,
   startOfYear,
   sub
-} from "date-fns"; // eslint-disable-line import/no-duplicates -- ???
-import enUS from "date-fns/locale/en-US"; // eslint-disable-line import/no-duplicates -- ???
+  // eslint-disable-next-line import/no-duplicates -- Ok
+} from "date-fns";
+// eslint-disable-next-line import/no-duplicates -- Ok
+import enUS from "date-fns/locale/en-US";
 
-import type {
-  DateTime as DateTimeInterface,
-  Facade,
-  Unit
-} from "@skylib/facades/dist/datetime";
-import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
-import * as is from "@skylib/functions/dist/guards";
-import { onDemand } from "@skylib/functions/dist/helpers";
-import * as o from "@skylib/functions/dist/object";
-import type { NumStr, strings } from "@skylib/functions/dist/types/core";
+export const formatStrings: strings = [
+  "yyyy-M-d h:m:s a",
+  "yyyy-M-d H:m:s",
+  "yyyy-M-d h:m a",
+  "yyyy-M-d H:m",
+  "yyyy-M-d"
+];
 
-export const implementation: Facade = {
-  create(dt?: Date | DateTimeInterface | NumStr) {
-    return new DateTime(dt);
-  },
-  now() {
-    return new DateTime().toString();
-  },
-  time() {
-    return Date.now();
-  },
-  timeSec() {
-    return Date.now() / 1000;
-  },
-  validate(dt: string) {
-    const now = Date.now();
-
-    return formatStrings.some(formatString =>
-      isValid(parse(dt, formatString, now))
-    );
-  }
-};
+export const moduleConfig = onDemand(() =>
+  reactiveStorage<Configuration>({
+    firstDayOfWeek: 0,
+    locale: enUS,
+    pm: true
+  })
+);
 
 export class DateTime implements DateTimeInterface {
   /**
@@ -336,6 +330,7 @@ export class DateTime implements DateTimeInterface {
     return getYear(this.value);
   }
 
+  // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected value: Date;
 }
 
@@ -365,22 +360,6 @@ export function configure(config: Partial<Configuration>): void {
 export function getConfiguration(): Configuration {
   return moduleConfig;
 }
-
-const formatStrings: strings = [
-  "yyyy-M-d h:m:s a",
-  "yyyy-M-d H:m:s",
-  "yyyy-M-d h:m a",
-  "yyyy-M-d H:m",
-  "yyyy-M-d"
-];
-
-const moduleConfig = onDemand(() =>
-  reactiveStorage<Configuration>({
-    firstDayOfWeek: 0,
-    locale: enUS,
-    pm: true
-  })
-);
 
 /**
  * Parses string.

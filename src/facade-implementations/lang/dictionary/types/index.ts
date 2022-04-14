@@ -20,7 +20,9 @@ export interface PluralReduce {
 export type RawDefinition =
   | RawDefinitions
   | string
+  // eslint-disable-next-line @skylib/no-multi-type-tuples -- Ok
   | readonly [NumStr, RawDefinitions, PartialRecord<Context, NumStr>]
+  // eslint-disable-next-line @skylib/no-multi-type-tuples -- Ok
   | readonly [NumStr, RawDefinitions];
 
 export interface RawDefinitions {

@@ -1,7 +1,3 @@
-import * as _ from "lodash";
-import { collate } from "pouchdb-collate";
-import sha256 from "sha256";
-
 import type {
   AttachedChangesHandler,
   AttachedSubscriptionId,
@@ -58,10 +54,9 @@ import type {
   unknowns,
   Writable
 } from "@skylib/functions/dist/types/core";
-
-import { PouchConflictError } from "./errors/PouchConflictError";
-import { PouchNotFoundError } from "./errors/PouchNotFoundError";
-import { PouchRetryError } from "./errors/PouchRetryError";
+import * as _ from "lodash";
+import { collate } from "pouchdb-collate";
+import sha256 from "sha256";
 import type {
   Changes,
   PouchDatabase,
@@ -69,6 +64,9 @@ import type {
   PouchQueryResponse
 } from "./PouchDBProxy";
 import { PouchDBProxy } from "./PouchDBProxy";
+import { PouchConflictError } from "./errors/PouchConflictError";
+import { PouchNotFoundError } from "./errors/PouchNotFoundError";
+import { PouchRetryError } from "./errors/PouchRetryError";
 
 export const handlers = o.freeze({
   error(error: unknown): void {
@@ -131,13 +129,15 @@ export class Database implements DatabaseInterface {
     docs: BulkAttachedDocuments
   ): Promise<PutAttachedResponses> {
     const responses = await Promise.all(
-      _.uniq(docs.map(doc => doc.parentDoc._id)).map(async parentId =>
-        fn.run(async () =>
-          this.putAttachedBulk(
-            parentId,
-            docs.filter(doc => doc.parentDoc._id === parentId)
+      _.uniq(docs.map(doc => doc.parentDoc._id)).map(
+        async parentId =>
+          await fn.run(
+            async () =>
+              await this.putAttachedBulk(
+                parentId,
+                docs.filter(doc => doc.parentDoc._id === parentId)
+              )
           )
-        )
       )
     );
 
@@ -546,24 +546,29 @@ export class Database implements DatabaseInterface {
     this.refreshSubscription();
   }
 
+  // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected changes: Changes | undefined = undefined;
 
-  protected changesHandlersAttachedPool = new Map<
+  protected readonly changesHandlersAttachedPool = new Map<
     AttachedSubscriptionId,
     AttachedChangesHandler
   >();
 
-  protected changesHandlersPool = new Map<SubscriptionId, ChangesHandler>();
+  protected readonly changesHandlersPool = new Map<
+    SubscriptionId,
+    ChangesHandler
+  >();
 
-  protected config: Required<Configuration>;
+  protected readonly config: Required<Configuration>;
 
+  // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected db: PouchDBProxy | undefined = undefined;
 
-  protected name: string;
+  protected readonly name: string;
 
-  protected options: Required<DatabaseOptions>;
+  protected readonly options: Required<DatabaseOptions>;
 
-  protected pouchConfig: PouchDatabaseConfiguration;
+  protected readonly pouchConfig: PouchDatabaseConfiguration;
 
   /**
    * Returns PouchDBProxy instance.
@@ -871,7 +876,6 @@ export class Database implements DatabaseInterface {
 
     const toSettle = _.flatten(
       response.rows
-        // eslint-disable-next-line @skylib/prefer-readonly -- ??
         .map(row => row.value as unknown)
         .filter(isDocsResponse)
         .filter(docsResponse => !docsResponse.settled)
@@ -904,7 +908,6 @@ export class Database implements DatabaseInterface {
       return rawQueryOptions.count ?? false
         ? num.sum(
             ...response.rows
-              // eslint-disable-next-line @skylib/prefer-readonly -- ??
               .map(row => row.value as unknown)
               .filter(isDocsResponse)
               .map(docsResponse =>
@@ -922,7 +925,6 @@ export class Database implements DatabaseInterface {
       if (rawQueryOptions.docs ?? false) {
         const docResponses = _.flatten(
           response.rows
-            // eslint-disable-next-line @skylib/prefer-readonly -- ??
             .map(row => row.value as unknown)
             .filter(isDocsResponse)
             .map(docsResponse => docsResponse.docs)
@@ -945,7 +947,6 @@ export class Database implements DatabaseInterface {
         ? num.sum(
             0,
             ...response.rows
-              // eslint-disable-next-line @skylib/prefer-readonly -- ??
               .map(row => row.value as unknown)
               .filter(isDocsResponse)
               .filter(docsResponse => !docsResponse.settled)
@@ -961,12 +962,12 @@ export class Database implements DatabaseInterface {
         assert.instance(e, PouchNotFoundError, wrapError(e));
         await createDesignDocument();
 
-        return queryAttempt();
+        return await queryAttempt();
       }
     }
 
     async function queryAttempt(): Promise<PouchQueryResponse> {
-      return db.query(`${mapReduce.id}/default`, {
+      return await db.query(`${mapReduce.id}/default`, {
         descending: options.descending,
         group: true,
         group_level: mapReduce.groupLevel,
@@ -1402,7 +1403,6 @@ export class Database implements DatabaseInterface {
         // Already exists
       } else
         this.changes = this.db.changes(
-          // eslint-disable-next-line @skylib/prefer-readonly -- ??
           value => {
             assert.byGuard(value.doc, isExistingDocument);
 

@@ -1,5 +1,4 @@
 import pouchdb from "pouchdb";
-
 import type { PouchDatabaseConfiguration } from "../PouchDBProxy";
 import { PouchDBProxy as BasePouchDBProxy } from "../PouchDBProxy";
 

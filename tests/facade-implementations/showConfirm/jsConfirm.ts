@@ -8,23 +8,18 @@ const failure = jest.fn();
 
 globalThis.confirm = confirmMock;
 
-test("showConfirm: Success", () => {
-  {
-    confirmMock.mockImplementationOnce(() => true);
-    showConfirm("Sample message");
-    expect(confirmMock).toHaveBeenCalledTimes(1);
-    expect(confirmMock).toHaveBeenCalledWith("Sample message");
-    confirmMock.mockClear();
-  }
+test("showConfirm.async: Failure", async () => {
+  confirmMock.mockImplementationOnce(() => false);
+  await expect(showConfirm.async("Sample message")).resolves.toBeFalse();
+  expect(confirmMock).toHaveBeenCalledTimes(1);
+  expect(confirmMock).toHaveBeenCalledWith("Sample message");
+});
 
-  {
-    confirmMock.mockImplementationOnce(() => true);
-    showConfirm("Sample message", success, failure);
-    expect(confirmMock).toHaveBeenCalledTimes(1);
-    expect(success).toHaveBeenCalledTimes(1);
-    expect(failure).not.toHaveBeenCalled();
-    expect(confirmMock).toHaveBeenCalledWith("Sample message");
-  }
+test("showConfirm.async: Success", async () => {
+  confirmMock.mockImplementationOnce(() => true);
+  await expect(showConfirm.async("Sample message")).resolves.toBeTrue();
+  expect(confirmMock).toHaveBeenCalledTimes(1);
+  expect(confirmMock).toHaveBeenCalledWith("Sample message");
 });
 
 test("showConfirm: Failure", () => {
@@ -46,16 +41,21 @@ test("showConfirm: Failure", () => {
   }
 });
 
-test("showConfirm.async: Success", async () => {
-  confirmMock.mockImplementationOnce(() => true);
-  await expect(showConfirm.async("Sample message")).resolves.toBeTrue();
-  expect(confirmMock).toHaveBeenCalledTimes(1);
-  expect(confirmMock).toHaveBeenCalledWith("Sample message");
-});
+test("showConfirm: Success", () => {
+  {
+    confirmMock.mockImplementationOnce(() => true);
+    showConfirm("Sample message");
+    expect(confirmMock).toHaveBeenCalledTimes(1);
+    expect(confirmMock).toHaveBeenCalledWith("Sample message");
+    confirmMock.mockClear();
+  }
 
-test("showConfirm.async: Failure", async () => {
-  confirmMock.mockImplementationOnce(() => false);
-  await expect(showConfirm.async("Sample message")).resolves.toBeFalse();
-  expect(confirmMock).toHaveBeenCalledTimes(1);
-  expect(confirmMock).toHaveBeenCalledWith("Sample message");
+  {
+    confirmMock.mockImplementationOnce(() => true);
+    showConfirm("Sample message", success, failure);
+    expect(confirmMock).toHaveBeenCalledTimes(1);
+    expect(success).toHaveBeenCalledTimes(1);
+    expect(failure).not.toHaveBeenCalled();
+    expect(confirmMock).toHaveBeenCalledWith("Sample message");
+  }
 });
