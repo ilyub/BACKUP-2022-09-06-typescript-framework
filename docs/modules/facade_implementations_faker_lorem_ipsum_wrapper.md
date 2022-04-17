@@ -17,4 +17,4 @@
 
 ### loremIpsumWrapper
 
-• `Const` **loremIpsumWrapper**: [`Configurable`](../interfaces/facade_implementations_faker_lorem_ipsum_wrapper.Configurable.md) & `Facade`
+• `Const` **loremIpsumWrapper**: [`Configurable`](../interfaces/facade_implementations_faker_lorem_ipsum_wrapper.Configurable.md) & `faker.Facade`

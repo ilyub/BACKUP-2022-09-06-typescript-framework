@@ -17,7 +17,7 @@
 
 ### jestReset
 
-• `Const` **jestReset**: { `dictionary`: (`this`: `void`, `localeName`: keyof `LocaleName`, `definitions`: `Rec`<keyof `LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\>) => `void` ; `dom`: (`this`: `void`) => `void`  } & () => `void`
+• `Const` **jestReset**: { `dictionary`: (`this`: `void`, `localeName`: `LocaleName`, `definitions`: `Rec`<`LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\>) => `void` ; `dom`: (`this`: `void`) => `void`  } & () => `void`
 
 Jest reset.
 
@@ -25,7 +25,7 @@ ___
 
 ### jestSetup
 
-• `Const` **jestSetup**: { `dictionary`: (`this`: `void`, `localeName`: keyof `LocaleName`, `definitions`: `Rec`<keyof `LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\>) => `void` ; `dom`: (`this`: `void`) => `void`  } & () => `void`
+• `Const` **jestSetup**: { `dictionary`: (`this`: `void`, `localeName`: `LocaleName`, `definitions`: `Rec`<`LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\>) => `void` ; `dom`: (`this`: `void`) => `void`  } & () => `void`
 
 Jest setup.
 
@@ -33,7 +33,7 @@ Jest setup.
 
 ### datetimeToEqual
 
-▸ **datetimeToEqual**(`got`, `expected`): `testUtils.ExpectReturnType`
+▸ **datetimeToEqual**(`got`, ...`args`): `ExpectReturnType`
 
 Checks that datetime equals expected value.
 
@@ -42,10 +42,10 @@ Checks that datetime equals expected value.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `got` | `unknown` | Got value. |
-| `expected` | `string` | Expected value. |
+| `...args` | [expected: string] | - |
 
 #### Returns
 
-`testUtils.ExpectReturnType`
+`ExpectReturnType`
 
 Result object.

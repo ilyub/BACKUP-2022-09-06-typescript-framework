@@ -1,7 +1,6 @@
-import type * as testUtils from "@skylib/functions/es/testUtils";
-import type { LocaleName } from "@skylib/functions/es/types/configurable";
-import type { Rec } from "@skylib/functions/es/types/core";
-import type { Definitions } from "../facade-implementations/lang/dictionary";
+import { lang } from "@skylib/facades";
+import type { testUtils, LocaleName, Rec } from "@skylib/functions";
+import { facadeImplementations as implementations } from "..";
 declare global {
     namespace jest {
         interface Matchers<R> {
@@ -18,41 +17,41 @@ declare global {
 /**
  * Jest reset.
  */
-export declare function jestReset(): void;
-export declare namespace jestReset {
-    var dictionary: typeof jestResetDictionary;
-    var dom: typeof jestResetDom;
-}
-/**
- * Jest reset.
- *
- * @param localeName - Locale name.
- * @param definitions - Language definitions.
- */
-export declare function jestResetDictionary(localeName: LocaleName, definitions: Rec<LocaleName, Definitions>): void;
-/**
- * Jest reset.
- */
-export declare function jestResetDom(): void;
-/**
- * Jest setup.
- */
-export declare function jestSetup(): void;
-export declare namespace jestSetup {
-    var dictionary: typeof jestSetupDictionary;
-    var dom: typeof jestSetupDom;
-}
-/**
- * Jest setup.
- *
- * @param localeName - Locale name.
- * @param definitions - Language definitions.
- */
-export declare function jestSetupDictionary(localeName: LocaleName, definitions: Rec<LocaleName, Definitions>): void;
+export declare const jestReset: {
+    /**
+     * Jest reset.
+     *
+     * @param this - No this.
+     * @param localeName - Locale name.
+     * @param definitions - Language definitions.
+     */
+    dictionary(this: void, localeName: LocaleName, definitions: Rec<LocaleName, implementations.lang.dictionary.Definitions>): void;
+    /**
+     * Jest reset.
+     *
+     * @param this - No this.
+     */
+    dom(this: void): void;
+} & (() => void);
 /**
  * Jest setup.
  */
-export declare function jestSetupDom(): void;
+export declare const jestSetup: {
+    /**
+     * Jest setup.
+     *
+     * @param this - No this.
+     * @param localeName - Locale name.
+     * @param definitions - Language definitions.
+     */
+    dictionary(this: void, localeName: LocaleName, definitions: Rec<LocaleName, implementations.lang.dictionary.Definitions>): void;
+    /**
+     * Jest setup.
+     *
+     * @param this - No this.
+     */
+    dom(this: void): void;
+} & (() => void);
 /**
  * Checks that datetime equals expected value.
  *
@@ -60,5 +59,5 @@ export declare function jestSetupDom(): void;
  * @param expected - Expected value.
  * @returns Result object.
  */
-export declare function datetimeToEqual(got: unknown, expected: string): testUtils.ExpectReturnType;
+export declare const datetimeToEqual: testUtils.ExpectFromMatcher<"datetimeToEqual">;
 //# sourceMappingURL=index.d.ts.map

@@ -1,12 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Definitions = void 0;
-const tslib_1 = require("tslib");
-const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
-const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
-const _1 = require(".");
+const functions_1 = require("@skylib/functions");
+const Definition_1 = require("./Definition");
 class Definitions {
     /**
      * Creates class instance.
@@ -20,11 +16,6 @@ class Definitions {
             writable: true,
             value: void 0
         });
-        /*
-        |*****************************************************************************
-        |* Protected
-        |*****************************************************************************
-        |*/
         Object.defineProperty(this, "wordForms", {
             enumerable: true,
             configurable: true,
@@ -53,12 +44,12 @@ class Definitions {
      * @returns Word.
      */
     get(key, context, forms, count, replacements) {
-        if (is.string(forms)) {
+        if (functions_1.is.string(forms)) {
             const candidate = this.wordForms[forms];
             forms = candidate ? candidate : [forms];
         }
         const definition = this.words[key];
-        assert.not.empty(definition, `Unknown word: ${key}`);
+        functions_1.assert.not.empty(definition, `Unknown word: ${key}`);
         return definition.get(this, context, forms, count, replacements);
     }
     /**
@@ -68,10 +59,27 @@ class Definitions {
      * @returns _True_ if dictionary has word, _false_ otherwise.
      */
     has(key) {
-        return is.not.empty(this.words[key]);
+        return functions_1.is.not.empty(this.words[key]);
     }
 }
 exports.Definitions = Definitions;
+/**
+ * Builds word forms.
+ *
+ * @param raw - Language definition.
+ * @returns Word forms.
+ */
+function getWords(raw) {
+    // eslint-disable-next-line @skylib/no-mutable-signature -- ???
+    const result = {};
+    for (const [key, value] of functions_1.o.entries(raw.words)) {
+        result[functions_1.s.lcFirst(key)] = new Definition_1.Definition(map(value, x => functions_1.s.lcFirst(x)), functions_1.s.lcFirst(key));
+        result[functions_1.s.ucFirst(key)] = new Definition_1.Definition(map(value, x => functions_1.s.ucFirst(x)), functions_1.s.ucFirst(key));
+        result[key.toLowerCase()] = new Definition_1.Definition(map(value, x => x.toLowerCase()), key.toLowerCase());
+        result[key.toUpperCase()] = new Definition_1.Definition(map(value, x => x.toUpperCase()), key.toUpperCase());
+    }
+    return result;
+}
 /**
  * Applies callback to raw definition.
  *
@@ -84,7 +92,7 @@ function map(definition, callback) {
         case "string":
             return callback(definition);
         case "object":
-            if (is.array(definition)) {
+            if (functions_1.is.array(definition)) {
                 const definitions = mapDefinitions(definition[1], callback);
                 return definition.length === 3
                     ? [definition[0], definitions, definition[2]]
@@ -101,25 +109,9 @@ function map(definition, callback) {
  * @returns Raw definitions.
  */
 function mapDefinitions(definitions, callback) {
-    return o.fromEntries.exhaustive(o
+    return functions_1.o.fromEntries.exhaustive(functions_1.o
         .entries(definitions)
         .map(([key, definition]) => [key, map(definition, callback)]));
-}
-/**
- * Builds word forms.
- *
- * @param raw - Language definition.
- * @returns Word forms.
- */
-function getWords(raw) {
-    const result = {};
-    for (const [key, value] of o.entries(raw.words)) {
-        result[s.lcFirst(key)] = new _1.Definition(map(value, x => s.lcFirst(x)), s.lcFirst(key));
-        result[s.ucFirst(key)] = new _1.Definition(map(value, x => s.ucFirst(x)), s.ucFirst(key));
-        result[key.toLowerCase()] = new _1.Definition(map(value, x => x.toLowerCase()), key.toLowerCase());
-        result[key.toUpperCase()] = new _1.Definition(map(value, x => x.toUpperCase()), key.toUpperCase());
-    }
-    return result;
 }
 /**
  * Validates language definition.
@@ -127,7 +119,7 @@ function getWords(raw) {
  * @param raw - Language definition.
  */
 function validate(raw) {
-    assert.toBeTrue(o
+    functions_1.assert.toBeTrue(functions_1.o
         .entries(raw.wordForms)
         .every(([key, forms]) => key === key.toLowerCase() &&
         forms.every(form => form === form.toLowerCase())), "Expecting lowercase word forms");

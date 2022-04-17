@@ -1,8 +1,5 @@
-import * as assert from "@skylib/functions/es/assertions";
-import * as is from "@skylib/functions/es/guards";
-import * as o from "@skylib/functions/es/object";
-import * as s from "@skylib/functions/es/string";
-import { Definition } from ".";
+import { assert, is, o, s } from "@skylib/functions";
+import { Definition } from "./Definition";
 export class Definitions {
     /**
      * Creates class instance.
@@ -16,11 +13,6 @@ export class Definitions {
             writable: true,
             value: void 0
         });
-        /*
-        |*****************************************************************************
-        |* Protected
-        |*****************************************************************************
-        |*/
         Object.defineProperty(this, "wordForms", {
             enumerable: true,
             configurable: true,
@@ -68,6 +60,23 @@ export class Definitions {
     }
 }
 /**
+ * Builds word forms.
+ *
+ * @param raw - Language definition.
+ * @returns Word forms.
+ */
+function getWords(raw) {
+    // eslint-disable-next-line @skylib/no-mutable-signature -- ???
+    const result = {};
+    for (const [key, value] of o.entries(raw.words)) {
+        result[s.lcFirst(key)] = new Definition(map(value, x => s.lcFirst(x)), s.lcFirst(key));
+        result[s.ucFirst(key)] = new Definition(map(value, x => s.ucFirst(x)), s.ucFirst(key));
+        result[key.toLowerCase()] = new Definition(map(value, x => x.toLowerCase()), key.toLowerCase());
+        result[key.toUpperCase()] = new Definition(map(value, x => x.toUpperCase()), key.toUpperCase());
+    }
+    return result;
+}
+/**
  * Applies callback to raw definition.
  *
  * @param definition - Raw definition.
@@ -99,22 +108,6 @@ function mapDefinitions(definitions, callback) {
     return o.fromEntries.exhaustive(o
         .entries(definitions)
         .map(([key, definition]) => [key, map(definition, callback)]));
-}
-/**
- * Builds word forms.
- *
- * @param raw - Language definition.
- * @returns Word forms.
- */
-function getWords(raw) {
-    const result = {};
-    for (const [key, value] of o.entries(raw.words)) {
-        result[s.lcFirst(key)] = new Definition(map(value, x => s.lcFirst(x)), s.lcFirst(key));
-        result[s.ucFirst(key)] = new Definition(map(value, x => s.ucFirst(x)), s.ucFirst(key));
-        result[key.toLowerCase()] = new Definition(map(value, x => x.toLowerCase()), key.toLowerCase());
-        result[key.toUpperCase()] = new Definition(map(value, x => x.toUpperCase()), key.toUpperCase());
-    }
-    return result;
 }
 /**
  * Validates language definition.

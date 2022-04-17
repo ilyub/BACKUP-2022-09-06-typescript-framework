@@ -1,7 +1,5 @@
+import { assert, fn, is } from "@skylib/functions";
 import $ from "jquery";
-import * as assert from "@skylib/functions/es/assertions";
-import * as fn from "@skylib/functions/es/function";
-import * as is from "@skylib/functions/es/guards";
 export class Google {
     /**
      * Creates class instance.
@@ -9,17 +7,13 @@ export class Google {
      * @param clientId - Client ID.
      */
     constructor(clientId) {
-        /*
-        |*****************************************************************************
-        |* Protected
-        |*****************************************************************************
-        |*/
         Object.defineProperty(this, "clientId", {
             enumerable: true,
             configurable: true,
             writable: true,
             value: void 0
         });
+        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
         Object.defineProperty(this, "sdk", {
             enumerable: true,
             configurable: true,
@@ -54,9 +48,9 @@ export class Google {
                     ? await this.clientId()
                     : await this.clientId;
                 assert.not.empty(clientId, "Missing Google client ID");
-                return new Promise((resolve, reject) => {
+                return await new Promise((resolve, reject) => {
                     gapi.load("auth2", () => {
-                        // eslint-disable-next-line github/no-then, promise/prefer-await-to-then
+                        // eslint-disable-next-line github/no-then -- ???
                         gapi.auth2.init({ client_id: clientId }).then(googleAuth => {
                             resolve(googleAuth);
                         }, e => {

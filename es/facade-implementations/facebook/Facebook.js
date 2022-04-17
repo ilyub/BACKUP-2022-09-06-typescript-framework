@@ -1,7 +1,5 @@
+import { assert, fn, is } from "@skylib/functions";
 import $ from "jquery";
-import * as assert from "@skylib/functions/es/assertions";
-import * as fn from "@skylib/functions/es/function";
-import * as is from "@skylib/functions/es/guards";
 export class Facebook {
     /**
      * Creates class instance.
@@ -10,17 +8,13 @@ export class Facebook {
      * @param version - Version.
      */
     constructor(appId, version) {
-        /*
-        |*****************************************************************************
-        |* Protected
-        |*****************************************************************************
-        |*/
         Object.defineProperty(this, "appId", {
             enumerable: true,
             configurable: true,
             writable: true,
             value: void 0
         });
+        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
         Object.defineProperty(this, "sdk", {
             enumerable: true,
             configurable: true,

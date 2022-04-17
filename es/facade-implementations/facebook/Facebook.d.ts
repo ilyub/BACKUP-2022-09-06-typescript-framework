@@ -1,7 +1,6 @@
-import type { Facade } from "@skylib/facades/es/facebook";
-import type { stringU } from "@skylib/functions/es/types/core";
-import type { AsyncPromise } from "@skylib/functions/es/types/function";
-export declare class Facebook implements Facade {
+import type { facebook } from "@skylib/facades";
+import type { stringU, AsyncPromise } from "@skylib/functions";
+export declare class Facebook implements facebook.Facade {
     /**
      * Creates class instance.
      *
@@ -11,8 +10,8 @@ export declare class Facebook implements Facade {
     constructor(appId: AsyncPromise<stringU> | stringU, version: string);
     accessToken(): Promise<stringU>;
     loadSdk(): Promise<void>;
-    protected appId: AsyncPromise<stringU> | stringU;
+    protected readonly appId: AsyncPromise<stringU> | stringU;
     protected sdk: Promise<void> | undefined;
-    protected version: string;
+    protected readonly version: string;
 }
 //# sourceMappingURL=Facebook.d.ts.map

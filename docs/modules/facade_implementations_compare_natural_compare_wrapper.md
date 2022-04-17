@@ -12,4 +12,4 @@
 
 ### implementation
 
-• `Const` **implementation**: `Facade`
+• `Const` **implementation**: `compare.Facade`

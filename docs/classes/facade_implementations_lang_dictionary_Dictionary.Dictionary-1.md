@@ -6,7 +6,7 @@
 
 ## Implements
 
-- `Dictionary`<`Context`\>
+- `Dictionary`<`lang.Context`\>
 
 ## Table of contents
 
@@ -46,7 +46,7 @@ Creates class instance.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `definitions` | `Rec`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\> | `undefined` | Language definitions. |
+| `definitions` | `Rec`<`LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\> | `undefined` | Language definitions. |
 | `context?` | ``"InXDays"`` | `undefined` | Context. |
 | `count` | `number` | `1` | Count for plural form. |
 
@@ -54,31 +54,31 @@ Creates class instance.
 
 ### \_context
 
-• `Protected` **\_context**: `undefined` \| ``"InXDays"``
+• `Protected` `Readonly` **\_context**: `undefined` \| ``"InXDays"``
 
 ___
 
 ### count
 
-• `Protected` **count**: `number`
+• `Protected` `Readonly` **count**: `number`
 
 ___
 
 ### definitions
 
-• `Protected` **definitions**: `Rec`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\>
+• `Protected` `Readonly` **definitions**: `Rec`<`LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\>
 
 ___
 
 ### proxified
 
-• `Protected` **proxified**: `Facade`
+• `Protected` `Readonly` **proxified**: `Facade`
 
 ___
 
 ### subsPool
 
-• `Protected` **subsPool**: `Map`<`NumStr`, `Facade`\>
+• `Protected` `Readonly` **subsPool**: `Map`<`NumStr`, `Facade`\>
 
 ## Methods
 
@@ -98,7 +98,7 @@ ___
 
 #### Implementation of
 
-DictionaryInterface.context
+lang.Dictionary.context
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Implementation of
 
-DictionaryInterface.get
+lang.Dictionary.get
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Implementation of
 
-DictionaryInterface.has
+lang.Dictionary.has
 
 ___
 
@@ -158,7 +158,7 @@ ___
 
 #### Implementation of
 
-DictionaryInterface.plural
+lang.Dictionary.plural
 
 ___
 
@@ -199,7 +199,7 @@ ___
 
 #### Implementation of
 
-DictionaryInterface.with
+lang.Dictionary.with
 
 ___
 
@@ -231,7 +231,7 @@ Creates class instance.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `definitions` | `Rec`<keyof `LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\> | Language definitions. |
+| `definitions` | `Rec`<`LocaleName`, [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md)\> | Language definitions. |
 | `context?` | ``"InXDays"`` | Context. |
 | `count?` | `number` | Count for plural form. |
 

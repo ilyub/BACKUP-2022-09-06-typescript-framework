@@ -1,4 +1,4 @@
-import type { Facade } from "@skylib/facades/es/reactiveStorage";
+import type { reactiveStorage } from "@skylib/facades";
 declare global {
     namespace facades {
         namespace reactiveStorage {
@@ -8,5 +8,5 @@ declare global {
         }
     }
 }
-export declare const implementation: Facade;
+export declare const implementation: reactiveStorage.Facade;
 //# sourceMappingURL=reflectStorage.d.ts.map

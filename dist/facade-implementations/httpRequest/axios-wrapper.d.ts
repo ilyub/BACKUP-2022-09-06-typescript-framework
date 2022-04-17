@@ -1,4 +1,5 @@
-import type { Facade } from "@skylib/facades/dist/httpRequest";
+import type { httpRequest } from "@skylib/facades";
+export declare const implementation: httpRequest.Facade;
 export interface Configuration {
     readonly timeout: number;
 }
@@ -17,5 +18,4 @@ export declare function configure(config: Partial<Configuration>): void;
  * @returns Plugin configuration.
  */
 export declare function getConfiguration(): Configuration;
-export declare const implementation: Facade;
 //# sourceMappingURL=axios-wrapper.d.ts.map

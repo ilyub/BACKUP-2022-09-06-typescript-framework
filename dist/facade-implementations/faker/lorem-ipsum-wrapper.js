@@ -2,35 +2,31 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loremIpsumWrapper = void 0;
 const tslib_1 = require("tslib");
-const _ = tslib_1.__importStar(require("lodash"));
+const facades_1 = require("@skylib/facades");
+const functions_1 = require("@skylib/functions");
+const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const lorem_ipsum_1 = require("lorem-ipsum");
-const datetime_1 = require("@skylib/facades/dist/datetime");
-const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
-const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const num = tslib_1.__importStar(require("@skylib/functions/dist/number"));
-const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
 exports.loremIpsumWrapper = {
     boolean() {
         return this.oneOf([true, false]);
     },
     configure(config) {
-        o.assign(moduleConfig, config);
+        functions_1.o.assign(moduleConfig, config);
     },
     date(from, to, step = 1, unit = "minute") {
-        const fromTime = is.string(from)
-            ? datetime_1.datetime.create(from).toTime()
-            : datetime_1.datetime
+        const fromTime = functions_1.is.string(from)
+            ? facades_1.datetime.create(from).toTime()
+            : facades_1.datetime
                 .create()
                 .add(...from)
                 .toTime();
-        const toTime = is.string(to)
-            ? datetime_1.datetime.create(to).toTime()
-            : datetime_1.datetime
+        const toTime = functions_1.is.string(to)
+            ? facades_1.datetime.create(to).toTime()
+            : facades_1.datetime
                 .create()
                 .add(...to)
                 .toTime();
-        const stepTime = fn.run(() => {
+        const stepTime = functions_1.fn.run(() => {
             switch (unit) {
                 case "day":
                 case "days":
@@ -43,17 +39,17 @@ exports.loremIpsumWrapper = {
                     return step * 60 * 1000;
             }
         });
-        const time = num.floor.step(_.random(fromTime, toTime), stepTime);
-        return datetime_1.datetime.create(new Date(time)).toString();
+        const time = functions_1.num.floor.step(_.random(fromTime, toTime), stepTime);
+        return facades_1.datetime.create(new Date(time)).toString();
     },
     getConfiguration() {
         return moduleConfig;
     },
     number(from, to, step = 1) {
-        return num.floor.step(_.random(from, to), step);
+        return functions_1.num.floor.step(_.random(from, to), step);
     },
     oneOf(values) {
-        return a.get(values, _.random(0, values.length - 1));
+        return functions_1.a.get(values, _.random(0, values.length - 1));
     },
     paragraph(minSentences, maxSentences, minWords, maxWords) {
         return (0, lorem_ipsum_1.loremIpsum)({
@@ -85,11 +81,6 @@ exports.loremIpsumWrapper = {
         return (0, lorem_ipsum_1.loremIpsum)({ suffix: "\n", units: "words" });
     }
 };
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
 const moduleConfig = {
     maxSentences: 5,
     maxWords: 10,

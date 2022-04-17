@@ -4,6 +4,12 @@
 
 ## Table of contents
 
-### Classes
+### References
 
-- [PouchDBWrapper](../classes/facade_implementations_database_PouchDBWrapper.PouchDBWrapper.md)
+- [PouchDBWrapper](facade_implementations_database_PouchDBWrapper.md#pouchdbwrapper)
+
+## References
+
+### PouchDBWrapper
+
+Re-exports [PouchDBWrapper](../classes/facade_implementations_database_PouchDBWrapper_PouchDBWrapper.PouchDBWrapper.md)

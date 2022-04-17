@@ -1,11 +1,7 @@
-import * as _ from "lodash-es";
+import { datetime } from "@skylib/facades";
+import { a, fn, is, num, o } from "@skylib/functions";
+import * as _ from "@skylib/lodash-commonjs-es";
 import { loremIpsum } from "lorem-ipsum";
-import { datetime } from "@skylib/facades/es/datetime";
-import * as a from "@skylib/functions/es/array";
-import * as fn from "@skylib/functions/es/function";
-import * as is from "@skylib/functions/es/guards";
-import * as num from "@skylib/functions/es/number";
-import * as o from "@skylib/functions/es/object";
 export const loremIpsumWrapper = {
     boolean() {
         return this.oneOf([true, false]);
@@ -81,11 +77,6 @@ export const loremIpsumWrapper = {
         return loremIpsum({ suffix: "\n", units: "words" });
     }
 };
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
 const moduleConfig = {
     maxSentences: 5,
     maxWords: 10,

@@ -1,5 +1,17 @@
+import { o } from "@skylib/functions";
 import axios from "axios";
-import * as o from "@skylib/functions/es/object";
+export const implementation = {
+    async send(url, method = "get", data = {}, headers = {}) {
+        const response = await axios({
+            data,
+            headers,
+            method,
+            timeout: moduleConfig.timeout,
+            url
+        });
+        return response.data;
+    }
+};
 /**
  * Configures plugin.
  *
@@ -16,22 +28,5 @@ export function configure(config) {
 export function getConfiguration() {
     return moduleConfig;
 }
-export const implementation = {
-    async send(url, method = "get", data = {}, headers = {}) {
-        const response = await axios({
-            data,
-            headers,
-            method,
-            timeout: moduleConfig.timeout,
-            url
-        });
-        return response.data;
-    }
-};
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
 const moduleConfig = { timeout: 30000 };
 //# sourceMappingURL=axios-wrapper.js.map

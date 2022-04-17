@@ -1,39 +1,16 @@
 import { __rest } from "tslib";
-import * as _ from "lodash-es";
+import { database, datetime, handlePromise, reactiveStorage, uniqueId } from "@skylib/facades";
+import { a, assert, cast, fn, is, json, num, o, programFlow } from "@skylib/functions";
+import * as _ from "@skylib/lodash-commonjs-es";
 import { collate } from "pouchdb-collate";
 import sha256 from "sha256";
-import { uniqueAttachedSubscriptionId, uniqueSubscriptionId } from "@skylib/facades/es/database";
-import { datetime } from "@skylib/facades/es/datetime";
-import { handlePromise } from "@skylib/facades/es/handlePromise";
-import { reactiveStorage } from "@skylib/facades/es/reactiveStorage";
-import { uniqueId } from "@skylib/facades/es/uniqueId";
-import * as a from "@skylib/functions/es/array";
-import * as assert from "@skylib/functions/es/assertions";
-import * as cast from "@skylib/functions/es/converters";
-import * as fn from "@skylib/functions/es/function";
-import * as is from "@skylib/functions/es/guards";
-import * as json from "@skylib/functions/es/json";
-import * as num from "@skylib/functions/es/number";
-import * as o from "@skylib/functions/es/object";
-import * as programFlow from "@skylib/functions/es/programFlow";
-import { PouchConflictError } from "./errors/PouchConflictError";
-import { PouchNotFoundError } from "./errors/PouchNotFoundError";
-import { PouchRetryError } from "./errors/PouchRetryError";
 import { PouchDBProxy } from "./PouchDBProxy";
+import { PouchConflictError, PouchNotFoundError, PouchRetryError } from "./errors";
 export const handlers = o.freeze({
     error(error) {
         throw error;
     }
 });
-/**
- * Wraps error.
- *
- * @param e - Error.
- * @returns Wrapped error.
- */
-export function wrapError(e) {
-    return () => e;
-}
 export class Database {
     /**
      * Creates class instance.
@@ -45,11 +22,7 @@ export class Database {
      */
     constructor(name, options = {}, config = {}, pouchConfig = {}) {
         var _a, _b, _c, _d;
-        /*
-        |*****************************************************************************
-        |* Protected
-        |*****************************************************************************
-        |*/
+        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
         Object.defineProperty(this, "changes", {
             enumerable: true,
             configurable: true,
@@ -74,6 +47,7 @@ export class Database {
             writable: true,
             value: void 0
         });
+        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
         Object.defineProperty(this, "db", {
             enumerable: true,
             configurable: true,
@@ -118,7 +92,7 @@ export class Database {
             .filter(is.not.empty);
     }
     async bulkDocsAttached(docs) {
-        const responses = await Promise.all(_.uniq(docs.map(doc => doc.parentDoc._id)).map(async (parentId) => fn.run(async () => this.putAttachedBulk(parentId, docs.filter(doc => doc.parentDoc._id === parentId)))));
+        const responses = await Promise.all(_.uniq(docs.map(doc => doc.parentDoc._id)).map(async (parentId) => await fn.run(async () => await this.putAttachedBulk(parentId, docs.filter(doc => doc.parentDoc._id === parentId)))));
         return _.flatten(responses);
     }
     async count(conditions = {}) {
@@ -198,7 +172,7 @@ export class Database {
     async putAttachedBulk(parentId, docs) {
         const db = await this.getDb();
         for (let i = 0; i < 1 + this.options.retries; i++) {
-            // eslint-disable-next-line no-await-in-loop
+            // eslint-disable-next-line no-await-in-loop -- ???
             const result = await attempt();
             if (result)
                 return result;
@@ -320,13 +294,13 @@ export class Database {
         await this.getDb();
     }
     subscribe(handler) {
-        const id = uniqueSubscriptionId();
+        const id = database.uniqueSubscriptionId();
         this.changesHandlersPool.set(id, handler);
         this.refreshSubscription();
         return id;
     }
     subscribeAttached(handler) {
-        const id = uniqueAttachedSubscriptionId();
+        const id = database.uniqueAttachedSubscriptionId();
         this.changesHandlersAttachedPool.set(id, handler);
         this.refreshSubscription();
         return id;
@@ -456,7 +430,7 @@ export class Database {
             settle: createFilter(conds.toSettle)
         };
         function createFilter(cond) {
-            // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion
+            // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion -- ???
             return new Function("doc", `return ${cond};`);
         }
     }
@@ -556,7 +530,7 @@ export class Database {
             settle: createFilter(conds.toSettle, parentConds.toSettle)
         };
         function createFilter(cond1, cond2) {
-            // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion
+            // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion -- ???
             return new Function("attached", uglify(`
           doc = attached.parentDoc;
           return ${cond1} && ${cond2};
@@ -577,12 +551,12 @@ export class Database {
                 }
                 else {
                     {
-                        // eslint-disable-next-line no-await-in-loop
+                        // eslint-disable-next-line no-await-in-loop -- ??
                         await migration.callback.call(this);
                     }
                     {
                         migrations = Object.assign(Object.assign({}, migrations), { [migration.id]: true });
-                        // eslint-disable-next-line no-await-in-loop
+                        // eslint-disable-next-line no-await-in-loop -- ??
                         const { id, rev } = await this.put(migrations);
                         migrations = Object.assign(Object.assign({}, migrations), { _id: id, _rev: rev });
                     }
@@ -675,11 +649,11 @@ export class Database {
             catch (e) {
                 assert.instance(e, PouchNotFoundError, wrapError(e));
                 await createDesignDocument();
-                return queryAttempt();
+                return await queryAttempt();
             }
         }
         async function queryAttempt() {
-            return db.query(`${mapReduce.id}/default`, {
+            return await db.query(`${mapReduce.id}/default`, {
                 descending: options.descending,
                 group: true,
                 group_level: mapReduce.groupLevel,
@@ -1033,6 +1007,15 @@ export class Database {
         }
     }
 }
+/**
+ * Wraps error.
+ *
+ * @param e - Error.
+ * @returns Wrapped error.
+ */
+export function wrapError(e) {
+    return () => e;
+}
 const isDocResponse = is.object.factory({ doc: is.unknown, key: is.unknown }, {});
 const isDocResponses = is.factory(is.array.of, isDocResponse);
 const isDocsResponse = is.object.factory({
@@ -1040,8 +1023,12 @@ const isDocsResponse = is.object.factory({
     docs: isDocResponses,
     settled: is.boolean
 }, {});
-const isStoredDocumentAttached = is.object.factory({ _id: is.number, _rev: is.number }, { _deleted: is.true });
-const isStoredDocumentAttachedArray = is.factory(is.array.of, isStoredDocumentAttached);
+const isBaseExistingDocument = is.object.factory({ _id: is.string, _rev: is.string }, {
+    _deleted: is.true,
+    attachedDocs: isStoredDocumentAttachedArray,
+    lastAttachedDocs: is.numbers
+});
+const isStoredDocumentAttached = is.object.factory({ _id: is.number, _rev: is.number }, { _deleted: is.true, parentDoc: isBaseExistingDocument });
 const isExistingDocument = is.object.factory({ _id: is.string, _rev: is.string }, {
     _deleted: is.true,
     attachedDocs: isStoredDocumentAttachedArray,
@@ -1146,11 +1133,11 @@ function condsToStr(source, conditions) {
         toSettle: and(toSettle)
     };
 }
-// eslint-disable-next-line @skylib/require-jsdoc
+// eslint-disable-next-line @skylib/require-jsdoc -- ???
 function dateDelta(date) {
     return num.round.step(datetime.create(date).toTime() - datetime.time() - 50 * 3600 * 1000, 3600 * 1000);
 }
-// eslint-disable-next-line @skylib/require-jsdoc
+// eslint-disable-next-line @skylib/require-jsdoc -- ???
 function dateValue(date) {
     if (is.string(date))
         return date;
@@ -1238,6 +1225,19 @@ function extractDocAttached(rawDoc, id, extractDeleted = false) {
     assert.toBeTrue(extractDeleted || is.empty(attachedDoc._deleted), () => new PouchNotFoundError("Missing attached document"));
     return Object.assign(Object.assign({}, attachedDoc), { parentDoc: Object.assign(Object.assign({}, parentDoc), { attachedDocs: [] }) });
 }
+// eslint-disable-next-line @skylib/require-jsdoc -- ??
+function isStoredDocumentAttachedArray(value) {
+    return is.array.of(value, isStoredDocumentAttached);
+}
+/**
+ * Uglify javascript code.
+ *
+ * @param code - Code.
+ * @returns Uglified code.
+ */
+function uglify(code) {
+    return code.trim().replace(/\s+/gu, " ");
+}
 /**
  * Validates document.
  *
@@ -1255,14 +1255,5 @@ function validatePutDocument(doc) {
         throw new Error("Put document contains reserved word: views");
     if ((_b = (_a = doc.attachedDocs) === null || _a === void 0 ? void 0 : _a.some((attachedDoc, index) => attachedDoc._id !== index)) !== null && _b !== void 0 ? _b : false)
         throw new Error("Invalid attached document");
-}
-/**
- * Uglify javascript code.
- *
- * @param code - Code.
- * @returns Uglified code.
- */
-function uglify(code) {
-    return code.trim().replace(/\s+/gu, " ");
 }
 //# sourceMappingURL=Database.js.map

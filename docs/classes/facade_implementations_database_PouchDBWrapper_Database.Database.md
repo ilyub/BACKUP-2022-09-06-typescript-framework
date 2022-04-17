@@ -112,19 +112,19 @@ ___
 
 ### changesHandlersAttachedPool
 
-• `Protected` **changesHandlersAttachedPool**: `Map`<\`attached-subscription-id-${string}\`, `AttachedChangesHandler`\>
+• `Protected` `Readonly` **changesHandlersAttachedPool**: `Map`<\`attached-subscription-id-${string}\`, `AttachedChangesHandler`\>
 
 ___
 
 ### changesHandlersPool
 
-• `Protected` **changesHandlersPool**: `Map`<\`subscription-id-${string}\`, `ChangesHandler`\>
+• `Protected` `Readonly` **changesHandlersPool**: `Map`<\`subscription-id-${string}\`, `ChangesHandler`\>
 
 ___
 
 ### config
 
-• `Protected` **config**: `Required`<[`Configuration`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.Configuration.md)\>
+• `Protected` `Readonly` **config**: `Required`<[`Configuration`](../interfaces/facade_implementations_database_PouchDBWrapper_Database.Configuration.md)\>
 
 ___
 
@@ -136,19 +136,19 @@ ___
 
 ### name
 
-• `Protected` **name**: `string`
+• `Protected` `Readonly` **name**: `string`
 
 ___
 
 ### options
 
-• `Protected` **options**: `Required`<`DatabaseOptions`\>
+• `Protected` `Readonly` **options**: `Required`<`DatabaseOptions`\>
 
 ___
 
 ### pouchConfig
 
-• `Protected` **pouchConfig**: `DatabaseConfiguration`
+• `Protected` `Readonly` **pouchConfig**: `DatabaseConfiguration`
 
 ## Methods
 
@@ -168,7 +168,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.bulkDocs
+database.Database.bulkDocs
 
 ___
 
@@ -188,7 +188,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.bulkDocsAttached
+database.Database.bulkDocsAttached
 
 ___
 
@@ -208,7 +208,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.count
+database.Database.count
 
 ___
 
@@ -229,7 +229,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.countAttached
+database.Database.countAttached
 
 ___
 
@@ -249,7 +249,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.exists
+database.Database.exists
 
 ___
 
@@ -270,7 +270,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.existsAttached
+database.Database.existsAttached
 
 ___
 
@@ -290,7 +290,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.get
+database.Database.get
 
 ___
 
@@ -311,7 +311,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.getAttached
+database.Database.getAttached
 
 ___
 
@@ -345,7 +345,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.getIfExists
+database.Database.getIfExists
 
 ___
 
@@ -366,7 +366,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.getIfExistsAttached
+database.Database.getIfExistsAttached
 
 ___
 
@@ -454,7 +454,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.put
+database.Database.put
 
 ___
 
@@ -475,7 +475,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.putAttached
+database.Database.putAttached
 
 ___
 
@@ -496,7 +496,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.putAttachedBulk
+database.Database.putAttachedBulk
 
 ___
 
@@ -516,7 +516,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.putIfNotExists
+database.Database.putIfNotExists
 
 ___
 
@@ -537,7 +537,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.putIfNotExistsAttached
+database.Database.putIfNotExistsAttached
 
 ___
 
@@ -558,7 +558,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.query
+database.Database.query
 
 ___
 
@@ -580,7 +580,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.queryAttached
+database.Database.queryAttached
 
 ___
 
@@ -621,7 +621,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.reactiveCount
+database.Database.reactiveCount
 
 ___
 
@@ -641,7 +641,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.reactiveCountAttached
+database.Database.reactiveCountAttached
 
 ___
 
@@ -661,7 +661,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.reactiveExists
+database.Database.reactiveExists
 
 ___
 
@@ -682,7 +682,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.reactiveExistsAttached
+database.Database.reactiveExistsAttached
 
 ___
 
@@ -922,7 +922,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.reactiveGet
+database.Database.reactiveGet
 
 ___
 
@@ -943,7 +943,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.reactiveGetAttached
+database.Database.reactiveGetAttached
 
 ___
 
@@ -963,7 +963,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.reactiveGetIfExists
+database.Database.reactiveGetIfExists
 
 ___
 
@@ -984,7 +984,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.reactiveGetIfExistsAttached
+database.Database.reactiveGetIfExistsAttached
 
 ___
 
@@ -1127,7 +1127,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.reactiveQuery
+database.Database.reactiveQuery
 
 ___
 
@@ -1147,7 +1147,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.reactiveQueryAttached
+database.Database.reactiveQueryAttached
 
 ___
 
@@ -1167,7 +1167,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.reactiveUnsettled
+database.Database.reactiveUnsettled
 
 ___
 
@@ -1187,7 +1187,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.reactiveUnsettledAttached
+database.Database.reactiveUnsettledAttached
 
 ___
 
@@ -1219,7 +1219,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.reset
+database.Database.reset
 
 ___
 
@@ -1239,7 +1239,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.subscribe
+database.Database.subscribe
 
 ___
 
@@ -1259,7 +1259,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.subscribeAttached
+database.Database.subscribeAttached
 
 ___
 
@@ -1280,7 +1280,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.unsettled
+database.Database.unsettled
 
 ___
 
@@ -1302,7 +1302,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.unsettledAttached
+database.Database.unsettledAttached
 
 ___
 
@@ -1322,7 +1322,7 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.unsubscribe
+database.Database.unsubscribe
 
 ___
 
@@ -1342,4 +1342,4 @@ ___
 
 #### Implementation of
 
-DatabaseInterface.unsubscribeAttached
+database.Database.unsubscribeAttached

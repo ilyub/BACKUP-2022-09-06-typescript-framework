@@ -8,9 +8,9 @@
 
 - **`BaseItemDoc`**
 
-  ↳ [`ExistingItemDoc`](classes_database_Item.ExistingItemDoc.md)
+  ↳ [`ExistingItemDoc`](classes_database_Item.Item.ExistingItemDoc.md)
 
-  ↳ [`PutItemDoc`](classes_database_Item.PutItemDoc.md)
+  ↳ [`PutItemDoc`](classes_database_Item.Item.PutItemDoc.md)
 
 ## Table of contents
 

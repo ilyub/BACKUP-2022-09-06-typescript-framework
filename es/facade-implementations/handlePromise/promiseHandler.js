@@ -1,12 +1,24 @@
-import { progressReporter } from "@skylib/facades/es/progressReporter";
-import { showAlert } from "@skylib/facades/es/showAlert";
-import * as fn from "@skylib/functions/es/function";
-import * as o from "@skylib/functions/es/object";
+import { progressReporter, showAlert } from "@skylib/facades";
+import { fn, o } from "@skylib/functions";
 export const handlers = o.freeze({
     error(error) {
         throw error;
     }
 });
+export const implementation = {
+    async runAll() {
+        await Promise.all(promisesPool.values());
+    },
+    running() {
+        return promisesPool.size > 0;
+    },
+    silent(promiseAsync, errorMessage = "") {
+        handle(promiseAsync, undefined, errorMessage);
+    },
+    verbose(promiseAsync, type, errorMessage = "") {
+        handle(promiseAsync, type, errorMessage);
+    }
+};
 /**
  * Configures plugin.
  *
@@ -23,25 +35,6 @@ export function configure(config) {
 export function getConfiguration() {
     return moduleConfig;
 }
-export const implementation = {
-    async runAll() {
-        await Promise.all(promisesPool.values());
-    },
-    running() {
-        return promisesPool.size > 0;
-    },
-    silent(promiseAsync, errorMessage = "") {
-        handle(promiseAsync, undefined, errorMessage);
-    },
-    verbose(promiseAsync, type, errorMessage = "") {
-        handle(promiseAsync, type, errorMessage);
-    }
-};
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
 const promisesPool = new Map();
 const moduleConfig = {
     expectedDurations: {
@@ -66,7 +59,7 @@ function handle(promiseAsync, type, errorMessage) {
         ? progressReporter.spawn().setAuto(moduleConfig.expectedDurations[type])
         : undefined;
     promisesPool.set(id, promise);
-    // eslint-disable-next-line github/no-then, promise/prefer-await-to-then
+    // eslint-disable-next-line github/no-then, promise/prefer-await-to-then -- ???
     promise.catch(rejected).then(fulfilled).catch(rejected);
     /**
      * Fulfilled callback.

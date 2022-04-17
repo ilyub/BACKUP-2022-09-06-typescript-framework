@@ -39,19 +39,19 @@ Creates class instance.
 
 ### pluralReduce
 
-• **pluralReduce**: [`PluralReduce`](../interfaces/facade_implementations_lang_dictionary_types.PluralReduce.md)
+• `Readonly` **pluralReduce**: [`PluralReduce`](../interfaces/facade_implementations_lang_dictionary_types.PluralReduce.md)
 
 ___
 
 ### wordForms
 
-• `Protected` **wordForms**: `IndexedObject`<`strings`\>
+• `Protected` `Readonly` **wordForms**: `IndexedObject`<`strings`\>
 
 ___
 
 ### words
 
-• `Protected` **words**: `IndexedObject`<[`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)\> = `{}`
+• `Protected` `Readonly` **words**: `IndexedObject`<[`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)\> = `{}`
 
 ## Methods
 

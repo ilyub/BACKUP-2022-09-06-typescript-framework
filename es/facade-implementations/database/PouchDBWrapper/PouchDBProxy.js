@@ -1,9 +1,7 @@
+import { testDelay } from "@skylib/facades";
+import { is, o } from "@skylib/functions";
 import pouchdb from "pouchdb";
-import { testDelay } from "@skylib/facades/es/testDelay";
-import * as is from "@skylib/functions/es/guards";
-import * as o from "@skylib/functions/es/object";
-import { PouchConflictError } from "./errors/PouchConflictError";
-import { PouchNotFoundError } from "./errors/PouchNotFoundError";
+import { PouchConflictError, PouchNotFoundError } from "./errors";
 export const handlers = o.freeze({
     error(error) {
         throw wrapPouchError(error);
@@ -31,7 +29,9 @@ export class PouchDBProxy {
      * @param docs - Documents.
      * @returns Responses.
      */
-    async bulkDocs(docs) {
+    async bulkDocs(
+    // eslint-disable-next-line @skylib/no-mutable-signature -- ??
+    docs) {
         await testDelay();
         try {
             return await this.db.bulkDocs(o.unfreeze(docs));
@@ -91,6 +91,7 @@ export class PouchDBProxy {
      * @param doc - Document.
      * @returns Response.
      */
+    // eslint-disable-next-line @skylib/no-mutable-signature -- ??
     async post(doc) {
         await testDelay();
         try {
@@ -106,6 +107,7 @@ export class PouchDBProxy {
      * @param doc - Document.
      * @returns Response.
      */
+    // eslint-disable-next-line @skylib/no-mutable-signature -- ??
     async put(doc) {
         await testDelay();
         try {

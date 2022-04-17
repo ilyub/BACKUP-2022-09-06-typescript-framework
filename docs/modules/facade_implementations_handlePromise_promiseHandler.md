@@ -44,7 +44,7 @@ ___
 
 ### implementation
 
-• `Const` **implementation**: `Facade`
+• `Const` **implementation**: `handlePromise.Facade`
 
 ## Functions
 

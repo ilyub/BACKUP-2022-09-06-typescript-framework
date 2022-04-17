@@ -1,4 +1,4 @@
-import * as o from "@skylib/functions/es/object";
+import { o } from "@skylib/functions";
 export class AttachedItem {
     /**
      * Creates class instance.
@@ -49,11 +49,7 @@ export class AttachedItem {
             writable: true,
             value: void 0
         });
-        /*
-        |*******************************************************************************
-        |* Protected
-        |*******************************************************************************
-        |*/
+        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
         Object.defineProperty(this, "_parent", {
             enumerable: true,
             configurable: true,

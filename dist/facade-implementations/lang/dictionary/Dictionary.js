@@ -1,15 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Dictionary = void 0;
-const tslib_1 = require("tslib");
-const reactiveStorage_1 = require("@skylib/facades/dist/reactiveStorage");
-const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
-const cast = tslib_1.__importStar(require("@skylib/functions/dist/converters"));
-const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
-const helpers_1 = require("@skylib/functions/dist/helpers");
-const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
-const reflect = tslib_1.__importStar(require("@skylib/functions/dist/reflect"));
-const s = tslib_1.__importStar(require("@skylib/functions/dist/string"));
+const facades_1 = require("@skylib/facades");
+const functions_1 = require("@skylib/functions");
 class Dictionary {
     /**
      * Creates class instance.
@@ -37,11 +30,6 @@ class Dictionary {
             writable: true,
             value: void 0
         });
-        /*
-        |*****************************************************************************
-        |* Protected
-        |*****************************************************************************
-        |*/
         Object.defineProperty(this, "proxified", {
             enumerable: true,
             configurable: true,
@@ -57,17 +45,17 @@ class Dictionary {
         this._context = context;
         this.count = count;
         this.definitions = definitions;
-        this.proxified = fn.run(() => {
-            const handler = (0, helpers_1.wrapProxyHandler)("Dictionary", "throw", {
+        this.proxified = functions_1.fn.run(() => {
+            const handler = (0, functions_1.wrapProxyHandler)("Dictionary", "throw", {
                 get(target, key) {
-                    assert.string(key, "Expecting string key");
-                    return target.has(key) ? target.get(key) : reflect.get(target, key);
+                    functions_1.assert.string(key, "Expecting string key");
+                    return target.has(key) ? target.get(key) : functions_1.reflect.get(target, key);
                 },
                 getOwnPropertyDescriptor(target, key) {
                     return Object.getOwnPropertyDescriptor(target, key);
                 }
             });
-            // eslint-disable-next-line no-type-assertion/no-type-assertion
+            // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
             return new Proxy(this, handler);
         });
     }
@@ -77,7 +65,7 @@ class Dictionary {
      * @param config - Plugin configuration.
      */
     static configure(config) {
-        o.assign(moduleConfig, config);
+        functions_1.o.assign(moduleConfig, config);
     }
     /**
      * Creates class instance.
@@ -96,7 +84,7 @@ class Dictionary {
      * @returns Plugin configuration.
      */
     static getConfiguration() {
-        return o.clone(moduleConfig);
+        return functions_1.o.clone(moduleConfig);
     }
     context(context) {
         if (context === this._context)
@@ -113,13 +101,13 @@ class Dictionary {
     }
     get(key) {
         const definitions = this.definitions[moduleConfig.localeName];
-        assert.not.empty(definitions, `Missing dictionary for locale: ${moduleConfig.localeName}`);
+        functions_1.assert.not.empty(definitions, `Missing dictionary for locale: ${moduleConfig.localeName}`);
         return definitions.get(key, this._context, [], this.count, replacementsPool)
             .value;
     }
     has(key) {
         const definitions = this.definitions[moduleConfig.localeName];
-        assert.not.empty(definitions, `Missing dictionary for locale: ${moduleConfig.localeName}`);
+        functions_1.assert.not.empty(definitions, `Missing dictionary for locale: ${moduleConfig.localeName}`);
         return definitions.has(key);
     }
     plural(count) {
@@ -139,16 +127,16 @@ class Dictionary {
     with(search, replace) {
         switch (typeof replace) {
             case "number":
-                replacementsPool.set(search.toUpperCase(), cast.string(replace));
-                replacementsPool.set(search.toLowerCase(), cast.string(replace));
-                replacementsPool.set(s.ucFirst(search), cast.string(replace));
-                replacementsPool.set(s.lcFirst(search), cast.string(replace));
+                replacementsPool.set(search.toUpperCase(), functions_1.cast.string(replace));
+                replacementsPool.set(search.toLowerCase(), functions_1.cast.string(replace));
+                replacementsPool.set(functions_1.s.ucFirst(search), functions_1.cast.string(replace));
+                replacementsPool.set(functions_1.s.lcFirst(search), functions_1.cast.string(replace));
                 return this.proxified;
             case "string":
                 replacementsPool.set(search.toUpperCase(), replace.toUpperCase());
                 replacementsPool.set(search.toLowerCase(), replace.toLowerCase());
-                replacementsPool.set(s.ucFirst(search), s.ucFirst(replace));
-                replacementsPool.set(s.lcFirst(search), s.lcFirst(replace));
+                replacementsPool.set(functions_1.s.ucFirst(search), functions_1.s.ucFirst(replace));
+                replacementsPool.set(functions_1.s.lcFirst(search), functions_1.s.lcFirst(replace));
                 return this.proxified;
         }
     }
@@ -160,16 +148,11 @@ class Dictionary {
      */
     pluralReduce(count) {
         const definitions = this.definitions[moduleConfig.localeName];
-        assert.not.empty(definitions, `Missing dictionary for locale: ${moduleConfig.localeName}`);
+        functions_1.assert.not.empty(definitions, `Missing dictionary for locale: ${moduleConfig.localeName}`);
         return definitions.pluralReduce(count);
     }
 }
 exports.Dictionary = Dictionary;
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
-const moduleConfig = (0, helpers_1.onDemand)(() => (0, reactiveStorage_1.reactiveStorage)({ localeName: "en-US" }));
+const moduleConfig = (0, functions_1.onDemand)(() => (0, facades_1.reactiveStorage)({ localeName: "en-US" }));
 const replacementsPool = new Map();
 //# sourceMappingURL=Dictionary.js.map

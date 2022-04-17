@@ -9,7 +9,7 @@ export class PouchDBProxy extends BasePouchDBProxy {
      * @param options - Database options.
      */
     constructor(name, options) {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+        // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires -- ???
         pouchdb.plugin(require("pouchdb-adapter-memory"));
         super(name, Object.assign(Object.assign({}, options), { adapter: "memory" }));
     }

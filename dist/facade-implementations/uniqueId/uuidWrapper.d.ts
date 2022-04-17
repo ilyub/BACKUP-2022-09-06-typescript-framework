@@ -1,3 +1,3 @@
-import type { Facade } from "@skylib/facades/dist/uniqueId";
-export declare const implementation: Facade;
+import type { uniqueId } from "@skylib/facades";
+export declare const implementation: uniqueId.Facade;
 //# sourceMappingURL=uuidWrapper.d.ts.map

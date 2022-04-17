@@ -1,4 +1,4 @@
-import * as o from "@skylib/functions/es/object";
+import { o } from "@skylib/functions";
 export class Item {
     /**
      * Creates class instance.
@@ -49,11 +49,6 @@ export class Item {
             writable: true,
             value: void 0
         });
-        /*
-        |*******************************************************************************
-        |* Protected
-        |*******************************************************************************
-        |*/
         Object.defineProperty(this, "attachedDocs", {
             enumerable: true,
             configurable: true,

@@ -1,0 +1,1 @@
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../../../src/facade-implementations/datetime/date-fns-wrapper/index.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,QAAQ,EAAE,MAAM,iBAAiB,CAAC;AAKhD,OAAO,EAAE,QAAQ,EAAE,SAAS,EAAE,gBAAgB,EAAE,MAAM,YAAY,CAAC;AAEnE,YAAY,EAAE,aAAa,EAAE,cAAc,EAAE,MAAM,YAAY,CAAC;AAEhE,eAAO,MAAM,cAAc,EAAE,QAAQ,CAAC,MAoBrC,CAAC"}

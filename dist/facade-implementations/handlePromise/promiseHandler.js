@@ -1,34 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.implementation = exports.getConfiguration = exports.configure = exports.handlers = void 0;
-const tslib_1 = require("tslib");
-const progressReporter_1 = require("@skylib/facades/dist/progressReporter");
-const showAlert_1 = require("@skylib/facades/dist/showAlert");
-const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
-const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
-exports.handlers = o.freeze({
+exports.getConfiguration = exports.configure = exports.implementation = exports.handlers = void 0;
+const facades_1 = require("@skylib/facades");
+const functions_1 = require("@skylib/functions");
+exports.handlers = functions_1.o.freeze({
     error(error) {
         throw error;
     }
 });
-/**
- * Configures plugin.
- *
- * @param config - Plugin configuration.
- */
-function configure(config) {
-    o.assign(moduleConfig, config);
-}
-exports.configure = configure;
-/**
- * Returns plugin configuration.
- *
- * @returns Plugin configuration.
- */
-function getConfiguration() {
-    return moduleConfig;
-}
-exports.getConfiguration = getConfiguration;
 exports.implementation = {
     async runAll() {
         await Promise.all(promisesPool.values());
@@ -43,11 +22,24 @@ exports.implementation = {
         handle(promiseAsync, type, errorMessage);
     }
 };
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
+/**
+ * Configures plugin.
+ *
+ * @param config - Plugin configuration.
+ */
+function configure(config) {
+    functions_1.o.assign(moduleConfig, config);
+}
+exports.configure = configure;
+/**
+ * Returns plugin configuration.
+ *
+ * @returns Plugin configuration.
+ */
+function getConfiguration() {
+    return moduleConfig;
+}
+exports.getConfiguration = getConfiguration;
 const promisesPool = new Map();
 const moduleConfig = {
     expectedDurations: {
@@ -67,12 +59,12 @@ const moduleConfig = {
  */
 function handle(promiseAsync, type, errorMessage) {
     const id = Symbol("PromiseId");
-    const promise = fn.run(promiseAsync);
+    const promise = functions_1.fn.run(promiseAsync);
     const progress = type
-        ? progressReporter_1.progressReporter.spawn().setAuto(moduleConfig.expectedDurations[type])
+        ? facades_1.progressReporter.spawn().setAuto(moduleConfig.expectedDurations[type])
         : undefined;
     promisesPool.set(id, promise);
-    // eslint-disable-next-line github/no-then, promise/prefer-await-to-then
+    // eslint-disable-next-line github/no-then, promise/prefer-await-to-then -- ???
     promise.catch(rejected).then(fulfilled).catch(rejected);
     /**
      * Fulfilled callback.
@@ -90,7 +82,7 @@ function handle(promiseAsync, type, errorMessage) {
         promisesPool.delete(id);
         progress === null || progress === void 0 ? void 0 : progress.done();
         if (errorMessage)
-            (0, showAlert_1.showAlert)(errorMessage);
+            (0, facades_1.showAlert)(errorMessage);
         exports.handlers.error(reason);
     }
 }

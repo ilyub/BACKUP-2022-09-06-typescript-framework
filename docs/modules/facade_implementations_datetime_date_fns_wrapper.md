@@ -4,67 +4,50 @@
 
 ## Table of contents
 
-### Classes
+### References
 
-- [DateTime](../classes/facade_implementations_datetime_date_fns_wrapper.DateTime.md)
-
-### Interfaces
-
-- [Configuration](../interfaces/facade_implementations_datetime_date_fns_wrapper.Configuration.md)
-
-### Type aliases
-
+- [Configuration](facade_implementations_datetime_date_fns_wrapper.md#configuration)
+- [DateTime](facade_implementations_datetime_date_fns_wrapper.md#datetime)
 - [FirstDayOfWeek](facade_implementations_datetime_date_fns_wrapper.md#firstdayofweek)
+- [configure](facade_implementations_datetime_date_fns_wrapper.md#configure)
+- [getConfiguration](facade_implementations_datetime_date_fns_wrapper.md#getconfiguration)
 
 ### Variables
 
 - [implementation](facade_implementations_datetime_date_fns_wrapper.md#implementation)
 
-### Functions
+## References
 
-- [configure](facade_implementations_datetime_date_fns_wrapper.md#configure)
-- [getConfiguration](facade_implementations_datetime_date_fns_wrapper.md#getconfiguration)
+### Configuration
 
-## Type aliases
+Re-exports [Configuration](../interfaces/facade_implementations_datetime_date_fns_wrapper_DateTime.Configuration.md)
+
+___
+
+### DateTime
+
+Re-exports [DateTime](../classes/facade_implementations_datetime_date_fns_wrapper_DateTime.DateTime.md)
+
+___
 
 ### FirstDayOfWeek
 
-Ƭ **FirstDayOfWeek**: ``0`` \| ``1``
+Re-exports [FirstDayOfWeek](facade_implementations_datetime_date_fns_wrapper_DateTime.md#firstdayofweek)
 
-## Variables
-
-### implementation
-
-• `Const` **implementation**: `Facade`
-
-## Functions
+___
 
 ### configure
 
-▸ **configure**(`config`): `void`
-
-Configures plugin.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `config` | `Partial`<[`Configuration`](../interfaces/facade_implementations_datetime_date_fns_wrapper.Configuration.md)\> | Plugin configuration. |
-
-#### Returns
-
-`void`
+Re-exports [configure](facade_implementations_datetime_date_fns_wrapper_DateTime.md#configure)
 
 ___
 
 ### getConfiguration
 
-▸ **getConfiguration**(): [`Configuration`](../interfaces/facade_implementations_datetime_date_fns_wrapper.Configuration.md)
+Re-exports [getConfiguration](facade_implementations_datetime_date_fns_wrapper_DateTime.md#getconfiguration)
 
-Returns plugin configuration.
+## Variables
 
-#### Returns
+### implementation
 
-[`Configuration`](../interfaces/facade_implementations_datetime_date_fns_wrapper.Configuration.md)
-
-Plugin configuration.
+• `Const` **implementation**: `datetime.Facade`

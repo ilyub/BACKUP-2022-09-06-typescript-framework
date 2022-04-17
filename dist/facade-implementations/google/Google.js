@@ -2,10 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Google = void 0;
 const tslib_1 = require("tslib");
+const functions_1 = require("@skylib/functions");
 const jquery_1 = tslib_1.__importDefault(require("jquery"));
-const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
-const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
 class Google {
     /**
      * Creates class instance.
@@ -13,17 +11,13 @@ class Google {
      * @param clientId - Client ID.
      */
     constructor(clientId) {
-        /*
-        |*****************************************************************************
-        |* Protected
-        |*****************************************************************************
-        |*/
         Object.defineProperty(this, "clientId", {
             enumerable: true,
             configurable: true,
             writable: true,
             value: void 0
         });
+        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
         Object.defineProperty(this, "sdk", {
             enumerable: true,
             configurable: true,
@@ -35,7 +29,7 @@ class Google {
     async idToken() {
         try {
             await this.loadSdk();
-            assert.not.empty(this.sdk);
+            functions_1.assert.not.empty(this.sdk);
             const sdk = await this.sdk;
             const user = sdk.isSignedIn.get()
                 ? sdk.currentUser.get()
@@ -43,7 +37,7 @@ class Google {
             return user.getAuthResponse().id_token;
         }
         catch (e) {
-            if (is.object.of(e, { error: is.string }, {}) &&
+            if (functions_1.is.object.of(e, { error: functions_1.is.string }, {}) &&
                 e.error === "popup_closed_by_user")
                 return undefined;
             throw e;
@@ -52,15 +46,15 @@ class Google {
     async loadSdk() {
         var _a;
         this.sdk =
-            (_a = this.sdk) !== null && _a !== void 0 ? _a : fn.run(async () => {
+            (_a = this.sdk) !== null && _a !== void 0 ? _a : functions_1.fn.run(async () => {
                 await jquery_1.default.getScript("https://apis.google.com/js/api:client.js");
-                const clientId = is.callable(this.clientId)
+                const clientId = functions_1.is.callable(this.clientId)
                     ? await this.clientId()
                     : await this.clientId;
-                assert.not.empty(clientId, "Missing Google client ID");
-                return new Promise((resolve, reject) => {
+                functions_1.assert.not.empty(clientId, "Missing Google client ID");
+                return await new Promise((resolve, reject) => {
                     gapi.load("auth2", () => {
-                        // eslint-disable-next-line github/no-then, promise/prefer-await-to-then
+                        // eslint-disable-next-line github/no-then -- ???
                         gapi.auth2.init({ client_id: clientId }).then(googleAuth => {
                             resolve(googleAuth);
                         }, e => {

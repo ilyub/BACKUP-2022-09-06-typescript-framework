@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Item = void 0;
-const tslib_1 = require("tslib");
-const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
+const functions_1 = require("@skylib/functions");
 class Item {
     /**
      * Creates class instance.
@@ -53,11 +52,6 @@ class Item {
             writable: true,
             value: void 0
         });
-        /*
-        |*******************************************************************************
-        |* Protected
-        |*******************************************************************************
-        |*/
         Object.defineProperty(this, "attachedDocs", {
             enumerable: true,
             configurable: true,
@@ -86,7 +80,7 @@ class Item {
      * @returns Database document.
      */
     doc() {
-        return o.removeUndefinedKeys({
+        return functions_1.o.removeUndefinedKeys({
             _deleted: this._deleted ? true : undefined,
             _id: this._id,
             _rev: this._rev,

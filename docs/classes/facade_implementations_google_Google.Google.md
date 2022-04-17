@@ -42,7 +42,7 @@ Creates class instance.
 
 ### clientId
 
-• `Protected` **clientId**: `stringU` \| `AsyncPromise`<`stringU`, `nevers`\>
+• `Protected` `Readonly` **clientId**: `stringU` \| `AsyncPromise`<`stringU`, `nevers`\>
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Implementation of
 
-Facade.idToken
+google.Facade.idToken
 
 ___
 
@@ -76,4 +76,4 @@ ___
 
 #### Implementation of
 
-Facade.loadSdk
+google.Facade.loadSdk

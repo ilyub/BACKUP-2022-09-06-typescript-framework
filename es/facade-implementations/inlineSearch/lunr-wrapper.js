@@ -1,15 +1,11 @@
+import { fn } from "@skylib/functions";
 import lunr from "lunr";
-import { createImplementation, Engine as BaseEngine } from "./api/template";
-export class Engine extends BaseEngine {
+import { createImplementation, Engine as BaseEngine } from "./api";
+export const implementation = createImplementation(fn.run(() => class Engine extends BaseEngine {
     search(query) {
         const refs = new Set(this.index.search(query).map(result => result.ref));
         return this.items.filter(item => refs.has(item[this.idField]));
     }
-    /*
-    |*****************************************************************************
-    |* Protected
-    |*****************************************************************************
-    |*/
     buildIndex(idField, fields, items) {
         return lunr(configFunction);
         function configFunction(builder) {
@@ -20,6 +16,5 @@ export class Engine extends BaseEngine {
                 builder.add(item);
         }
     }
-}
-export const implementation = createImplementation(Engine);
+}));
 //# sourceMappingURL=lunr-wrapper.js.map

@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AttachedItem = void 0;
-const tslib_1 = require("tslib");
-const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
+const functions_1 = require("@skylib/functions");
 class AttachedItem {
     /**
      * Creates class instance.
@@ -53,11 +52,7 @@ class AttachedItem {
             writable: true,
             value: void 0
         });
-        /*
-        |*******************************************************************************
-        |* Protected
-        |*******************************************************************************
-        |*/
+        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
         Object.defineProperty(this, "_parent", {
             enumerable: true,
             configurable: true,
@@ -99,7 +94,7 @@ class AttachedItem {
      * @returns Database document.
      */
     doc() {
-        return o.removeUndefinedKeys({
+        return functions_1.o.removeUndefinedKeys({
             _deleted: this._deleted ? true : undefined,
             _id: this._id,
             _rev: this._rev,

@@ -49,7 +49,7 @@ Creates class instance.
 
 ### db
 
-• **db**: [`PouchDatabase`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchdatabase)
+• `Readonly` **db**: [`PouchDatabase`](../modules/facade_implementations_database_PouchDBWrapper_PouchDBProxy.md#pouchdatabase)
 
 ## Methods
 

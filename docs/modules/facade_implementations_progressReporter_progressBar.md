@@ -4,67 +4,33 @@
 
 ## Table of contents
 
-### Classes
+### References
 
-- [Process](../classes/facade_implementations_progressReporter_progressBar.Process.md)
-
-### Interfaces
-
-- [Configuration](../interfaces/facade_implementations_progressReporter_progressBar.Configuration.md)
-
-### Type aliases
-
-- [State](facade_implementations_progressReporter_progressBar.md#state)
-
-### Variables
-
-- [implementation](facade_implementations_progressReporter_progressBar.md#implementation)
-
-### Functions
-
+- [Configuration](facade_implementations_progressReporter_progressBar.md#configuration)
 - [configure](facade_implementations_progressReporter_progressBar.md#configure)
 - [getConfiguration](facade_implementations_progressReporter_progressBar.md#getconfiguration)
+- [implementation](facade_implementations_progressReporter_progressBar.md#implementation)
 
-## Type aliases
+## References
 
-### State
+### Configuration
 
-Ƭ **State**: ``"auto"`` \| ``"done"`` \| ``"manual"``
+Re-exports [Configuration](../interfaces/facade_implementations_progressReporter_progressBar_Process.Configuration.md)
 
-## Variables
-
-### implementation
-
-• `Const` **implementation**: `Facade`
-
-## Functions
+___
 
 ### configure
 
-▸ **configure**(`config`): `void`
-
-Configures plugin.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `config` | `Partial`<[`Configuration`](../interfaces/facade_implementations_progressReporter_progressBar.Configuration.md)\> | Plugin configuration. |
-
-#### Returns
-
-`void`
+Re-exports [configure](facade_implementations_progressReporter_progressBar_Process.md#configure)
 
 ___
 
 ### getConfiguration
 
-▸ **getConfiguration**(): [`Configuration`](../interfaces/facade_implementations_progressReporter_progressBar.Configuration.md)
+Re-exports [getConfiguration](facade_implementations_progressReporter_progressBar_Process.md#getconfiguration)
 
-Returns plugin configuration.
+___
 
-#### Returns
+### implementation
 
-[`Configuration`](../interfaces/facade_implementations_progressReporter_progressBar.Configuration.md)
-
-Plugin configuration.
+Renames and re-exports [facade](facade_implementations_progressReporter_progressBar_Process.md#facade)

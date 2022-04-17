@@ -1,59 +1,29 @@
+import { compare, database, datetime, facebook, faker, google, handlePromise, httpRequest, inlineSearch, lang, progressReporter, reactiveStorage, showAlert, showConfirm, testDelay, uniqueId } from "@skylib/facades";
+import { assert, o } from "@skylib/functions";
 import enUS from "date-fns/locale/en-US";
-import { compare } from "@skylib/facades/es/compare";
-import { database } from "@skylib/facades/es/database";
-import { datetime } from "@skylib/facades/es/datetime";
-import { facebook } from "@skylib/facades/es/facebook";
-import { faker } from "@skylib/facades/es/faker";
-import { google } from "@skylib/facades/es/google";
-import { handlePromise } from "@skylib/facades/es/handlePromise";
-import { httpRequest } from "@skylib/facades/es/httpRequest";
-import { inlineSearch } from "@skylib/facades/es/inlineSearch";
-import { lang } from "@skylib/facades/es/lang";
-import { progressReporter } from "@skylib/facades/es/progressReporter";
-import { reactiveStorage } from "@skylib/facades/es/reactiveStorage";
-import { showAlert } from "@skylib/facades/es/showAlert";
-import { showConfirm } from "@skylib/facades/es/showConfirm";
-import { testDelay } from "@skylib/facades/es/testDelay";
-import { uniqueId } from "@skylib/facades/es/uniqueId";
-import * as assert from "@skylib/functions/es/assertions";
-import * as naturalCompareWrapper from "../facade-implementations/compare/natural-compare-wrapper";
-import { PouchDBWrapper } from "../facade-implementations/database/PouchDBWrapper";
-import * as dateFnsWrapper from "../facade-implementations/datetime/date-fns-wrapper";
-import { Facebook } from "../facade-implementations/facebook/Facebook";
-import { loremIpsumWrapper } from "../facade-implementations/faker/lorem-ipsum-wrapper";
-import { Google } from "../facade-implementations/google/Google";
-import * as promiseHandler from "../facade-implementations/handlePromise/promiseHandler";
-import * as axiosWrapper from "../facade-implementations/httpRequest/axios-wrapper";
-import * as lunrWrapper from "../facade-implementations/inlineSearch/lunr-wrapper";
-import { Dictionary } from "../facade-implementations/lang/dictionary";
-import * as progressBar from "../facade-implementations/progressReporter/progressBar";
-import * as reflectStorage from "../facade-implementations/reactiveStorage/reflectStorage";
-import * as jsAlert from "../facade-implementations/showAlert/jsAlert";
-import * as jsConfirm from "../facade-implementations/showConfirm/jsConfirm";
-import * as configurableTestDelay from "../facade-implementations/testDelay/configurableTestDelay";
-import * as uuidWrapper from "../facade-implementations/uniqueId/uuidWrapper";
+import { facadeImplementations as implementations } from "..";
 /**
  * Jest reset.
  */
-export function jestReset() {
-    faker.setImplementation(loremIpsumWrapper);
-    compare.setImplementation(naturalCompareWrapper.implementation);
-    database.setImplementation(new PouchDBWrapper());
-    facebook.setImplementation(new Facebook(undefined, "10.0"));
-    google.setImplementation(new Google(undefined));
-    inlineSearch.setImplementation(lunrWrapper.implementation);
-    reactiveStorage.setImplementation(reflectStorage.implementation);
-    showAlert.setImplementation(jsAlert.implementation);
-    showConfirm.setImplementation(jsConfirm.implementation);
-    uniqueId.setImplementation(uuidWrapper.implementation);
+export const jestReset = o.extend(() => {
+    faker.setImplementation(implementations.faker.loremIpsumWrapper);
+    compare.setImplementation(implementations.compare.naturalCompare);
+    database.setImplementation(new implementations.database.PouchDBWrapper());
+    facebook.setImplementation(new implementations.facebook.Facebook(undefined, "10.0"));
+    google.setImplementation(new implementations.google.Google(undefined));
+    inlineSearch.setImplementation(implementations.inlineSearch.lunrWrapper);
+    reactiveStorage.setImplementation(implementations.reactiveStorage.reflectStorage);
+    showAlert.setImplementation(implementations.showAlert.jsAlert);
+    showConfirm.setImplementation(implementations.showConfirm.jsConfirm);
+    uniqueId.setImplementation(implementations.uniqueId.uuidWrapper);
     {
         const config = {
             firstDayOfWeek: 0,
             locale: enUS,
             pm: true
         };
-        dateFnsWrapper.configure(config);
-        datetime.setImplementation(dateFnsWrapper.implementation);
+        implementations.datetime.dateFnsWrapper.configure(config);
+        datetime.setImplementation(implementations.datetime.dateFnsWrapper.implementation);
     }
     {
         const config = {
@@ -65,82 +35,87 @@ export function jestReset() {
                 navigation: 1000
             }
         };
-        promiseHandler.configure(config);
-        handlePromise.setImplementation(promiseHandler.implementation);
-    }
-    {
-        const config = { timeout: 30000 };
-        axiosWrapper.configure(config);
-        httpRequest.setImplementation(axiosWrapper.implementation);
+        implementations.handlePromise.promiseHandler.configure(config);
+        handlePromise.setImplementation(implementations.handlePromise.promiseHandler.implementation);
     }
     {
         const config = {
-            enabled: false,
-            timeout: 1000
+            timeout: 30000
         };
-        configurableTestDelay.configure(config);
-        testDelay.setImplementation(configurableTestDelay.implementation);
+        implementations.httpRequest.axiosWrapper.configure(config);
+        httpRequest.setImplementation(implementations.httpRequest.axiosWrapper.implementation);
     }
-}
-/**
- * Jest reset.
- *
- * @param localeName - Locale name.
- * @param definitions - Language definitions.
- */
-export function jestResetDictionary(localeName, definitions) {
-    const config = { localeName };
-    Dictionary.configure(config);
-    lang.setImplementation(Dictionary.create(definitions));
-}
-jestReset.dictionary = jestResetDictionary;
-/**
- * Jest reset.
- */
-export function jestResetDom() {
-    const config = {
-        activeClass: "progress-bar-active",
-        enabled: true,
-        finalEasing: false,
-        finalEasingSpeed: 500,
-        latency: 0,
-        precision: 3,
-        selector: "#progressBar",
-        updateInterval: 100
-    };
-    progressBar.configure(config);
-    progressReporter.setImplementation(progressBar.implementation);
-    progressReporter.reset();
-}
-jestReset.dom = jestResetDom;
+    {
+        const config = { enabled: false, timeout: 1000 };
+        implementations.testDelay.configurableTestDelay.configure(config);
+        testDelay.setImplementation(implementations.testDelay.configurableTestDelay.implementation);
+    }
+}, {
+    /**
+     * Jest reset.
+     *
+     * @param this - No this.
+     * @param localeName - Locale name.
+     * @param definitions - Language definitions.
+     */
+    dictionary(localeName, definitions) {
+        const config = {
+            localeName
+        };
+        implementations.lang.dictionary.Dictionary.configure(config);
+        lang.setImplementation(implementations.lang.dictionary.Dictionary.create(definitions));
+    },
+    /**
+     * Jest reset.
+     *
+     * @param this - No this.
+     */
+    dom() {
+        const config = {
+            activeClass: "progress-bar-active",
+            enabled: true,
+            finalEasing: false,
+            finalEasingSpeed: 500,
+            latency: 0,
+            precision: 3,
+            selector: "#progressBar",
+            updateInterval: 100
+        };
+        implementations.progressReporter.progressBar.configure(config);
+        progressReporter.setImplementation(implementations.progressReporter.progressBar.implementation);
+        progressReporter.reset();
+    }
+});
 /**
  * Jest setup.
  */
-export function jestSetup() {
+export const jestSetup = o.extend(() => {
     {
         const expectExtend = { datetimeToEqual };
-        // eslint-disable-next-line no-type-assertion/no-type-assertion
+        // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
         expect.extend(expectExtend);
     }
     jestReset();
-}
-/**
- * Jest setup.
- *
- * @param localeName - Locale name.
- * @param definitions - Language definitions.
- */
-export function jestSetupDictionary(localeName, definitions) {
-    jestReset.dictionary(localeName, definitions);
-}
-jestSetup.dictionary = jestSetupDictionary;
-/**
- * Jest setup.
- */
-export function jestSetupDom() {
-    jestReset.dom();
-}
-jestSetup.dom = jestSetupDom;
+}, {
+    /**
+     * Jest setup.
+     *
+     * @param this - No this.
+     * @param localeName - Locale name.
+     * @param definitions - Language definitions.
+     */
+    dictionary(localeName, definitions) {
+        jestReset.dictionary(localeName, definitions);
+    },
+    /**
+     * Jest setup.
+     *
+     * @param this - No this.
+     */
+    dom() {
+        jestReset.dom();
+    }
+});
 /**
  * Checks that datetime equals expected value.
  *
@@ -148,8 +123,8 @@ jestSetup.dom = jestSetupDom;
  * @param expected - Expected value.
  * @returns Result object.
  */
-export function datetimeToEqual(got, expected) {
-    assert.instance(got, dateFnsWrapper.DateTime);
+export const datetimeToEqual = (got, expected) => {
+    assert.instance(got, implementations.datetime.dateFnsWrapper.DateTime);
     return got.toTime() === new Date(expected).getTime()
         ? {
             message: () => `Expected date not to be "${expected}"`,
@@ -159,5 +134,5 @@ export function datetimeToEqual(got, expected) {
             message: () => `Expected date to be "${expected}", got "${got.toString()}"`,
             pass: false
         };
-}
+};
 //# sourceMappingURL=index.js.map

@@ -1,3 +1,3 @@
-import type { Facade } from "@skylib/facades/dist/compare";
-export declare const implementation: Facade;
+import type { compare } from "@skylib/facades";
+export declare const implementation: compare.Facade;
 //# sourceMappingURL=natural-compare-wrapper.d.ts.map

@@ -2,13 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PouchDBProxy = exports.handlers = void 0;
 const tslib_1 = require("tslib");
+const facades_1 = require("@skylib/facades");
+const functions_1 = require("@skylib/functions");
 const pouchdb_1 = tslib_1.__importDefault(require("pouchdb"));
-const testDelay_1 = require("@skylib/facades/dist/testDelay");
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
-const PouchConflictError_1 = require("./errors/PouchConflictError");
-const PouchNotFoundError_1 = require("./errors/PouchNotFoundError");
-exports.handlers = o.freeze({
+const errors_1 = require("./errors");
+exports.handlers = functions_1.o.freeze({
     error(error) {
         throw wrapPouchError(error);
     }
@@ -35,10 +33,12 @@ class PouchDBProxy {
      * @param docs - Documents.
      * @returns Responses.
      */
-    async bulkDocs(docs) {
-        await (0, testDelay_1.testDelay)();
+    async bulkDocs(
+    // eslint-disable-next-line @skylib/no-mutable-signature -- ??
+    docs) {
+        await (0, facades_1.testDelay)();
         try {
-            return await this.db.bulkDocs(o.unfreeze(docs));
+            return await this.db.bulkDocs(functions_1.o.unfreeze(docs));
         }
         catch (e) {
             throw wrapPouchError(e);
@@ -53,7 +53,7 @@ class PouchDBProxy {
      */
     changes(changesHandler, options) {
         const changes = this.db
-            .changes(o.unfreeze(options))
+            .changes(functions_1.o.unfreeze(options))
             .on("change", changesHandler)
             .on("error", exports.handlers.error);
         return {
@@ -66,7 +66,7 @@ class PouchDBProxy {
      * Destroys database.
      */
     async destroy() {
-        await (0, testDelay_1.testDelay)();
+        await (0, facades_1.testDelay)();
         try {
             await this.db.destroy();
         }
@@ -81,7 +81,7 @@ class PouchDBProxy {
      * @returns Document.
      */
     async get(id) {
-        await (0, testDelay_1.testDelay)();
+        await (0, facades_1.testDelay)();
         try {
             return await this.db.get(id);
         }
@@ -95,8 +95,9 @@ class PouchDBProxy {
      * @param doc - Document.
      * @returns Response.
      */
+    // eslint-disable-next-line @skylib/no-mutable-signature -- ??
     async post(doc) {
-        await (0, testDelay_1.testDelay)();
+        await (0, facades_1.testDelay)();
         try {
             return await this.db.post(doc);
         }
@@ -110,10 +111,11 @@ class PouchDBProxy {
      * @param doc - Document.
      * @returns Response.
      */
+    // eslint-disable-next-line @skylib/no-mutable-signature -- ??
     async put(doc) {
-        await (0, testDelay_1.testDelay)();
+        await (0, facades_1.testDelay)();
         try {
-            return await this.db.put(o.unfreeze(doc));
+            return await this.db.put(functions_1.o.unfreeze(doc));
         }
         catch (e) {
             throw wrapPouchError(e);
@@ -127,9 +129,9 @@ class PouchDBProxy {
      * @returns Query response.
      */
     async query(mapReduce, options) {
-        await (0, testDelay_1.testDelay)();
+        await (0, facades_1.testDelay)();
         try {
-            return await this.db.query(mapReduce, o.unfreeze(options));
+            return await this.db.query(mapReduce, functions_1.o.unfreeze(options));
         }
         catch (e) {
             throw wrapPouchError(e);
@@ -137,11 +139,11 @@ class PouchDBProxy {
     }
 }
 exports.PouchDBProxy = PouchDBProxy;
-const isWrappablePouchError = is.object.factory({
-    error: is.true,
-    message: is.string,
-    name: is.string,
-    status: is.number
+const isWrappablePouchError = functions_1.is.object.factory({
+    error: functions_1.is.true,
+    message: functions_1.is.string,
+    name: functions_1.is.string,
+    status: functions_1.is.number
 }, {});
 /**
  * Converts pouch error to conventional error.
@@ -152,9 +154,9 @@ const isWrappablePouchError = is.object.factory({
 function wrapPouchError(value) {
     if (isWrappablePouchError(value)) {
         if (value.status === 404 && value.name === "not_found")
-            return new PouchNotFoundError_1.PouchNotFoundError(value.message);
+            return new errors_1.PouchNotFoundError(value.message);
         if (value.status === 409 && value.name === "conflict")
-            return new PouchConflictError_1.PouchConflictError(value.message);
+            return new errors_1.PouchConflictError(value.message);
         return new Error(value.message);
     }
     return value;

@@ -1,6 +1,6 @@
-import type { Context } from "@skylib/facades/es/lang";
-import type { IndexedObject, NumStr, strings } from "@skylib/functions/es/types/core";
-import type { Definitions } from ".";
+import type { lang } from "@skylib/facades";
+import type { IndexedObject, NumStr, strings } from "@skylib/functions";
+import type { Definitions } from "./Definitions";
 import type { RawDefinition, WordInfo } from "./types";
 export declare class Definition {
     /**
@@ -21,18 +21,18 @@ export declare class Definition {
      * @param replacements - Replacements.
      * @returns Word.
      */
-    get(owner: Definitions, context: Context | undefined, forms: strings, count: number, replacements: ReadonlyMap<string, string>): WordInfo;
-    protected contexts: IndexedObject<NumStr>;
-    protected id: NumStr;
-    protected rulesRef: readonly strings[];
-    protected rulesRefDependent: readonly strings[];
-    protected rulesRefSecondary: readonly strings[];
-    protected rulesVal: readonly strings[];
-    protected rulesWord: readonly strings[];
-    protected rulesWordSecondary: readonly strings[];
-    protected sub: Definition | undefined;
-    protected subs: IndexedObject<Definition>;
-    protected value: string;
+    get(owner: Definitions, context: lang.Context | undefined, forms: strings, count: number, replacements: ReadonlyMap<string, string>): WordInfo;
+    protected readonly contexts: IndexedObject<NumStr>;
+    protected readonly id: NumStr;
+    protected readonly rulesRef: readonly strings[];
+    protected readonly rulesRefDependent: readonly strings[];
+    protected readonly rulesRefSecondary: readonly strings[];
+    protected readonly rulesVal: readonly strings[];
+    protected readonly rulesWord: readonly strings[];
+    protected readonly rulesWordSecondary: readonly strings[];
+    protected readonly sub: Definition | undefined;
+    protected readonly subs: IndexedObject<Definition>;
+    protected readonly value: string;
     /**
      * Applies rules to the word.
      *

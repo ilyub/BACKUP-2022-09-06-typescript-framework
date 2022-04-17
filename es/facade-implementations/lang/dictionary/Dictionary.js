@@ -1,11 +1,5 @@
-import { reactiveStorage } from "@skylib/facades/es/reactiveStorage";
-import * as assert from "@skylib/functions/es/assertions";
-import * as cast from "@skylib/functions/es/converters";
-import * as fn from "@skylib/functions/es/function";
-import { onDemand, wrapProxyHandler } from "@skylib/functions/es/helpers";
-import * as o from "@skylib/functions/es/object";
-import * as reflect from "@skylib/functions/es/reflect";
-import * as s from "@skylib/functions/es/string";
+import { reactiveStorage } from "@skylib/facades";
+import { assert, cast, fn, onDemand, wrapProxyHandler, o, reflect, s } from "@skylib/functions";
 export class Dictionary {
     /**
      * Creates class instance.
@@ -33,11 +27,6 @@ export class Dictionary {
             writable: true,
             value: void 0
         });
-        /*
-        |*****************************************************************************
-        |* Protected
-        |*****************************************************************************
-        |*/
         Object.defineProperty(this, "proxified", {
             enumerable: true,
             configurable: true,
@@ -63,7 +52,7 @@ export class Dictionary {
                     return Object.getOwnPropertyDescriptor(target, key);
                 }
             });
-            // eslint-disable-next-line no-type-assertion/no-type-assertion
+            // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
             return new Proxy(this, handler);
         });
     }
@@ -160,11 +149,6 @@ export class Dictionary {
         return definitions.pluralReduce(count);
     }
 }
-/*
-|*******************************************************************************
-|* Private
-|*******************************************************************************
-|*/
 const moduleConfig = onDemand(() => reactiveStorage({ localeName: "en-US" }));
 const replacementsPool = new Map();
 //# sourceMappingURL=Dictionary.js.map

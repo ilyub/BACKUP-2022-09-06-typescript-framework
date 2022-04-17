@@ -1,14 +1,15 @@
-import type { Facade, Type } from "@skylib/facades/dist/handlePromise";
-import type { Rec } from "@skylib/functions/dist/types/core";
+import type { handlePromise } from "@skylib/facades";
+import type { Rec } from "@skylib/functions";
+export declare const handlers: Readonly<{
+    error(error: unknown): void;
+}>;
+export declare const implementation: handlePromise.Facade;
 export interface Configuration {
-    readonly expectedDurations: Rec<Type, number>;
+    readonly expectedDurations: Rec<handlePromise.Type, number>;
 }
 export declare type PartialConfiguration<K extends keyof Configuration> = {
     readonly [L in K]: Configuration[L];
 };
-export declare const handlers: Readonly<{
-    error(error: unknown): void;
-}>;
 /**
  * Configures plugin.
  *
@@ -21,5 +22,4 @@ export declare function configure(config: Partial<Configuration>): void;
  * @returns Plugin configuration.
  */
 export declare function getConfiguration(): Configuration;
-export declare const implementation: Facade;
 //# sourceMappingURL=promiseHandler.d.ts.map

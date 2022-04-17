@@ -1,13 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Definition = void 0;
-const tslib_1 = require("tslib");
-const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
-const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
-const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
-const regexp = tslib_1.__importStar(require("@skylib/functions/dist/regexp"));
+const functions_1 = require("@skylib/functions");
 class Definition {
     /**
      * Creates class instance.
@@ -16,11 +10,6 @@ class Definition {
      * @param id - ID.
      */
     constructor(raw, id) {
-        /*
-        |*****************************************************************************
-        |* Protected
-        |*****************************************************************************
-        |*/
         Object.defineProperty(this, "contexts", {
             enumerable: true,
             configurable: true,
@@ -90,16 +79,16 @@ class Definition {
         this.id = id;
         switch (typeof raw) {
             case "object": {
-                const [primary, subs, contexts] = is.array(raw)
+                const [primary, subs, contexts] = functions_1.is.array(raw)
                     ? raw
                     : [undefined, raw, undefined];
                 this.contexts = contexts !== null && contexts !== void 0 ? contexts : {};
-                this.subs = o.map(subs, (value, key) => new Definition(value, key));
-                this.sub = fn.run(() => {
-                    const result = is.not.empty(primary)
+                this.subs = functions_1.o.map(subs, (value, key) => new Definition(value, key));
+                this.sub = functions_1.fn.run(() => {
+                    const result = functions_1.is.not.empty(primary)
                         ? this.subs[primary]
-                        : o.values(this.subs)[0];
-                    assert.not.empty(result, `Invalid primary reference: ${id}`);
+                        : functions_1.o.values(this.subs)[0];
+                    functions_1.assert.not.empty(result, `Invalid primary reference: ${id}`);
                     return result;
                 });
                 this.value = this.sub.value;
@@ -115,12 +104,12 @@ class Definition {
         const reVal = /@([^\s.:<>{}]+)/u;
         const reWord = /\{([^\s.:<>{}]+)\}/u;
         const reWordSecondary = /\{([^\s.:<>{}]+)\.([^\s.:<>{}]+)\}/u;
-        this.rulesRef = regexp.matchAll(this.value, reRef);
-        this.rulesRefDependent = regexp.matchAll(this.value, reRefDependent);
-        this.rulesRefSecondary = regexp.matchAll(this.value, reRefSecondary);
-        this.rulesVal = regexp.matchAll(this.value, reVal);
-        this.rulesWord = regexp.matchAll(this.value, reWord);
-        this.rulesWordSecondary = regexp.matchAll(this.value, reWordSecondary);
+        this.rulesRef = functions_1.regexp.matchAll(this.value, reRef);
+        this.rulesRefDependent = functions_1.regexp.matchAll(this.value, reRefDependent);
+        this.rulesRefSecondary = functions_1.regexp.matchAll(this.value, reRefSecondary);
+        this.rulesVal = functions_1.regexp.matchAll(this.value, reVal);
+        this.rulesWord = functions_1.regexp.matchAll(this.value, reWord);
+        this.rulesWordSecondary = functions_1.regexp.matchAll(this.value, reWordSecondary);
     }
     /**
      * Returns word based on context, word forms, and count.
@@ -136,9 +125,9 @@ class Definition {
     get(owner, context, forms, count, replacements) {
         if (context) {
             const ref = this.contexts[context];
-            if (is.not.empty(ref)) {
+            if (functions_1.is.not.empty(ref)) {
                 const definition = this.subs[ref];
-                assert.not.empty(definition, `Invalid context reference: ${this.id}.${context}`);
+                functions_1.assert.not.empty(definition, `Invalid context reference: ${this.id}.${context}`);
                 return definition.get(owner, context, forms, count, replacements);
             }
         }
@@ -147,7 +136,12 @@ class Definition {
             if (definition)
                 return definition.get(owner, context, [form], count, replacements);
         }
-        if (count !== 1) {
+        // eslint-disable-next-line no-warning-comments -- Postponed
+        // fixme: Compare to dictionary's count
+        if (count === 1) {
+            // Plural form not needed
+        }
+        else {
             const definition = this.subs[count];
             if (definition)
                 return definition.get(owner, context, forms, count, replacements);
@@ -178,11 +172,11 @@ class Definition {
      */
     applyRulesRef(word, owner) {
         for (const rule of this.rulesRef) {
-            const rule0 = a.get(rule, 0);
-            const rule1 = a.get(rule, 1);
-            const rule2 = a.get(rule, 2).toLowerCase();
+            const rule0 = functions_1.a.get(rule, 0);
+            const rule1 = functions_1.a.get(rule, 1);
+            const rule2 = functions_1.a.get(rule, 2).toLowerCase();
             const key = word.replacements.get(rule1);
-            assert.string(key, `Missing replacement: ${this.id}.${rule1}`);
+            functions_1.assert.string(key, `Missing replacement: ${this.id}.${rule1}`);
             const word2 = owner.get(key, word.context, rule2, word.count, word.replacements);
             word = Object.assign(Object.assign({}, word), { forms: word2.forms, value: word.value.replace(rule0, word2.value) });
         }
@@ -197,10 +191,10 @@ class Definition {
      */
     applyRulesRefDependent(word, owner) {
         for (const rule of this.rulesRefDependent) {
-            const rule0 = a.get(rule, 0);
-            const rule1 = a.get(rule, 1);
+            const rule0 = functions_1.a.get(rule, 0);
+            const rule1 = functions_1.a.get(rule, 1);
             const key = word.replacements.get(rule1);
-            assert.string(key, `Missing replacement: ${this.id}.${rule1}`);
+            functions_1.assert.string(key, `Missing replacement: ${this.id}.${rule1}`);
             const word2 = owner.get(key, word.context, word.forms, word.count, word.replacements);
             word = Object.assign(Object.assign({}, word), { value: word.value.replace(rule0, word2.value) });
         }
@@ -215,11 +209,11 @@ class Definition {
      */
     applyRulesRefSecondary(word, owner) {
         for (const rule of this.rulesRefSecondary) {
-            const rule0 = a.get(rule, 0);
-            const rule1 = a.get(rule, 1);
-            const rule2 = a.get(rule, 2).toLowerCase();
+            const rule0 = functions_1.a.get(rule, 0);
+            const rule1 = functions_1.a.get(rule, 1);
+            const rule2 = functions_1.a.get(rule, 2).toLowerCase();
             const key = word.replacements.get(rule1);
-            assert.string(key, `Missing replacement: ${this.id}.${rule1}`);
+            functions_1.assert.string(key, `Missing replacement: ${this.id}.${rule1}`);
             const word2 = owner.get(key, word.context, rule2, 1, word.replacements);
             word = Object.assign(Object.assign({}, word), { value: word.value.replace(rule0, word2.value) });
         }
@@ -233,10 +227,10 @@ class Definition {
      */
     applyRulesVal(word) {
         for (const rule of this.rulesVal) {
-            const rule0 = a.get(rule, 0);
-            const rule1 = a.get(rule, 1);
+            const rule0 = functions_1.a.get(rule, 0);
+            const rule1 = functions_1.a.get(rule, 1);
             const value = word.replacements.get(rule1);
-            assert.string(value, `Missing replacement: ${this.id}.${rule1}`);
+            functions_1.assert.string(value, `Missing replacement: ${this.id}.${rule1}`);
             word = Object.assign(Object.assign({}, word), { value: word.value.replace(rule0, value) });
         }
         return word;
@@ -250,8 +244,8 @@ class Definition {
      */
     applyRulesWord(word, owner) {
         for (const rule of this.rulesWord) {
-            const rule0 = a.get(rule, 0);
-            const rule1 = a.get(rule, 1);
+            const rule0 = functions_1.a.get(rule, 0);
+            const rule1 = functions_1.a.get(rule, 1);
             const word2 = owner.get(rule1, word.context, word.forms, word.count, word.replacements);
             word = Object.assign(Object.assign({}, word), { value: word.value.replace(rule0, word2.value) });
         }
@@ -266,9 +260,9 @@ class Definition {
      */
     applyRulesWordSecondary(word, owner) {
         for (const rule of this.rulesWordSecondary) {
-            const rule0 = a.get(rule, 0);
-            const rule1 = a.get(rule, 1);
-            const rule2 = a.get(rule, 2).toLowerCase();
+            const rule0 = functions_1.a.get(rule, 0);
+            const rule1 = functions_1.a.get(rule, 1);
+            const rule2 = functions_1.a.get(rule, 2).toLowerCase();
             const word2 = owner.get(rule1, word.context, rule2, 1, word.replacements);
             word = Object.assign(Object.assign({}, word), { value: word.value.replace(rule0, word2.value) });
         }

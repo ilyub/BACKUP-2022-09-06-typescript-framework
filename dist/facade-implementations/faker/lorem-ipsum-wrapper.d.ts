@@ -1,4 +1,5 @@
-import type { Facade } from "@skylib/facades/dist/faker";
+import type { faker } from "@skylib/facades";
+export declare const loremIpsumWrapper: Configurable & faker.Facade;
 export interface Configurable {
     /**
      * Configures plugin.
@@ -19,5 +20,4 @@ export interface Configuration {
     readonly minSentences: number;
     readonly minWords: number;
 }
-export declare const loremIpsumWrapper: Configurable & Facade;
 //# sourceMappingURL=lorem-ipsum-wrapper.d.ts.map

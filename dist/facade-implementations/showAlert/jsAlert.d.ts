@@ -1,3 +1,3 @@
-import type { Facade } from "@skylib/facades/dist/showAlert";
-export declare const implementation: Facade;
+import type { showAlert } from "@skylib/facades";
+export declare const implementation: showAlert.Facade;
 //# sourceMappingURL=jsAlert.d.ts.map

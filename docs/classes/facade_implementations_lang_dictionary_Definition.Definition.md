@@ -53,67 +53,67 @@ Creates class instance.
 
 ### contexts
 
-• `Protected` **contexts**: `IndexedObject`<`NumStr`\> = `{}`
+• `Protected` `Readonly` **contexts**: `IndexedObject`<`NumStr`\> = `{}`
 
 ___
 
 ### id
 
-• `Protected` **id**: `NumStr`
+• `Protected` `Readonly` **id**: `NumStr`
 
 ___
 
 ### rulesRef
 
-• `Protected` **rulesRef**: readonly `strings`[]
+• `Protected` `Readonly` **rulesRef**: readonly `strings`[]
 
 ___
 
 ### rulesRefDependent
 
-• `Protected` **rulesRefDependent**: readonly `strings`[]
+• `Protected` `Readonly` **rulesRefDependent**: readonly `strings`[]
 
 ___
 
 ### rulesRefSecondary
 
-• `Protected` **rulesRefSecondary**: readonly `strings`[]
+• `Protected` `Readonly` **rulesRefSecondary**: readonly `strings`[]
 
 ___
 
 ### rulesVal
 
-• `Protected` **rulesVal**: readonly `strings`[]
+• `Protected` `Readonly` **rulesVal**: readonly `strings`[]
 
 ___
 
 ### rulesWord
 
-• `Protected` **rulesWord**: readonly `strings`[]
+• `Protected` `Readonly` **rulesWord**: readonly `strings`[]
 
 ___
 
 ### rulesWordSecondary
 
-• `Protected` **rulesWordSecondary**: readonly `strings`[]
+• `Protected` `Readonly` **rulesWordSecondary**: readonly `strings`[]
 
 ___
 
 ### sub
 
-• `Protected` **sub**: `undefined` \| [`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md) = `undefined`
+• `Protected` `Readonly` **sub**: `undefined` \| [`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md) = `undefined`
 
 ___
 
 ### subs
 
-• `Protected` **subs**: `IndexedObject`<[`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)\> = `{}`
+• `Protected` `Readonly` **subs**: `IndexedObject`<[`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)\> = `{}`
 
 ___
 
 ### value
 
-• `Protected` **value**: `string`
+• `Protected` `Readonly` **value**: `string`
 
 ## Methods
 

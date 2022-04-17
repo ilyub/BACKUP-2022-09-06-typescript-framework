@@ -4,10 +4,6 @@
 
 ## Table of contents
 
-### Classes
-
-- [Engine](../classes/facade_implementations_inlineSearch_lunr_wrapper.Engine.md)
-
 ### Variables
 
 - [implementation](facade_implementations_inlineSearch_lunr_wrapper.md#implementation)
@@ -16,4 +12,4 @@
 
 ### implementation
 
-• `Const` **implementation**: `Facade`
+• `Const` **implementation**: `inlineSearch.Facade`

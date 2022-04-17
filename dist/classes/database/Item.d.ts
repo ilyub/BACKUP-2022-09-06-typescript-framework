@@ -1,18 +1,5 @@
-import type { BaseExistingDocument, BasePutDocument, StoredAttachedDocuments } from "@skylib/facades/dist/database";
-import type { numbers, stringU } from "@skylib/functions/dist/types/core";
-export interface BaseItemDoc {
-    readonly createdAt?: string;
-    readonly deletedAt?: string;
-    readonly softDeleted?: true;
-    readonly updatedAt?: string;
-}
-export interface PutItemDoc extends BasePutDocument, BaseItemDoc {
-}
-export declare type PutItemDocs = readonly PutItemDoc[];
-export interface ExistingItemDoc extends BaseExistingDocument, BaseItemDoc {
-}
-export declare type ExistingItemDocs = readonly ExistingItemDoc[];
-export declare type Items = readonly Items[];
+import type { database } from "@skylib/facades";
+import type { numbers, stringU } from "@skylib/functions";
 export declare class Item {
     readonly _deleted: boolean;
     readonly _id: string;
@@ -26,14 +13,29 @@ export declare class Item {
      *
      * @param source - Source.
      */
-    constructor(source: ExistingItemDoc);
+    constructor(source: Item.ExistingItemDoc);
     /**
      * Returns database document.
      *
      * @returns Database document.
      */
-    doc(): ExistingItemDoc;
-    protected readonly attachedDocs: StoredAttachedDocuments | undefined;
+    doc(): Item.ExistingItemDoc;
+    protected readonly attachedDocs: database.BaseStoredAttachedDocuments | undefined;
     protected readonly lastAttachedDocs: numbers | undefined;
+}
+export interface BaseItemDoc {
+    readonly createdAt?: string;
+    readonly deletedAt?: string;
+    readonly softDeleted?: true;
+    readonly updatedAt?: string;
+}
+export declare namespace Item {
+    interface ExistingItemDoc extends database.BaseExistingDocument, BaseItemDoc {
+    }
+    type ExistingItemDocs = readonly ExistingItemDoc[];
+    type Items = readonly Items[];
+    interface PutItemDoc extends database.BasePutDocument, BaseItemDoc {
+    }
+    type PutItemDocs = readonly PutItemDoc[];
 }
 //# sourceMappingURL=Item.d.ts.map

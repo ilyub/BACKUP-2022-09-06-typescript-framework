@@ -44,7 +44,7 @@ Creates class instance.
 
 ### appId
 
-• `Protected` **appId**: `stringU` \| `AsyncPromise`<`stringU`, `nevers`\>
+• `Protected` `Readonly` **appId**: `stringU` \| `AsyncPromise`<`stringU`, `nevers`\>
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 ### version
 
-• `Protected` **version**: `string`
+• `Protected` `Readonly` **version**: `string`
 
 ## Methods
 
@@ -70,7 +70,7 @@ ___
 
 #### Implementation of
 
-Facade.accessToken
+facebook.Facade.accessToken
 
 ___
 
@@ -84,4 +84,4 @@ ___
 
 #### Implementation of
 
-Facade.loadSdk
+facebook.Facade.loadSdk

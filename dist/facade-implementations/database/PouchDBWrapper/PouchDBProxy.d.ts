@@ -2,43 +2,13 @@
 /// <reference types="pouchdb-find" />
 /// <reference types="pouchdb-mapreduce" />
 /// <reference types="pouchdb-replication" />
-import type { StoredAttachedDocument } from "@skylib/facades/dist/database";
-import type { numbers } from "@skylib/functions/dist/types/core";
-export interface Changes {
-    /**
-     * Cancels changes.
-     */
-    readonly cancel: () => void;
-}
-export interface Content {
-    readonly [key: string]: unknown;
-    readonly attachedDocs?: readonly StoredAttachedDocument[];
-    readonly lastAttachedDocs?: numbers;
-}
-export declare type PouchChange = PouchDB.Core.ChangesResponseChange<Content>;
-export interface PouchChangesHandler {
-    /**
-     * Changes handler.
-     *
-     * @param change - Change.
-     */
-    (change: PouchChange): void;
-}
-export declare type PouchChangesOptions = PouchDB.Core.ChangesOptions;
-export declare type PouchDatabaseConfiguration = PouchDB.Configuration.DatabaseConfiguration;
-export declare type PouchGetMeta = PouchDB.Core.GetMeta;
-export declare type PouchIdMeta = PouchDB.Core.IdMeta;
-export declare type PouchDatabase = PouchDB.Database<Content>;
-export declare type PouchError = PouchDB.Core.Error;
-export declare type PouchResponse = PouchDB.Core.Response;
-export declare type PouchPutDocument = PouchDB.Core.PutDocument<Content>;
-export declare type PouchQueryOptions = PouchDB.Query.Options<Content, Content>;
-export declare type PouchQueryResponse = PouchDB.Query.Response<Content>;
+import type { database } from "@skylib/facades";
+import type { numbers } from "@skylib/functions";
 export declare const handlers: Readonly<{
     error(error: unknown): void;
 }>;
 export declare class PouchDBProxy {
-    db: PouchDatabase;
+    readonly db: PouchDatabase;
     /**
      * Creates class instance.
      *
@@ -95,4 +65,34 @@ export declare class PouchDBProxy {
      */
     query(mapReduce: string, options: PouchQueryOptions): Promise<PouchQueryResponse>;
 }
+export interface Changes {
+    /**
+     * Cancels changes.
+     */
+    readonly cancel: () => void;
+}
+export interface Content {
+    readonly [key: string]: unknown;
+    readonly attachedDocs?: database.BaseStoredAttachedDocuments;
+    readonly lastAttachedDocs?: numbers;
+}
+export declare type PouchChange = PouchDB.Core.ChangesResponseChange<Content>;
+export interface PouchChangesHandler {
+    /**
+     * Changes handler.
+     *
+     * @param change - Change.
+     */
+    (change: PouchChange): void;
+}
+export declare type PouchChangesOptions = PouchDB.Core.ChangesOptions;
+export declare type PouchDatabase = PouchDB.Database<Content>;
+export declare type PouchDatabaseConfiguration = PouchDB.Configuration.DatabaseConfiguration;
+export declare type PouchError = PouchDB.Core.Error;
+export declare type PouchGetMeta = PouchDB.Core.GetMeta;
+export declare type PouchIdMeta = PouchDB.Core.IdMeta;
+export declare type PouchPutDocument = PouchDB.Core.PutDocument<Content>;
+export declare type PouchQueryOptions = PouchDB.Query.Options<Content, Content>;
+export declare type PouchQueryResponse = PouchDB.Query.Response<Content>;
+export declare type PouchResponse = PouchDB.Core.Response;
 //# sourceMappingURL=PouchDBProxy.d.ts.map

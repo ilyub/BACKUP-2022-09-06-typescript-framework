@@ -37,7 +37,7 @@
 
 ### implementation
 
-• `Const` **implementation**: `Facade`
+• `Const` **implementation**: `httpRequest.Facade`
 
 ## Functions
 

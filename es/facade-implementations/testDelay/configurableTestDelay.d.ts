@@ -1,9 +1,10 @@
-import type { Facade } from "@skylib/facades/es/testDelay";
+import type { testDelay } from "@skylib/facades";
+export declare const implementation: testDelay.Facade;
+export declare const moduleConfig: Configuration;
 export interface Configuration {
     readonly enabled: boolean;
     readonly timeout: number;
 }
-export declare const implementation: Facade;
 /**
  * Configures plugin.
  *
@@ -16,5 +17,4 @@ export declare function configure(config: Partial<Configuration>): void;
  * @returns Plugin configuration.
  */
 export declare function getConfiguration(): Configuration;
-export declare const moduleConfig: Configuration;
 //# sourceMappingURL=configurableTestDelay.d.ts.map

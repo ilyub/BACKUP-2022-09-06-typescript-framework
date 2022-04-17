@@ -1,43 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Database = exports.wrapError = exports.handlers = void 0;
+exports.wrapError = exports.Database = exports.handlers = void 0;
 const tslib_1 = require("tslib");
-const _ = tslib_1.__importStar(require("lodash"));
+const facades_1 = require("@skylib/facades");
+const functions_1 = require("@skylib/functions");
+const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const pouchdb_collate_1 = require("pouchdb-collate");
 const sha256_1 = tslib_1.__importDefault(require("sha256"));
-const database_1 = require("@skylib/facades/dist/database");
-const datetime_1 = require("@skylib/facades/dist/datetime");
-const handlePromise_1 = require("@skylib/facades/dist/handlePromise");
-const reactiveStorage_1 = require("@skylib/facades/dist/reactiveStorage");
-const uniqueId_1 = require("@skylib/facades/dist/uniqueId");
-const a = tslib_1.__importStar(require("@skylib/functions/dist/array"));
-const assert = tslib_1.__importStar(require("@skylib/functions/dist/assertions"));
-const cast = tslib_1.__importStar(require("@skylib/functions/dist/converters"));
-const fn = tslib_1.__importStar(require("@skylib/functions/dist/function"));
-const is = tslib_1.__importStar(require("@skylib/functions/dist/guards"));
-const json = tslib_1.__importStar(require("@skylib/functions/dist/json"));
-const num = tslib_1.__importStar(require("@skylib/functions/dist/number"));
-const o = tslib_1.__importStar(require("@skylib/functions/dist/object"));
-const programFlow = tslib_1.__importStar(require("@skylib/functions/dist/programFlow"));
-const PouchConflictError_1 = require("./errors/PouchConflictError");
-const PouchNotFoundError_1 = require("./errors/PouchNotFoundError");
-const PouchRetryError_1 = require("./errors/PouchRetryError");
 const PouchDBProxy_1 = require("./PouchDBProxy");
-exports.handlers = o.freeze({
+const errors_1 = require("./errors");
+exports.handlers = functions_1.o.freeze({
     error(error) {
         throw error;
     }
 });
-/**
- * Wraps error.
- *
- * @param e - Error.
- * @returns Wrapped error.
- */
-function wrapError(e) {
-    return () => e;
-}
-exports.wrapError = wrapError;
 class Database {
     /**
      * Creates class instance.
@@ -49,11 +25,7 @@ class Database {
      */
     constructor(name, options = {}, config = {}, pouchConfig = {}) {
         var _a, _b, _c, _d;
-        /*
-        |*****************************************************************************
-        |* Protected
-        |*****************************************************************************
-        |*/
+        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
         Object.defineProperty(this, "changes", {
             enumerable: true,
             configurable: true,
@@ -78,6 +50,7 @@ class Database {
             writable: true,
             value: void 0
         });
+        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
         Object.defineProperty(this, "db", {
             enumerable: true,
             configurable: true,
@@ -112,17 +85,17 @@ class Database {
     async bulkDocs(docs) {
         for (const doc of docs)
             validatePutDocument(doc);
-        docs = docs.map(doc => o.omit(doc, "lastAttachedDocs"));
+        docs = docs.map(doc => functions_1.o.omit(doc, "lastAttachedDocs"));
         const db = await this.getDb();
         const responses = await db.bulkDocs(docs);
         return responses
             .map(response => "ok" in response && response.ok
             ? { id: response.id, rev: response.rev }
             : undefined)
-            .filter(is.not.empty);
+            .filter(functions_1.is.not.empty);
     }
     async bulkDocsAttached(docs) {
-        const responses = await Promise.all(_.uniq(docs.map(doc => doc.parentDoc._id)).map(async (parentId) => fn.run(async () => this.putAttachedBulk(parentId, docs.filter(doc => doc.parentDoc._id === parentId)))));
+        const responses = await Promise.all(_.uniq(docs.map(doc => doc.parentDoc._id)).map(async (parentId) => await functions_1.fn.run(async () => await this.putAttachedBulk(parentId, docs.filter(doc => doc.parentDoc._id === parentId)))));
         return _.flatten(responses);
     }
     async count(conditions = {}) {
@@ -139,11 +112,11 @@ class Database {
     }
     async exists(id) {
         const doc = await this.getIfExists(id);
-        return is.not.empty(doc);
+        return functions_1.is.not.empty(doc);
     }
     async existsAttached(id, parentId) {
         const doc = await this.getIfExistsAttached(id, parentId);
-        return is.not.empty(doc);
+        return functions_1.is.not.empty(doc);
     }
     async get(id) {
         const db = await this.getDb();
@@ -160,7 +133,7 @@ class Database {
             return await this.get(id);
         }
         catch (e) {
-            assert.instance(e, PouchNotFoundError_1.PouchNotFoundError, wrapError(e));
+            functions_1.assert.instance(e, errors_1.PouchNotFoundError, wrapError(e));
             return undefined;
         }
     }
@@ -169,7 +142,7 @@ class Database {
             return await this.getAttached(id, parentId);
         }
         catch (e) {
-            assert.instance(e, PouchNotFoundError_1.PouchNotFoundError, wrapError(e));
+            functions_1.assert.instance(e, errors_1.PouchNotFoundError, wrapError(e));
             return undefined;
         }
     }
@@ -186,38 +159,38 @@ class Database {
         validatePutDocument(doc);
         const db = await this.getDb();
         if (doc.attachedDocs && doc.attachedDocs.length === 0) {
-            assert.not.empty(doc._id);
-            assert.not.empty(doc._rev);
+            functions_1.assert.not.empty(doc._id);
+            functions_1.assert.not.empty(doc._rev);
             const storedDoc = await db.get(doc._id);
-            assert.not.empty(storedDoc.attachedDocs);
+            functions_1.assert.not.empty(storedDoc.attachedDocs);
             doc = Object.assign(Object.assign({}, doc), { attachedDocs: storedDoc.attachedDocs });
         }
-        const response = await db.post(o.omit(doc, "lastAttachedDocs"));
-        assert.toBeTrue(response.ok);
+        const response = await db.post(functions_1.o.omit(doc, "lastAttachedDocs"));
+        functions_1.assert.toBeTrue(response.ok);
         return { id: response.id, rev: response.rev };
     }
     async putAttached(parentId, doc) {
-        return a.first(await this.putAttachedBulk(parentId, [doc]));
+        return functions_1.a.first(await this.putAttachedBulk(parentId, [doc]));
     }
     async putAttachedBulk(parentId, docs) {
         const db = await this.getDb();
         for (let i = 0; i < 1 + this.options.retries; i++) {
-            // eslint-disable-next-line no-await-in-loop
+            // eslint-disable-next-line no-await-in-loop -- ???
             const result = await attempt();
             if (result)
                 return result;
         }
-        throw new PouchRetryError_1.PouchRetryError(`Failed after ${this.options.retries} retries`);
+        throw new errors_1.PouchRetryError(`Failed after ${this.options.retries} retries`);
         async function attempt() {
             var _a;
             const parentDoc = await db.get(parentId);
-            const attachedDocs = a.clone((_a = parentDoc.attachedDocs) !== null && _a !== void 0 ? _a : []);
+            const attachedDocs = functions_1.a.clone((_a = parentDoc.attachedDocs) !== null && _a !== void 0 ? _a : []);
             const lastAttachedDocs = [];
             const result = [];
             for (const doc of docs) {
                 const { _id, _rev, parentDoc: omitParentDoc } = doc, content = tslib_1.__rest(doc, ["_id", "_rev", "parentDoc"]);
-                if (is.not.empty(_id) && _rev !== a.get(attachedDocs, _id)._rev)
-                    throw new PouchConflictError_1.PouchConflictError("Attached document update conflict");
+                if (functions_1.is.not.empty(_id) && _rev !== functions_1.a.get(attachedDocs, _id)._rev)
+                    throw new errors_1.PouchConflictError("Attached document update conflict");
                 const id = _id !== null && _id !== void 0 ? _id : attachedDocs.length;
                 const rev = (_rev !== null && _rev !== void 0 ? _rev : 0) + 1;
                 const attachedDoc = Object.assign(Object.assign({}, content), { _id: id, _rev: rev });
@@ -234,15 +207,15 @@ class Database {
                 });
             }
             try {
-                const response = await db.put(o.omit(Object.assign(Object.assign({}, parentDoc), { attachedDocs,
+                const response = await db.put(functions_1.o.omit(Object.assign(Object.assign({}, parentDoc), { attachedDocs,
                     lastAttachedDocs })));
-                assert.toBeTrue(response.ok, "Database request failed");
+                functions_1.assert.toBeTrue(response.ok, "Database request failed");
                 return result.map(item => {
                     return Object.assign(Object.assign({}, item), { parentRev: response.rev });
                 });
             }
             catch (e) {
-                assert.instance(e, PouchConflictError_1.PouchConflictError, wrapError(e));
+                functions_1.assert.instance(e, errors_1.PouchConflictError, wrapError(e));
                 return undefined;
             }
         }
@@ -252,7 +225,7 @@ class Database {
             return await this.put(doc);
         }
         catch (e) {
-            assert.instance(e, PouchConflictError_1.PouchConflictError, wrapError(e));
+            functions_1.assert.instance(e, errors_1.PouchConflictError, wrapError(e));
             return undefined;
         }
     }
@@ -261,13 +234,13 @@ class Database {
             return await this.putAttached(parentId, doc);
         }
         catch (e) {
-            assert.instance(e, PouchConflictError_1.PouchConflictError, wrapError(e));
+            functions_1.assert.instance(e, errors_1.PouchConflictError, wrapError(e));
             return undefined;
         }
     }
     async query(conditions = {}, options = {}) {
         const response = await this.rawQuery(options, { conditions, docs: true });
-        assert.array.of(response.docs, isExistingDocument);
+        functions_1.assert.array.of(response.docs, isExistingDocument);
         return response.docs;
     }
     async queryAttached(conditions = {}, parentConditions = {}, options = {}) {
@@ -276,7 +249,7 @@ class Database {
             docs: true,
             parentConditions
         });
-        assert.array.of(response.docs, isExistingDocumentAttached);
+        functions_1.assert.array.of(response.docs, isExistingDocumentAttached);
         return response.docs;
     }
     reactiveCount(config) {
@@ -324,13 +297,13 @@ class Database {
         await this.getDb();
     }
     subscribe(handler) {
-        const id = (0, database_1.uniqueSubscriptionId)();
+        const id = facades_1.database.uniqueSubscriptionId();
         this.changesHandlersPool.set(id, handler);
         this.refreshSubscription();
         return id;
     }
     subscribeAttached(handler) {
-        const id = (0, database_1.uniqueAttachedSubscriptionId)();
+        const id = facades_1.database.uniqueAttachedSubscriptionId();
         this.changesHandlersAttachedPool.set(id, handler);
         this.refreshSubscription();
         return id;
@@ -351,12 +324,12 @@ class Database {
         return response.unsettledCount;
     }
     unsubscribe(id) {
-        assert.toBeTrue(this.changesHandlersPool.has(id));
+        functions_1.assert.toBeTrue(this.changesHandlersPool.has(id));
         this.changesHandlersPool.delete(id);
         this.refreshSubscription();
     }
     unsubscribeAttached(id) {
-        assert.toBeTrue(this.changesHandlersAttachedPool.has(id));
+        functions_1.assert.toBeTrue(this.changesHandlersAttachedPool.has(id));
         this.changesHandlersAttachedPool.delete(id);
         this.refreshSubscription();
     }
@@ -366,7 +339,7 @@ class Database {
      * @returns PouchDBProxy instance.
      */
     async getDb() {
-        if (is.empty(this.db)) {
+        if (functions_1.is.empty(this.db)) {
             this.db = new PouchDBProxy_1.PouchDBProxy(this.name, this.pouchConfig);
             this.refreshSubscription();
             await this.migrate();
@@ -396,8 +369,8 @@ class Database {
             descending,
             this.options.caseSensitiveSorting
         ];
-        const keyCode = fn.run(() => {
-            if (is.empty(sortBy))
+        const keyCode = functions_1.fn.run(() => {
+            if (functions_1.is.empty(sortBy))
                 return `const key = [${group2}, null, doc._id];`;
             return this.options.caseSensitiveSorting
                 ? `
@@ -417,7 +390,7 @@ class Database {
         });
         const map = uglify(`
       function (doc) {
-        /* ${(0, uniqueId_1.uniqueId)()} */
+        /* ${(0, facades_1.uniqueId)()} */
         if (${conds.toEmit}) {
           ${keyCode}
           const settled = ${conds.toSettle};
@@ -439,7 +412,7 @@ class Database {
     `);
         const reduce = uglify(`
       function (keys, values, rereduce) {
-        /* ${(0, uniqueId_1.uniqueId)()} */
+        /* ${(0, facades_1.uniqueId)()} */
         let count = 0;
         let docs = [];
         let settled = false;
@@ -454,13 +427,13 @@ class Database {
     `);
         return {
             groupLevel: ((_b = rawQueryOptions.count) !== null && _b !== void 0 ? _b : false) ? 1 : 3,
-            id: (0, sha256_1.default)(json.encode(idParams)),
+            id: (0, sha256_1.default)(functions_1.json.encode(idParams)),
             mapReduce: { map, reduce },
             output: createFilter(conds.toOutput),
             settle: createFilter(conds.toSettle)
         };
         function createFilter(cond) {
-            // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion
+            // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion -- ???
             return new Function("doc", `return ${cond};`);
         }
     }
@@ -489,8 +462,8 @@ class Database {
             descending,
             this.options.caseSensitiveSorting
         ];
-        const keyCode = fn.run(() => {
-            if (is.empty(sortBy))
+        const keyCode = functions_1.fn.run(() => {
+            if (functions_1.is.empty(sortBy))
                 return `const key = [${group2}, null, doc._id, _id];`;
             return this.options.caseSensitiveSorting
                 ? `
@@ -510,7 +483,7 @@ class Database {
         });
         const map = uglify(`
       function (doc) {
-        /* ${(0, uniqueId_1.uniqueId)()} */
+        /* ${(0, facades_1.uniqueId)()} */
         if (doc.attachedDocs && ${parentConds.toEmit}) {
           const parentDoc = { ...doc, attachedDocs: [] };
           const parentSettled = ${parentConds.toSettle};
@@ -539,7 +512,7 @@ class Database {
     `);
         const reduce = uglify(`
       function (keys, values, rereduce) {
-        /* ${(0, uniqueId_1.uniqueId)()} */
+        /* ${(0, facades_1.uniqueId)()} */
         let count = 0;
         let docs = [];
         let settled = false;
@@ -554,13 +527,13 @@ class Database {
     `);
         return {
             groupLevel: ((_b = rawQueryOptions.count) !== null && _b !== void 0 ? _b : false) ? 1 : 4,
-            id: (0, sha256_1.default)(json.encode(idParams)),
+            id: (0, sha256_1.default)(functions_1.json.encode(idParams)),
             mapReduce: { map, reduce },
             output: createFilter(conds.toOutput, parentConds.toOutput),
             settle: createFilter(conds.toSettle, parentConds.toSettle)
         };
         function createFilter(cond1, cond2) {
-            // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion
+            // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion -- ???
             return new Function("attached", uglify(`
           doc = attached.parentDoc;
           return ${cond1} && ${cond2};
@@ -581,12 +554,12 @@ class Database {
                 }
                 else {
                     {
-                        // eslint-disable-next-line no-await-in-loop
+                        // eslint-disable-next-line no-await-in-loop -- ??
                         await migration.callback.call(this);
                     }
                     {
                         migrations = Object.assign(Object.assign({}, migrations), { [migration.id]: true });
-                        // eslint-disable-next-line no-await-in-loop
+                        // eslint-disable-next-line no-await-in-loop -- ??
                         const { id, rev } = await this.put(migrations);
                         migrations = Object.assign(Object.assign({}, migrations), { _id: id, _rev: rev });
                     }
@@ -632,13 +605,13 @@ class Database {
                 });
             }
             catch (e) {
-                assert.instance(e, PouchConflictError_1.PouchConflictError, wrapError(e));
+                functions_1.assert.instance(e, errors_1.PouchConflictError, wrapError(e));
             }
         }
         function getCount() {
             var _a;
             return ((_a = rawQueryOptions.count) !== null && _a !== void 0 ? _a : false)
-                ? num.sum(...response.rows
+                ? functions_1.num.sum(...response.rows
                     .map(row => row.value)
                     .filter(isDocsResponse)
                     .map(docsResponse => docsResponse.settled
@@ -665,7 +638,7 @@ class Database {
         function getUnsettledCount() {
             var _a;
             return ((_a = rawQueryOptions.unsettledCount) !== null && _a !== void 0 ? _a : false)
-                ? num.sum(0, ...response.rows
+                ? functions_1.num.sum(0, ...response.rows
                     .map(row => row.value)
                     .filter(isDocsResponse)
                     .filter(docsResponse => !docsResponse.settled)
@@ -677,17 +650,17 @@ class Database {
                 return await queryAttempt();
             }
             catch (e) {
-                assert.instance(e, PouchNotFoundError_1.PouchNotFoundError, wrapError(e));
+                functions_1.assert.instance(e, errors_1.PouchNotFoundError, wrapError(e));
                 await createDesignDocument();
-                return queryAttempt();
+                return await queryAttempt();
             }
         }
         async function queryAttempt() {
-            return db.query(`${mapReduce.id}/default`, {
+            return await db.query(`${mapReduce.id}/default`, {
                 descending: options.descending,
                 group: true,
                 group_level: mapReduce.groupLevel,
-                limit: is.not.empty(limit) ? limit + skip + 1 : undefined
+                limit: functions_1.is.not.empty(limit) ? limit + skip + 1 : undefined
             });
         }
         async function rebuildIndex() {
@@ -695,11 +668,11 @@ class Database {
             await db.put(Object.assign(Object.assign({}, doc), { views: { default: mapReduce.mapReduce } }));
         }
         function sliceDocs(docs) {
-            if (is.not.empty(options.skip))
-                return is.not.empty(options.limit)
+            if (functions_1.is.not.empty(options.skip))
+                return functions_1.is.not.empty(options.limit)
                     ? docs.slice(options.skip, options.skip + options.limit)
                     : docs.slice(options.skip);
-            return is.not.empty(options.limit) ? docs.slice(0, options.limit) : docs;
+            return functions_1.is.not.empty(options.limit) ? docs.slice(0, options.limit) : docs;
         }
     }
     /**
@@ -710,13 +683,13 @@ class Database {
      * @returns Reactive response.
      */
     reactiveFactoryGet(request, handler) {
-        const result = (0, reactiveStorage_1.reactiveStorage)({
+        const result = (0, facades_1.reactiveStorage)({
             loaded: false,
             loading: true,
-            refresh: fn.noop,
-            unsubscribe: fn.noop
+            refresh: functions_1.fn.noop,
+            unsubscribe: functions_1.fn.noop
         });
-        handlePromise_1.handlePromise.silent(this.reactiveFactoryGetAsync(request, handler, result));
+        facades_1.handlePromise.silent(this.reactiveFactoryGetAsync(request, handler, result));
         return result;
     }
     /**
@@ -728,7 +701,7 @@ class Database {
      * @returns Reactive response.
      */
     async reactiveFactoryGetAsync(request, handler, result) {
-        o.assign(result, {
+        functions_1.o.assign(result, {
             loaded: true,
             loading: false,
             unsubscribe: () => {
@@ -736,10 +709,10 @@ class Database {
             },
             value: await request
         });
-        assert.toBeTrue(result.loaded);
+        functions_1.assert.toBeTrue(result.loaded);
         const subscription = this.subscribe(doc => {
-            assert.not.empty(result);
-            assert.toBeTrue(result.loaded);
+            functions_1.assert.not.empty(result);
+            functions_1.assert.toBeTrue(result.loaded);
             handler(doc, result);
         });
         return result;
@@ -752,13 +725,13 @@ class Database {
      * @returns Reactive response.
      */
     reactiveFactoryGetAttached(request, handler) {
-        const result = (0, reactiveStorage_1.reactiveStorage)({
+        const result = (0, facades_1.reactiveStorage)({
             loaded: false,
             loading: true,
-            refresh: fn.noop,
-            unsubscribe: fn.noop
+            refresh: functions_1.fn.noop,
+            unsubscribe: functions_1.fn.noop
         });
-        handlePromise_1.handlePromise.silent(this.reactiveFactoryGetAttachedAsync(request, handler, result));
+        facades_1.handlePromise.silent(this.reactiveFactoryGetAttachedAsync(request, handler, result));
         return result;
     }
     /**
@@ -770,7 +743,7 @@ class Database {
      * @returns Reactive response.
      */
     async reactiveFactoryGetAttachedAsync(request, handler, result) {
-        o.assign(result, {
+        functions_1.o.assign(result, {
             loaded: true,
             loading: false,
             unsubscribe: () => {
@@ -778,10 +751,10 @@ class Database {
             },
             value: await request
         });
-        assert.toBeTrue(result.loaded);
+        functions_1.assert.toBeTrue(result.loaded);
         const subscription = this.subscribeAttached(doc => {
-            assert.not.empty(result);
-            assert.toBeTrue(result.loaded);
+            functions_1.assert.not.empty(result);
+            functions_1.assert.toBeTrue(result.loaded);
             handler(doc, result);
         });
         return result;
@@ -794,13 +767,13 @@ class Database {
      * @returns Reactive response.
      */
     reactiveFactoryQuery(request, config) {
-        const result = (0, reactiveStorage_1.reactiveStorage)({
+        const result = (0, facades_1.reactiveStorage)({
             loaded: false,
             loading: true,
-            refresh: fn.noop,
-            unsubscribe: fn.noop
+            refresh: functions_1.fn.noop,
+            unsubscribe: functions_1.fn.noop
         });
-        handlePromise_1.handlePromise.silent(this.reactiveFactoryQueryAsync(request, config, result));
+        facades_1.handlePromise.silent(this.reactiveFactoryQueryAsync(request, config, result));
         return result;
     }
     /**
@@ -812,19 +785,19 @@ class Database {
      * @returns Reactive response.
      */
     async reactiveFactoryQueryAsync(request, config, result) {
-        config = (0, reactiveStorage_1.reactiveStorage)(config);
-        o.assign(result, {
+        config = (0, facades_1.reactiveStorage)(config);
+        functions_1.o.assign(result, {
             loaded: true,
             loading: false,
             unsubscribe: () => {
-                reactiveStorage_1.reactiveStorage.unwatch(config, observer);
+                facades_1.reactiveStorage.unwatch(config, observer);
                 this.unsubscribe(subscription);
-                programFlow.clearTimeout(timeout);
+                functions_1.programFlow.clearTimeout(timeout);
             },
             value: await request(config.conditions, config.options)
         });
-        assert.toBeTrue(result.loaded);
-        const observer = reactiveStorage_1.reactiveStorage.watch(config, refresh);
+        functions_1.assert.toBeTrue(result.loaded);
+        const observer = facades_1.reactiveStorage.watch(config, refresh);
         const subscription = this.subscribe(doc => {
             if (config.update && config.update(doc))
                 refresh();
@@ -833,22 +806,22 @@ class Database {
         updateTimeout();
         return result;
         function refresh() {
-            handlePromise_1.handlePromise.silent(async () => {
-                assert.not.empty(result);
-                assert.toBeTrue(result.loaded);
+            facades_1.handlePromise.silent(async () => {
+                functions_1.assert.not.empty(result);
+                functions_1.assert.toBeTrue(result.loaded);
                 result.loading = true;
                 const value = await request(config.conditions, config.options);
-                assert.not.empty(result);
-                assert.toBeTrue(result.loaded);
+                functions_1.assert.not.empty(result);
+                functions_1.assert.toBeTrue(result.loaded);
                 result.loading = false;
                 result.value = value;
                 updateTimeout();
             });
         }
         function updateTimeout() {
-            programFlow.clearTimeout(timeout);
-            timeout = is.not.empty(config.updateInterval)
-                ? programFlow.setTimeout(refresh, config.updateInterval)
+            functions_1.programFlow.clearTimeout(timeout);
+            timeout = functions_1.is.not.empty(config.updateInterval)
+                ? functions_1.programFlow.setTimeout(refresh, config.updateInterval)
                 : undefined;
         }
     }
@@ -860,13 +833,13 @@ class Database {
      * @returns Reactive response.
      */
     reactiveFactoryQueryAttached(request, config) {
-        const result = (0, reactiveStorage_1.reactiveStorage)({
+        const result = (0, facades_1.reactiveStorage)({
             loaded: false,
             loading: true,
-            refresh: fn.noop,
-            unsubscribe: fn.noop
+            refresh: functions_1.fn.noop,
+            unsubscribe: functions_1.fn.noop
         });
-        handlePromise_1.handlePromise.silent(this.reactiveFactoryQueryAttachedAsync(request, config, result));
+        facades_1.handlePromise.silent(this.reactiveFactoryQueryAttachedAsync(request, config, result));
         return result;
     }
     /**
@@ -878,19 +851,19 @@ class Database {
      * @returns Reactive response.
      */
     async reactiveFactoryQueryAttachedAsync(request, config, result) {
-        config = (0, reactiveStorage_1.reactiveStorage)(config);
-        o.assign(result, {
+        config = (0, facades_1.reactiveStorage)(config);
+        functions_1.o.assign(result, {
             loaded: true,
             loading: false,
             unsubscribe: () => {
-                reactiveStorage_1.reactiveStorage.unwatch(config, observer);
+                facades_1.reactiveStorage.unwatch(config, observer);
                 this.unsubscribeAttached(subscription);
-                programFlow.clearTimeout(timeout);
+                functions_1.programFlow.clearTimeout(timeout);
             },
             value: await request(config.conditions, config.parentConditions, config.options)
         });
-        assert.toBeTrue(result.loaded);
-        const observer = reactiveStorage_1.reactiveStorage.watch(config, refresh);
+        functions_1.assert.toBeTrue(result.loaded);
+        const observer = facades_1.reactiveStorage.watch(config, refresh);
         const subscription = this.subscribeAttached(doc => {
             if (config.update && config.update(doc))
                 refresh();
@@ -899,22 +872,22 @@ class Database {
         updateTimeout();
         return result;
         function refresh() {
-            handlePromise_1.handlePromise.silent(async () => {
-                assert.not.empty(result);
-                assert.toBeTrue(result.loaded);
+            facades_1.handlePromise.silent(async () => {
+                functions_1.assert.not.empty(result);
+                functions_1.assert.toBeTrue(result.loaded);
                 result.loading = true;
                 const value = await request(config.conditions, config.parentConditions, config.options);
-                assert.not.empty(result);
-                assert.toBeTrue(result.loaded);
+                functions_1.assert.not.empty(result);
+                functions_1.assert.toBeTrue(result.loaded);
                 result.loading = false;
                 result.value = value;
                 updateTimeout();
             });
         }
         function updateTimeout() {
-            programFlow.clearTimeout(timeout);
-            timeout = is.not.empty(config.updateInterval)
-                ? programFlow.setTimeout(refresh, config.updateInterval)
+            functions_1.programFlow.clearTimeout(timeout);
+            timeout = functions_1.is.not.empty(config.updateInterval)
+                ? functions_1.programFlow.setTimeout(refresh, config.updateInterval)
                 : undefined;
         }
     }
@@ -953,7 +926,7 @@ class Database {
         return (doc, mutableResult) => {
             if (doc._id === id)
                 if (doc._deleted)
-                    exports.handlers.error(new PouchNotFoundError_1.PouchNotFoundError("Missing document"));
+                    exports.handlers.error(new errors_1.PouchNotFoundError("Missing document"));
                 else
                     mutableResult.value = doc;
         };
@@ -969,7 +942,7 @@ class Database {
         return (doc, mutableResult) => {
             if (doc._id === id && doc.parentDoc._id === parentId)
                 if (doc._deleted)
-                    exports.handlers.error(new PouchNotFoundError_1.PouchNotFoundError("Missing attached document"));
+                    exports.handlers.error(new errors_1.PouchNotFoundError("Missing attached document"));
                 else
                     mutableResult.value = doc;
         };
@@ -1011,7 +984,7 @@ class Database {
             else
                 this.changes = this.db.changes(value => {
                     var _a;
-                    assert.byGuard(value.doc, isExistingDocument);
+                    functions_1.assert.byGuard(value.doc, isExistingDocument);
                     if (this.changesHandlersPool.size) {
                         const doc = extractDoc(value.doc);
                         for (const handler of this.changesHandlersPool.values())
@@ -1038,25 +1011,39 @@ class Database {
     }
 }
 exports.Database = Database;
-const isDocResponse = is.object.factory({ doc: is.unknown, key: is.unknown }, {});
-const isDocResponses = is.factory(is.array.of, isDocResponse);
-const isDocsResponse = is.object.factory({
-    count: is.number,
+/**
+ * Wraps error.
+ *
+ * @param e - Error.
+ * @returns Wrapped error.
+ */
+function wrapError(e) {
+    return () => e;
+}
+exports.wrapError = wrapError;
+const isDocResponse = functions_1.is.object.factory({ doc: functions_1.is.unknown, key: functions_1.is.unknown }, {});
+const isDocResponses = functions_1.is.factory(functions_1.is.array.of, isDocResponse);
+const isDocsResponse = functions_1.is.object.factory({
+    count: functions_1.is.number,
     docs: isDocResponses,
-    settled: is.boolean
+    settled: functions_1.is.boolean
 }, {});
-const isStoredDocumentAttached = is.object.factory({ _id: is.number, _rev: is.number }, { _deleted: is.true });
-const isStoredDocumentAttachedArray = is.factory(is.array.of, isStoredDocumentAttached);
-const isExistingDocument = is.object.factory({ _id: is.string, _rev: is.string }, {
-    _deleted: is.true,
+const isBaseExistingDocument = functions_1.is.object.factory({ _id: functions_1.is.string, _rev: functions_1.is.string }, {
+    _deleted: functions_1.is.true,
     attachedDocs: isStoredDocumentAttachedArray,
-    lastAttachedDocs: is.numbers
+    lastAttachedDocs: functions_1.is.numbers
 });
-const isExistingDocumentAttached = is.object.factory({
-    _id: is.number,
-    _rev: is.number,
+const isStoredDocumentAttached = functions_1.is.object.factory({ _id: functions_1.is.number, _rev: functions_1.is.number }, { _deleted: functions_1.is.true, parentDoc: isBaseExistingDocument });
+const isExistingDocument = functions_1.is.object.factory({ _id: functions_1.is.string, _rev: functions_1.is.string }, {
+    _deleted: functions_1.is.true,
+    attachedDocs: isStoredDocumentAttachedArray,
+    lastAttachedDocs: functions_1.is.numbers
+});
+const isExistingDocumentAttached = functions_1.is.object.factory({
+    _id: functions_1.is.number,
+    _rev: functions_1.is.number,
     parentDoc: isExistingDocument
-}, { _deleted: is.true });
+}, { _deleted: functions_1.is.true });
 /**
  * Joins condition strings with boolean "and" operator.
  *
@@ -1067,7 +1054,7 @@ function and(conditions) {
     conditions = conditions.filter(condition => condition !== "true");
     if (conditions.length === 0)
         return "true";
-    assert.toBeFalse(conditions.includes("false"));
+    functions_1.assert.toBeFalse(conditions.includes("false"));
     return conditions.join(" && ");
 }
 /**
@@ -1078,12 +1065,12 @@ function and(conditions) {
  * @returns Condition strings.
  */
 function condsToStr(source, conditions) {
-    conditions = is.array(conditions) ? conditions : [conditions];
+    conditions = functions_1.is.array(conditions) ? conditions : [conditions];
     const toEmit = [];
     const toOutput = [];
     const toSettle = [];
     for (const conditionsGroup of conditions)
-        for (const [key, fieldConditions] of o.entries(conditionsGroup)) {
+        for (const [key, fieldConditions] of functions_1.o.entries(conditionsGroup)) {
             const dest = `${source}.${key}`;
             const destDelta = `new Date(${dest}).getTime() - Date.now()`;
             if ("isSet" in fieldConditions)
@@ -1151,18 +1138,18 @@ function condsToStr(source, conditions) {
         toSettle: and(toSettle)
     };
 }
-// eslint-disable-next-line @skylib/require-jsdoc
+// eslint-disable-next-line @skylib/require-jsdoc -- ???
 function dateDelta(date) {
-    return num.round.step(datetime_1.datetime.create(date).toTime() - datetime_1.datetime.time() - 50 * 3600 * 1000, 3600 * 1000);
+    return functions_1.num.round.step(facades_1.datetime.create(date).toTime() - facades_1.datetime.time() - 50 * 3600 * 1000, 3600 * 1000);
 }
-// eslint-disable-next-line @skylib/require-jsdoc
+// eslint-disable-next-line @skylib/require-jsdoc -- ???
 function dateValue(date) {
-    if (is.string(date))
+    if (functions_1.is.string(date))
         return date;
     if (date.length === 1)
         date = [date[0], "+", 0, "minutes"];
     const [type, sign, value, unit] = date;
-    const result = datetime_1.datetime.create();
+    const result = facades_1.datetime.create();
     switch (type) {
         case "endOfDay":
             result.setStartOfDay().add(1, "day");
@@ -1211,9 +1198,9 @@ function escapeForJs(value) {
         case "boolean":
             return value ? "true" : "false";
         case "number":
-            return cast.string(value);
+            return functions_1.cast.string(value);
         case "string":
-            return json.encode(value);
+            return functions_1.json.encode(value);
         default:
             throw new Error(`Unexpected value type: ${typeof value}`);
     }
@@ -1237,29 +1224,15 @@ function extractDoc(rawDoc) {
  */
 function extractDocAttached(rawDoc, id, extractDeleted = false) {
     const { attachedDocs } = rawDoc, parentDoc = tslib_1.__rest(rawDoc, ["attachedDocs"]);
-    assert.not.empty(attachedDocs, () => new PouchNotFoundError_1.PouchNotFoundError("Missing attached document"));
+    functions_1.assert.not.empty(attachedDocs, () => new errors_1.PouchNotFoundError("Missing attached document"));
     const attachedDoc = attachedDocs[id];
-    assert.not.empty(attachedDoc, () => new PouchNotFoundError_1.PouchNotFoundError("Missing attached document"));
-    assert.toBeTrue(extractDeleted || is.empty(attachedDoc._deleted), () => new PouchNotFoundError_1.PouchNotFoundError("Missing attached document"));
+    functions_1.assert.not.empty(attachedDoc, () => new errors_1.PouchNotFoundError("Missing attached document"));
+    functions_1.assert.toBeTrue(extractDeleted || functions_1.is.empty(attachedDoc._deleted), () => new errors_1.PouchNotFoundError("Missing attached document"));
     return Object.assign(Object.assign({}, attachedDoc), { parentDoc: Object.assign(Object.assign({}, parentDoc), { attachedDocs: [] }) });
 }
-/**
- * Validates document.
- *
- * @param doc - Document.
- */
-function validatePutDocument(doc) {
-    var _a, _b;
-    if (o.hasOwnProp("_attachments", doc))
-        throw new Error("Put document contains reserved word: _attachments");
-    if (o.hasOwnProp("_conflicts", doc))
-        throw new Error("Put document contains reserved word: _conflicts");
-    if (o.hasOwnProp("filters", doc))
-        throw new Error("Put document contains reserved word: filters");
-    if (o.hasOwnProp("views", doc))
-        throw new Error("Put document contains reserved word: views");
-    if ((_b = (_a = doc.attachedDocs) === null || _a === void 0 ? void 0 : _a.some((attachedDoc, index) => attachedDoc._id !== index)) !== null && _b !== void 0 ? _b : false)
-        throw new Error("Invalid attached document");
+// eslint-disable-next-line @skylib/require-jsdoc -- ??
+function isStoredDocumentAttachedArray(value) {
+    return functions_1.is.array.of(value, isStoredDocumentAttached);
 }
 /**
  * Uglify javascript code.
@@ -1269,5 +1242,23 @@ function validatePutDocument(doc) {
  */
 function uglify(code) {
     return code.trim().replace(/\s+/gu, " ");
+}
+/**
+ * Validates document.
+ *
+ * @param doc - Document.
+ */
+function validatePutDocument(doc) {
+    var _a, _b;
+    if (functions_1.o.hasOwnProp("_attachments", doc))
+        throw new Error("Put document contains reserved word: _attachments");
+    if (functions_1.o.hasOwnProp("_conflicts", doc))
+        throw new Error("Put document contains reserved word: _conflicts");
+    if (functions_1.o.hasOwnProp("filters", doc))
+        throw new Error("Put document contains reserved word: filters");
+    if (functions_1.o.hasOwnProp("views", doc))
+        throw new Error("Put document contains reserved word: views");
+    if ((_b = (_a = doc.attachedDocs) === null || _a === void 0 ? void 0 : _a.some((attachedDoc, index) => attachedDoc._id !== index)) !== null && _b !== void 0 ? _b : false)
+        throw new Error("Invalid attached document");
 }
 //# sourceMappingURL=Database.js.map

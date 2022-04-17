@@ -1,9 +1,4 @@
-import * as a from "@skylib/functions/es/array";
-import * as assert from "@skylib/functions/es/assertions";
-import * as fn from "@skylib/functions/es/function";
-import * as is from "@skylib/functions/es/guards";
-import * as o from "@skylib/functions/es/object";
-import * as regexp from "@skylib/functions/es/regexp";
+import { a, assert, fn, is, o, regexp } from "@skylib/functions";
 export class Definition {
     /**
      * Creates class instance.
@@ -12,11 +7,6 @@ export class Definition {
      * @param id - ID.
      */
     constructor(raw, id) {
-        /*
-        |*****************************************************************************
-        |* Protected
-        |*****************************************************************************
-        |*/
         Object.defineProperty(this, "contexts", {
             enumerable: true,
             configurable: true,
@@ -143,7 +133,12 @@ export class Definition {
             if (definition)
                 return definition.get(owner, context, [form], count, replacements);
         }
-        if (count !== 1) {
+        // eslint-disable-next-line no-warning-comments -- Postponed
+        // fixme: Compare to dictionary's count
+        if (count === 1) {
+            // Plural form not needed
+        }
+        else {
             const definition = this.subs[count];
             if (definition)
                 return definition.get(owner, context, forms, count, replacements);
