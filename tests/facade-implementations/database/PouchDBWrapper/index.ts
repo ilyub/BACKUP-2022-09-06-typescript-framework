@@ -1,18 +1,11 @@
-import type {
-  Conditions,
-  Database as DatabaseInterface,
-  ExistingAttachedDocument,
-  ExistingDocument,
-  PutDocument
-} from "@skylib/facades/dist/database";
-import { database } from "@skylib/facades/dist/database";
-import { datetime } from "@skylib/facades/dist/datetime";
-import { uniqueId } from "@skylib/facades/dist/uniqueId";
-import * as fn from "@skylib/functions/dist/function";
-import { typedef, wait } from "@skylib/functions/dist/helpers";
-import * as testUtils from "@skylib/functions/dist/testUtils";
+import { database, datetime, uniqueId } from "@skylib/facades";
+import { fn, typedef, wait, testUtils } from "@skylib/functions";
+import * as facadeImplementations from "@/facade-implementations";
+// eslint-disable-next-line import/no-internal-modules -- Ok
 import { Database } from "@/facade-implementations/database/PouchDBWrapper/Database";
-import { PouchRetryError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchRetryError";
+
+const PouchRetryError =
+  facadeImplementations.database.PouchDBWrapper.PouchRetryError;
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
@@ -62,7 +55,7 @@ test("create: config.reindexThreshold", async () => {
 
     async function subtest(
       db: Database,
-      conditions: Conditions,
+      conditions: database.Conditions,
       expected: number
     ): Promise<void> {
       await db.query(conditions);
@@ -76,7 +69,7 @@ test("create: options.caseSensitiveSorting", async () => {
 
   const db2 = database.create(uniqueId(), { caseSensitiveSorting: true });
 
-  const docs: PutDocument[] = typedef([
+  const docs: database.PutDocument[] = typedef([
     {
       _id: "id1",
       attachedDocs: [
@@ -126,13 +119,15 @@ test("create: options.caseSensitiveSorting", async () => {
   ]);
 
   async function subtest(
-    db: DatabaseInterface,
+    db: database.Database,
     method: "query1" | "query2" | "queryAttached1" | "queryAttached2",
     expected: string[]
   ): Promise<void> {
     const got = await fn.run(
       async (): Promise<
-        ReadonlyArray<ExistingAttachedDocument | ExistingDocument>
+        ReadonlyArray<
+          database.ExistingAttachedDocument | database.ExistingDocument
+        >
       > => {
         // eslint-disable-next-line jest/no-conditional-in-test -- ???
         switch (method) {

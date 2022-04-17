@@ -1,14 +1,9 @@
-import type {
-  Process as ProcessInterface,
-  Facade
-} from "@skylib/facades/dist/progressReporter";
-import * as num from "@skylib/functions/dist/number";
-import * as o from "@skylib/functions/dist/object";
-import * as programFlow from "@skylib/functions/dist/programFlow";
-import type { numberU } from "@skylib/functions/dist/types/core";
+import type { progressReporter } from "@skylib/facades";
+import { num, o, programFlow } from "@skylib/functions";
+import type { numberU } from "@skylib/functions";
 import $ from "jquery";
 
-export const facade: Facade = {
+export const facade: progressReporter.Facade = {
   getProgress() {
     return num.round(progress, moduleConfig.precision);
   },
@@ -26,7 +21,7 @@ export const facade: Facade = {
   }
 };
 
-export class Process implements ProcessInterface {
+export class Process implements progressReporter.Process {
   /**
    * Creates class instance.
    */

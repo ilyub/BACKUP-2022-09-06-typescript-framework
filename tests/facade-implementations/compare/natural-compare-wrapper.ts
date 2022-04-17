@@ -1,7 +1,7 @@
-import * as naturalCompareWrapper from "@/facade-implementations/compare/natural-compare-wrapper";
+import * as facadeImplementations from "@/facade-implementations";
 
 test("implementation", () => {
-  const compare = naturalCompareWrapper.implementation;
+  const compare = facadeImplementations.compare.naturalCompare;
 
   expect(compare(2, 1)).toBe(1);
   expect(compare(1, 2)).toStrictEqual(-1);
@@ -9,7 +9,7 @@ test("implementation", () => {
 });
 
 test("implementation.strings", () => {
-  const compare = naturalCompareWrapper.implementation.strings;
+  const compare = facadeImplementations.compare.naturalCompare.strings;
 
   expect(compare("b", "a")).toBe(1);
   expect(compare("a", "b")).toStrictEqual(-1);

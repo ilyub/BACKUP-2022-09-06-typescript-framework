@@ -1,4 +1,6 @@
-import * as minisearchWrapper from "@/facade-implementations/inlineSearch/minisearch-wrapper";
+import * as facadeImplementations from "@/facade-implementations";
+
+const miniSearchWrapper = facadeImplementations.inlineSearch.miniSearchWrapper;
 
 test.each([
   { ids: ["a"], searchString: "n1" },
@@ -29,11 +31,7 @@ test.each([
     }
   ];
 
-  const engine = minisearchWrapper.implementation.create(
-    "id",
-    ["name", "description"],
-    items
-  );
+  const engine = miniSearchWrapper.create("id", ["name", "description"], items);
 
   const expected = items.filter(item => ids.includes(item.id));
 

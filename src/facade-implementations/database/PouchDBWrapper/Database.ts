@@ -1,60 +1,29 @@
-import type {
-  AttachedChangesHandler,
-  AttachedSubscriptionId,
-  BaseExistingDocument,
-  BaseStoredAttachedDocument,
-  BaseStoredAttachedDocuments,
-  BulkAttachedDocuments,
-  ChangesHandler,
-  Conditions,
-  Database as DatabaseInterface,
-  DatabaseOptions,
-  DateCondition,
-  ExistingAttachedDocument,
-  ExistingAttachedDocuments,
-  ExistingDocument,
-  ExistingDocuments,
-  PutAttachedDocument,
-  PutAttachedDocuments,
-  PutAttachedResponse,
-  PutAttachedResponses,
-  PutDocument,
-  PutDocuments,
-  PutResponse,
-  PutResponses,
-  QueryOptions,
-  ReactiveConfig,
-  ReactiveConfigAttached,
-  ReactiveResponse,
-  ReactiveResponseLoaded,
-  ResetCallback,
-  SubscriptionId
-} from "@skylib/facades/dist/database";
 import {
-  uniqueAttachedSubscriptionId,
-  uniqueSubscriptionId
-} from "@skylib/facades/dist/database";
-import { datetime } from "@skylib/facades/dist/datetime";
-import { handlePromise } from "@skylib/facades/dist/handlePromise";
-import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
-import { uniqueId } from "@skylib/facades/dist/uniqueId";
-import * as a from "@skylib/functions/dist/array";
-import * as assert from "@skylib/functions/dist/assertions";
-import * as cast from "@skylib/functions/dist/converters";
-import * as fn from "@skylib/functions/dist/function";
-import * as is from "@skylib/functions/dist/guards";
-import * as json from "@skylib/functions/dist/json";
-import * as num from "@skylib/functions/dist/number";
-import * as o from "@skylib/functions/dist/object";
-import * as programFlow from "@skylib/functions/dist/programFlow";
+  database,
+  datetime,
+  handlePromise,
+  reactiveStorage,
+  uniqueId
+} from "@skylib/facades";
+import {
+  a,
+  assert,
+  cast,
+  fn,
+  is,
+  json,
+  num,
+  o,
+  programFlow
+} from "@skylib/functions";
 import type {
   numbers,
   numberU,
   strings,
   unknowns,
   Writable
-} from "@skylib/functions/dist/types/core";
-import * as _ from "lodash";
+} from "@skylib/functions";
+import * as _ from "@skylib/lodash-commonjs-es";
 import { collate } from "pouchdb-collate";
 import sha256 from "sha256";
 import type {
@@ -64,9 +33,11 @@ import type {
   PouchQueryResponse
 } from "./PouchDBProxy";
 import { PouchDBProxy } from "./PouchDBProxy";
-import { PouchConflictError } from "./errors/PouchConflictError";
-import { PouchNotFoundError } from "./errors/PouchNotFoundError";
-import { PouchRetryError } from "./errors/PouchRetryError";
+import {
+  PouchConflictError,
+  PouchNotFoundError,
+  PouchRetryError
+} from "./errors";
 
 export const handlers = o.freeze({
   error(error: unknown): void {
@@ -74,7 +45,7 @@ export const handlers = o.freeze({
   }
 });
 
-export class Database implements DatabaseInterface {
+export class Database implements database.Database {
   /**
    * Creates class instance.
    *
@@ -85,11 +56,11 @@ export class Database implements DatabaseInterface {
    */
   public constructor(
     name: string,
-    options: DatabaseOptions = {},
+    options: database.DatabaseOptions = {},
     config: Configuration = {},
     pouchConfig: PouchDatabaseConfiguration = {}
   ) {
-    const optionsWithDefaults: Required<DatabaseOptions> = {
+    const optionsWithDefaults: Required<database.DatabaseOptions> = {
       ...options,
       caseSensitiveSorting: options.caseSensitiveSorting ?? false,
       migrations: options.migrations ?? [],
@@ -107,7 +78,9 @@ export class Database implements DatabaseInterface {
     this.pouchConfig = pouchConfig;
   }
 
-  public async bulkDocs(docs: PutDocuments): Promise<PutResponses> {
+  public async bulkDocs(
+    docs: database.PutDocuments
+  ): Promise<database.PutResponses> {
     for (const doc of docs) validatePutDocument(doc);
 
     docs = docs.map(doc => o.omit(doc, "lastAttachedDocs"));
@@ -126,8 +99,8 @@ export class Database implements DatabaseInterface {
   }
 
   public async bulkDocsAttached(
-    docs: BulkAttachedDocuments
-  ): Promise<PutAttachedResponses> {
+    docs: database.BulkAttachedDocuments
+  ): Promise<database.PutAttachedResponses> {
     const responses = await Promise.all(
       _.uniq(docs.map(doc => doc.parentDoc._id)).map(
         async parentId =>
@@ -144,15 +117,15 @@ export class Database implements DatabaseInterface {
     return _.flatten(responses);
   }
 
-  public async count(conditions: Conditions = {}): Promise<number> {
+  public async count(conditions: database.Conditions = {}): Promise<number> {
     const response = await this.rawQuery({}, { conditions, count: true });
 
     return response.count;
   }
 
   public async countAttached(
-    conditions: Conditions = {},
-    parentConditions: Conditions = {}
+    conditions: database.Conditions = {},
+    parentConditions: database.Conditions = {}
   ): Promise<number> {
     const response = await this.rawQuery(
       {},
@@ -178,7 +151,7 @@ export class Database implements DatabaseInterface {
     return is.not.empty(doc);
   }
 
-  public async get(id: string): Promise<ExistingDocument> {
+  public async get(id: string): Promise<database.ExistingDocument> {
     const db = await this.getDb();
 
     const doc = await db.get(id);
@@ -189,7 +162,7 @@ export class Database implements DatabaseInterface {
   public async getAttached(
     id: number,
     parentId: string
-  ): Promise<ExistingAttachedDocument> {
+  ): Promise<database.ExistingAttachedDocument> {
     const db = await this.getDb();
 
     const doc = await db.get(parentId);
@@ -197,7 +170,9 @@ export class Database implements DatabaseInterface {
     return extractDocAttached(doc, id);
   }
 
-  public async getIfExists(id: string): Promise<ExistingDocument | undefined> {
+  public async getIfExists(
+    id: string
+  ): Promise<database.ExistingDocument | undefined> {
     try {
       return await this.get(id);
     } catch (e) {
@@ -210,7 +185,7 @@ export class Database implements DatabaseInterface {
   public async getIfExistsAttached(
     id: number,
     parentId: string
-  ): Promise<ExistingAttachedDocument | undefined> {
+  ): Promise<database.ExistingAttachedDocument | undefined> {
     try {
       return await this.getAttached(id, parentId);
     } catch (e) {
@@ -231,7 +206,7 @@ export class Database implements DatabaseInterface {
     return db.db;
   }
 
-  public async put(doc: PutDocument): Promise<PutResponse> {
+  public async put(doc: database.PutDocument): Promise<database.PutResponse> {
     validatePutDocument(doc);
 
     const db = await this.getDb();
@@ -255,15 +230,15 @@ export class Database implements DatabaseInterface {
 
   public async putAttached(
     parentId: string,
-    doc: PutAttachedDocument
-  ): Promise<PutAttachedResponse> {
+    doc: database.PutAttachedDocument
+  ): Promise<database.PutAttachedResponse> {
     return a.first(await this.putAttachedBulk(parentId, [doc]));
   }
 
   public async putAttachedBulk(
     parentId: string,
-    docs: PutAttachedDocuments
-  ): Promise<PutAttachedResponses> {
+    docs: database.PutAttachedDocuments
+  ): Promise<database.PutAttachedResponses> {
     const db = await this.getDb();
 
     for (let i = 0; i < 1 + this.options.retries; i++) {
@@ -275,14 +250,16 @@ export class Database implements DatabaseInterface {
 
     throw new PouchRetryError(`Failed after ${this.options.retries} retries`);
 
-    async function attempt(): Promise<PutAttachedResponses | undefined> {
+    async function attempt(): Promise<
+      database.PutAttachedResponses | undefined
+    > {
       const parentDoc = await db.get(parentId);
 
       const attachedDocs = a.clone(parentDoc.attachedDocs ?? []);
 
       const lastAttachedDocs: Writable<numbers> = [];
 
-      const result: Writable<PutAttachedResponses> = [];
+      const result: Writable<database.PutAttachedResponses> = [];
 
       for (const doc of docs) {
         const { _id, _rev, parentDoc: omitParentDoc, ...content } = doc;
@@ -294,7 +271,7 @@ export class Database implements DatabaseInterface {
 
         const rev = (_rev ?? 0) + 1;
 
-        const attachedDoc: BaseStoredAttachedDocument = {
+        const attachedDoc: database.BaseStoredAttachedDocument = {
           ...content,
           _id: id,
           _rev: rev
@@ -336,8 +313,8 @@ export class Database implements DatabaseInterface {
   }
 
   public async putIfNotExists(
-    doc: PutDocument
-  ): Promise<PutResponse | undefined> {
+    doc: database.PutDocument
+  ): Promise<database.PutResponse | undefined> {
     try {
       return await this.put(doc);
     } catch (e) {
@@ -349,8 +326,8 @@ export class Database implements DatabaseInterface {
 
   public async putIfNotExistsAttached(
     parentId: string,
-    doc: PutAttachedDocument
-  ): Promise<PutAttachedResponse | undefined> {
+    doc: database.PutAttachedDocument
+  ): Promise<database.PutAttachedResponse | undefined> {
     try {
       return await this.putAttached(parentId, doc);
     } catch (e) {
@@ -361,9 +338,9 @@ export class Database implements DatabaseInterface {
   }
 
   public async query(
-    conditions: Conditions = {},
-    options: QueryOptions = {}
-  ): Promise<ExistingDocuments> {
+    conditions: database.Conditions = {},
+    options: database.QueryOptions = {}
+  ): Promise<database.ExistingDocuments> {
     const response = await this.rawQuery(options, { conditions, docs: true });
 
     assert.array.of(response.docs, isExistingDocument);
@@ -372,10 +349,10 @@ export class Database implements DatabaseInterface {
   }
 
   public async queryAttached(
-    conditions: Conditions = {},
-    parentConditions: Conditions = {},
-    options: QueryOptions = {}
-  ): Promise<ExistingAttachedDocuments> {
+    conditions: database.Conditions = {},
+    parentConditions: database.Conditions = {},
+    options: database.QueryOptions = {}
+  ): Promise<database.ExistingAttachedDocuments> {
     const response = await this.rawQuery(options, {
       conditions,
       docs: true,
@@ -387,20 +364,22 @@ export class Database implements DatabaseInterface {
     return response.docs;
   }
 
-  public reactiveCount(config: ReactiveConfig): ReactiveResponse<number> {
+  public reactiveCount(
+    config: database.ReactiveConfig
+  ): database.ReactiveResponse<number> {
     return this.reactiveFactoryQuery(this.count.bind(this), config);
   }
 
   public reactiveCountAttached(
-    config: ReactiveConfigAttached
-  ): ReactiveResponse<number> {
+    config: database.ReactiveConfigAttached
+  ): database.ReactiveResponse<number> {
     return this.reactiveFactoryQueryAttached(
       this.countAttached.bind(this),
       config
     );
   }
 
-  public reactiveExists(id: string): ReactiveResponse<boolean> {
+  public reactiveExists(id: string): database.ReactiveResponse<boolean> {
     return this.reactiveFactoryGet(
       this.exists(id),
       this.reactiveHandlerExists(id)
@@ -410,21 +389,23 @@ export class Database implements DatabaseInterface {
   public reactiveExistsAttached(
     id: number,
     parentId: string
-  ): ReactiveResponse<boolean> {
+  ): database.ReactiveResponse<boolean> {
     return this.reactiveFactoryGetAttached(
       this.existsAttached(id, parentId),
       this.reactiveHandlerExistsAttached(id, parentId)
     );
   }
 
-  public reactiveGet(id: string): ReactiveResponse<ExistingDocument> {
+  public reactiveGet(
+    id: string
+  ): database.ReactiveResponse<database.ExistingDocument> {
     return this.reactiveFactoryGet(this.get(id), this.reactiveHandlerGet(id));
   }
 
   public reactiveGetAttached(
     id: number,
     parentId: string
-  ): ReactiveResponse<ExistingAttachedDocument> {
+  ): database.ReactiveResponse<database.ExistingAttachedDocument> {
     return this.reactiveFactoryGetAttached(
       this.getAttached(id, parentId),
       this.reactiveHandlerGetAttached(id, parentId)
@@ -433,7 +414,7 @@ export class Database implements DatabaseInterface {
 
   public reactiveGetIfExists(
     id: string
-  ): ReactiveResponse<ExistingDocument | undefined> {
+  ): database.ReactiveResponse<database.ExistingDocument | undefined> {
     return this.reactiveFactoryGet(
       this.getIfExists(id),
       this.reactiveHandlerGetIfExists(id)
@@ -443,7 +424,7 @@ export class Database implements DatabaseInterface {
   public reactiveGetIfExistsAttached(
     id: number,
     parentId: string
-  ): ReactiveResponse<ExistingAttachedDocument | undefined> {
+  ): database.ReactiveResponse<database.ExistingAttachedDocument | undefined> {
     return this.reactiveFactoryGetAttached(
       this.getIfExistsAttached(id, parentId),
       this.reactiveHandlerGetAttachedIfExists(id, parentId)
@@ -451,34 +432,36 @@ export class Database implements DatabaseInterface {
   }
 
   public reactiveQuery(
-    config: ReactiveConfig
-  ): ReactiveResponse<ExistingDocuments> {
+    config: database.ReactiveConfig
+  ): database.ReactiveResponse<database.ExistingDocuments> {
     return this.reactiveFactoryQuery(this.query.bind(this), config);
   }
 
   public reactiveQueryAttached(
-    config: ReactiveConfigAttached
-  ): ReactiveResponse<ExistingAttachedDocuments> {
+    config: database.ReactiveConfigAttached
+  ): database.ReactiveResponse<database.ExistingAttachedDocuments> {
     return this.reactiveFactoryQueryAttached(
       this.queryAttached.bind(this),
       config
     );
   }
 
-  public reactiveUnsettled(config: ReactiveConfig): ReactiveResponse<number> {
+  public reactiveUnsettled(
+    config: database.ReactiveConfig
+  ): database.ReactiveResponse<number> {
     return this.reactiveFactoryQuery(this.unsettled.bind(this), config);
   }
 
   public reactiveUnsettledAttached(
-    config: ReactiveConfigAttached
-  ): ReactiveResponse<number> {
+    config: database.ReactiveConfigAttached
+  ): database.ReactiveResponse<number> {
     return this.reactiveFactoryQueryAttached(
       this.unsettledAttached.bind(this),
       config
     );
   }
 
-  public async reset(callback?: ResetCallback): Promise<void> {
+  public async reset(callback?: database.ResetCallback): Promise<void> {
     const db = await this.getDb();
 
     await db.destroy();
@@ -488,8 +471,8 @@ export class Database implements DatabaseInterface {
     await this.getDb();
   }
 
-  public subscribe(handler: ChangesHandler): SubscriptionId {
-    const id = uniqueSubscriptionId();
+  public subscribe(handler: database.ChangesHandler): database.SubscriptionId {
+    const id = database.uniqueSubscriptionId();
 
     this.changesHandlersPool.set(id, handler);
     this.refreshSubscription();
@@ -498,9 +481,9 @@ export class Database implements DatabaseInterface {
   }
 
   public subscribeAttached(
-    handler: AttachedChangesHandler
-  ): AttachedSubscriptionId {
-    const id = uniqueAttachedSubscriptionId();
+    handler: database.AttachedChangesHandler
+  ): database.AttachedSubscriptionId {
+    const id = database.uniqueAttachedSubscriptionId();
 
     this.changesHandlersAttachedPool.set(id, handler);
     this.refreshSubscription();
@@ -509,8 +492,8 @@ export class Database implements DatabaseInterface {
   }
 
   public async unsettled(
-    conditions: Conditions = {},
-    options: QueryOptions = {}
+    conditions: database.Conditions = {},
+    options: database.QueryOptions = {}
   ): Promise<number> {
     const response = await this.rawQuery(options, {
       conditions,
@@ -521,9 +504,9 @@ export class Database implements DatabaseInterface {
   }
 
   public async unsettledAttached(
-    conditions: Conditions = {},
-    parentConditions: Conditions = {},
-    options: QueryOptions = {}
+    conditions: database.Conditions = {},
+    parentConditions: database.Conditions = {},
+    options: database.QueryOptions = {}
   ): Promise<number> {
     const response = await this.rawQuery(options, {
       conditions,
@@ -534,13 +517,13 @@ export class Database implements DatabaseInterface {
     return response.unsettledCount;
   }
 
-  public unsubscribe(id: SubscriptionId): void {
+  public unsubscribe(id: database.SubscriptionId): void {
     assert.toBeTrue(this.changesHandlersPool.has(id));
     this.changesHandlersPool.delete(id);
     this.refreshSubscription();
   }
 
-  public unsubscribeAttached(id: AttachedSubscriptionId): void {
+  public unsubscribeAttached(id: database.AttachedSubscriptionId): void {
     assert.toBeTrue(this.changesHandlersAttachedPool.has(id));
     this.changesHandlersAttachedPool.delete(id);
     this.refreshSubscription();
@@ -550,13 +533,13 @@ export class Database implements DatabaseInterface {
   protected changes: Changes | undefined = undefined;
 
   protected readonly changesHandlersAttachedPool = new Map<
-    AttachedSubscriptionId,
-    AttachedChangesHandler
+    database.AttachedSubscriptionId,
+    database.AttachedChangesHandler
   >();
 
   protected readonly changesHandlersPool = new Map<
-    SubscriptionId,
-    ChangesHandler
+    database.SubscriptionId,
+    database.ChangesHandler
   >();
 
   protected readonly config: Required<Configuration>;
@@ -566,7 +549,7 @@ export class Database implements DatabaseInterface {
 
   protected readonly name: string;
 
-  protected readonly options: Required<DatabaseOptions>;
+  protected readonly options: Required<database.DatabaseOptions>;
 
   protected readonly pouchConfig: PouchDatabaseConfiguration;
 
@@ -593,7 +576,7 @@ export class Database implements DatabaseInterface {
    * @returns Map/reduce.
    */
   protected mapReduce(
-    options: QueryOptions,
+    options: database.QueryOptions,
     rawQueryOptions: RawQueryOptions
   ): MapReduce {
     const conds = condsToStr("doc", rawQueryOptions.conditions);
@@ -699,7 +682,7 @@ export class Database implements DatabaseInterface {
    * @returns Map/reduce.
    */
   protected mapReduceAttached(
-    options: QueryOptions,
+    options: database.QueryOptions,
     rawQueryOptions: RawQueryOptionsAttached
   ): MapReduce {
     const conds = condsToStr("attached", rawQueryOptions.conditions);
@@ -819,11 +802,12 @@ export class Database implements DatabaseInterface {
    */
   protected async migrate(): Promise<void> {
     if (this.options.migrations.length) {
-      const defaultMigrations: PutDocument = { _id: "migrations" };
+      const defaultMigrations: database.PutDocument = { _id: "migrations" };
 
       const storedMigrations = await this.getIfExists("migrations");
 
-      let migrations: PutDocument = storedMigrations ?? defaultMigrations;
+      let migrations: database.PutDocument =
+        storedMigrations ?? defaultMigrations;
 
       for (const migration of this.options.migrations)
         if (migrations[migration.id] === true) {
@@ -858,7 +842,7 @@ export class Database implements DatabaseInterface {
    * @returns Documents.
    */
   protected async rawQuery(
-    options: QueryOptions,
+    options: database.QueryOptions,
     rawQueryOptions: RawQueryOptions | RawQueryOptionsAttached
   ): Promise<RawQueryResponse> {
     const mapReduce =
@@ -1001,8 +985,8 @@ export class Database implements DatabaseInterface {
   protected reactiveFactoryGet<T>(
     request: Promise<T>,
     handler: ReactiveHandler<T>
-  ): ReactiveResponse<T> {
-    const result = reactiveStorage<ReactiveResponse<T>>({
+  ): database.ReactiveResponse<T> {
+    const result = reactiveStorage<database.ReactiveResponse<T>>({
       loaded: false,
       loading: true,
       refresh: fn.noop,
@@ -1027,9 +1011,9 @@ export class Database implements DatabaseInterface {
   protected async reactiveFactoryGetAsync<T>(
     request: Promise<T>,
     handler: ReactiveHandler<T>,
-    // eslint-disable-next-line @skylib/prefer-readonly -- ??
-    result: Writable<ReactiveResponse<T>>
-  ): Promise<ReactiveResponseLoaded<T>> {
+
+    result: Writable<database.ReactiveResponse<T>>
+  ): Promise<database.ReactiveResponseLoaded<T>> {
     o.assign(result, {
       loaded: true,
       loading: false,
@@ -1060,8 +1044,8 @@ export class Database implements DatabaseInterface {
   protected reactiveFactoryGetAttached<T>(
     request: Promise<T>,
     handler: ReactiveHandlerAttached<T>
-  ): ReactiveResponse<T> {
-    const result = reactiveStorage<ReactiveResponse<T>>({
+  ): database.ReactiveResponse<T> {
+    const result = reactiveStorage<database.ReactiveResponse<T>>({
       loaded: false,
       loading: true,
       refresh: fn.noop,
@@ -1086,9 +1070,9 @@ export class Database implements DatabaseInterface {
   protected async reactiveFactoryGetAttachedAsync<T>(
     request: Promise<T>,
     handler: ReactiveHandlerAttached<T>,
-    // eslint-disable-next-line @skylib/prefer-readonly -- ??
-    result: Writable<ReactiveResponse<T>>
-  ): Promise<ReactiveResponseLoaded<T>> {
+
+    result: Writable<database.ReactiveResponse<T>>
+  ): Promise<database.ReactiveResponseLoaded<T>> {
     o.assign(result, {
       loaded: true,
       loading: false,
@@ -1118,9 +1102,9 @@ export class Database implements DatabaseInterface {
    */
   protected reactiveFactoryQuery<T>(
     request: ReactiveRequest<T>,
-    config: ReactiveConfig
-  ): ReactiveResponse<T> {
-    const result = reactiveStorage<ReactiveResponse<T>>({
+    config: database.ReactiveConfig
+  ): database.ReactiveResponse<T> {
+    const result = reactiveStorage<database.ReactiveResponse<T>>({
       loaded: false,
       loading: true,
       refresh: fn.noop,
@@ -1144,10 +1128,10 @@ export class Database implements DatabaseInterface {
    */
   protected async reactiveFactoryQueryAsync<T>(
     request: ReactiveRequest<T>,
-    config: ReactiveConfig,
-    // eslint-disable-next-line @skylib/prefer-readonly -- ??
-    result: Writable<ReactiveResponse<T>>
-  ): Promise<ReactiveResponseLoaded<T>> {
+    config: database.ReactiveConfig,
+
+    result: Writable<database.ReactiveResponse<T>>
+  ): Promise<database.ReactiveResponseLoaded<T>> {
     config = reactiveStorage(config);
 
     o.assign(result, {
@@ -1208,9 +1192,9 @@ export class Database implements DatabaseInterface {
    */
   protected reactiveFactoryQueryAttached<T>(
     request: ReactiveRequestAttached<T>,
-    config: ReactiveConfigAttached
-  ): ReactiveResponse<T> {
-    const result = reactiveStorage<ReactiveResponse<T>>({
+    config: database.ReactiveConfigAttached
+  ): database.ReactiveResponse<T> {
+    const result = reactiveStorage<database.ReactiveResponse<T>>({
       loaded: false,
       loading: true,
       refresh: fn.noop,
@@ -1234,10 +1218,10 @@ export class Database implements DatabaseInterface {
    */
   protected async reactiveFactoryQueryAttachedAsync<T>(
     request: ReactiveRequestAttached<T>,
-    config: ReactiveConfigAttached,
-    // eslint-disable-next-line @skylib/prefer-readonly -- ??
-    result: Writable<ReactiveResponse<T>>
-  ): Promise<ReactiveResponseLoaded<T>> {
+    config: database.ReactiveConfigAttached,
+
+    result: Writable<database.ReactiveResponse<T>>
+  ): Promise<database.ReactiveResponseLoaded<T>> {
     config = reactiveStorage(config);
 
     o.assign(result, {
@@ -1332,7 +1316,9 @@ export class Database implements DatabaseInterface {
    * @param id - ID.
    * @returns Reactive handler.
    */
-  protected reactiveHandlerGet(id: string): ReactiveHandler<ExistingDocument> {
+  protected reactiveHandlerGet(
+    id: string
+  ): ReactiveHandler<database.ExistingDocument> {
     return (doc, mutableResult): void => {
       if (doc._id === id)
         if (doc._deleted)
@@ -1351,7 +1337,7 @@ export class Database implements DatabaseInterface {
   protected reactiveHandlerGetAttached(
     id: number,
     parentId: string
-  ): ReactiveHandlerAttached<ExistingAttachedDocument> {
+  ): ReactiveHandlerAttached<database.ExistingAttachedDocument> {
     return (doc, mutableResult): void => {
       if (doc._id === id && doc.parentDoc._id === parentId)
         if (doc._deleted)
@@ -1370,7 +1356,7 @@ export class Database implements DatabaseInterface {
   protected reactiveHandlerGetAttachedIfExists(
     id: number,
     parentId: string
-  ): ReactiveHandlerAttached<ExistingAttachedDocument | undefined> {
+  ): ReactiveHandlerAttached<database.ExistingAttachedDocument | undefined> {
     return (doc, mutableResult): void => {
       if (doc._id === id && doc.parentDoc._id === parentId)
         mutableResult.value = doc._deleted ? undefined : doc;
@@ -1385,7 +1371,7 @@ export class Database implements DatabaseInterface {
    */
   protected reactiveHandlerGetIfExists(
     id: string
-  ): ReactiveHandler<ExistingDocument | undefined> {
+  ): ReactiveHandler<database.ExistingDocument | undefined> {
     return (doc, mutableResult): void => {
       if (doc._id === id) mutableResult.value = doc._deleted ? undefined : doc;
     };
@@ -1466,14 +1452,14 @@ export interface MapReduce {
 }
 
 export interface RawQueryOptions {
-  readonly conditions: Conditions;
+  readonly conditions: database.Conditions;
   readonly count?: true;
   readonly docs?: true;
   readonly unsettledCount?: true;
 }
 
 export interface RawQueryOptionsAttached extends RawQueryOptions {
-  readonly parentConditions: Conditions;
+  readonly parentConditions: database.Conditions;
 }
 
 export interface RawQueryResponse {
@@ -1491,8 +1477,8 @@ export interface ReactiveHandler<T> {
    * @param mutableResult - Mutable result.
    */
   (
-    doc: ExistingDocument,
-    mutableResult: Writable<ReactiveResponseLoaded<T>>
+    doc: database.ExistingDocument,
+    mutableResult: Writable<database.ReactiveResponseLoaded<T>>
   ): void;
 }
 
@@ -1504,8 +1490,8 @@ export interface ReactiveHandlerAttached<T> {
    * @param mutableResult - Mutable result.
    */
   (
-    doc: ExistingAttachedDocument,
-    mutableResult: Writable<ReactiveResponseLoaded<T>>
+    doc: database.ExistingAttachedDocument,
+    mutableResult: Writable<database.ReactiveResponseLoaded<T>>
   ): void;
 }
 
@@ -1517,7 +1503,10 @@ export interface ReactiveRequest<T> {
    * @param options - Options.
    * @returns Promise.
    */
-  (conditions?: Conditions, options?: QueryOptions): Promise<T>;
+  (
+    conditions?: database.Conditions,
+    options?: database.QueryOptions
+  ): Promise<T>;
 }
 
 export interface ReactiveRequestAttached<T> {
@@ -1530,9 +1519,9 @@ export interface ReactiveRequestAttached<T> {
    * @returns Promise.
    */
   (
-    conditions?: Conditions,
-    parentConditions?: Conditions,
-    options?: QueryOptions
+    conditions?: database.Conditions,
+    parentConditions?: database.Conditions,
+    options?: database.QueryOptions
   ): Promise<T>;
 }
 
@@ -1562,7 +1551,7 @@ const isDocsResponse = is.object.factory<DocsResponse>(
   {}
 );
 
-const isBaseExistingDocument = is.object.factory<BaseExistingDocument>(
+const isBaseExistingDocument = is.object.factory<database.BaseExistingDocument>(
   { _id: is.string, _rev: is.string },
   {
     _deleted: is.true,
@@ -1571,12 +1560,13 @@ const isBaseExistingDocument = is.object.factory<BaseExistingDocument>(
   }
 );
 
-const isStoredDocumentAttached = is.object.factory<BaseStoredAttachedDocument>(
-  { _id: is.number, _rev: is.number },
-  { _deleted: is.true, parentDoc: isBaseExistingDocument }
-);
+const isStoredDocumentAttached =
+  is.object.factory<database.BaseStoredAttachedDocument>(
+    { _id: is.number, _rev: is.number },
+    { _deleted: is.true, parentDoc: isBaseExistingDocument }
+  );
 
-const isExistingDocument = is.object.factory<ExistingDocument>(
+const isExistingDocument = is.object.factory<database.ExistingDocument>(
   { _id: is.string, _rev: is.string },
   {
     _deleted: is.true,
@@ -1585,14 +1575,15 @@ const isExistingDocument = is.object.factory<ExistingDocument>(
   }
 );
 
-const isExistingDocumentAttached = is.object.factory<ExistingAttachedDocument>(
-  {
-    _id: is.number,
-    _rev: is.number,
-    parentDoc: isExistingDocument
-  },
-  { _deleted: is.true }
-);
+const isExistingDocumentAttached =
+  is.object.factory<database.ExistingAttachedDocument>(
+    {
+      _id: is.number,
+      _rev: is.number,
+      parentDoc: isExistingDocument
+    },
+    { _deleted: is.true }
+  );
 
 interface DocResponse {
   readonly doc: unknown;
@@ -1638,7 +1629,7 @@ function and(conditions: strings): string {
  */
 function condsToStr(
   source: "attached" | "doc",
-  conditions: Conditions
+  conditions: database.Conditions
 ): StrConds {
   conditions = is.array(conditions) ? conditions : [conditions];
 
@@ -1756,7 +1747,7 @@ function dateDelta(date: string): number {
 }
 
 // eslint-disable-next-line @skylib/require-jsdoc -- ???
-function dateValue(date: DateCondition): string {
+function dateValue(date: database.DateCondition): string {
   if (is.string(date)) return date;
 
   if (date.length === 1) date = [date[0], "+", 0, "minutes"];
@@ -1851,7 +1842,9 @@ function escapeForJs(value: unknown): string {
  * @param rawDoc - Raw document.
  * @returns Document.
  */
-function extractDoc(rawDoc: ExistingDocument): ExistingDocument {
+function extractDoc(
+  rawDoc: database.ExistingDocument
+): database.ExistingDocument {
   return rawDoc.attachedDocs ? { ...rawDoc, attachedDocs: [] } : rawDoc;
 }
 
@@ -1864,10 +1857,10 @@ function extractDoc(rawDoc: ExistingDocument): ExistingDocument {
  * @returns Attached document.
  */
 function extractDocAttached(
-  rawDoc: ExistingDocument,
+  rawDoc: database.ExistingDocument,
   id: number,
   extractDeleted = false
-): ExistingAttachedDocument {
+): database.ExistingAttachedDocument {
   const { attachedDocs, ...parentDoc } = rawDoc;
 
   assert.not.empty(
@@ -1893,7 +1886,7 @@ function extractDocAttached(
 // eslint-disable-next-line @skylib/require-jsdoc -- ??
 function isStoredDocumentAttachedArray(
   value: unknown
-): value is BaseStoredAttachedDocuments {
+): value is database.BaseStoredAttachedDocuments {
   return is.array.of(value, isStoredDocumentAttached);
 }
 
@@ -1912,7 +1905,7 @@ function uglify(code: string): string {
  *
  * @param doc - Document.
  */
-function validatePutDocument(doc: PutDocument): void {
+function validatePutDocument(doc: database.PutDocument): void {
   if (o.hasOwnProp("_attachments", doc))
     throw new Error("Put document contains reserved word: _attachments");
 

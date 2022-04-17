@@ -1,4 +1,6 @@
-import * as lunrWrapper from "@/facade-implementations/inlineSearch/lunr-wrapper";
+import * as facadeImplementations from "@/facade-implementations";
+
+const lunrWrapper = facadeImplementations.inlineSearch.lunrWrapper;
 
 test.each([
   { ids: ["a"], searchString: "n1" },
@@ -29,11 +31,7 @@ test.each([
     }
   ];
 
-  const engine = lunrWrapper.implementation.create(
-    "id",
-    ["name", "description"],
-    items
-  );
+  const engine = lunrWrapper.create("id", ["name", "description"], items);
 
   const expected = items.filter(item => ids.includes(item.id));
 

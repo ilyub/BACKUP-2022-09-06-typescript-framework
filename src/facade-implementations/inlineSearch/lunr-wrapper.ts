@@ -1,9 +1,9 @@
-import type { Facade } from "@skylib/facades/dist/inlineSearch";
-import * as fn from "@skylib/functions/dist/function";
+import type { inlineSearch } from "@skylib/facades";
+import { fn } from "@skylib/functions";
 import lunr from "lunr";
 import { createImplementation, Engine as BaseEngine } from "./api";
 
-export const implementation: Facade = createImplementation(
+export const implementation: inlineSearch.Facade = createImplementation(
   fn.run(
     () =>
       class Engine<T extends object> extends BaseEngine<T, lunr.Index> {

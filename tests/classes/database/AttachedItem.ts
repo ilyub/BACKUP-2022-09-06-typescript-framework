@@ -1,8 +1,6 @@
-import type { ExistingAttachedItemDoc } from "@/classes/database/AttachedItem";
-import { AttachedItem } from "@/classes/database/AttachedItem";
-import { Item } from "@/classes/database/Item";
+import * as classes from "@/classes";
 
-test.each<ExistingAttachedItemDoc>([
+test.each<classes.database.AttachedItem.ExistingAttachedItemDoc>([
   {
     _id: 0,
     _rev: 1,
@@ -17,16 +15,16 @@ test.each<ExistingAttachedItemDoc>([
   }
 ])("attachedItem", doc => {
   {
-    const item = new AttachedItem(doc);
+    const item = new classes.database.AttachedItem(doc);
 
     expect(item.doc()).toStrictEqual(doc);
     expect(() => item.parent).toThrow(new Error("Not implemented"));
   }
 
   {
-    class TestAttachedItem extends AttachedItem {
-      protected override getParent(): Item {
-        return new Item(this._parentDoc);
+    class TestAttachedItem extends classes.database.AttachedItem {
+      protected override getParent(): classes.database.Item {
+        return new classes.database.Item(this._parentDoc);
       }
     }
 

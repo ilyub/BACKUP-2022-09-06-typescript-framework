@@ -1,8 +1,8 @@
-import type { Facade } from "@skylib/facades/dist/compare";
-import * as o from "@skylib/functions/dist/object";
+import type { compare } from "@skylib/facades";
+import { o } from "@skylib/functions";
 import naturalCompare from "natural-compare";
 
-export const implementation: Facade = o.extend(
+export const implementation: compare.Facade = o.extend(
   (x: unknown, y: unknown): number => {
     // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
     if ((x as number) > (y as number)) return 1;

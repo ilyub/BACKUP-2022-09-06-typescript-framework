@@ -1,21 +1,19 @@
-import type {
-  Context,
-  Dictionary as DictionaryInterface,
-  Facade
-} from "@skylib/facades/dist/lang";
-import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
-import * as assert from "@skylib/functions/dist/assertions";
-import * as cast from "@skylib/functions/dist/converters";
-import * as fn from "@skylib/functions/dist/function";
-import { onDemand, wrapProxyHandler } from "@skylib/functions/dist/helpers";
-import * as o from "@skylib/functions/dist/object";
-import * as reflect from "@skylib/functions/dist/reflect";
-import * as s from "@skylib/functions/dist/string";
-import type { LocaleName } from "@skylib/functions/dist/types/configurable";
-import type { NumStr, Rec } from "@skylib/functions/dist/types/core";
-import type { Definitions } from ".";
+import type { lang } from "@skylib/facades";
+import { reactiveStorage } from "@skylib/facades";
+import {
+  assert,
+  cast,
+  fn,
+  onDemand,
+  wrapProxyHandler,
+  o,
+  reflect,
+  s
+} from "@skylib/functions";
+import type { LocaleName, NumStr, Rec } from "@skylib/functions";
+import type { Definitions } from "./Definitions";
 
-export class Dictionary implements DictionaryInterface<Context> {
+export class Dictionary implements lang.Dictionary<lang.Context> {
   /**
    * Configures plugin.
    *
@@ -35,9 +33,9 @@ export class Dictionary implements DictionaryInterface<Context> {
    */
   public static create(
     definitions: Rec<LocaleName, Definitions>,
-    context?: Context,
+    context?: lang.Context,
     count?: number
-  ): Facade {
+  ): lang.Facade {
     return new Dictionary(definitions, context, count).proxified;
   }
 
@@ -50,7 +48,7 @@ export class Dictionary implements DictionaryInterface<Context> {
     return o.clone(moduleConfig);
   }
 
-  public context(context: Context): Facade {
+  public context(context: lang.Context): lang.Facade {
     if (context === this._context) return this.proxified;
 
     let sub = this.subsPool.get(context);
@@ -88,7 +86,7 @@ export class Dictionary implements DictionaryInterface<Context> {
     return definitions.has(key);
   }
 
-  public plural(count: number): Facade {
+  public plural(count: number): lang.Facade {
     count = this.pluralReduce(count);
 
     if (count === this.count) return this.proxified;
@@ -105,7 +103,7 @@ export class Dictionary implements DictionaryInterface<Context> {
     return sub;
   }
 
-  public with(search: string, replace: NumStr): Facade {
+  public with(search: string, replace: NumStr): lang.Facade {
     switch (typeof replace) {
       case "number":
         replacementsPool.set(search.toUpperCase(), cast.string(replace));
@@ -125,15 +123,15 @@ export class Dictionary implements DictionaryInterface<Context> {
     }
   }
 
-  protected readonly _context: Context | undefined;
+  protected readonly _context: lang.Context | undefined;
 
   protected readonly count: number;
 
   protected readonly definitions: Rec<LocaleName, Definitions>;
 
-  protected readonly proxified: Facade;
+  protected readonly proxified: lang.Facade;
 
-  protected readonly subsPool = new Map<NumStr, Facade>();
+  protected readonly subsPool = new Map<NumStr, lang.Facade>();
 
   /**
    * Creates class instance.
@@ -144,7 +142,7 @@ export class Dictionary implements DictionaryInterface<Context> {
    */
   protected constructor(
     definitions: Rec<LocaleName, Definitions>,
-    context?: Context,
+    context?: lang.Context,
     count = 1
   ) {
     this._context = context;
@@ -166,7 +164,7 @@ export class Dictionary implements DictionaryInterface<Context> {
       });
 
       // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
-      return new Proxy(this, handler) as unknown as Facade;
+      return new Proxy(this, handler) as unknown as lang.Facade;
     });
   }
 
@@ -188,7 +186,6 @@ export class Dictionary implements DictionaryInterface<Context> {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-namespace -- ???
 export namespace Dictionary {
   export interface Configuration {
     readonly localeName: LocaleName;

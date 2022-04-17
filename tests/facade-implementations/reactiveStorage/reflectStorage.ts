@@ -1,4 +1,4 @@
-import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
+import { reactiveStorage } from "@skylib/facades";
 
 test("reactiveStorage", () => {
   const callback = jest.fn();

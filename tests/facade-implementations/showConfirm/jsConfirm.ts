@@ -1,4 +1,4 @@
-import { showConfirm } from "@skylib/facades/dist/showConfirm";
+import { showConfirm } from "@skylib/facades";
 
 const confirmMock = jest.fn();
 

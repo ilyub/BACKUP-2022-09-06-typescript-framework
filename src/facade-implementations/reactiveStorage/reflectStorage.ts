@@ -1,15 +1,12 @@
-import type {
-  Facade,
-  Handler,
-  Observer,
-  Reducer
-} from "@skylib/facades/dist/reactiveStorage";
-import * as assert from "@skylib/functions/dist/assertions";
-import * as is from "@skylib/functions/dist/guards";
-import { wrapProxyHandler } from "@skylib/functions/dist/helpers";
-import * as map from "@skylib/functions/dist/map";
-import * as o from "@skylib/functions/dist/object";
-import * as reflect from "@skylib/functions/dist/reflect";
+import type { reactiveStorage } from "@skylib/facades";
+import {
+  assert,
+  is,
+  wrapProxyHandler,
+  map,
+  o,
+  reflect
+} from "@skylib/functions";
 
 declare global {
   namespace facades {
@@ -21,7 +18,7 @@ declare global {
   }
 }
 
-export const implementation: Facade = o.extend(
+export const implementation: reactiveStorage.Facade = o.extend(
   <T extends object>(obj: T): T => {
     if (reflect.hasMetadata(callbacksKey, obj)) return obj;
 
@@ -73,7 +70,7 @@ export const implementation: Facade = o.extend(
     }
   },
   {
-    unwatch(obj: object, observer: Observer): void {
+    unwatch(obj: object, observer: reactiveStorage.Observer): void {
       const callbacks = reflect.getMetadata(callbacksKey, obj);
 
       assert.byGuard(callbacks, isCallbacks);
@@ -86,10 +83,10 @@ export const implementation: Facade = o.extend(
     },
     watch<T extends object>(
       obj: T,
-      handler: Handler<T>,
-      reducer?: Reducer<T>
-    ): Observer {
-      const observer: Observer = {
+      handler: reactiveStorage.Handler<T>,
+      reducer?: reactiveStorage.Reducer<T>
+    ): reactiveStorage.Observer {
+      const observer: reactiveStorage.Observer = {
         _type: "ReactiveStorageObserver",
         symbol: Symbol("Callback")
       };

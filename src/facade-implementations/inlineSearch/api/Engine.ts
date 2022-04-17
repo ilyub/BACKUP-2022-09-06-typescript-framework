@@ -1,7 +1,7 @@
-import type { Engine as EngineInterface } from "@skylib/facades/dist/inlineSearch";
+import type { inlineSearch } from "@skylib/facades";
 
 export abstract class Engine<T extends object, I>
-  implements EngineInterface<T>
+  implements inlineSearch.Engine<T>
 {
   /**
    * Creates class instance.

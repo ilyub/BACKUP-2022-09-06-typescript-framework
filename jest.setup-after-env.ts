@@ -1,15 +1,15 @@
-import * as functionsTestUtils from "@skylib/functions/dist/testUtils";
-import type { LocaleName } from "@skylib/functions/dist/types/configurable";
-import type { Rec } from "@skylib/functions/dist/types/core";
-import {
-  Definitions,
-  pluralReduce
-} from "./src/facade-implementations/lang/dictionary";
-import * as testUtils from "./src/testUtils";
+import { testUtils as functionsTestUtils } from "@skylib/functions";
+import type { LocaleName, Rec } from "@skylib/functions";
+import { testUtils, facadeImplementations } from "./src";
 
-const definitions: Rec<LocaleName, Definitions> = {
-  "en-US": new Definitions({
-    pluralReduce,
+const { lang } = facadeImplementations;
+
+const definitions: Rec<
+  LocaleName,
+  facadeImplementations.lang.dictionary.Definitions
+> = {
+  "en-US": new lang.dictionary.Definitions({
+    pluralReduce: lang.dictionary.pluralReduce,
     wordForms: {},
     words: {
       Confirm: "Password confirm",
@@ -25,8 +25,8 @@ const definitions: Rec<LocaleName, Definitions> = {
       String: "String"
     }
   }),
-  "ru-RU": new Definitions({
-    pluralReduce: pluralReduce.ru,
+  "ru-RU": new lang.dictionary.Definitions({
+    pluralReduce: lang.dictionary.pluralReduce.ru,
     wordForms: {
       "кем-чем": ["кем-чем-им", "кем-чем-ей", "кем-чем-им-ср"],
       "кого-чего": ["кого-чего-его", "кого-чего-ее", "кого-чего-его-ср"],

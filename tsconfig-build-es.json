@@ -1,31 +1,7 @@
 {
   "compilerOptions": {
     "module": "ES2015",
-    "outDir": "es",
-    "plugins": [
-      {
-        "after": true,
-        "afterDeclarations": false,
-        "alias": {
-          "^@skylib/([^/]+)/dist/(.+)": "@skylib/$1/es/$2",
-          "^lodash$": "lodash-es"
-        },
-        "import": "transform",
-        "transform": "ts-transform-import-path-rewrite",
-        "type": "config"
-      },
-      {
-        "after": false,
-        "afterDeclarations": true,
-        "alias": {
-          "^@skylib/([^/]+)/dist/(.+)": "@skylib/$1/es/$2",
-          "^lodash$": "lodash-es"
-        },
-        "import": "transform",
-        "transform": "ts-transform-import-path-rewrite",
-        "type": "config"
-      }
-    ]
+    "outDir": "es"
   },
   "extends": "./tsconfig",
   "include": [

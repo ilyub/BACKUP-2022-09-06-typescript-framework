@@ -1,10 +1,12 @@
-import type { Unit } from "@skylib/facades/dist/faker";
-import { loremIpsumWrapper } from "@/facade-implementations/faker/lorem-ipsum-wrapper";
+import type { faker } from "@skylib/facades";
+import * as facadeImplementations from "@/facade-implementations";
+
+const loremIpsumWrapper = facadeImplementations.faker.loremIpsumWrapper;
 
 interface DateTestData {
-  readonly from: string | readonly [number, Unit];
-  readonly to: string | readonly [number, Unit];
-  readonly unit: Unit;
+  readonly from: string | readonly [number, faker.Unit];
+  readonly to: string | readonly [number, faker.Unit];
+  readonly unit: faker.Unit;
 }
 
 test("boolean", () => {

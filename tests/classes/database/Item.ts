@@ -1,7 +1,6 @@
-import type { ExistingItemDoc } from "@/classes/database/Item";
-import { Item } from "@/classes/database/Item";
+import * as classes from "@/classes";
 
-test.each<ExistingItemDoc>([
+test.each<classes.database.Item.ExistingItemDoc>([
   { _id: "test-id", _rev: "test-rev" },
   {
     _deleted: true,
@@ -10,7 +9,7 @@ test.each<ExistingItemDoc>([
     softDeleted: true
   }
 ])("item", doc => {
-  const item = new Item(doc);
+  const item = new classes.database.Item(doc);
 
   expect(item.doc()).toStrictEqual(doc);
 });

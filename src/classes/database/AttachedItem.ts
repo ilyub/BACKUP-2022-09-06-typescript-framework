@@ -1,12 +1,6 @@
-import type {
-  BaseBulkAttachedDocument,
-  BaseExistingAttachedDocument,
-  BaseExistingDocument,
-  BasePutAttachedDocument
-} from "@skylib/facades/dist/database";
-import * as o from "@skylib/functions/dist/object";
-import type { stringU } from "@skylib/functions/dist/types/core";
-import type { UndefinedStyle } from "@skylib/functions/dist/types/object";
+import type { database } from "@skylib/facades";
+import { o } from "@skylib/functions";
+import type { stringU, UndefinedStyle } from "@skylib/functions";
 import type { Item } from "./Item";
 
 export class AttachedItem<T extends Item = Item> {
@@ -45,7 +39,7 @@ export class AttachedItem<T extends Item = Item> {
    *
    * @param source - Source.
    */
-  public constructor(source: ExistingAttachedItemDoc) {
+  public constructor(source: AttachedItem.ExistingAttachedItemDoc) {
     this._deleted = source._deleted ?? false;
     this._id = source._id;
     this._rev = source._rev;
@@ -61,8 +55,10 @@ export class AttachedItem<T extends Item = Item> {
    *
    * @returns Database document.
    */
-  public doc(): ExistingAttachedItemDoc {
-    return o.removeUndefinedKeys<UndefinedStyle<ExistingAttachedItemDoc>>({
+  public doc(): AttachedItem.ExistingAttachedItemDoc {
+    return o.removeUndefinedKeys<
+      UndefinedStyle<AttachedItem.ExistingAttachedItemDoc>
+    >({
       _deleted: this._deleted ? true : undefined,
       _id: this._id,
       _rev: this._rev,
@@ -77,7 +73,7 @@ export class AttachedItem<T extends Item = Item> {
   // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected _parent: T | undefined = undefined;
 
-  protected readonly _parentDoc: BaseExistingDocument;
+  protected readonly _parentDoc: database.BaseExistingDocument;
 
   /**
    * Initializes parent.
@@ -87,29 +83,31 @@ export class AttachedItem<T extends Item = Item> {
   }
 }
 
-export type AttachedItems = readonly AttachedItems[];
+export namespace AttachedItem {
+  export type AttachedItems = readonly AttachedItems[];
 
-export interface BaseAttachedItemDoc {
-  readonly createdAt?: string;
-  readonly deletedAt?: string;
-  readonly softDeleted?: true;
-  readonly updatedAt?: string;
+  export interface BaseAttachedItemDoc {
+    readonly createdAt?: string;
+    readonly deletedAt?: string;
+    readonly softDeleted?: true;
+    readonly updatedAt?: string;
+  }
+
+  export interface BulkAttachedItemDoc
+    extends database.BaseBulkAttachedDocument,
+      BaseAttachedItemDoc {}
+
+  export type BulkAttachedItemDocs = readonly BulkAttachedItemDoc[];
+
+  export interface ExistingAttachedItemDoc
+    extends database.BaseExistingAttachedDocument,
+      BaseAttachedItemDoc {}
+
+  export type ExistingAttachedItemDocs = readonly ExistingAttachedItemDoc[];
+
+  export interface PutAttachedItemDoc
+    extends database.BasePutAttachedDocument,
+      BaseAttachedItemDoc {}
+
+  export type PutAttachedItemDocs = readonly PutAttachedItemDoc[];
 }
-
-export interface BulkAttachedItemDoc
-  extends BaseBulkAttachedDocument,
-    BaseAttachedItemDoc {}
-
-export type BulkAttachedItemDocs = readonly BulkAttachedItemDoc[];
-
-export interface ExistingAttachedItemDoc
-  extends BaseExistingAttachedDocument,
-    BaseAttachedItemDoc {}
-
-export type ExistingAttachedItemDocs = readonly ExistingAttachedItemDoc[];
-
-export interface PutAttachedItemDoc
-  extends BasePutAttachedDocument,
-    BaseAttachedItemDoc {}
-
-export type PutAttachedItemDocs = readonly PutAttachedItemDoc[];

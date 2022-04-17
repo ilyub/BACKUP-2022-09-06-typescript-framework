@@ -1,11 +1,18 @@
-import { uniqueId } from "@skylib/facades/dist/uniqueId";
+import { uniqueId } from "@skylib/facades";
+import * as facadeImplementations from "@/facade-implementations";
+// eslint-disable-next-line import/no-internal-modules -- Ok
 import type { PouchPutDocument } from "@/facade-implementations/database/PouchDBWrapper/PouchDBProxy";
 import {
   handlers,
   PouchDBProxy
+  // eslint-disable-next-line import/no-internal-modules -- Ok
 } from "@/facade-implementations/database/PouchDBWrapper/PouchDBProxy";
-import { PouchConflictError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchConflictError";
-import { PouchNotFoundError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchNotFoundError";
+
+const PouchConflictError =
+  facadeImplementations.database.PouchDBWrapper.PouchConflictError;
+
+const PouchNotFoundError =
+  facadeImplementations.database.PouchDBWrapper.PouchNotFoundError;
 
 test("handlers.error", () => {
   {

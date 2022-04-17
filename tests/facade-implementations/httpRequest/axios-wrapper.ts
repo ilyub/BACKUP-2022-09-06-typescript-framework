@@ -1,6 +1,8 @@
-import { httpRequest } from "@skylib/facades/dist/httpRequest";
+import { httpRequest } from "@skylib/facades";
 import jestMockAxios from "jest-mock-axios";
-import * as axiosWrapper from "@/facade-implementations/httpRequest/axios-wrapper";
+import * as facadeImplementations from "@/facade-implementations";
+
+const axiosWrapper = facadeImplementations.httpRequest.axiosWrapper;
 
 beforeEach(jestMockAxios.reset);
 

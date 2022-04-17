@@ -1,10 +1,9 @@
-import { handlePromise } from "@skylib/facades/dist/handlePromise";
-import { progressReporter } from "@skylib/facades/dist/progressReporter";
-import * as fn from "@skylib/functions/dist/function";
-import { wait } from "@skylib/functions/dist/helpers";
-import * as testUtils from "@skylib/functions/dist/testUtils";
-import type { booleanU } from "@skylib/functions/dist/types/core";
-import * as promiseHandler from "@/facade-implementations/handlePromise/promiseHandler";
+import { handlePromise, progressReporter } from "@skylib/facades";
+import { fn, wait, testUtils } from "@skylib/functions";
+import type { booleanU } from "@skylib/functions";
+import * as facadeImplementations from "@/facade-implementations";
+
+const promiseHandler = facadeImplementations.handlePromise.promiseHandler;
 
 const alertMock = jest.fn();
 

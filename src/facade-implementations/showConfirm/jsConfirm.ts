@@ -1,7 +1,7 @@
-import type { Facade } from "@skylib/facades/dist/showConfirm";
-import * as o from "@skylib/functions/dist/object";
+import type { showConfirm } from "@skylib/facades";
+import { o } from "@skylib/functions";
 
-export const implementation: Facade = o.extend(
+export const implementation: showConfirm.Facade = o.extend(
   (message: string, success?: () => void, failure?: () => void): void => {
     // eslint-disable-next-line no-alert -- ???
     if (confirm(message)) success?.();

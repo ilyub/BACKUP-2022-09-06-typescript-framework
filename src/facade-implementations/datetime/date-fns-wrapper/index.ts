@@ -1,8 +1,5 @@
-import type {
-  DateTime as DateTimeInterface,
-  Facade
-} from "@skylib/facades/dist/datetime";
-import type { NumStr } from "@skylib/functions/dist/types/core";
+import type { datetime } from "@skylib/facades";
+import type { NumStr } from "@skylib/functions";
 import { isValid, parse } from "date-fns";
 import { DateTime, formatStrings } from "./DateTime";
 
@@ -10,8 +7,8 @@ export { DateTime, configure, getConfiguration } from "./DateTime";
 
 export type { Configuration, FirstDayOfWeek } from "./DateTime";
 
-export const implementation: Facade = {
-  create(dt?: Date | DateTimeInterface | NumStr) {
+export const implementation: datetime.Facade = {
+  create(dt?: Date | datetime.DateTime | NumStr) {
     return new DateTime(dt);
   },
   now() {

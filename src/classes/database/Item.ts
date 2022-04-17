@@ -1,11 +1,6 @@
-import type {
-  BaseExistingDocument,
-  BasePutDocument,
-  BaseStoredAttachedDocuments
-} from "@skylib/facades/dist/database";
-import * as o from "@skylib/functions/dist/object";
-import type { numbers, stringU } from "@skylib/functions/dist/types/core";
-import type { UndefinedStyle } from "@skylib/functions/dist/types/object";
+import type { database } from "@skylib/facades";
+import { o } from "@skylib/functions";
+import type { numbers, stringU, UndefinedStyle } from "@skylib/functions";
 
 export class Item {
   public readonly _deleted: boolean;
@@ -27,7 +22,7 @@ export class Item {
    *
    * @param source - Source.
    */
-  public constructor(source: ExistingItemDoc) {
+  public constructor(source: Item.ExistingItemDoc) {
     this._deleted = source._deleted ?? false;
     this._id = source._id;
     this._rev = source._rev;
@@ -44,8 +39,8 @@ export class Item {
    *
    * @returns Database document.
    */
-  public doc(): ExistingItemDoc {
-    return o.removeUndefinedKeys<UndefinedStyle<ExistingItemDoc>>({
+  public doc(): Item.ExistingItemDoc {
+    return o.removeUndefinedKeys<UndefinedStyle<Item.ExistingItemDoc>>({
       _deleted: this._deleted ? true : undefined,
       _id: this._id,
       _rev: this._rev,
@@ -58,7 +53,9 @@ export class Item {
     });
   }
 
-  protected readonly attachedDocs: BaseStoredAttachedDocuments | undefined;
+  protected readonly attachedDocs:
+    | database.BaseStoredAttachedDocuments
+    | undefined;
 
   protected readonly lastAttachedDocs: numbers | undefined;
 }
@@ -70,12 +67,16 @@ export interface BaseItemDoc {
   readonly updatedAt?: string;
 }
 
-export interface ExistingItemDoc extends BaseExistingDocument, BaseItemDoc {}
+export namespace Item {
+  export interface ExistingItemDoc
+    extends database.BaseExistingDocument,
+      BaseItemDoc {}
 
-export type ExistingItemDocs = readonly ExistingItemDoc[];
+  export type ExistingItemDocs = readonly ExistingItemDoc[];
 
-export type Items = readonly Items[];
+  export type Items = readonly Items[];
 
-export interface PutItemDoc extends BasePutDocument, BaseItemDoc {}
+  export interface PutItemDoc extends database.BasePutDocument, BaseItemDoc {}
 
-export type PutItemDocs = readonly PutItemDoc[];
+  export type PutItemDocs = readonly PutItemDoc[];
+}

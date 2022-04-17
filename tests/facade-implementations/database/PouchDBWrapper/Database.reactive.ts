@@ -1,21 +1,15 @@
-import type {
-  ExistingAttachedDocument,
-  ExistingDocument,
-  ReactiveConfig,
-  ReactiveConfigAttached
-} from "@skylib/facades/dist/database";
-import { database } from "@skylib/facades/dist/database";
-import { datetime } from "@skylib/facades/dist/datetime";
-import { handlePromise } from "@skylib/facades/dist/handlePromise";
-import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
-import { uniqueId } from "@skylib/facades/dist/uniqueId";
-import * as assert from "@skylib/functions/dist/assertions";
-import * as fn from "@skylib/functions/dist/function";
-import { wait } from "@skylib/functions/dist/helpers";
-import * as testUtils from "@skylib/functions/dist/testUtils";
-import type { Writable } from "@skylib/functions/dist/types/core";
+import {
+  database,
+  datetime,
+  handlePromise,
+  reactiveStorage,
+  uniqueId
+} from "@skylib/facades";
+import { assert, fn, wait, testUtils } from "@skylib/functions";
+import type { Writable } from "@skylib/functions";
+import * as facadeImplementations from "@/facade-implementations";
+// eslint-disable-next-line import/no-internal-modules -- Ok
 import { handlers } from "@/facade-implementations/database/PouchDBWrapper/Database";
-import { PouchNotFoundError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchNotFoundError";
 
 const errorHandler = jest.spyOn(handlers, "error");
 
@@ -25,9 +19,9 @@ test("database.reactiveCount", async () => {
   expect.hasAssertions();
 
   await testUtils.run(async () => {
-    const config = reactiveStorage<Writable<ReactiveConfig>>({
+    const config = reactiveStorage<Writable<database.ReactiveConfig>>({
       conditions: { type: { eq: "a" } },
-      update(doc: ExistingDocument): boolean {
+      update(doc: database.ExistingDocument): boolean {
         return doc["type"] === "a";
       }
     });
@@ -75,9 +69,9 @@ test("database.reactiveCountAttached", async () => {
   expect.hasAssertions();
 
   await testUtils.run(async () => {
-    const config = reactiveStorage<Writable<ReactiveConfigAttached>>({
+    const config = reactiveStorage<Writable<database.ReactiveConfigAttached>>({
       conditions: { type: { eq: "a" } },
-      update(doc: ExistingAttachedDocument): boolean {
+      update(doc: database.ExistingAttachedDocument): boolean {
         return doc["type"] === "a";
       }
     });
@@ -210,7 +204,10 @@ test("database.reactiveGet", async () => {
     }
 
     {
-      const error = new PouchNotFoundError("Missing document");
+      const error =
+        new facadeImplementations.database.PouchDBWrapper.PouchNotFoundError(
+          "Missing document"
+        );
 
       errorHandler.mockImplementationOnce(fn.noop);
 
@@ -288,7 +285,10 @@ test("database.reactiveGetAttached", async () => {
     }
 
     {
-      const error = new PouchNotFoundError("Missing attached document");
+      const error =
+        new facadeImplementations.database.PouchDBWrapper.PouchNotFoundError(
+          "Missing attached document"
+        );
 
       errorHandler.mockImplementationOnce(fn.noop);
 
@@ -417,7 +417,7 @@ test("database.reactiveQuery", async () => {
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
-    const config: ReactiveConfig = {
+    const config: database.ReactiveConfig = {
       conditions: { type: { eq: "a" } },
       update(doc) {
         return doc["type"] === "a";
@@ -462,7 +462,7 @@ test("database.reactiveQueryAttached", async () => {
 
     const { id: parentId } = await db.put({});
 
-    const config: ReactiveConfigAttached = {
+    const config: database.ReactiveConfigAttached = {
       conditions: { type: { eq: "a" } },
       update(doc) {
         return doc["type"] === "a";
@@ -512,7 +512,7 @@ test("database.reactiveUnsettled", async () => {
   testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:00").toDate());
 
   await testUtils.run(async () => {
-    const config: ReactiveConfig = {
+    const config: database.ReactiveConfig = {
       conditions: { d: { dateGt: ["now"] } },
       updateInterval: 3600 * 1000
     };
@@ -548,7 +548,7 @@ test("database.reactiveUnsettledAttached", async () => {
   testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:00").toDate());
 
   await testUtils.run(async () => {
-    const config: ReactiveConfigAttached = {
+    const config: database.ReactiveConfigAttached = {
       conditions: { d: { dateGt: ["now"] } },
       updateInterval: 3600 * 1000
     };

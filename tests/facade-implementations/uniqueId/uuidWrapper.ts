@@ -1,4 +1,4 @@
-import { uniqueId } from "@skylib/facades/dist/uniqueId";
+import { uniqueId } from "@skylib/facades";
 
 test("uniqueId", () => {
   const id1 = uniqueId();

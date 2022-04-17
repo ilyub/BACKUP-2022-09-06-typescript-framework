@@ -1,7 +1,7 @@
-import type { Facade } from "@skylib/facades/dist/showAlert";
-import * as o from "@skylib/functions/dist/object";
+import type { showAlert } from "@skylib/facades";
+import { o } from "@skylib/functions";
 
-export const implementation: Facade = o.extend(
+export const implementation: showAlert.Facade = o.extend(
   (message: string): void => {
     // eslint-disable-next-line no-alert -- ???
     alert(message);

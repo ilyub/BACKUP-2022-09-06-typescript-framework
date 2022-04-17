@@ -1,11 +1,11 @@
-import type { Context, Word } from "@skylib/facades/dist/lang";
+import type { lang } from "@skylib/facades";
 import type {
   IndexedObject,
   NumStr,
   PartialRecord,
   Rec,
   strings
-} from "@skylib/functions/dist/types/core";
+} from "@skylib/functions";
 
 export interface PluralReduce {
   /**
@@ -21,7 +21,7 @@ export type RawDefinition =
   | RawDefinitions
   | string
   // eslint-disable-next-line @skylib/no-multi-type-tuples -- Ok
-  | readonly [NumStr, RawDefinitions, PartialRecord<Context, NumStr>]
+  | readonly [NumStr, RawDefinitions, PartialRecord<lang.Context, NumStr>]
   // eslint-disable-next-line @skylib/no-multi-type-tuples -- Ok
   | readonly [NumStr, RawDefinitions];
 
@@ -32,11 +32,11 @@ export interface RawDefinitions {
 export interface RawLanguage {
   readonly pluralReduce: PluralReduce;
   readonly wordForms: IndexedObject<strings>;
-  readonly words: Rec<Word, RawDefinition>;
+  readonly words: Rec<lang.Word, RawDefinition>;
 }
 
 export interface WordInfo {
-  readonly context: Context | undefined;
+  readonly context: lang.Context | undefined;
   readonly count: number;
   readonly forms: strings;
   readonly replacements: ReadonlyMap<string, string>;

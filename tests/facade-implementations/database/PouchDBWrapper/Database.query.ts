@@ -1,9 +1,5 @@
-import type { Conditions, QueryOptions } from "@skylib/facades/dist/database";
-import { database } from "@skylib/facades/dist/database";
-import { datetime } from "@skylib/facades/dist/datetime";
-import { uniqueId } from "@skylib/facades/dist/uniqueId";
-import { wait } from "@skylib/functions/dist/helpers";
-import * as testUtils from "@skylib/functions/dist/testUtils";
+import { database, datetime, uniqueId } from "@skylib/facades";
+import { wait, testUtils } from "@skylib/functions";
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
@@ -33,7 +29,7 @@ test("query", async () => {
   ]);
 
   async function subtest(
-    conditions: Conditions | undefined,
+    conditions: database.Conditions | undefined,
     expected: string[]
   ): Promise<void> {
     const docs = await db.query(conditions);
@@ -56,7 +52,7 @@ test("query: Date condition 1", async () => {
   ]);
 
   async function subtest(
-    conditions: Conditions | undefined,
+    conditions: database.Conditions | undefined,
     expected: string[]
   ): Promise<void> {
     const docs = await db.query(conditions);
@@ -95,7 +91,7 @@ test("query: Date condition 2", async () => {
   ]);
 
   async function subtest(
-    conditions: Conditions | undefined,
+    conditions: database.Conditions | undefined,
     expected: string[]
   ): Promise<void> {
     const docs = await db.query(conditions);
@@ -140,7 +136,7 @@ test("query: Date condition 3", async () => {
   ]);
 
   async function subtest(
-    conditions: Conditions | undefined,
+    conditions: database.Conditions | undefined,
     expected: string[]
   ): Promise<void> {
     const docs = await db.query(conditions);
@@ -235,7 +231,7 @@ test("query: Options", async () => {
   ]);
 
   async function subtest(
-    options: QueryOptions,
+    options: database.QueryOptions,
     expected: unknown[]
   ): Promise<void> {
     const docs = await db.query({ d: { dateLt: "2001-02-15 12:00" } }, options);
@@ -281,7 +277,7 @@ test("query: Time evolution", async () => {
     ]);
 
     async function subtest(
-      conditions: Conditions,
+      conditions: database.Conditions,
       expected: unknown[]
     ): Promise<void> {
       const docs = await db.query(conditions);

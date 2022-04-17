@@ -1,12 +1,9 @@
-import type { Facade } from "@skylib/facades/dist/facebook";
-import * as assert from "@skylib/functions/dist/assertions";
-import * as fn from "@skylib/functions/dist/function";
-import * as is from "@skylib/functions/dist/guards";
-import type { stringU } from "@skylib/functions/dist/types/core";
-import type { AsyncPromise } from "@skylib/functions/dist/types/function";
+import type { facebook } from "@skylib/facades";
+import { assert, fn, is } from "@skylib/functions";
+import type { stringU, AsyncPromise } from "@skylib/functions";
 import $ from "jquery";
 
-export class Facebook implements Facade {
+export class Facebook implements facebook.Facade {
   /**
    * Creates class instance.
    *

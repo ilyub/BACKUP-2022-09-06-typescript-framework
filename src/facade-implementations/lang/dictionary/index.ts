@@ -1,6 +1,4 @@
-import * as o from "@skylib/functions/dist/object";
-
-export { Definition } from "./Definition";
+import { o } from "@skylib/functions";
 
 export { Definitions } from "./Definitions";
 

@@ -1,21 +1,17 @@
-import { datetime } from "@skylib/facades/dist/datetime";
-import type { Facade, Unit } from "@skylib/facades/dist/faker";
-import * as a from "@skylib/functions/dist/array";
-import * as fn from "@skylib/functions/dist/function";
-import * as is from "@skylib/functions/dist/guards";
-import * as num from "@skylib/functions/dist/number";
-import * as o from "@skylib/functions/dist/object";
-import * as _ from "lodash";
+import type { faker } from "@skylib/facades";
+import { datetime } from "@skylib/facades";
+import { a, fn, is, num, o } from "@skylib/functions";
+import * as _ from "@skylib/lodash-commonjs-es";
 import { loremIpsum } from "lorem-ipsum";
 
-export const loremIpsumWrapper: Configurable & Facade = {
+export const loremIpsumWrapper: Configurable & faker.Facade = {
   boolean(): boolean {
     return this.oneOf([true, false]);
   },
   configure(config): void {
     o.assign(moduleConfig, config);
   },
-  date(from, to, step = 1, unit: Unit = "minute") {
+  date(from, to, step = 1, unit = "minute") {
     const fromTime = is.string(from)
       ? datetime.create(from).toTime()
       : datetime

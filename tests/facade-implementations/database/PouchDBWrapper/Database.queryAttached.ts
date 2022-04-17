@@ -1,9 +1,5 @@
-import type { Conditions, QueryOptions } from "@skylib/facades/dist/database";
-import { database } from "@skylib/facades/dist/database";
-import { datetime } from "@skylib/facades/dist/datetime";
-import { uniqueId } from "@skylib/facades/dist/uniqueId";
-import { typedef, wait } from "@skylib/functions/dist/helpers";
-import * as testUtils from "@skylib/functions/dist/testUtils";
+import { database, datetime, uniqueId } from "@skylib/facades";
+import { typedef, wait, testUtils } from "@skylib/functions";
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
@@ -176,7 +172,7 @@ test("queryAttached", async () => {
   ]);
 
   async function subtest(
-    conditions: Conditions | undefined,
+    conditions: database.Conditions | undefined,
     expected: unknown[]
   ): Promise<void> {
     const docs = await db.queryAttached(conditions);
@@ -261,8 +257,8 @@ test("queryAttached: Combined", async () => {
   ]);
 
   async function subtest(
-    conditions: Conditions,
-    parentConditions: Conditions,
+    conditions: database.Conditions,
+    parentConditions: database.Conditions,
     expected: unknown[]
   ): Promise<void> {
     const docs = await db.queryAttached(conditions, parentConditions);
@@ -389,7 +385,7 @@ test("queryAttached: Options", async () => {
   ]);
 
   async function subtest(
-    options: QueryOptions,
+    options: database.QueryOptions,
     expected: unknown[]
   ): Promise<void> {
     const docs = await db.queryAttached({ n: { eq: 1 } }, {}, options);
@@ -491,7 +487,7 @@ test("queryAttached: Time evolution", async () => {
     ]);
 
     async function subtest(
-      conditions: Conditions,
+      conditions: database.Conditions,
       expected: unknown[]
     ): Promise<void> {
       const docs = await db.queryAttached(conditions);

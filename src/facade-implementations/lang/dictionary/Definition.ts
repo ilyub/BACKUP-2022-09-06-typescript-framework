@@ -1,17 +1,8 @@
-import type { Context } from "@skylib/facades/dist/lang";
-import * as a from "@skylib/functions/dist/array";
-import * as assert from "@skylib/functions/dist/assertions";
-import * as fn from "@skylib/functions/dist/function";
-import * as is from "@skylib/functions/dist/guards";
-import * as o from "@skylib/functions/dist/object";
-import * as regexp from "@skylib/functions/dist/regexp";
-import type {
-  IndexedObject,
-  NumStr,
-  strings
-} from "@skylib/functions/dist/types/core";
+import type { lang } from "@skylib/facades";
+import { a, assert, fn, is, o, regexp } from "@skylib/functions";
+import type { IndexedObject, NumStr, strings } from "@skylib/functions";
+import type { Definitions } from "./Definitions";
 import type { RawDefinition, WordInfo } from "./types";
-import type { Definitions } from ".";
 
 export class Definition {
   /**
@@ -87,7 +78,7 @@ export class Definition {
    */
   public get(
     owner: Definitions,
-    context: Context | undefined,
+    context: lang.Context | undefined,
     forms: strings,
     count: number,
     replacements: ReadonlyMap<string, string>
@@ -114,8 +105,8 @@ export class Definition {
         return definition.get(owner, context, [form], count, replacements);
     }
 
-    // eslint-disable-next-line no-warning-comments -- Compare to dictionary's count
-    // fixme
+    // eslint-disable-next-line no-warning-comments -- Postponed
+    // fixme: Compare to dictionary's count
     if (count === 1) {
       // Plural form not needed
     } else {

@@ -1,7 +1,5 @@
-import type { Conditions } from "@skylib/facades/dist/database";
-import { database } from "@skylib/facades/dist/database";
-import { uniqueId } from "@skylib/facades/dist/uniqueId";
-import { typedef } from "@skylib/functions/dist/helpers";
+import { database, uniqueId } from "@skylib/facades";
+import { typedef } from "@skylib/functions";
 
 test("count", async () => {
   const db = database.create(uniqueId());
@@ -38,7 +36,7 @@ test("count", async () => {
   ]);
 
   async function subtest(
-    conditions: Conditions | undefined,
+    conditions: database.Conditions | undefined,
     expected: number
   ): Promise<void> {
     await expect(db.count(conditions)).resolves.toStrictEqual(expected);
@@ -116,8 +114,8 @@ test("countAttached", async () => {
   ]);
 
   async function subtest(
-    conditions: Conditions | undefined,
-    parentConditions: Conditions | undefined,
+    conditions: database.Conditions | undefined,
+    parentConditions: database.Conditions | undefined,
     expected: number
   ): Promise<void> {
     await expect(
@@ -202,8 +200,8 @@ test("countAttached: Combined", async () => {
   ]);
 
   async function subtest(
-    conditions: Conditions,
-    parentConditions: Conditions,
+    conditions: database.Conditions,
+    parentConditions: database.Conditions,
     expected: number
   ): Promise<void> {
     await expect(

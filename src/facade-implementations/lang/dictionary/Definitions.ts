@@ -1,13 +1,11 @@
-import type { Context, Transforms, Word } from "@skylib/facades/dist/lang";
-import * as assert from "@skylib/functions/dist/assertions";
-import * as is from "@skylib/functions/dist/guards";
-import * as o from "@skylib/functions/dist/object";
-import * as s from "@skylib/functions/dist/string";
+import type { lang } from "@skylib/facades";
+import { assert, is, o, s } from "@skylib/functions";
 import type {
   IndexedObject,
   strings,
   WritableIndexedObject
-} from "@skylib/functions/dist/types/core";
+} from "@skylib/functions";
+import { Definition } from "./Definition";
 import type {
   PluralReduce,
   RawDefinition,
@@ -15,7 +13,6 @@ import type {
   RawLanguage,
   WordInfo
 } from "./types";
-import { Definition } from ".";
 
 export class Definitions {
   public readonly pluralReduce: PluralReduce;
@@ -44,7 +41,7 @@ export class Definitions {
    */
   public get(
     key: string,
-    context: Context | undefined,
+    context: lang.Context | undefined,
     forms: strings | string,
     count: number,
     replacements: ReadonlyMap<string, string>
@@ -68,7 +65,7 @@ export class Definitions {
    * @param key - Word ID.
    * @returns _True_ if dictionary has word, _false_ otherwise.
    */
-  public has(key: string): key is Transforms<Word> {
+  public has(key: string): key is lang.Transforms<lang.Word> {
     return is.not.empty(this.words[key]);
   }
 

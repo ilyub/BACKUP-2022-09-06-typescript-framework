@@ -1,10 +1,9 @@
-import type { Facade } from "@skylib/facades/dist/inlineSearch";
-import * as a from "@skylib/functions/dist/array";
-import * as fn from "@skylib/functions/dist/function";
+import type { inlineSearch } from "@skylib/facades";
+import { a, fn } from "@skylib/functions";
 import MiniSearch from "minisearch";
 import { createImplementation, Engine as BaseEngine } from "./api";
 
-export const implementation: Facade = createImplementation(
+export const implementation: inlineSearch.Facade = createImplementation(
   fn.run(
     () =>
       class Engine<T extends object> extends BaseEngine<

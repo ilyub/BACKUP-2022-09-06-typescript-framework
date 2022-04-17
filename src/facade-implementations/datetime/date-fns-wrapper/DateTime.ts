@@ -1,12 +1,7 @@
-import type {
-  DateTime as DateTimeInterface,
-  Unit
-} from "@skylib/facades/dist/datetime";
-import { reactiveStorage } from "@skylib/facades/dist/reactiveStorage";
-import * as is from "@skylib/functions/dist/guards";
-import { onDemand } from "@skylib/functions/dist/helpers";
-import * as o from "@skylib/functions/dist/object";
-import type { NumStr, strings } from "@skylib/functions/dist/types/core";
+import type { datetime } from "@skylib/facades";
+import { reactiveStorage } from "@skylib/facades";
+import { is, onDemand, o } from "@skylib/functions";
+import type { NumStr, strings } from "@skylib/functions";
 import {
   add,
   format,
@@ -57,13 +52,13 @@ export const moduleConfig = onDemand(() =>
   })
 );
 
-export class DateTime implements DateTimeInterface {
+export class DateTime implements datetime.DateTime {
   /**
    * Creates class instance.
    *
    * @param dt - Date/time.
    */
-  public constructor(dt?: Date | DateTimeInterface | NumStr) {
+  public constructor(dt?: Date | datetime.DateTime | NumStr) {
     if (dt instanceof Date) this.value = dt;
     else if (dt instanceof DateTime) this.value = new Date(dt.value);
     else if (is.number(dt)) this.value = new Date(dt);
@@ -71,7 +66,7 @@ export class DateTime implements DateTimeInterface {
     else this.value = new Date();
   }
 
-  public add(amount: number, unit: Unit): DateTimeInterface {
+  public add(amount: number, unit: datetime.Unit): datetime.DateTime {
     const duration: Duration = {};
 
     switch (unit) {
@@ -115,7 +110,7 @@ export class DateTime implements DateTimeInterface {
     return this;
   }
 
-  public clone(): DateTimeInterface {
+  public clone(): datetime.DateTime {
     return new DateTime(this);
   }
 
@@ -147,23 +142,23 @@ export class DateTime implements DateTimeInterface {
     return getHours(this.value);
   }
 
-  public isSameDayOfMonth(dt: DateTimeInterface): boolean {
+  public isSameDayOfMonth(dt: datetime.DateTime): boolean {
     return isSameDay(this.value, dt.toDate());
   }
 
-  public isSameHour(dt: DateTimeInterface): boolean {
+  public isSameHour(dt: datetime.DateTime): boolean {
     return isSameHour(this.value, dt.toDate());
   }
 
-  public isSameMinute(dt: DateTimeInterface): boolean {
+  public isSameMinute(dt: datetime.DateTime): boolean {
     return isSameMinute(this.value, dt.toDate());
   }
 
-  public isSameMonth(dt: DateTimeInterface): boolean {
+  public isSameMonth(dt: datetime.DateTime): boolean {
     return isSameMonth(this.value, dt.toDate());
   }
 
-  public isSameYear(dt: DateTimeInterface): boolean {
+  public isSameYear(dt: datetime.DateTime): boolean {
     return isSameYear(this.value, dt.toDate());
   }
 
@@ -175,7 +170,7 @@ export class DateTime implements DateTimeInterface {
     return getMonth(this.value);
   }
 
-  public setDayOfMonth(day: number): DateTimeInterface {
+  public setDayOfMonth(day: number): datetime.DateTime {
     this.value = setDate(this.value, day);
 
     return this;
@@ -184,13 +179,13 @@ export class DateTime implements DateTimeInterface {
   public setDayOfWeek(
     day: number,
     weekStartsOn: FirstDayOfWeek
-  ): DateTimeInterface {
+  ): datetime.DateTime {
     this.value = setDay(this.value, day, { weekStartsOn });
 
     return this;
   }
 
-  public setDayOfWeekLocale(day: number): DateTimeInterface {
+  public setDayOfWeekLocale(day: number): datetime.DateTime {
     const weekStartsOn = moduleConfig.firstDayOfWeek;
 
     this.value = setDay(this.value, day, { weekStartsOn });
@@ -198,55 +193,55 @@ export class DateTime implements DateTimeInterface {
     return this;
   }
 
-  public setHours(hours: number): DateTimeInterface {
+  public setHours(hours: number): datetime.DateTime {
     this.value = setHours(this.value, hours);
 
     return this;
   }
 
-  public setMinutes(minutes: number): DateTimeInterface {
+  public setMinutes(minutes: number): datetime.DateTime {
     this.value = setMinutes(this.value, minutes);
 
     return this;
   }
 
-  public setMonth(month: number): DateTimeInterface {
+  public setMonth(month: number): datetime.DateTime {
     this.value = setMonth(this.value, month);
 
     return this;
   }
 
-  public setStartOfDay(): DateTimeInterface {
+  public setStartOfDay(): datetime.DateTime {
     this.value = startOfDay(this.value);
 
     return this;
   }
 
-  public setStartOfHour(): DateTimeInterface {
+  public setStartOfHour(): datetime.DateTime {
     this.value = startOfHour(this.value);
 
     return this;
   }
 
-  public setStartOfMinute(): DateTimeInterface {
+  public setStartOfMinute(): datetime.DateTime {
     this.value = startOfMinute(this.value);
 
     return this;
   }
 
-  public setStartOfMonth(): DateTimeInterface {
+  public setStartOfMonth(): datetime.DateTime {
     this.value = startOfMonth(this.value);
 
     return this;
   }
 
-  public setStartOfWeek(weekStartsOn: FirstDayOfWeek): DateTimeInterface {
+  public setStartOfWeek(weekStartsOn: FirstDayOfWeek): datetime.DateTime {
     this.value = startOfWeek(this.value, { weekStartsOn });
 
     return this;
   }
 
-  public setStartOfWeekLocale(): DateTimeInterface {
+  public setStartOfWeekLocale(): datetime.DateTime {
     const weekStartsOn = moduleConfig.firstDayOfWeek;
 
     this.value = startOfWeek(this.value, { weekStartsOn });
@@ -254,19 +249,19 @@ export class DateTime implements DateTimeInterface {
     return this;
   }
 
-  public setStartOfYear(): DateTimeInterface {
+  public setStartOfYear(): datetime.DateTime {
     this.value = startOfYear(this.value);
 
     return this;
   }
 
-  public setYear(year: number): DateTimeInterface {
+  public setYear(year: number): datetime.DateTime {
     this.value = setYear(this.value, year);
 
     return this;
   }
 
-  public sub(amount: number, unit: Unit): DateTimeInterface {
+  public sub(amount: number, unit: datetime.Unit): datetime.DateTime {
     const duration: Duration = {};
 
     switch (unit) {
@@ -347,7 +342,6 @@ export type FirstDayOfWeek = 0 | 1;
  *
  * @param config - Plugin configuration.
  */
-// eslint-disable-next-line @skylib/prefer-readonly -- ??
 export function configure(config: Partial<Configuration>): void {
   o.assign(moduleConfig, config);
 }

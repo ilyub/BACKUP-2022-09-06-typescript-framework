@@ -1,5 +1,5 @@
-import { showAlert } from "@skylib/facades/dist/showAlert";
-import * as fn from "@skylib/functions/dist/function";
+import { showAlert } from "@skylib/facades";
+import { fn } from "@skylib/functions";
 
 const alertMock = jest.fn();
 

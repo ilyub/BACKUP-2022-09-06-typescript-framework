@@ -1,4 +1,4 @@
-import type { Facade } from "@skylib/facades/dist/uniqueId";
+import type { uniqueId } from "@skylib/facades";
 import { v4 } from "uuid";
 
-export const implementation: Facade = v4;
+export const implementation: uniqueId.Facade = v4;

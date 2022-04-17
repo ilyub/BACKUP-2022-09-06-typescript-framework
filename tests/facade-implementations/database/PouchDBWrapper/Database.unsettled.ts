@@ -1,9 +1,5 @@
-import type { Conditions } from "@skylib/facades/dist/database";
-import { database } from "@skylib/facades/dist/database";
-import { datetime } from "@skylib/facades/dist/datetime";
-import { uniqueId } from "@skylib/facades/dist/uniqueId";
-import { typedef, wait } from "@skylib/functions/dist/helpers";
-import * as testUtils from "@skylib/functions/dist/testUtils";
+import { database, datetime, uniqueId } from "@skylib/facades";
+import { typedef, wait, testUtils } from "@skylib/functions";
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
@@ -45,7 +41,7 @@ test("unsettled", async () => {
     ]);
 
     async function subtest(
-      conditions: Conditions | undefined,
+      conditions: database.Conditions | undefined,
       expected: number
     ): Promise<void> {
       await db.query(conditions);
@@ -126,7 +122,7 @@ test("unsettledAttached", async () => {
     ]);
 
     async function subtest(
-      conditions: Conditions | undefined,
+      conditions: database.Conditions | undefined,
       expected: number
     ): Promise<void> {
       await db.queryAttached(conditions);
@@ -276,8 +272,8 @@ test("unsettledAttached: Combined", async () => {
     ]);
 
     async function subtest(
-      conditions: Conditions,
-      parentConditions: Conditions,
+      conditions: database.Conditions,
+      parentConditions: database.Conditions,
       expected: number
     ): Promise<void> {
       await db.queryAttached(conditions, parentConditions);

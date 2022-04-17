@@ -1,11 +1,14 @@
-import { database } from "@skylib/facades/dist/database";
-import { uniqueId } from "@skylib/facades/dist/uniqueId";
-import * as assert from "@skylib/functions/dist/assertions";
-import { typedef, wait } from "@skylib/functions/dist/helpers";
-import * as testUtils from "@skylib/functions/dist/testUtils";
+import { database, uniqueId } from "@skylib/facades";
+import { assert, typedef, wait, testUtils } from "@skylib/functions";
+import * as facadeImplementations from "@/facade-implementations";
+// eslint-disable-next-line import/no-internal-modules -- Ok
 import { wrapError } from "@/facade-implementations/database/PouchDBWrapper/Database";
-import { PouchConflictError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchConflictError";
-import { PouchNotFoundError } from "@/facade-implementations/database/PouchDBWrapper/errors/PouchNotFoundError";
+
+const PouchConflictError =
+  facadeImplementations.database.PouchDBWrapper.PouchConflictError;
+
+const PouchNotFoundError =
+  facadeImplementations.database.PouchDBWrapper.PouchNotFoundError;
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 

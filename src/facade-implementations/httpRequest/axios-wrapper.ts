@@ -1,18 +1,14 @@
-import type {
-  Facade,
-  HttpHeaders,
-  HttpRequestMethod
-} from "@skylib/facades/dist/httpRequest";
-import * as o from "@skylib/functions/dist/object";
-import type { IndexedObject } from "@skylib/functions/dist/types/core";
+import type { httpRequest } from "@skylib/facades";
+import { o } from "@skylib/functions";
+import type { IndexedObject } from "@skylib/functions";
 import axios from "axios";
 
-export const implementation: Facade = {
+export const implementation: httpRequest.Facade = {
   async send(
     url: string,
-    method: HttpRequestMethod = "get",
+    method: httpRequest.HttpRequestMethod = "get",
     data: IndexedObject = {},
-    headers: HttpHeaders = {}
+    headers: httpRequest.HttpHeaders = {}
   ): Promise<unknown> {
     const response = await axios({
       data,

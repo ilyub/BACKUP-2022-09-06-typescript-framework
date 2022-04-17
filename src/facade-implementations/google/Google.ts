@@ -1,12 +1,9 @@
-import type { Facade } from "@skylib/facades/dist/google";
-import * as assert from "@skylib/functions/dist/assertions";
-import * as fn from "@skylib/functions/dist/function";
-import * as is from "@skylib/functions/dist/guards";
-import type { stringU } from "@skylib/functions/dist/types/core";
-import type { AsyncPromise } from "@skylib/functions/dist/types/function";
+import type { google } from "@skylib/facades";
+import { assert, fn, is } from "@skylib/functions";
+import type { stringU, AsyncPromise } from "@skylib/functions";
 import $ from "jquery";
 
-export class Google implements Facade {
+export class Google implements google.Facade {
   /**
    * Creates class instance.
    *
@@ -53,7 +50,6 @@ export class Google implements Facade {
 
         return await new Promise(
           (
-            // eslint-disable-next-line @skylib/prefer-readonly -- ??
             resolve: (value: GoogleAuth) => void,
             reject: (reason: unknown) => void
           ) => {
@@ -81,5 +77,4 @@ export class Google implements Facade {
   protected sdk: Promise<GoogleAuth> | undefined = undefined;
 }
 
-// eslint-disable-next-line @skylib/prefer-readonly -- ??
 export type GoogleAuth = Omit<gapi.auth2.GoogleAuth, "then">;

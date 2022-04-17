@@ -1,10 +1,7 @@
-import type { Facade, Type } from "@skylib/facades/dist/handlePromise";
-import { progressReporter } from "@skylib/facades/dist/progressReporter";
-import { showAlert } from "@skylib/facades/dist/showAlert";
-import * as fn from "@skylib/functions/dist/function";
-import * as o from "@skylib/functions/dist/object";
-import type { Rec } from "@skylib/functions/dist/types/core";
-import type { AsyncPromise } from "@skylib/functions/dist/types/function";
+import type { handlePromise } from "@skylib/facades";
+import { progressReporter, showAlert } from "@skylib/facades";
+import { fn, o } from "@skylib/functions";
+import type { Rec, AsyncPromise } from "@skylib/functions";
 
 export const handlers = o.freeze({
   error(error: unknown): void {
@@ -12,7 +9,7 @@ export const handlers = o.freeze({
   }
 });
 
-export const implementation: Facade = {
+export const implementation: handlePromise.Facade = {
   async runAll() {
     await Promise.all(promisesPool.values());
   },
@@ -22,13 +19,17 @@ export const implementation: Facade = {
   silent<T>(promiseAsync: AsyncPromise<T>, errorMessage = "") {
     handle(promiseAsync, undefined, errorMessage);
   },
-  verbose<T>(promiseAsync: AsyncPromise<T>, type: Type, errorMessage = "") {
+  verbose<T>(
+    promiseAsync: AsyncPromise<T>,
+    type: handlePromise.Type,
+    errorMessage = ""
+  ) {
     handle(promiseAsync, type, errorMessage);
   }
 };
 
 export interface Configuration {
-  readonly expectedDurations: Rec<Type, number>;
+  readonly expectedDurations: Rec<handlePromise.Type, number>;
 }
 
 export type PartialConfiguration<K extends keyof Configuration> = {
@@ -74,7 +75,7 @@ const moduleConfig: Configuration = {
  */
 function handle<T>(
   promiseAsync: AsyncPromise<T>,
-  type: Type | undefined,
+  type: handlePromise.Type | undefined,
   errorMessage: string
 ): void {
   const id = Symbol("PromiseId");

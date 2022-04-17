@@ -1,11 +1,12 @@
-import type { DateTime } from "@skylib/facades/dist/datetime";
-import { datetime } from "@skylib/facades/dist/datetime";
-import * as testUtils from "@skylib/functions/dist/testUtils";
+import { datetime } from "@skylib/facades";
+import { testUtils } from "@skylib/functions";
 // eslint-disable-next-line import/no-duplicates -- Ok
 import enUS from "date-fns/locale/en-US";
 // eslint-disable-next-line import/no-duplicates -- Ok
 import ru from "date-fns/locale/ru";
-import * as dateFnsWrapper from "@/facade-implementations/datetime/date-fns-wrapper";
+import * as facadeImplementations from "@/facade-implementations";
+
+const dateFnsWrapper = facadeImplementations.datetime.dateFnsWrapper;
 
 const d1 = d("1950-06-15 14:30");
 
@@ -19,13 +20,14 @@ const d5 = d("1950-07-15 14:30");
 
 const d6 = d("1951-06-15 14:30");
 
-const firstDayOfWeekOptions: readonly dateFnsWrapper.FirstDayOfWeek[] = [0, 1];
+const firstDayOfWeekOptions: readonly facadeImplementations.datetime.dateFnsWrapper.FirstDayOfWeek[] =
+  [0, 1];
 
 const pmOptions = [true, false];
 
 testUtils.installFakeTimer();
 
-function d(dt = "1950-06-15 14:30"): DateTime {
+function d(dt = "1950-06-15 14:30"): datetime.DateTime {
   return datetime.create(dt);
 }
 

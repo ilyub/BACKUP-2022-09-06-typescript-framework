@@ -1,8 +1,7 @@
-import type { Facade } from "@skylib/facades/dist/testDelay";
-import { wait } from "@skylib/functions/dist/helpers";
-import * as o from "@skylib/functions/dist/object";
+import type { testDelay } from "@skylib/facades";
+import { wait, o } from "@skylib/functions";
 
-export const implementation: Facade = async () => {
+export const implementation: testDelay.Facade = async () => {
   if (moduleConfig.enabled) await wait(moduleConfig.timeout);
 };
 
