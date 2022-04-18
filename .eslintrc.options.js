@@ -13,6 +13,7 @@ module.exports = {
     },
     {
       autoImportSource: "@/facade-implementations",
+      localName: "implementations",
       sourcePattern: "@skylib/framework/src/facade-implementations",
       type: "wildcard"
     },
@@ -115,5 +116,5 @@ module.exports = {
       type: "default"
     }
   ],
-  extends: ["@skylib/functions/configs/eslintrc.options"]
+  extends: [require("@skylib/functions/configs/eslintrc.options")]
 };

@@ -1,7 +1,7 @@
 import type { faker } from "@skylib/facades";
-import * as facadeImplementations from "@/facade-implementations";
+import { implementations } from "@";
 
-const loremIpsumWrapper = facadeImplementations.faker.loremIpsumWrapper;
+const loremIpsumWrapper = implementations.faker.loremIpsumWrapper;
 
 interface DateTestData {
   readonly from: string | readonly [number, faker.Unit];

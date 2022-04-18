@@ -17,9 +17,10 @@ import {
   uniqueId
 } from "@skylib/facades";
 import { assert, o } from "@skylib/functions";
-import type { testUtils, LocaleName, Rec } from "@skylib/functions";
+import type { LocaleName, Rec } from "@skylib/functions";
+import type * as testUtils from "@skylib/functions/dist/testUtils";
 import enUS from "date-fns/locale/en-US";
-import { facadeImplementations as implementations } from "..";
+import { implementations } from "..";
 
 declare global {
   namespace jest {

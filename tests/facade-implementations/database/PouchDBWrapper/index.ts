@@ -1,11 +1,11 @@
 import { database, datetime, uniqueId } from "@skylib/facades";
-import { fn, typedef, wait, testUtils } from "@skylib/functions";
-import * as facadeImplementations from "@/facade-implementations";
+import { fn, typedef, wait } from "@skylib/functions";
+import * as testUtils from "@skylib/functions/dist/testUtils";
+import { implementations } from "@";
 // eslint-disable-next-line import/no-internal-modules -- Ok
 import { Database } from "@/facade-implementations/database/PouchDBWrapper/Database";
 
-const PouchRetryError =
-  facadeImplementations.database.PouchDBWrapper.PouchRetryError;
+const PouchRetryError = implementations.database.PouchDBWrapper.PouchRetryError;
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 

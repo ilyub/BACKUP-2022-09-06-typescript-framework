@@ -1,6 +1,6 @@
-import * as facadeImplementations from "@/facade-implementations";
+import { implementations } from "@";
 
-const lunrWrapper = facadeImplementations.inlineSearch.lunrWrapper;
+const lunrWrapper = implementations.inlineSearch.lunrWrapper;
 
 test.each([
   { ids: ["a"], searchString: "n1" },

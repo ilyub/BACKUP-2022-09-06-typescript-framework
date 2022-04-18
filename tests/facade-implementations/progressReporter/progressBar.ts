@@ -1,11 +1,12 @@
 /* eslint-disable jest/expect-expect -- ??? */
 
 import { progressReporter } from "@skylib/facades";
-import { wait, testUtils } from "@skylib/functions";
+import { wait } from "@skylib/functions";
+import * as testUtils from "@skylib/functions/dist/testUtils";
 import $ from "jquery";
-import * as facadeImplementations from "@/facade-implementations";
+import { implementations } from "@";
 
-const progressBar = facadeImplementations.progressReporter.progressBar;
+const progressBar = implementations.progressReporter.progressBar;
 
 testUtils.installFakeTimer();
 

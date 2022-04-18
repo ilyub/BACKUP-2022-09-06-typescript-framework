@@ -1,12 +1,12 @@
 import { datetime } from "@skylib/facades";
-import { testUtils } from "@skylib/functions";
+import * as testUtils from "@skylib/functions/dist/testUtils";
 // eslint-disable-next-line import/no-duplicates -- Ok
 import enUS from "date-fns/locale/en-US";
 // eslint-disable-next-line import/no-duplicates -- Ok
 import ru from "date-fns/locale/ru";
-import * as facadeImplementations from "@/facade-implementations";
+import { implementations } from "@";
 
-const dateFnsWrapper = facadeImplementations.datetime.dateFnsWrapper;
+const dateFnsWrapper = implementations.datetime.dateFnsWrapper;
 
 const d1 = d("1950-06-15 14:30");
 
@@ -20,7 +20,7 @@ const d5 = d("1950-07-15 14:30");
 
 const d6 = d("1951-06-15 14:30");
 
-const firstDayOfWeekOptions: readonly facadeImplementations.datetime.dateFnsWrapper.FirstDayOfWeek[] =
+const firstDayOfWeekOptions: readonly implementations.datetime.dateFnsWrapper.FirstDayOfWeek[] =
   [0, 1];
 
 const pmOptions = [true, false];

@@ -5,9 +5,10 @@ import {
   reactiveStorage,
   uniqueId
 } from "@skylib/facades";
-import { assert, fn, wait, testUtils } from "@skylib/functions";
+import { assert, fn, wait } from "@skylib/functions";
 import type { Writable } from "@skylib/functions";
-import * as facadeImplementations from "@/facade-implementations";
+import * as testUtils from "@skylib/functions/dist/testUtils";
+import { implementations } from "@";
 // eslint-disable-next-line import/no-internal-modules -- Ok
 import { handlers } from "@/facade-implementations/database/PouchDBWrapper/Database";
 
@@ -205,7 +206,7 @@ test("database.reactiveGet", async () => {
 
     {
       const error =
-        new facadeImplementations.database.PouchDBWrapper.PouchNotFoundError(
+        new implementations.database.PouchDBWrapper.PouchNotFoundError(
           "Missing document"
         );
 
@@ -286,7 +287,7 @@ test("database.reactiveGetAttached", async () => {
 
     {
       const error =
-        new facadeImplementations.database.PouchDBWrapper.PouchNotFoundError(
+        new implementations.database.PouchDBWrapper.PouchNotFoundError(
           "Missing attached document"
         );
 

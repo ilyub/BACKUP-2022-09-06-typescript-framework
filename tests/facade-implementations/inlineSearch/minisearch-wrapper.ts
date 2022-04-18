@@ -1,6 +1,6 @@
-import * as facadeImplementations from "@/facade-implementations";
+import { implementations } from "@";
 
-const miniSearchWrapper = facadeImplementations.inlineSearch.miniSearchWrapper;
+const miniSearchWrapper = implementations.inlineSearch.miniSearchWrapper;
 
 test.each([
   { ids: ["a"], searchString: "n1" },

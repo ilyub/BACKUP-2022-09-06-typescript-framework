@@ -1,26 +1,18 @@
 import { lang } from "@skylib/facades";
-import * as facadeImplementations from "@/facade-implementations";
+import { implementations } from "@";
 
 test("dictionary.configure, Dictionary.getConfiguration", () => {
   expect(
-    facadeImplementations.lang.dictionary.Dictionary.getConfiguration()
-      .localeName
+    implementations.lang.dictionary.Dictionary.getConfiguration().localeName
   ).toBe("en-US");
-
-  facadeImplementations.lang.dictionary.Dictionary.configure({
-    localeName: "ru-RU"
-  });
-
+  implementations.lang.dictionary.Dictionary.configure({ localeName: "ru-RU" });
   expect(
-    facadeImplementations.lang.dictionary.Dictionary.getConfiguration()
-      .localeName
+    implementations.lang.dictionary.Dictionary.getConfiguration().localeName
   ).toBe("ru-RU");
 });
 
 test("dictionary.context", () => {
-  facadeImplementations.lang.dictionary.Dictionary.configure({
-    localeName: "ru-RU"
-  });
+  implementations.lang.dictionary.Dictionary.configure({ localeName: "ru-RU" });
   expect(lang.day).toBe("день");
   expect(lang.context("InXDays").day).toBe("дня");
   expect(lang.context("InXDays").day).toBe("дня");
@@ -42,9 +34,7 @@ test("dictionary.create", () => {
 });
 
 test("dictionary.get", () => {
-  facadeImplementations.lang.dictionary.Dictionary.configure({
-    localeName: "ru-RU"
-  });
+  implementations.lang.dictionary.Dictionary.configure({ localeName: "ru-RU" });
   expect(lang.get("Day")).toBe("День");
   expect(lang.get("day")).toBe("день");
   expect(lang.get("DAY")).toBe("ДЕНЬ");
@@ -67,9 +57,7 @@ test("dictionary.has", () => {
 });
 
 test("dictionary.plural", () => {
-  facadeImplementations.lang.dictionary.Dictionary.configure({
-    localeName: "ru-RU"
-  });
+  implementations.lang.dictionary.Dictionary.configure({ localeName: "ru-RU" });
   subtest(1, "1 день");
   subtest(2, "2 дня");
   subtest(3, "3 дня");
@@ -85,26 +73,20 @@ test("dictionary.with", () => {
   expect(lang.with("field", "string").MustBeValidField).toBe(
     "Must be valid string"
   );
-
-  facadeImplementations.lang.dictionary.Dictionary.configure({
-    localeName: "ru-RU"
-  });
-
+  implementations.lang.dictionary.Dictionary.configure({ localeName: "ru-RU" });
   expect(lang.with("field", "string").with("min", 10).FieldIsTooShort).toBe(
     "Строка должна содержать не менее 10 символов"
   );
-
   expect(
     lang.with("field", "Confirm").with("field2", "Password").MustBeSameAs
   ).toBe("Подтверждение пароля должно совпадать с паролем");
-
   expect(lang.with("field", "string").MustBeValidField).toBe(
     "Введите корректную строку"
   );
 });
 
 test("pluralReduce", () => {
-  const pluralReduce = facadeImplementations.lang.dictionary.pluralReduce;
+  const pluralReduce = implementations.lang.dictionary.pluralReduce;
 
   expect(pluralReduce(0)).toBe(2);
   expect(pluralReduce(1)).toBe(1);
@@ -113,7 +95,7 @@ test("pluralReduce", () => {
 });
 
 test("pluralReduce.ru", () => {
-  const pluralReduce = facadeImplementations.lang.dictionary.pluralReduce;
+  const pluralReduce = implementations.lang.dictionary.pluralReduce;
 
   expect(pluralReduce.ru(0)).toBe(5);
   expect(pluralReduce.ru(1)).toBe(1);

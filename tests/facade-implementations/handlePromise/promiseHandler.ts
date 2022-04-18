@@ -1,9 +1,10 @@
 import { handlePromise, progressReporter } from "@skylib/facades";
-import { fn, wait, testUtils } from "@skylib/functions";
+import { fn, wait } from "@skylib/functions";
 import type { booleanU } from "@skylib/functions";
-import * as facadeImplementations from "@/facade-implementations";
+import * as testUtils from "@skylib/functions/dist/testUtils";
+import { implementations } from "@";
 
-const promiseHandler = facadeImplementations.handlePromise.promiseHandler;
+const promiseHandler = implementations.handlePromise.promiseHandler;
 
 const alertMock = jest.fn();
 

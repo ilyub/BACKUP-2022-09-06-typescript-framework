@@ -1,5 +1,6 @@
 import { database, datetime, uniqueId } from "@skylib/facades";
-import { typedef, wait, testUtils } from "@skylib/functions";
+import { typedef, wait } from "@skylib/functions";
+import * as testUtils from "@skylib/functions/dist/testUtils";
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 

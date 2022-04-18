@@ -2,9 +2,9 @@ import { google } from "@skylib/facades";
 import { assert, AssertionError } from "@skylib/functions";
 import type { stringU } from "@skylib/functions";
 import $ from "jquery";
-import * as facadeImplementations from "@/facade-implementations";
+import { implementations } from "@";
 
-const Google = facadeImplementations.google.Google;
+const Google = implementations.google.Google;
 
 const getScript = jest
   .spyOn($, "getScript")

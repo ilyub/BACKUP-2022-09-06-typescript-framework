@@ -12,7 +12,7 @@ declare global {
   namespace facades {
     namespace reactiveStorage {
       interface Observer {
-        readonly symbol: symbol;
+        readonly symbol?: symbol;
       }
     }
   }
@@ -70,7 +70,9 @@ export const implementation: reactiveStorage.Facade = o.extend(
     }
   },
   {
-    unwatch(obj: object, observer: reactiveStorage.Observer): void {
+    unwatch(obj: object, observer: reactiveStorage.Observer) {
+      assert.not.empty(observer.symbol);
+
       const callbacks = reflect.getMetadata(callbacksKey, obj);
 
       assert.byGuard(callbacks, isCallbacks);
@@ -86,10 +88,7 @@ export const implementation: reactiveStorage.Facade = o.extend(
       handler: reactiveStorage.Handler<T>,
       reducer?: reactiveStorage.Reducer<T>
     ): reactiveStorage.Observer {
-      const observer: reactiveStorage.Observer = {
-        _type: "ReactiveStorageObserver",
-        symbol: Symbol("Callback")
-      };
+      const symbol = Symbol("Callback");
 
       const callbacks = reflect.getMetadata(callbacksKey, obj);
 
@@ -100,7 +99,7 @@ export const implementation: reactiveStorage.Facade = o.extend(
 
         reflect.defineMetadata(
           callbacksKey,
-          map.set(callbacks, observer.symbol, () => {
+          map.set(callbacks, symbol, () => {
             const oldReduced = reduced;
 
             reduced = reducer(obj);
@@ -114,13 +113,13 @@ export const implementation: reactiveStorage.Facade = o.extend(
       } else
         reflect.defineMetadata(
           callbacksKey,
-          map.set(callbacks, observer.symbol, () => {
+          map.set(callbacks, symbol, () => {
             handler(obj);
           }),
           obj
         );
 
-      return observer;
+      return { _type: "ReactiveStorageObserver", symbol };
     }
   }
 );

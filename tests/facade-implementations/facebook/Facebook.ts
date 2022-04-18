@@ -2,9 +2,9 @@ import { facebook } from "@skylib/facades";
 import { assert, AssertionError } from "@skylib/functions";
 import type { stringU } from "@skylib/functions";
 import $ from "jquery";
-import * as facadeImplementations from "@/facade-implementations";
+import { implementations } from "@";
 
-const Facebook = facadeImplementations.facebook.Facebook;
+const Facebook = implementations.facebook.Facebook;
 
 const getScript = jest
   .spyOn($, "getScript")
