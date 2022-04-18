@@ -106,7 +106,7 @@
   },
   "peerDependencies": {
     "@skylib/facades": "^2.0.0",
-    "@skylib/functions": "^1.3.0",
+    "@skylib/functions": "^1.3.3",
     "@skylib/lodash-commonjs-es": "^0.1.0",
     "@skylib/typescript-types": "^1.0.0",
     "@types/facebook-js-sdk": "^3.3.5",
