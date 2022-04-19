@@ -7,8 +7,7 @@
 ### References
 
 - [classes](index.md#classes)
-- [facadeImplementations](index.md#facadeimplementations)
-- [testUtils](index.md#testutils)
+- [implementations](index.md#implementations)
 
 ## References
 
@@ -18,12 +17,6 @@ Re-exports [classes](classes.md)
 
 ___
 
-### facadeImplementations
+### implementations
 
 Renames and re-exports [facade-implementations](facade_implementations.md)
-
-___
-
-### testUtils
-
-Re-exports [testUtils](testUtils.md)

@@ -10,24 +10,24 @@ const __1 = require("..");
  * Jest reset.
  */
 exports.jestReset = functions_1.o.extend(() => {
-    facades_1.faker.setImplementation(__1.facadeImplementations.faker.loremIpsumWrapper);
-    facades_1.compare.setImplementation(__1.facadeImplementations.compare.naturalCompare);
-    facades_1.database.setImplementation(new __1.facadeImplementations.database.PouchDBWrapper());
-    facades_1.facebook.setImplementation(new __1.facadeImplementations.facebook.Facebook(undefined, "10.0"));
-    facades_1.google.setImplementation(new __1.facadeImplementations.google.Google(undefined));
-    facades_1.inlineSearch.setImplementation(__1.facadeImplementations.inlineSearch.lunrWrapper);
-    facades_1.reactiveStorage.setImplementation(__1.facadeImplementations.reactiveStorage.reflectStorage);
-    facades_1.showAlert.setImplementation(__1.facadeImplementations.showAlert.jsAlert);
-    facades_1.showConfirm.setImplementation(__1.facadeImplementations.showConfirm.jsConfirm);
-    facades_1.uniqueId.setImplementation(__1.facadeImplementations.uniqueId.uuidWrapper);
+    facades_1.faker.setImplementation(__1.implementations.faker.loremIpsumWrapper);
+    facades_1.compare.setImplementation(__1.implementations.compare.naturalCompare);
+    facades_1.database.setImplementation(new __1.implementations.database.PouchDBWrapper());
+    facades_1.facebook.setImplementation(new __1.implementations.facebook.Facebook(undefined, "10.0"));
+    facades_1.google.setImplementation(new __1.implementations.google.Google(undefined));
+    facades_1.inlineSearch.setImplementation(__1.implementations.inlineSearch.lunrWrapper);
+    facades_1.reactiveStorage.setImplementation(__1.implementations.reactiveStorage.reflectStorage);
+    facades_1.showAlert.setImplementation(__1.implementations.showAlert.jsAlert);
+    facades_1.showConfirm.setImplementation(__1.implementations.showConfirm.jsConfirm);
+    facades_1.uniqueId.setImplementation(__1.implementations.uniqueId.uuidWrapper);
     {
         const config = {
             firstDayOfWeek: 0,
             locale: en_US_1.default,
             pm: true
         };
-        __1.facadeImplementations.datetime.dateFnsWrapper.configure(config);
-        facades_1.datetime.setImplementation(__1.facadeImplementations.datetime.dateFnsWrapper.implementation);
+        __1.implementations.datetime.dateFnsWrapper.configure(config);
+        facades_1.datetime.setImplementation(__1.implementations.datetime.dateFnsWrapper.implementation);
     }
     {
         const config = {
@@ -39,20 +39,20 @@ exports.jestReset = functions_1.o.extend(() => {
                 navigation: 1000
             }
         };
-        __1.facadeImplementations.handlePromise.promiseHandler.configure(config);
-        facades_1.handlePromise.setImplementation(__1.facadeImplementations.handlePromise.promiseHandler.implementation);
+        __1.implementations.handlePromise.promiseHandler.configure(config);
+        facades_1.handlePromise.setImplementation(__1.implementations.handlePromise.promiseHandler.implementation);
     }
     {
         const config = {
             timeout: 30000
         };
-        __1.facadeImplementations.httpRequest.axiosWrapper.configure(config);
-        facades_1.httpRequest.setImplementation(__1.facadeImplementations.httpRequest.axiosWrapper.implementation);
+        __1.implementations.httpRequest.axiosWrapper.configure(config);
+        facades_1.httpRequest.setImplementation(__1.implementations.httpRequest.axiosWrapper.implementation);
     }
     {
         const config = { enabled: false, timeout: 1000 };
-        __1.facadeImplementations.testDelay.configurableTestDelay.configure(config);
-        facades_1.testDelay.setImplementation(__1.facadeImplementations.testDelay.configurableTestDelay.implementation);
+        __1.implementations.testDelay.configurableTestDelay.configure(config);
+        facades_1.testDelay.setImplementation(__1.implementations.testDelay.configurableTestDelay.implementation);
     }
 }, {
     /**
@@ -66,8 +66,8 @@ exports.jestReset = functions_1.o.extend(() => {
         const config = {
             localeName
         };
-        __1.facadeImplementations.lang.dictionary.Dictionary.configure(config);
-        facades_1.lang.setImplementation(__1.facadeImplementations.lang.dictionary.Dictionary.create(definitions));
+        __1.implementations.lang.dictionary.Dictionary.configure(config);
+        facades_1.lang.setImplementation(__1.implementations.lang.dictionary.Dictionary.create(definitions));
     },
     /**
      * Jest reset.
@@ -85,8 +85,8 @@ exports.jestReset = functions_1.o.extend(() => {
             selector: "#progressBar",
             updateInterval: 100
         };
-        __1.facadeImplementations.progressReporter.progressBar.configure(config);
-        facades_1.progressReporter.setImplementation(__1.facadeImplementations.progressReporter.progressBar.implementation);
+        __1.implementations.progressReporter.progressBar.configure(config);
+        facades_1.progressReporter.setImplementation(__1.implementations.progressReporter.progressBar.implementation);
         facades_1.progressReporter.reset();
     }
 });
@@ -128,7 +128,7 @@ exports.jestSetup = functions_1.o.extend(() => {
  * @returns Result object.
  */
 const datetimeToEqual = (got, expected) => {
-    functions_1.assert.instance(got, __1.facadeImplementations.datetime.dateFnsWrapper.DateTime);
+    functions_1.assert.instance(got, __1.implementations.datetime.dateFnsWrapper.DateTime);
     return got.toTime() === new Date(expected).getTime()
         ? {
             message: () => `Expected date not to be "${expected}"`,

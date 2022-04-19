@@ -1,6 +1,7 @@
 import { lang } from "@skylib/facades";
-import type { testUtils, LocaleName, Rec } from "@skylib/functions";
-import { facadeImplementations as implementations } from "..";
+import type { LocaleName, Rec } from "@skylib/functions";
+import type * as testUtils from "@skylib/functions/dist/testUtils";
+import { implementations } from "..";
 declare global {
     namespace jest {
         interface Matchers<R> {

@@ -29,20 +29,18 @@ export const implementation = o.extend((obj) => {
     }
 }, {
     unwatch(obj, observer) {
+        assert.not.empty(observer.symbol);
         const callbacks = reflect.getMetadata(callbacksKey, obj);
         assert.byGuard(callbacks, isCallbacks);
         reflect.defineMetadata(callbacksKey, map.delete(callbacks, observer.symbol), obj);
     },
     watch(obj, handler, reducer) {
-        const observer = {
-            _type: "ReactiveStorageObserver",
-            symbol: Symbol("Callback")
-        };
+        const symbol = Symbol("Callback");
         const callbacks = reflect.getMetadata(callbacksKey, obj);
         assert.byGuard(callbacks, isCallbacks);
         if (reducer) {
             let reduced = reducer(obj);
-            reflect.defineMetadata(callbacksKey, map.set(callbacks, observer.symbol, () => {
+            reflect.defineMetadata(callbacksKey, map.set(callbacks, symbol, () => {
                 const oldReduced = reduced;
                 reduced = reducer(obj);
                 if (reduced === oldReduced) {
@@ -53,10 +51,10 @@ export const implementation = o.extend((obj) => {
             }), obj);
         }
         else
-            reflect.defineMetadata(callbacksKey, map.set(callbacks, observer.symbol, () => {
+            reflect.defineMetadata(callbacksKey, map.set(callbacks, symbol, () => {
                 handler(obj);
             }), obj);
-        return observer;
+        return { _type: "ReactiveStorageObserver", symbol };
     }
 });
 const callbacksKey = Symbol("Callbacks");

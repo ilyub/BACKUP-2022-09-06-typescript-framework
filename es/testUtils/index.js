@@ -1,7 +1,7 @@
 import { compare, database, datetime, facebook, faker, google, handlePromise, httpRequest, inlineSearch, lang, progressReporter, reactiveStorage, showAlert, showConfirm, testDelay, uniqueId } from "@skylib/facades";
 import { assert, o } from "@skylib/functions";
 import enUS from "date-fns/locale/en-US";
-import { facadeImplementations as implementations } from "..";
+import { implementations } from "..";
 /**
  * Jest reset.
  */

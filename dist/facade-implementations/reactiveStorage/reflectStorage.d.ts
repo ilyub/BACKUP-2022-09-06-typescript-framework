@@ -3,7 +3,7 @@ declare global {
     namespace facades {
         namespace reactiveStorage {
             interface Observer {
-                readonly symbol: symbol;
+                readonly symbol?: symbol;
             }
         }
     }
