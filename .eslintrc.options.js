@@ -116,5 +116,5 @@ module.exports = {
       type: "default"
     }
   ],
-  extends: [require("@skylib/functions/configs/eslintrc.options")]
+  extends: ["@skylib/functions/configs/eslintrc.options.js"]
 };

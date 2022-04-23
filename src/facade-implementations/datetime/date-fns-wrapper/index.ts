@@ -3,9 +3,9 @@ import type { NumStr } from "@skylib/functions";
 import { isValid, parse } from "date-fns";
 import { DateTime, formatStrings } from "./DateTime";
 
-export { DateTime, configure, getConfiguration } from "./DateTime";
-
 export type { Configuration, FirstDayOfWeek } from "./DateTime";
+
+export { DateTime, configure, getConfiguration } from "./DateTime";
 
 export const implementation: datetime.Facade = {
   create(dt?: Date | datetime.DateTime | NumStr) {

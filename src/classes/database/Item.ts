@@ -60,14 +60,14 @@ export class Item {
   protected readonly lastAttachedDocs: numbers | undefined;
 }
 
-export interface BaseItemDoc {
-  readonly createdAt?: string;
-  readonly deletedAt?: string;
-  readonly softDeleted?: true;
-  readonly updatedAt?: string;
-}
-
 export namespace Item {
+  export interface BaseItemDoc {
+    readonly createdAt?: string;
+    readonly deletedAt?: string;
+    readonly softDeleted?: true;
+    readonly updatedAt?: string;
+  }
+
   export interface ExistingItemDoc
     extends database.BaseExistingDocument,
       BaseItemDoc {}

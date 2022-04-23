@@ -3,7 +3,10 @@ module.exports = {
   // eslint-disable-next-line no-warning-comments -- Wait for @skylib/config update
   // fixme
   rules: {
+    "@skylib/class-only-export": "off",
+    "@skylib/only-export-name": "off",
     "@skylib/prefer-readonly": "off",
+    "@skylib/primary-export-only": "off",
     "import/no-internal-modules": [
       "warn",
       {
