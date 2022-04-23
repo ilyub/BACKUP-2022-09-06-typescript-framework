@@ -201,13 +201,6 @@ export const jestSetup = o.extend(
   }
 );
 
-/**
- * Checks that datetime equals expected value.
- *
- * @param got - Got value.
- * @param expected - Expected value.
- * @returns Result object.
- */
 export const datetimeToEqual: testUtils.ExpectFromMatcher<"datetimeToEqual"> = (
   got: unknown,
   expected: string
