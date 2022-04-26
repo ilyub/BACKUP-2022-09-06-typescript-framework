@@ -1,5 +1,5 @@
-import type { showConfirm } from "@skylib/facades";
 import { o } from "@skylib/functions";
+import type { showConfirm } from "@skylib/facades";
 
 export const implementation: showConfirm.Facade = o.extend(
   (message: string, success?: () => void, failure?: () => void): void => {

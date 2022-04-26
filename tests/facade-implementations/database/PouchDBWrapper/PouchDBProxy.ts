@@ -1,12 +1,10 @@
-import { uniqueId } from "@skylib/facades";
 import { implementations } from "@";
-// eslint-disable-next-line import/no-internal-modules -- Ok
-import type { PouchPutDocument } from "@/facade-implementations/database/PouchDBWrapper/PouchDBProxy";
 import {
   handlers,
   PouchDBProxy
-  // eslint-disable-next-line import/no-internal-modules -- Ok
 } from "@/facade-implementations/database/PouchDBWrapper/PouchDBProxy";
+import { uniqueId } from "@skylib/facades";
+import type { PouchPutDocument } from "@/facade-implementations/database/PouchDBWrapper/PouchDBProxy";
 
 const PouchConflictError =
   implementations.database.PouchDBWrapper.PouchConflictError;

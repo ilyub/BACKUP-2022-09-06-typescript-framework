@@ -1,8 +1,8 @@
-import type { lang } from "@skylib/facades";
 import { a, assert, fn, is, o, regexp } from "@skylib/functions";
-import type { IndexedObject, NumStr, strings } from "@skylib/functions";
 import type { Definitions } from "./Definitions";
 import type { RawDefinition, WordInfo } from "./types";
+import type { lang } from "@skylib/facades";
+import type { IndexedObject, NumStr, strings } from "@skylib/functions";
 
 export class Definition {
   /**
@@ -119,13 +119,13 @@ export class Definition {
     if (this.sub)
       return this.sub.get(owner, context, forms, count, replacements);
 
-    let word: WordInfo = {
+    let word: WordInfo = o.removeUndefinedKeys({
       context,
       count,
       forms,
       replacements,
       value: this.value
-    };
+    });
 
     word = this.applyRulesRef(word, owner);
     word = this.applyRulesRefDependent(word, owner);
@@ -141,17 +141,17 @@ export class Definition {
 
   protected readonly id: NumStr;
 
-  protected readonly rulesRef: readonly strings[];
+  protected readonly rulesRef: Definition.stringsArray;
 
-  protected readonly rulesRefDependent: readonly strings[];
+  protected readonly rulesRefDependent: Definition.stringsArray;
 
-  protected readonly rulesRefSecondary: readonly strings[];
+  protected readonly rulesRefSecondary: Definition.stringsArray;
 
-  protected readonly rulesVal: readonly strings[];
+  protected readonly rulesVal: Definition.stringsArray;
 
-  protected readonly rulesWord: readonly strings[];
+  protected readonly rulesWord: Definition.stringsArray;
 
-  protected readonly rulesWordSecondary: readonly strings[];
+  protected readonly rulesWordSecondary: Definition.stringsArray;
 
   protected readonly sub: Definition | undefined = undefined;
 
@@ -333,4 +333,8 @@ export class Definition {
 
     return word;
   }
+}
+
+export namespace Definition {
+  export type stringsArray = readonly strings[];
 }

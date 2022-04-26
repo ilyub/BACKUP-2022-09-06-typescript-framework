@@ -1,14 +1,14 @@
+import { implementations } from "@";
 import { facebook } from "@skylib/facades";
 import { assert, AssertionError } from "@skylib/functions";
-import type { stringU } from "@skylib/functions";
 import $ from "jquery";
-import { implementations } from "@";
+import type { stringU, unknowns } from "@skylib/functions";
 
 const Facebook = implementations.facebook.Facebook;
 
 const getScript = jest
   .spyOn($, "getScript")
-  .mockImplementation((...args: unknown[]) => {
+  .mockImplementation((...args: unknowns) => {
     assert.toBeTrue(args.length === 1);
     assert.toBeTrue(args[0] === "https://connect.facebook.net/en_US/sdk.js");
 

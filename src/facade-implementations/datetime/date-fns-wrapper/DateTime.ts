@@ -1,7 +1,5 @@
-import type { datetime } from "@skylib/facades";
 import { reactiveStorage } from "@skylib/facades";
 import { is, onDemand, o } from "@skylib/functions";
-import type { NumStr, strings } from "@skylib/functions";
 import {
   add,
   format,
@@ -35,6 +33,8 @@ import {
 } from "date-fns";
 // eslint-disable-next-line import/no-duplicates -- Ok
 import enUS from "date-fns/locale/en-US";
+import type { datetime } from "@skylib/facades";
+import type { NumStr, strings } from "@skylib/functions";
 
 export const formatStrings: strings = [
   "yyyy-M-d h:m:s a",

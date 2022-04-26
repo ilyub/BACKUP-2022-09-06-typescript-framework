@@ -1,14 +1,14 @@
+import { implementations } from "@";
 import { google } from "@skylib/facades";
 import { assert, AssertionError } from "@skylib/functions";
-import type { stringU } from "@skylib/functions";
 import $ from "jquery";
-import { implementations } from "@";
+import type { stringU, unknowns } from "@skylib/functions";
 
 const Google = implementations.google.Google;
 
 const getScript = jest
   .spyOn($, "getScript")
-  .mockImplementation((...args: unknown[]) => {
+  .mockImplementation((...args: unknowns) => {
     assert.toBeTrue(args.length === 1);
     assert.toBeTrue(args[0] === "https://apis.google.com/js/api:client.js");
 

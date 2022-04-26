@@ -1,3 +1,4 @@
+import { implementations } from "..";
 import {
   compare,
   database,
@@ -17,10 +18,9 @@ import {
   uniqueId
 } from "@skylib/facades";
 import { assert, o } from "@skylib/functions";
+import enUS from "date-fns/locale/en-US";
 import type { LocaleName, Rec } from "@skylib/functions";
 import type * as testUtils from "@skylib/functions/dist/testUtils";
-import enUS from "date-fns/locale/en-US";
-import { implementations } from "..";
 
 declare global {
   namespace jest {

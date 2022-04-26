@@ -1,3 +1,9 @@
+import { PouchDBProxy } from "./PouchDBProxy";
+import {
+  PouchConflictError,
+  PouchNotFoundError,
+  PouchRetryError
+} from "./errors";
 import {
   database,
   datetime,
@@ -16,13 +22,6 @@ import {
   o,
   programFlow
 } from "@skylib/functions";
-import type {
-  numbers,
-  numberU,
-  strings,
-  unknowns,
-  Writable
-} from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { collate } from "pouchdb-collate";
 import sha256 from "sha256";
@@ -32,12 +31,13 @@ import type {
   PouchDatabaseConfiguration,
   PouchQueryResponse
 } from "./PouchDBProxy";
-import { PouchDBProxy } from "./PouchDBProxy";
-import {
-  PouchConflictError,
-  PouchNotFoundError,
-  PouchRetryError
-} from "./errors";
+import type {
+  numbers,
+  numberU,
+  strings,
+  unknowns,
+  Writable
+} from "@skylib/functions";
 
 export const handlers = o.freeze({
   error(error: unknown): void {
@@ -1633,11 +1633,11 @@ function condsToStr(
 ): StrConds {
   conditions = is.array(conditions) ? conditions : [conditions];
 
-  const toEmit: string[] = [];
+  const toEmit: Writable<strings> = [];
 
-  const toOutput: string[] = [];
+  const toOutput: Writable<strings> = [];
 
-  const toSettle: string[] = [];
+  const toSettle: Writable<strings> = [];
 
   for (const conditionsGroup of conditions)
     for (const [key, fieldConditions] of o.entries(conditionsGroup)) {

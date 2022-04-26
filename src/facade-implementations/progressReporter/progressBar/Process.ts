@@ -1,7 +1,7 @@
-import type { progressReporter } from "@skylib/facades";
 import { num, o, programFlow } from "@skylib/functions";
-import type { numberU } from "@skylib/functions";
 import $ from "jquery";
+import type { progressReporter } from "@skylib/facades";
+import type { numberU } from "@skylib/functions";
 
 export const facade: progressReporter.Facade = {
   getProgress() {

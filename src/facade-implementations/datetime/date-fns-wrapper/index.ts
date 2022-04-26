@@ -1,7 +1,7 @@
+import { DateTime, formatStrings } from "./DateTime";
+import { isValid, parse } from "date-fns";
 import type { datetime } from "@skylib/facades";
 import type { NumStr } from "@skylib/functions";
-import { isValid, parse } from "date-fns";
-import { DateTime, formatStrings } from "./DateTime";
 
 export type { Configuration, FirstDayOfWeek } from "./DateTime";
 

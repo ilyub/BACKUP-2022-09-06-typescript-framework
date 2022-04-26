@@ -1,6 +1,6 @@
-import type { handlePromise } from "@skylib/facades";
 import { progressReporter, showAlert } from "@skylib/facades";
 import { fn, o } from "@skylib/functions";
+import type { handlePromise } from "@skylib/facades";
 import type { Rec, AsyncPromise } from "@skylib/functions";
 
 export const handlers = o.freeze({

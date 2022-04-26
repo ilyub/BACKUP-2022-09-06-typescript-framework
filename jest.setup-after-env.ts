@@ -1,7 +1,7 @@
-import type { LocaleName, Rec } from "@skylib/functions";
-import * as functionsTestUtils from "@skylib/functions/dist/testUtils";
 import { implementations } from "./src";
 import * as testUtils from "./src/testUtils";
+import * as functionsTestUtils from "@skylib/functions/dist/testUtils";
+import type { LocaleName, Rec } from "@skylib/functions";
 
 const definitions: Rec<
   LocaleName,

@@ -1,8 +1,8 @@
+import { implementations } from "@";
 import { handlePromise, progressReporter } from "@skylib/facades";
 import { fn, wait } from "@skylib/functions";
-import type { booleanU } from "@skylib/functions";
 import * as testUtils from "@skylib/functions/dist/testUtils";
-import { implementations } from "@";
+import type { booleanU } from "@skylib/functions";
 
 const promiseHandler = implementations.handlePromise.promiseHandler;
 

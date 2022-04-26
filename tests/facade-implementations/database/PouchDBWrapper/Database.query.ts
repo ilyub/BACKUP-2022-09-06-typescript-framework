@@ -1,6 +1,7 @@
 import { database, datetime, uniqueId } from "@skylib/facades";
 import { wait } from "@skylib/functions";
 import * as testUtils from "@skylib/functions/dist/testUtils";
+import type { strings, unknowns } from "@skylib/functions";
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
@@ -31,7 +32,7 @@ test("query", async () => {
 
   async function subtest(
     conditions: database.Conditions | undefined,
-    expected: string[]
+    expected: strings
   ): Promise<void> {
     const docs = await db.query(conditions);
 
@@ -54,7 +55,7 @@ test("query: Date condition 1", async () => {
 
   async function subtest(
     conditions: database.Conditions | undefined,
-    expected: string[]
+    expected: strings
   ): Promise<void> {
     const docs = await db.query(conditions);
 
@@ -93,7 +94,7 @@ test("query: Date condition 2", async () => {
 
   async function subtest(
     conditions: database.Conditions | undefined,
-    expected: string[]
+    expected: strings
   ): Promise<void> {
     const docs = await db.query(conditions);
 
@@ -138,7 +139,7 @@ test("query: Date condition 3", async () => {
 
   async function subtest(
     conditions: database.Conditions | undefined,
-    expected: string[]
+    expected: strings
   ): Promise<void> {
     const docs = await db.query(conditions);
 
@@ -233,7 +234,7 @@ test("query: Options", async () => {
 
   async function subtest(
     options: database.QueryOptions,
-    expected: unknown[]
+    expected: unknowns
   ): Promise<void> {
     const docs = await db.query({ d: { dateLt: "2001-02-15 12:00" } }, options);
 
@@ -279,7 +280,7 @@ test("query: Time evolution", async () => {
 
     async function subtest(
       conditions: database.Conditions,
-      expected: unknown[]
+      expected: unknowns
     ): Promise<void> {
       const docs = await db.query(conditions);
 

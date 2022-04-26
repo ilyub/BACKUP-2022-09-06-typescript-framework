@@ -1,3 +1,5 @@
+import { implementations } from "@";
+import { handlers } from "@/facade-implementations/database/PouchDBWrapper/Database";
 import {
   database,
   datetime,
@@ -6,11 +8,8 @@ import {
   uniqueId
 } from "@skylib/facades";
 import { assert, fn, wait } from "@skylib/functions";
-import type { Writable } from "@skylib/functions";
 import * as testUtils from "@skylib/functions/dist/testUtils";
-import { implementations } from "@";
-// eslint-disable-next-line import/no-internal-modules -- Ok
-import { handlers } from "@/facade-implementations/database/PouchDBWrapper/Database";
+import type { Writable } from "@skylib/functions";
 
 const errorHandler = jest.spyOn(handlers, "error");
 

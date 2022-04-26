@@ -1,5 +1,5 @@
-import type { faker } from "@skylib/facades";
 import { implementations } from "@";
+import type { faker } from "@skylib/facades";
 
 const loremIpsumWrapper = implementations.faker.loremIpsumWrapper;
 

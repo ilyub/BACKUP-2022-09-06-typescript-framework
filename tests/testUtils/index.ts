@@ -1,5 +1,5 @@
-import { datetime } from "@skylib/facades";
 import * as testUtils from "@/testUtils";
+import { datetime } from "@skylib/facades";
 
 test("executionTimeToBe", () => {
   {

@@ -1,10 +1,10 @@
+import { implementations } from "@";
 import { datetime } from "@skylib/facades";
 import * as testUtils from "@skylib/functions/dist/testUtils";
 // eslint-disable-next-line import/no-duplicates -- Ok
 import enUS from "date-fns/locale/en-US";
 // eslint-disable-next-line import/no-duplicates -- Ok
 import ru from "date-fns/locale/ru";
-import { implementations } from "@";
 
 const dateFnsWrapper = implementations.datetime.dateFnsWrapper;
 
@@ -20,12 +20,14 @@ const d5 = d("1950-07-15 14:30");
 
 const d6 = d("1951-06-15 14:30");
 
-const firstDayOfWeekOptions: readonly implementations.datetime.dateFnsWrapper.FirstDayOfWeek[] =
-  [0, 1];
+const firstDayOfWeekOptions: FirstDayOfWeekOptions = [0, 1];
 
 const pmOptions = [true, false];
 
 testUtils.installFakeTimer();
+
+type FirstDayOfWeekOptions =
+  readonly implementations.datetime.dateFnsWrapper.FirstDayOfWeek[];
 
 function d(dt = "1950-06-15 14:30"): datetime.DateTime {
   return datetime.create(dt);

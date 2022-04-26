@@ -1,5 +1,5 @@
-import type { showAlert } from "@skylib/facades";
 import { o } from "@skylib/functions";
+import type { showAlert } from "@skylib/facades";
 
 export const implementation: showAlert.Facade = o.extend(
   (message: string): void => {

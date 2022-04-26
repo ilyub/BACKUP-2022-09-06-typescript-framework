@@ -1,6 +1,6 @@
+import { implementations } from "@";
 import { httpRequest } from "@skylib/facades";
 import jestMockAxios from "jest-mock-axios";
-import { implementations } from "@";
 
 const axiosWrapper = implementations.httpRequest.axiosWrapper;
 

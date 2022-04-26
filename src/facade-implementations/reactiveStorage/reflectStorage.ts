@@ -1,4 +1,3 @@
-import type { reactiveStorage } from "@skylib/facades";
 import {
   assert,
   is,
@@ -7,6 +6,7 @@ import {
   o,
   reflect
 } from "@skylib/functions";
+import type { reactiveStorage } from "@skylib/facades";
 
 declare global {
   namespace facades {

@@ -1,8 +1,8 @@
-import type { faker } from "@skylib/facades";
 import { datetime } from "@skylib/facades";
 import { a, fn, is, num, o } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { loremIpsum } from "lorem-ipsum";
+import type { faker } from "@skylib/facades";
 
 export const loremIpsumWrapper: Configurable & faker.Facade = {
   boolean(): boolean {

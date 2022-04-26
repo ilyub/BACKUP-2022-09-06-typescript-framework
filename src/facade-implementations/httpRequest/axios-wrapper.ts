@@ -1,7 +1,7 @@
-import type { httpRequest } from "@skylib/facades";
 import { o } from "@skylib/functions";
-import type { IndexedObject } from "@skylib/functions";
 import axios from "axios";
+import type { httpRequest } from "@skylib/facades";
+import type { IndexedObject } from "@skylib/functions";
 
 export const implementation: httpRequest.Facade = {
   async send(

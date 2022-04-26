@@ -1,12 +1,12 @@
-import type { database } from "@skylib/facades";
-import type { Configuration } from "./Database";
 import { Database } from "./Database";
-import type { PouchDatabaseConfiguration } from "./PouchDBProxy";
 import {
   PouchConflictError,
   PouchNotFoundError,
   PouchRetryError
 } from "./errors";
+import type { Configuration } from "./Database";
+import type { PouchDatabaseConfiguration } from "./PouchDBProxy";
+import type { database } from "@skylib/facades";
 
 export class PouchDBWrapper implements database.Facade {
   public static readonly PouchConflictError = PouchConflictError;

@@ -1,5 +1,5 @@
-import { lang } from "@skylib/facades";
 import { implementations } from "@";
+import { lang } from "@skylib/facades";
 
 test("dictionary.configure, Dictionary.getConfiguration", () => {
   expect(

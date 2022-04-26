@@ -1,9 +1,9 @@
-import { testDelay } from "@skylib/facades";
-import type { database } from "@skylib/facades";
-import { is, o } from "@skylib/functions";
-import type { numbers } from "@skylib/functions";
-import pouchdb from "pouchdb";
 import { PouchConflictError, PouchNotFoundError } from "./errors";
+import { testDelay } from "@skylib/facades";
+import { is, o } from "@skylib/functions";
+import pouchdb from "pouchdb";
+import type { database } from "@skylib/facades";
+import type { numbers } from "@skylib/functions";
 
 export const handlers = o.freeze({
   error(error: unknown): void {
@@ -32,7 +32,7 @@ export class PouchDBProxy {
    */
   public async bulkDocs(
     // eslint-disable-next-line @skylib/no-mutable-signature -- ??
-    docs: readonly PouchPutDocument[]
+    docs: PouchPutDocuments
   ): Promise<Array<PouchError | PouchResponse>> {
     await testDelay();
 
@@ -189,6 +189,8 @@ export type PouchGetMeta = PouchDB.Core.GetMeta;
 export type PouchIdMeta = PouchDB.Core.IdMeta;
 
 export type PouchPutDocument = PouchDB.Core.PutDocument<Content>;
+
+export type PouchPutDocuments = readonly PouchPutDocument[];
 
 export type PouchQueryOptions = PouchDB.Query.Options<Content, Content>;
 

@@ -1,9 +1,9 @@
+import { implementations } from "@";
+import { Database } from "@/facade-implementations/database/PouchDBWrapper/Database";
 import { database, datetime, uniqueId } from "@skylib/facades";
 import { fn, typedef, wait } from "@skylib/functions";
 import * as testUtils from "@skylib/functions/dist/testUtils";
-import { implementations } from "@";
-// eslint-disable-next-line import/no-internal-modules -- Ok
-import { Database } from "@/facade-implementations/database/PouchDBWrapper/Database";
+import type { strings } from "@skylib/functions";
 
 const PouchRetryError = implementations.database.PouchDBWrapper.PouchRetryError;
 
@@ -69,7 +69,7 @@ test("create: options.caseSensitiveSorting", async () => {
 
   const db2 = database.create(uniqueId(), { caseSensitiveSorting: true });
 
-  const docs: database.PutDocument[] = typedef([
+  const docs: database.PutDocuments = typedef([
     {
       _id: "id1",
       attachedDocs: [
@@ -121,7 +121,7 @@ test("create: options.caseSensitiveSorting", async () => {
   async function subtest(
     db: database.Database,
     method: "query1" | "query2" | "queryAttached1" | "queryAttached2",
-    expected: string[]
+    expected: strings
   ): Promise<void> {
     const got = await fn.run(
       async (): Promise<

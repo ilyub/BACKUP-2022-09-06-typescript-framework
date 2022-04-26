@@ -1,11 +1,5 @@
-import type { lang } from "@skylib/facades";
-import { assert, is, o, s } from "@skylib/functions";
-import type {
-  IndexedObject,
-  strings,
-  WritableIndexedObject
-} from "@skylib/functions";
 import { Definition } from "./Definition";
+import { assert, is, o, s } from "@skylib/functions";
 import type {
   PluralReduce,
   RawDefinition,
@@ -13,6 +7,12 @@ import type {
   RawLanguage,
   WordInfo
 } from "./types";
+import type { lang } from "@skylib/facades";
+import type {
+  IndexedObject,
+  strings,
+  WritableIndexedObject
+} from "@skylib/functions";
 
 export class Definitions {
   public readonly pluralReduce: PluralReduce;

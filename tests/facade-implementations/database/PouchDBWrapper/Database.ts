@@ -1,9 +1,8 @@
+import { implementations } from "@";
+import { wrapError } from "@/facade-implementations/database/PouchDBWrapper/Database";
 import { database, uniqueId } from "@skylib/facades";
 import { assert, typedef, wait } from "@skylib/functions";
 import * as testUtils from "@skylib/functions/dist/testUtils";
-import { implementations } from "@";
-// eslint-disable-next-line import/no-internal-modules -- Ok
-import { wrapError } from "@/facade-implementations/database/PouchDBWrapper/Database";
 
 const PouchConflictError =
   implementations.database.PouchDBWrapper.PouchConflictError;

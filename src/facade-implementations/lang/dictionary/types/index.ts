@@ -36,7 +36,7 @@ export interface RawLanguage {
 }
 
 export interface WordInfo {
-  readonly context: lang.Context | undefined;
+  readonly context?: lang.Context;
   readonly count: number;
   readonly forms: strings;
   readonly replacements: ReadonlyMap<string, string>;

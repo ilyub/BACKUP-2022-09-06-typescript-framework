@@ -1,7 +1,7 @@
-import type { google } from "@skylib/facades";
 import { assert, fn, is } from "@skylib/functions";
-import type { stringU, AsyncPromise } from "@skylib/functions";
 import $ from "jquery";
+import type { google } from "@skylib/facades";
+import type { stringU, AsyncPromise } from "@skylib/functions";
 
 export class Google implements google.Facade {
   /**
