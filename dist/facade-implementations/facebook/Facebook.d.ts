@@ -4,7 +4,7 @@ export declare class Facebook implements facebook.Facade {
     /**
      * Creates class instance.
      *
-     * @param appId - Facebook app ID.
+     * @param appId - App ID.
      * @param version - Version.
      */
     constructor(appId: AsyncPromise<stringU> | stringU, version: string);

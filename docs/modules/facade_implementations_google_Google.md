@@ -4,16 +4,10 @@
 
 ## Table of contents
 
+### Namespaces
+
+- [Google](facade_implementations_google_Google.Google.md)
+
 ### Classes
 
-- [Google](../classes/facade_implementations_google_Google.Google.md)
-
-### Type aliases
-
-- [GoogleAuth](facade_implementations_google_Google.md#googleauth)
-
-## Type aliases
-
-### GoogleAuth
-
-Ƭ **GoogleAuth**: `Omit`<`gapi.auth2.GoogleAuth`, ``"then"``\>
+- [Google](../classes/facade_implementations_google_Google.Google-1.md)

@@ -10,22 +10,22 @@ export * as faker from "./faker";
 
 export * as google from "./google";
 
-export * as handlePromise from "./handlePromise";
+export * as handlePromise from "./handle-promise";
 
-export * as httpRequest from "./httpRequest";
+export * as httpRequest from "./http-request";
 
-export * as inlineSearch from "./inlineSearch";
+export * as inlineSearch from "./inline-search";
 
 export * as lang from "./lang";
 
-export * as progressReporter from "./progressReporter";
+export * as progressReporter from "./progress-reporter";
 
-export * as reactiveStorage from "./reactiveStorage";
+export * as reactiveStorage from "./reactive-storage";
 
-export * as showAlert from "./showAlert";
+export * as showAlert from "./show-alert";
 
-export * as showConfirm from "./showConfirm";
+export * as showConfirm from "./show-confirm";
 
-export * as testDelay from "./testDelay";
+export * as testDelay from "./test-delay";
 
-export * as uniqueId from "./uniqueId";
+export * as uniqueId from "./unique-id";

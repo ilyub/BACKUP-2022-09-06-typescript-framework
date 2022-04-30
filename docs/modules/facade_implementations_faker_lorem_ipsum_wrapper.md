@@ -4,10 +4,9 @@
 
 ## Table of contents
 
-### Interfaces
+### Namespaces
 
-- [Configurable](../interfaces/facade_implementations_faker_lorem_ipsum_wrapper.Configurable.md)
-- [Configuration](../interfaces/facade_implementations_faker_lorem_ipsum_wrapper.Configuration.md)
+- [loremIpsumWrapper](facade_implementations_faker_lorem_ipsum_wrapper.loremIpsumWrapper.md)
 
 ### Variables
 
@@ -17,4 +16,4 @@
 
 ### loremIpsumWrapper
 
-• `Const` **loremIpsumWrapper**: [`Configurable`](../interfaces/facade_implementations_faker_lorem_ipsum_wrapper.Configurable.md) & `faker.Facade`
+• `Const` **loremIpsumWrapper**: `faker.Facade` & [`Configurable`](../interfaces/facade_implementations_faker_lorem_ipsum_wrapper.loremIpsumWrapper.Configurable.md)

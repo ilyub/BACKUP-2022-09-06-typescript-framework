@@ -1,4 +1,4 @@
-import { a, assert, fn, is, o, regexp } from "@skylib/functions";
+import { a, as, assert, is, o, regexp } from "@skylib/functions";
 export class Definition {
     /**
      * Creates class instance.
@@ -43,7 +43,7 @@ export class Definition {
             writable: true,
             value: void 0
         });
-        Object.defineProperty(this, "rulesWord", {
+        Object.defineProperty(this, "rulesWordDependent", {
             enumerable: true,
             configurable: true,
             writable: true,
@@ -59,7 +59,7 @@ export class Definition {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: undefined
+            value: void 0
         });
         Object.defineProperty(this, "subs", {
             enumerable: true,
@@ -75,25 +75,22 @@ export class Definition {
         });
         this.id = id;
         switch (typeof raw) {
-            case "object": {
-                const [primary, subs, contexts] = is.array(raw)
-                    ? raw
-                    : [undefined, raw, undefined];
-                this.contexts = contexts !== null && contexts !== void 0 ? contexts : {};
-                this.subs = o.map(subs, (value, key) => new Definition(value, key));
-                this.sub = fn.run(() => {
-                    const result = is.not.empty(primary)
-                        ? this.subs[primary]
-                        : o.values(this.subs)[0];
-                    assert.not.empty(result, `Invalid primary reference: ${id}`);
-                    return result;
-                });
-                this.value = this.sub.value;
+            case "object":
+                if (is.array(raw)) {
+                    this.subs = o.map(raw[1], (value, key) => new Definition(value, key));
+                    this.sub = as.not.empty(this.subs[raw[0]]);
+                    this.value = this.sub.value;
+                    if (raw.length === 3)
+                        this.contexts = raw[2];
+                }
+                else {
+                    this.subs = o.map(raw, (value, key) => new Definition(value, key));
+                    this.sub = a.first(o.values(this.subs));
+                    this.value = this.sub.value;
+                }
                 break;
-            }
             case "string":
                 this.value = raw;
-                break;
         }
         const reRef = /<([^\s.:<>{}]+):([^\s.:<>{}]+)>/u;
         const reRefDependent = /<([^\s.:<>{}]+)>/u;
@@ -105,165 +102,161 @@ export class Definition {
         this.rulesRefDependent = regexp.matchAll(this.value, reRefDependent);
         this.rulesRefSecondary = regexp.matchAll(this.value, reRefSecondary);
         this.rulesVal = regexp.matchAll(this.value, reVal);
-        this.rulesWord = regexp.matchAll(this.value, reWord);
+        this.rulesWordDependent = regexp.matchAll(this.value, reWord);
         this.rulesWordSecondary = regexp.matchAll(this.value, reWordSecondary);
     }
     /**
-     * Returns word based on context, word forms, and count.
-     * Applies replacements.
+     * Returns word based on context, count, and replacements.
      *
      * @param owner - Parent object.
      * @param context - Context.
-     * @param forms - Word form.
      * @param count - Count for plural form.
      * @param replacements - Replacements.
+     * @param forms - Candidate word forms.
      * @returns Word.
      */
-    get(owner, context, forms, count, replacements) {
+    get(owner, context, count, replacements, forms) {
         if (context) {
             const ref = this.contexts[context];
             if (is.not.empty(ref)) {
                 const definition = this.subs[ref];
-                assert.not.empty(definition, `Invalid context reference: ${this.id}.${context}`);
-                return definition.get(owner, context, forms, count, replacements);
+                assert.not.empty(definition, `Invalid context: ${context}`);
+                return definition.get(owner, context, count, replacements, forms);
             }
         }
         for (const form of forms) {
             const definition = this.subs[form];
             if (definition)
-                return definition.get(owner, context, [form], count, replacements);
+                return definition.get(owner, context, count, replacements, [form]);
         }
-        // eslint-disable-next-line no-warning-comments -- Postponed
-        // fixme: Compare to dictionary's count
         if (count === 1) {
             // Plural form not needed
         }
         else {
             const definition = this.subs[count];
             if (definition)
-                return definition.get(owner, context, forms, count, replacements);
+                return definition.get(owner, context, count, replacements, forms);
         }
         if (this.sub)
-            return this.sub.get(owner, context, forms, count, replacements);
-        let word = {
+            return this.sub.get(owner, context, count, replacements, forms);
+        let word = o.removeUndefinedKeys({
             context,
             count,
             forms,
             replacements,
             value: this.value
-        };
-        word = this.applyRulesRef(word, owner);
-        word = this.applyRulesRefDependent(word, owner);
-        word = this.applyRulesRefSecondary(word, owner);
-        word = this.applyRulesVal(word);
-        word = this.applyRulesWord(word, owner);
-        word = this.applyRulesWordSecondary(word, owner);
+        });
+        for (const rule of this.rulesRef)
+            word = applyRuleRef(word, rule, owner);
+        for (const rule of this.rulesRefDependent)
+            word = applyRuleRefDependent(word, rule, owner);
+        for (const rule of this.rulesRefSecondary)
+            word = applyRuleRefSecondary(word, rule, owner);
+        for (const rule of this.rulesVal)
+            word = applyRuleVal(word, rule);
+        for (const rule of this.rulesWordDependent)
+            word = applyRuleWordDependent(word, rule, owner);
+        for (const rule of this.rulesWordSecondary)
+            word = applyRuleWordSecondary(word, rule, owner);
         return word;
     }
-    /**
-     * Applies rules to the word.
-     *
-     * @param word - Word.
-     * @param owner - Parent object.
-     * @returns Modified word.
-     */
-    applyRulesRef(word, owner) {
-        for (const rule of this.rulesRef) {
-            const rule0 = a.get(rule, 0);
-            const rule1 = a.get(rule, 1);
-            const rule2 = a.get(rule, 2).toLowerCase();
-            const key = word.replacements.get(rule1);
-            assert.string(key, `Missing replacement: ${this.id}.${rule1}`);
-            const word2 = owner.get(key, word.context, rule2, word.count, word.replacements);
-            word = Object.assign(Object.assign({}, word), { forms: word2.forms, value: word.value.replace(rule0, word2.value) });
-        }
-        return word;
-    }
-    /**
-     * Applies rules to the word.
-     *
-     * @param word - Word.
-     * @param owner - Parent object.
-     * @returns Modified word.
-     */
-    applyRulesRefDependent(word, owner) {
-        for (const rule of this.rulesRefDependent) {
-            const rule0 = a.get(rule, 0);
-            const rule1 = a.get(rule, 1);
-            const key = word.replacements.get(rule1);
-            assert.string(key, `Missing replacement: ${this.id}.${rule1}`);
-            const word2 = owner.get(key, word.context, word.forms, word.count, word.replacements);
-            word = Object.assign(Object.assign({}, word), { value: word.value.replace(rule0, word2.value) });
-        }
-        return word;
-    }
-    /**
-     * Applies rules to the word.
-     *
-     * @param word - Word.
-     * @param owner - Parent object.
-     * @returns Modified word.
-     */
-    applyRulesRefSecondary(word, owner) {
-        for (const rule of this.rulesRefSecondary) {
-            const rule0 = a.get(rule, 0);
-            const rule1 = a.get(rule, 1);
-            const rule2 = a.get(rule, 2).toLowerCase();
-            const key = word.replacements.get(rule1);
-            assert.string(key, `Missing replacement: ${this.id}.${rule1}`);
-            const word2 = owner.get(key, word.context, rule2, 1, word.replacements);
-            word = Object.assign(Object.assign({}, word), { value: word.value.replace(rule0, word2.value) });
-        }
-        return word;
-    }
-    /**
-     * Applies rules to the word.
-     *
-     * @param word - Word.
-     * @returns Modified word.
-     */
-    applyRulesVal(word) {
-        for (const rule of this.rulesVal) {
-            const rule0 = a.get(rule, 0);
-            const rule1 = a.get(rule, 1);
-            const value = word.replacements.get(rule1);
-            assert.string(value, `Missing replacement: ${this.id}.${rule1}`);
-            word = Object.assign(Object.assign({}, word), { value: word.value.replace(rule0, value) });
-        }
-        return word;
-    }
-    /**
-     * Applies rules to the word.
-     *
-     * @param word - Word.
-     * @param owner - Parent object.
-     * @returns Modified word.
-     */
-    applyRulesWord(word, owner) {
-        for (const rule of this.rulesWord) {
-            const rule0 = a.get(rule, 0);
-            const rule1 = a.get(rule, 1);
-            const word2 = owner.get(rule1, word.context, word.forms, word.count, word.replacements);
-            word = Object.assign(Object.assign({}, word), { value: word.value.replace(rule0, word2.value) });
-        }
-        return word;
-    }
-    /**
-     * Applies rules to the word.
-     *
-     * @param word - Word.
-     * @param owner - Parent object.
-     * @returns Modified word.
-     */
-    applyRulesWordSecondary(word, owner) {
-        for (const rule of this.rulesWordSecondary) {
-            const rule0 = a.get(rule, 0);
-            const rule1 = a.get(rule, 1);
-            const rule2 = a.get(rule, 2).toLowerCase();
-            const word2 = owner.get(rule1, word.context, rule2, 1, word.replacements);
-            word = Object.assign(Object.assign({}, word), { value: word.value.replace(rule0, word2.value) });
-        }
-        return word;
-    }
+}
+/**
+ * Applies rules to the word.
+ *
+ * @param word - Word.
+ * @param rule - Rule.
+ * @param owner - Parent object.
+ * @returns Modified word.
+ */
+function applyRuleRef(word, rule, owner) {
+    // eslint-disable-next-line @skylib/disallow-by-regexp -- Wait for @skylib/config update
+    // Format: <replacement-id:form>
+    const search = a.first(rule);
+    const replacementId = a.get(rule, 1);
+    const form = a.get(rule, 2).toLowerCase();
+    const key = as.not.empty(word.replacements.get(replacementId), `Missing replacement: ${replacementId}`);
+    const replacement = owner.get(key, word.context, word.count, word.replacements, form);
+    return Object.assign(Object.assign({}, word), { forms: replacement.forms, value: word.value.replace(search, replacement.value) });
+}
+/**
+ * Applies rules to the word.
+ *
+ * @param word - Word.
+ * @param rule - Rule.
+ * @param owner - Parent object.
+ * @returns Modified word.
+ */
+function applyRuleRefDependent(word, rule, owner) {
+    // eslint-disable-next-line @skylib/disallow-by-regexp -- Wait for @skylib/config update
+    // Format: <replacement-id>
+    const search = a.first(rule);
+    const replacementId = a.get(rule, 1);
+    const key = as.not.empty(word.replacements.get(replacementId), `Missing replacement: ${replacementId}`);
+    const replacement = owner.get(key, word.context, word.count, word.replacements, word.forms);
+    return Object.assign(Object.assign({}, word), { value: word.value.replace(search, replacement.value) });
+}
+/**
+ * Applies rules to the word.
+ *
+ * @param word - Word.
+ * @param rule - Rule.
+ * @param owner - Parent object.
+ * @returns Modified word.
+ */
+function applyRuleRefSecondary(word, rule, owner) {
+    // eslint-disable-next-line @skylib/disallow-by-regexp -- Wait for @skylib/config update
+    // Format: <replacement-id.form>
+    const search = a.first(rule);
+    const replacementId = a.get(rule, 1);
+    const form = a.get(rule, 2).toLowerCase();
+    const key = as.not.empty(word.replacements.get(replacementId), `Missing replacement: ${replacementId}`);
+    const replacement = owner.get(key, word.context, 1, word.replacements, form);
+    return Object.assign(Object.assign({}, word), { value: word.value.replace(search, replacement.value) });
+}
+/**
+ * Applies rules to the word.
+ *
+ * @param word - Word.
+ * @param rule - Rule.
+ * @returns Modified word.
+ */
+function applyRuleVal(word, rule) {
+    // Format: @replacement-id
+    const search = a.first(rule);
+    const replacementId = a.get(rule, 1);
+    const replacement = as.not.empty(word.replacements.get(replacementId), `Missing replacement: ${replacementId}`);
+    return Object.assign(Object.assign({}, word), { value: word.value.replace(search, replacement) });
+}
+/**
+ * Applies rules to the word.
+ *
+ * @param word - Word.
+ * @param rule - Rule.
+ * @param owner - Parent object.
+ * @returns Modified word.
+ */
+function applyRuleWordDependent(word, rule, owner) {
+    // Format: {key}
+    const search = a.first(rule);
+    const key = a.get(rule, 1);
+    const replacement = owner.get(key, word.context, word.count, word.replacements, word.forms);
+    return Object.assign(Object.assign({}, word), { value: word.value.replace(search, replacement.value) });
+}
+/**
+ * Applies rules to the word.
+ *
+ * @param word - Word.
+ * @param rule - Rule.
+ * @param owner - Parent object.
+ * @returns Modified word.
+ */
+function applyRuleWordSecondary(word, rule, owner) {
+    // Format: {key.form}
+    const search = a.first(rule);
+    const key = a.get(rule, 1);
+    const form = a.get(rule, 2).toLowerCase();
+    const replacement = owner.get(key, word.context, 1, word.replacements, form);
+    return Object.assign(Object.assign({}, word), { value: word.value.replace(search, replacement.value) });
 }
 //# sourceMappingURL=Definition.js.map

@@ -8,7 +8,7 @@
 
 - `BasePutDocument`
 
-- [`BaseItemDoc`](classes_database_Item.BaseItemDoc.md)
+- [`OwnProps`](classes_database_Item.Item.OwnProps.md)
 
   ↳ **`PutItemDoc`**
 
@@ -74,7 +74,7 @@ ___
 
 #### Inherited from
 
-[BaseItemDoc](classes_database_Item.BaseItemDoc.md).[createdAt](classes_database_Item.BaseItemDoc.md#createdat)
+[OwnProps](classes_database_Item.Item.OwnProps.md).[createdAt](classes_database_Item.Item.OwnProps.md#createdat)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Inherited from
 
-[BaseItemDoc](classes_database_Item.BaseItemDoc.md).[deletedAt](classes_database_Item.BaseItemDoc.md#deletedat)
+[OwnProps](classes_database_Item.Item.OwnProps.md).[deletedAt](classes_database_Item.Item.OwnProps.md#deletedat)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Inherited from
 
-[BaseItemDoc](classes_database_Item.BaseItemDoc.md).[softDeleted](classes_database_Item.BaseItemDoc.md#softdeleted)
+[OwnProps](classes_database_Item.Item.OwnProps.md).[softDeleted](classes_database_Item.Item.OwnProps.md#softdeleted)
 
 ___
 
@@ -114,4 +114,4 @@ ___
 
 #### Inherited from
 
-[BaseItemDoc](classes_database_Item.BaseItemDoc.md).[updatedAt](classes_database_Item.BaseItemDoc.md#updatedat)
+[OwnProps](classes_database_Item.Item.OwnProps.md).[updatedAt](classes_database_Item.Item.OwnProps.md#updatedat)

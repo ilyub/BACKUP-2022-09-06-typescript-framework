@@ -4,10 +4,6 @@
 
 ## Table of contents
 
-### Namespaces
-
-- [Dictionary](facade_implementations_lang_dictionary_Dictionary.Dictionary.md)
-
 ### Classes
 
-- [Dictionary](../classes/facade_implementations_lang_dictionary_Dictionary.Dictionary-1.md)
+- [Dictionary](../classes/facade_implementations_lang_dictionary_Dictionary.Dictionary.md)

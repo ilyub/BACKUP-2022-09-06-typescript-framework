@@ -1,15 +1,20 @@
-import { DateTime, formatStrings } from "./DateTime";
+import { DateTime } from "./DateTime";
+import { formatStrings, moduleConfig } from "./core";
+import { o } from "@skylib/functions";
 import { isValid, parse } from "date-fns";
 import type { datetime } from "@skylib/facades";
 import type { NumStr } from "@skylib/functions";
 
-export type { Configuration, FirstDayOfWeek } from "./DateTime";
-
-export { DateTime, configure, getConfiguration } from "./DateTime";
-
-export const implementation: datetime.Facade = {
-  create(dt?: Date | datetime.DateTime | NumStr) {
-    return new DateTime(dt);
+export const dateFnsWrapper: dateFnsWrapper.Configurable & datetime.Facade = {
+  DateTime,
+  configure(config) {
+    o.assign(moduleConfig, config);
+  },
+  create(date?: Date | datetime.DateTime | NumStr) {
+    return new DateTime(date);
+  },
+  getConfiguration() {
+    return moduleConfig;
   },
   now() {
     return new DateTime().toString();
@@ -20,11 +25,33 @@ export const implementation: datetime.Facade = {
   timeSec() {
     return Date.now() / 1000;
   },
-  validate(dt: string) {
+  validate(date: string) {
     const now = Date.now();
 
     return formatStrings.some(formatString =>
-      isValid(parse(dt, formatString, now))
+      isValid(parse(date, formatString, now))
     );
   }
 };
+
+export namespace dateFnsWrapper {
+  export interface Configurable {
+    readonly DateTime: typeof DateTime;
+    /**
+     * Configures plugin.
+     *
+     * @param config - Plugin configuration.
+     */
+    readonly configure: (config: PartialConfiguration) => void;
+    /**
+     * Returns plugin configuration.
+     *
+     * @returns Plugin configuration.
+     */
+    readonly getConfiguration: () => Configuration;
+  }
+
+  export type Configuration = import("./core").Configuration;
+
+  export type PartialConfiguration = import("./core").PartialConfiguration;
+}

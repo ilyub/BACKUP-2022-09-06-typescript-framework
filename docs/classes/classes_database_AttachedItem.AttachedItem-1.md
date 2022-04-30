@@ -74,7 +74,7 @@ ___
 
 ### \_parent
 
-• `Protected` **\_parent**: `undefined` \| `T` = `undefined`
+• `Protected` **\_parent**: `undefined` \| `T`
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 • `get` **id**(): `string`
 
-Parent ID + attached item ID.
+Unique combined ID.
 
 #### Returns
 
@@ -130,7 +130,7 @@ ___
 
 • `get` **parent**(): `T`
 
-Returns parent item.
+Parent item.
 
 #### Returns
 
@@ -154,7 +154,7 @@ ___
 
 ### getParent
 
-▸ `Protected` **getParent**(): `T`
+▸ `Protected` `Abstract` **getParent**(): `T`
 
 Initializes parent.
 

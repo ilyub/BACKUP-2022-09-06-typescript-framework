@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dateFnsWrapper = void 0;
-const tslib_1 = require("tslib");
-exports.dateFnsWrapper = tslib_1.__importStar(require("./date-fns-wrapper"));
+var date_fns_wrapper_1 = require("./date-fns-wrapper");
+Object.defineProperty(exports, "dateFnsWrapper", { enumerable: true, get: function () { return date_fns_wrapper_1.dateFnsWrapper; } });
 //# sourceMappingURL=index.js.map

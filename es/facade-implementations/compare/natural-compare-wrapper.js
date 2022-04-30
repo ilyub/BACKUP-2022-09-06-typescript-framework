@@ -1,10 +1,10 @@
-import { o } from "@skylib/functions";
+import { defineFn } from "@skylib/functions";
 import naturalCompare from "natural-compare";
-export const implementation = o.extend((x, y) => {
-    // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
+export const naturalCompareWrapper = defineFn((x, y) => {
+    // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
     if (x > y)
         return 1;
-    // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
+    // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
     if (x < y)
         return -1;
     return 0;

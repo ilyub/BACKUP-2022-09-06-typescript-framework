@@ -6,10 +6,10 @@
 
 ### Variables
 
-- [implementation](facade_implementations_compare_natural_compare_wrapper.md#implementation)
+- [naturalCompareWrapper](facade_implementations_compare_natural_compare_wrapper.md#naturalcomparewrapper)
 
 ## Variables
 
-### implementation
+### naturalCompareWrapper
 
-• `Const` **implementation**: `compare.Facade`
+• `Const` **naturalCompareWrapper**: `compare.Facade`

@@ -7,7 +7,7 @@ export class Facebook implements facebook.Facade {
   /**
    * Creates class instance.
    *
-   * @param appId - Facebook app ID.
+   * @param appId - App ID.
    * @param version - Version.
    */
   public constructor(appId: AsyncPromise<stringU> | stringU, version: string) {
@@ -43,7 +43,7 @@ export class Facebook implements facebook.Facade {
   public async loadSdk(): Promise<void> {
     this.sdk =
       this.sdk ??
-      fn.run(async (): Promise<void> => {
+      fn.run(async () => {
         await $.getScript("https://connect.facebook.net/en_US/sdk.js");
 
         const appId = is.callable(this.appId)
@@ -66,7 +66,7 @@ export class Facebook implements facebook.Facade {
   protected readonly appId: AsyncPromise<stringU> | stringU;
 
   // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
-  protected sdk: Promise<void> | undefined = undefined;
+  protected sdk: Promise<void> | undefined;
 
   protected readonly version: string;
 }

@@ -33,47 +33,47 @@ Creates class instance.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `raw` | [`RawLanguage`](../interfaces/facade_implementations_lang_dictionary_types.RawLanguage.md) | Language definition. |
+| `raw` | [`RawLanguage`](../interfaces/facade_implementations_lang_dictionary_core.RawLanguage.md) | Language definition. |
 
 ## Properties
 
 ### pluralReduce
 
-• `Readonly` **pluralReduce**: [`PluralReduce`](../interfaces/facade_implementations_lang_dictionary_types.PluralReduce.md)
+• `Readonly` **pluralReduce**: [`PluralReduce`](../interfaces/facade_implementations_lang_dictionary_core.PluralReduce.md)
 
 ___
 
 ### wordForms
 
-• `Protected` `Readonly` **wordForms**: `IndexedObject`<`strings`\>
+• `Protected` `Readonly` **wordForms**: `ReadonlyMap`<`string`, `strings`\>
 
 ___
 
 ### words
 
-• `Protected` `Readonly` **words**: `IndexedObject`<[`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)\> = `{}`
+• `Protected` `Readonly` **words**: `ReadonlyMap`<`string`, [`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)\>
 
 ## Methods
 
 ### get
 
-▸ **get**(`key`, `context`, `forms`, `count`, `replacements`): [`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md)
+▸ **get**(`key`, `context`, `count`, `replacements`, `forms?`): [`WordInfo`](../interfaces/facade_implementations_lang_dictionary_core.WordInfo.md)
 
-Gets word based on context, count, and replacements.
+Returns word based on context, count, and replacements.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `key` | `string` | Word ID. |
-| `context` | `undefined` \| ``"InXDays"`` | Context. |
-| `forms` | `string` \| `strings` | Word forms or reference to wordForms. |
-| `count` | `number` | Count for plural form. |
-| `replacements` | `ReadonlyMap`<`string`, `string`\> | Replacements. |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `key` | `string` | `undefined` | Key. |
+| `context` | `undefined` \| ``"InXDays"`` | `undefined` | Context. |
+| `count` | `number` | `undefined` | Count for plural form. |
+| `replacements` | `ReadonlyMap`<`string`, `string`\> | `undefined` | Replacements. |
+| `forms` | `string` \| `strings` | `[]` | Candidate word forms. |
 
 #### Returns
 
-[`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md)
+[`WordInfo`](../interfaces/facade_implementations_lang_dictionary_core.WordInfo.md)
 
 Word.
 
@@ -81,18 +81,18 @@ ___
 
 ### has
 
-▸ **has**(`key`): key is Transforms<Word\>
+▸ **has**(`key`): `boolean`
 
-Checks that dictionary has word.
+Checks if dictionary has word.
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `key` | `string` | Word ID. |
+| `key` | `string` | Key. |
 
 #### Returns
 
-key is Transforms<Word\>
+`boolean`
 
 _True_ if dictionary has word, _false_ otherwise.

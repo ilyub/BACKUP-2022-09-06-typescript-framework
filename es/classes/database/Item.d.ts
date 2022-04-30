@@ -23,18 +23,18 @@ export declare class Item {
     protected readonly attachedDocs: database.BaseStoredAttachedDocuments | undefined;
     protected readonly lastAttachedDocs: numbers | undefined;
 }
-export interface BaseItemDoc {
-    readonly createdAt?: string;
-    readonly deletedAt?: string;
-    readonly softDeleted?: true;
-    readonly updatedAt?: string;
-}
 export declare namespace Item {
-    interface ExistingItemDoc extends database.BaseExistingDocument, BaseItemDoc {
+    interface ExistingItemDoc extends database.BaseExistingDocument, OwnProps {
     }
     type ExistingItemDocs = readonly ExistingItemDoc[];
     type Items = readonly Items[];
-    interface PutItemDoc extends database.BasePutDocument, BaseItemDoc {
+    interface OwnProps {
+        readonly createdAt?: string;
+        readonly deletedAt?: string;
+        readonly softDeleted?: true;
+        readonly updatedAt?: string;
+    }
+    interface PutItemDoc extends database.BasePutDocument, OwnProps {
     }
     type PutItemDocs = readonly PutItemDoc[];
 }

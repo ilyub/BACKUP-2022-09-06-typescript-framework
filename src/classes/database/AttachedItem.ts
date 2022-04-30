@@ -3,7 +3,7 @@ import type { Item } from "./Item";
 import type { database } from "@skylib/facades";
 import type { stringU, UndefinedStyle } from "@skylib/functions";
 
-export class AttachedItem<T extends Item = Item> {
+export abstract class AttachedItem<T extends Item = Item> {
   public readonly _deleted: boolean;
 
   public readonly _id: number;
@@ -19,14 +19,14 @@ export class AttachedItem<T extends Item = Item> {
   public readonly updatedAt: stringU;
 
   /**
-   * Parent ID + attached item ID.
+   * Unique combined ID.
    */
   public get id(): string {
     return `${this._parentDoc._id}:${this._id}`;
   }
 
   /**
-   * Returns parent item.
+   * Parent item.
    */
   public get parent(): T {
     this._parent = this._parent ?? this.getParent();
@@ -56,9 +56,7 @@ export class AttachedItem<T extends Item = Item> {
    * @returns Database document.
    */
   public doc(): AttachedItem.ExistingAttachedItemDoc {
-    return o.removeUndefinedKeys<
-      UndefinedStyle<AttachedItem.ExistingAttachedItemDoc>
-    >({
+    return o.removeUndefinedKeys<Source>({
       _deleted: this._deleted ? true : undefined,
       _id: this._id,
       _rev: this._rev,
@@ -68,46 +66,46 @@ export class AttachedItem<T extends Item = Item> {
       softDeleted: this.softDeleted ? true : undefined,
       updatedAt: this.updatedAt
     });
+
+    type Source = UndefinedStyle<AttachedItem.ExistingAttachedItemDoc>;
   }
 
   // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
-  protected _parent: T | undefined = undefined;
+  protected _parent: T | undefined;
 
   protected readonly _parentDoc: database.BaseExistingDocument;
 
   /**
    * Initializes parent.
    */
-  protected getParent(): T {
-    throw new Error("Not implemented");
-  }
+  protected abstract getParent(): T;
 }
 
 export namespace AttachedItem {
   export type AttachedItems = readonly AttachedItems[];
 
-  export interface BaseAttachedItemDoc {
+  export interface BulkAttachedItemDoc
+    extends database.BaseBulkAttachedDocument,
+      OwnProps {}
+
+  export type BulkAttachedItemDocs = readonly BulkAttachedItemDoc[];
+
+  export interface ExistingAttachedItemDoc
+    extends database.BaseExistingAttachedDocument,
+      OwnProps {}
+
+  export type ExistingAttachedItemDocs = readonly ExistingAttachedItemDoc[];
+
+  export interface OwnProps {
     readonly createdAt?: string;
     readonly deletedAt?: string;
     readonly softDeleted?: true;
     readonly updatedAt?: string;
   }
 
-  export interface BulkAttachedItemDoc
-    extends database.BaseBulkAttachedDocument,
-      BaseAttachedItemDoc {}
-
-  export type BulkAttachedItemDocs = readonly BulkAttachedItemDoc[];
-
-  export interface ExistingAttachedItemDoc
-    extends database.BaseExistingAttachedDocument,
-      BaseAttachedItemDoc {}
-
-  export type ExistingAttachedItemDocs = readonly ExistingAttachedItemDoc[];
-
   export interface PutAttachedItemDoc
     extends database.BasePutAttachedDocument,
-      BaseAttachedItemDoc {}
+      OwnProps {}
 
   export type PutAttachedItemDocs = readonly PutAttachedItemDoc[];
 }

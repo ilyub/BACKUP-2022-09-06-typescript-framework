@@ -1,13 +1,14 @@
-import { reactiveStorage } from "@skylib/facades";
-import { is, onDemand, o } from "@skylib/functions";
+import { formatStrings, moduleConfig } from "./core";
+import { is } from "@skylib/functions";
 import {
   add,
-  format,
+  format as formatDate,
   getDate,
   getDay,
   getHours,
   getMinutes,
   getMonth,
+  getSeconds,
   getYear,
   isSameDay,
   isSameHour,
@@ -29,41 +30,35 @@ import {
   startOfWeek,
   startOfYear,
   sub
-  // eslint-disable-next-line import/no-duplicates -- Ok
 } from "date-fns";
-// eslint-disable-next-line import/no-duplicates -- Ok
-import enUS from "date-fns/locale/en-US";
+import type { FirstDayOfWeek } from "./core";
 import type { datetime } from "@skylib/facades";
-import type { NumStr, strings } from "@skylib/functions";
-
-export const formatStrings: strings = [
-  "yyyy-M-d h:m:s a",
-  "yyyy-M-d H:m:s",
-  "yyyy-M-d h:m a",
-  "yyyy-M-d H:m",
-  "yyyy-M-d"
-];
-
-export const moduleConfig = onDemand(() =>
-  reactiveStorage<Configuration>({
-    firstDayOfWeek: 0,
-    locale: enUS,
-    pm: true
-  })
-);
+import type { NumStr } from "@skylib/functions";
 
 export class DateTime implements datetime.DateTime {
   /**
    * Creates class instance.
    *
-   * @param dt - Date/time.
+   * @param date - Date.
    */
-  public constructor(dt?: Date | datetime.DateTime | NumStr) {
-    if (dt instanceof Date) this.value = dt;
-    else if (dt instanceof DateTime) this.value = new Date(dt.value);
-    else if (is.number(dt)) this.value = new Date(dt);
-    else if (is.string(dt)) this.value = parseString(dt);
+  public constructor(date?: Date | datetime.DateTime | NumStr) {
+    if (date instanceof Date) this.value = date;
+    else if (date instanceof DateTime) this.value = date.value;
+    else if (is.number(date)) this.value = new Date(date);
+    else if (is.string(date)) this.value = parseString(date);
     else this.value = new Date();
+
+    function parseString(str: string): Date {
+      const now = Date.now();
+
+      for (const formatString of formatStrings) {
+        const result = parse(str, formatString, now);
+
+        if (isValid(result)) return result;
+      }
+
+      throw new Error(`Unknown date format: ${str}`);
+    }
   }
 
   public add(amount: number, unit: datetime.Unit): datetime.DateTime {
@@ -122,44 +117,44 @@ export class DateTime implements datetime.DateTime {
     return getDay(this.value);
   }
 
-  public format(fmt: string): string {
-    fmt = moduleConfig.pm
-      ? fmt
+  public format(format: string): string {
+    format = moduleConfig.pm
+      ? format
           .replace(/H{4}/gu, "hh")
           .replace(/H{3}/gu, "h")
           .replace(/A/gu, "a")
           .trim()
-      : fmt
+      : format
           .replace(/H{4}/gu, "HH")
           .replace(/H{3}/gu, "H")
           .replace(/A/gu, "")
           .trim();
 
-    return format(this.value, fmt, { locale: moduleConfig.locale });
+    return formatDate(this.value, format, { locale: moduleConfig.locale });
   }
 
   public hours(): number {
     return getHours(this.value);
   }
 
-  public isSameDayOfMonth(dt: datetime.DateTime): boolean {
-    return isSameDay(this.value, dt.toDate());
+  public isSameDayOfMonth(date: datetime.DateTime): boolean {
+    return isSameDay(this.value, date.toDate());
   }
 
-  public isSameHour(dt: datetime.DateTime): boolean {
-    return isSameHour(this.value, dt.toDate());
+  public isSameHour(date: datetime.DateTime): boolean {
+    return isSameHour(this.value, date.toDate());
   }
 
-  public isSameMinute(dt: datetime.DateTime): boolean {
-    return isSameMinute(this.value, dt.toDate());
+  public isSameMinute(date: datetime.DateTime): boolean {
+    return isSameMinute(this.value, date.toDate());
   }
 
-  public isSameMonth(dt: datetime.DateTime): boolean {
-    return isSameMonth(this.value, dt.toDate());
+  public isSameMonth(date: datetime.DateTime): boolean {
+    return isSameMonth(this.value, date.toDate());
   }
 
-  public isSameYear(dt: datetime.DateTime): boolean {
-    return isSameYear(this.value, dt.toDate());
+  public isSameYear(date: datetime.DateTime): boolean {
+    return isSameYear(this.value, date.toDate());
   }
 
   public minutes(): number {
@@ -310,7 +305,9 @@ export class DateTime implements datetime.DateTime {
   }
 
   public toString(): string {
-    return format(this.value, "yyyy-MM-dd HH:mm");
+    return getSeconds(this.value)
+      ? formatDate(this.value, "yyyy-MM-dd HH:mm:ss")
+      : formatDate(this.value, "yyyy-MM-dd HH:mm");
   }
 
   public toTime(): number {
@@ -327,48 +324,4 @@ export class DateTime implements datetime.DateTime {
 
   // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected value: Date;
-}
-
-export interface Configuration {
-  readonly firstDayOfWeek: FirstDayOfWeek;
-  readonly locale: Locale;
-  readonly pm: boolean;
-}
-
-export type FirstDayOfWeek = 0 | 1;
-
-/**
- * Configures plugin.
- *
- * @param config - Plugin configuration.
- */
-export function configure(config: Partial<Configuration>): void {
-  o.assign(moduleConfig, config);
-}
-
-/**
- * Returns plugin configuration.
- *
- * @returns Plugin configuration.
- */
-export function getConfiguration(): Configuration {
-  return moduleConfig;
-}
-
-/**
- * Parses string.
- *
- * @param dt - Date/time.
- * @returns Date object.
- */
-function parseString(dt: string): Date {
-  const now = Date.now();
-
-  for (const formatString of formatStrings) {
-    const result = parse(dt, formatString, now);
-
-    if (isValid(result)) return result;
-  }
-
-  throw new Error(`Invalid date: ${dt}`);
 }

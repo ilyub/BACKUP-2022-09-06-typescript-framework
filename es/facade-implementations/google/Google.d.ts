@@ -11,7 +11,16 @@ export declare class Google implements google.Facade {
     idToken(): Promise<stringU>;
     loadSdk(): Promise<void>;
     protected readonly clientId: AsyncPromise<stringU> | stringU;
-    protected sdk: Promise<GoogleAuth> | undefined;
+    protected sdk: Promise<Google.Auth> | undefined;
+    /**
+     * Loads SDK.
+     *
+     * @returns SDK.
+     */
+    protected _loadSdk(): Promise<Google.Auth>;
 }
-export declare type GoogleAuth = Omit<gapi.auth2.GoogleAuth, "then">;
+export declare namespace Google {
+    interface Auth extends Omit<gapi.auth2.GoogleAuth, "then"> {
+    }
+}
 //# sourceMappingURL=Google.d.ts.map

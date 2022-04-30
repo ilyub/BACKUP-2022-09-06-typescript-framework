@@ -6,10 +6,10 @@
 
 ### References
 
-- [naturalCompare](facade_implementations_compare.md#naturalcompare)
+- [naturalCompareWrapper](facade_implementations_compare.md#naturalcomparewrapper)
 
 ## References
 
-### naturalCompare
+### naturalCompareWrapper
 
-Renames and re-exports [implementation](facade_implementations_compare_natural_compare_wrapper.md#implementation)
+Re-exports [naturalCompareWrapper](facade_implementations_compare_natural_compare_wrapper.md#naturalcomparewrapper)

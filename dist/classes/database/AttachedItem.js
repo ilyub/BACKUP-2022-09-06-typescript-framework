@@ -57,7 +57,7 @@ class AttachedItem {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: undefined
+            value: void 0
         });
         Object.defineProperty(this, "_parentDoc", {
             enumerable: true,
@@ -75,13 +75,13 @@ class AttachedItem {
         this.updatedAt = source.updatedAt;
     }
     /**
-     * Parent ID + attached item ID.
+     * Unique combined ID.
      */
     get id() {
         return `${this._parentDoc._id}:${this._id}`;
     }
     /**
-     * Returns parent item.
+     * Parent item.
      */
     get parent() {
         var _a;
@@ -104,12 +104,6 @@ class AttachedItem {
             softDeleted: this.softDeleted ? true : undefined,
             updatedAt: this.updatedAt
         });
-    }
-    /**
-     * Initializes parent.
-     */
-    getParent() {
-        throw new Error("Not implemented");
     }
 }
 exports.AttachedItem = AttachedItem;

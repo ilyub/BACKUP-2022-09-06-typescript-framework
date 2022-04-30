@@ -40,7 +40,7 @@ export class Item {
    * @returns Database document.
    */
   public doc(): Item.ExistingItemDoc {
-    return o.removeUndefinedKeys<UndefinedStyle<Item.ExistingItemDoc>>({
+    return o.removeUndefinedKeys<Source>({
       _deleted: this._deleted ? true : undefined,
       _id: this._id,
       _rev: this._rev,
@@ -51,6 +51,8 @@ export class Item {
       softDeleted: this.softDeleted ? true : undefined,
       updatedAt: this.updatedAt
     });
+
+    type Source = UndefinedStyle<Item.ExistingItemDoc>;
   }
 
   protected readonly attachedDocs:
@@ -61,22 +63,22 @@ export class Item {
 }
 
 export namespace Item {
-  export interface BaseItemDoc {
+  export interface ExistingItemDoc
+    extends database.BaseExistingDocument,
+      OwnProps {}
+
+  export type ExistingItemDocs = readonly ExistingItemDoc[];
+
+  export type Items = readonly Items[];
+
+  export interface OwnProps {
     readonly createdAt?: string;
     readonly deletedAt?: string;
     readonly softDeleted?: true;
     readonly updatedAt?: string;
   }
 
-  export interface ExistingItemDoc
-    extends database.BaseExistingDocument,
-      BaseItemDoc {}
-
-  export type ExistingItemDocs = readonly ExistingItemDoc[];
-
-  export type Items = readonly Items[];
-
-  export interface PutItemDoc extends database.BasePutDocument, BaseItemDoc {}
+  export interface PutItemDoc extends database.BasePutDocument, OwnProps {}
 
   export type PutItemDocs = readonly PutItemDoc[];
 }

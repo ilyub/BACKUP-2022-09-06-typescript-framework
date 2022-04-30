@@ -6,14 +6,25 @@
 
 ### References
 
+- [Configuration](facade_implementations_lang_dictionary.md#configuration)
 - [Definitions](facade_implementations_lang_dictionary.md#definitions)
 - [Dictionary](facade_implementations_lang_dictionary.md#dictionary)
-
-### Variables
-
+- [PartialConfiguration](facade_implementations_lang_dictionary.md#partialconfiguration)
+- [configure](facade_implementations_lang_dictionary.md#configure)
+- [getConfiguration](facade_implementations_lang_dictionary.md#getconfiguration)
 - [pluralReduce](facade_implementations_lang_dictionary.md#pluralreduce)
 
+### Type aliases
+
+- [DefinitionsByLocale](facade_implementations_lang_dictionary.md#definitionsbylocale)
+
 ## References
+
+### Configuration
+
+Re-exports [Configuration](../interfaces/facade_implementations_lang_dictionary_core.Configuration.md)
+
+___
 
 ### Definitions
 
@@ -23,16 +34,34 @@ ___
 
 ### Dictionary
 
-Re-exports [Dictionary](../classes/facade_implementations_lang_dictionary_Dictionary.Dictionary-1.md)
+Re-exports [Dictionary](../classes/facade_implementations_lang_dictionary_Dictionary.Dictionary.md)
 
-## Variables
+___
+
+### PartialConfiguration
+
+Re-exports [PartialConfiguration](../interfaces/facade_implementations_lang_dictionary_core.PartialConfiguration.md)
+
+___
+
+### configure
+
+Re-exports [configure](facade_implementations_lang_dictionary_core.md#configure)
+
+___
+
+### getConfiguration
+
+Re-exports [getConfiguration](facade_implementations_lang_dictionary_core.md#getconfiguration)
+
+___
 
 ### pluralReduce
 
-• `Const` **pluralReduce**: { `ru`: (`this`: `void`, `count`: `number`) => `number`  } & (`count`: `number`) => `number`
+Re-exports [pluralReduce](facade_implementations_lang_dictionary_core.md#pluralreduce)
 
-Plural reduction function.
+## Type aliases
 
-**`param`** Count.
+### DefinitionsByLocale
 
-**`returns`** Reduced count.
+Ƭ **DefinitionsByLocale**: `Rec`<`LocaleName`, [`Definitions`](../classes/facade_implementations_lang_dictionary_Definitions.Definitions.md)\>

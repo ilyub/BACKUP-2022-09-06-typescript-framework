@@ -1,1 +1,4 @@
-module.exports = { dirs: ["./src"] };
+module.exports = {
+  dirs: ["./configs", "./src", "./tests"],
+  scopes: ["configs"]
+};

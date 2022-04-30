@@ -1,25 +1,24 @@
+import type { FirstDayOfWeek } from "./core";
 import type { datetime } from "@skylib/facades";
-import type { NumStr, strings } from "@skylib/functions";
-export declare const formatStrings: strings;
-export declare const moduleConfig: Configuration;
+import type { NumStr } from "@skylib/functions";
 export declare class DateTime implements datetime.DateTime {
     /**
      * Creates class instance.
      *
-     * @param dt - Date/time.
+     * @param date - Date.
      */
-    constructor(dt?: Date | datetime.DateTime | NumStr);
+    constructor(date?: Date | datetime.DateTime | NumStr);
     add(amount: number, unit: datetime.Unit): datetime.DateTime;
     clone(): datetime.DateTime;
     dayOfMonth(): number;
     dayOfWeek(): number;
-    format(fmt: string): string;
+    format(format: string): string;
     hours(): number;
-    isSameDayOfMonth(dt: datetime.DateTime): boolean;
-    isSameHour(dt: datetime.DateTime): boolean;
-    isSameMinute(dt: datetime.DateTime): boolean;
-    isSameMonth(dt: datetime.DateTime): boolean;
-    isSameYear(dt: datetime.DateTime): boolean;
+    isSameDayOfMonth(date: datetime.DateTime): boolean;
+    isSameHour(date: datetime.DateTime): boolean;
+    isSameMinute(date: datetime.DateTime): boolean;
+    isSameMonth(date: datetime.DateTime): boolean;
+    isSameYear(date: datetime.DateTime): boolean;
     minutes(): number;
     month(): number;
     setDayOfMonth(day: number): datetime.DateTime;
@@ -44,22 +43,4 @@ export declare class DateTime implements datetime.DateTime {
     year(): number;
     protected value: Date;
 }
-export interface Configuration {
-    readonly firstDayOfWeek: FirstDayOfWeek;
-    readonly locale: Locale;
-    readonly pm: boolean;
-}
-export declare type FirstDayOfWeek = 0 | 1;
-/**
- * Configures plugin.
- *
- * @param config - Plugin configuration.
- */
-export declare function configure(config: Partial<Configuration>): void;
-/**
- * Returns plugin configuration.
- *
- * @returns Plugin configuration.
- */
-export declare function getConfiguration(): Configuration;
 //# sourceMappingURL=DateTime.d.ts.map

@@ -1,23 +1,27 @@
 import type { faker } from "@skylib/facades";
-export declare const loremIpsumWrapper: Configurable & faker.Facade;
-export interface Configurable {
-    /**
-     * Configures plugin.
-     *
-     * @param config - Plugin configuration.
-     */
-    readonly configure: (config: Partial<Configuration>) => void;
-    /**
-     * Returns plugin configuration.
-     *
-     * @returns Plugin configuration.
-     */
-    readonly getConfiguration: () => Configuration;
-}
-export interface Configuration {
-    readonly maxSentences: number;
-    readonly maxWords: number;
-    readonly minSentences: number;
-    readonly minWords: number;
+export declare const loremIpsumWrapper: faker.Facade & loremIpsumWrapper.Configurable;
+export declare namespace loremIpsumWrapper {
+    interface Configurable {
+        /**
+         * Configures plugin.
+         *
+         * @param config - Plugin configuration.
+         */
+        readonly configure: (config: PartialConfiguration) => void;
+        /**
+         * Returns plugin configuration.
+         *
+         * @returns Plugin configuration.
+         */
+        readonly getConfiguration: () => Configuration;
+    }
+    interface Configuration {
+        readonly maxSentences: number;
+        readonly maxWords: number;
+        readonly minSentences: number;
+        readonly minWords: number;
+    }
+    interface PartialConfiguration extends Partial<Configuration> {
+    }
 }
 //# sourceMappingURL=lorem-ipsum-wrapper.d.ts.map

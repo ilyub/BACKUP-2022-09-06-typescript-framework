@@ -1,3 +1,2 @@
-import * as dateFnsWrapper_1 from "./date-fns-wrapper";
-export { dateFnsWrapper_1 as dateFnsWrapper };
+export { dateFnsWrapper } from "./date-fns-wrapper";
 //# sourceMappingURL=index.js.map

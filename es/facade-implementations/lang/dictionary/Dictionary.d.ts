@@ -1,15 +1,9 @@
+import type { Definitions } from "./Definitions";
 import type { lang } from "@skylib/facades";
 import type { LocaleName, NumStr, Rec } from "@skylib/functions";
-import type { Definitions } from "./Definitions";
 export declare class Dictionary implements lang.Dictionary<lang.Context> {
     /**
-     * Configures plugin.
-     *
-     * @param config - Plugin configuration.
-     */
-    static configure(config: Partial<Dictionary.Configuration>): void;
-    /**
-     * Creates class instance.
+     * Creates dictionary.
      *
      * @param definitions - Language definitions.
      * @param context - Context.
@@ -17,12 +11,6 @@ export declare class Dictionary implements lang.Dictionary<lang.Context> {
      * @returns Dictionary.
      */
     static create(definitions: Rec<LocaleName, Definitions>, context?: lang.Context, count?: number): lang.Facade;
-    /**
-     * Returns plugin configuration.
-     *
-     * @returns Plugin configuration.
-     */
-    static getConfiguration(): Dictionary.Configuration;
     context(context: lang.Context): lang.Facade;
     get(key: string): string;
     has(key: string): boolean;
@@ -31,8 +19,8 @@ export declare class Dictionary implements lang.Dictionary<lang.Context> {
     protected readonly _context: lang.Context | undefined;
     protected readonly count: number;
     protected readonly definitions: Rec<LocaleName, Definitions>;
-    protected readonly proxified: lang.Facade;
-    protected readonly subsPool: Map<NumStr, lang.Facade>;
+    protected readonly facade: lang.Facade;
+    protected readonly subs: Map<NumStr, lang.Facade>;
     /**
      * Creates class instance.
      *
@@ -42,16 +30,11 @@ export declare class Dictionary implements lang.Dictionary<lang.Context> {
      */
     protected constructor(definitions: Rec<LocaleName, Definitions>, context?: lang.Context, count?: number);
     /**
-     * Reduces count for plural word form.
+     * Reduces count for plural form.
      *
      * @param count - Count.
      * @returns Reduced count.
      */
     protected pluralReduce(count: number): number;
-}
-export declare namespace Dictionary {
-    interface Configuration {
-        readonly localeName: LocaleName;
-    }
 }
 //# sourceMappingURL=Dictionary.d.ts.map

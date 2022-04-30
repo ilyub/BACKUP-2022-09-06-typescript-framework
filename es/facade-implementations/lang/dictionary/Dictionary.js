@@ -1,5 +1,5 @@
-import { reactiveStorage } from "@skylib/facades";
-import { assert, cast, fn, onDemand, wrapProxyHandler, o, reflect, s } from "@skylib/functions";
+import { moduleConfig } from "./core";
+import { assert, cast, fn, wrapProxyHandler, reflect, s } from "@skylib/functions";
 export class Dictionary {
     /**
      * Creates class instance.
@@ -27,13 +27,13 @@ export class Dictionary {
             writable: true,
             value: void 0
         });
-        Object.defineProperty(this, "proxified", {
+        Object.defineProperty(this, "facade", {
             enumerable: true,
             configurable: true,
             writable: true,
             value: void 0
         });
-        Object.defineProperty(this, "subsPool", {
+        Object.defineProperty(this, "subs", {
             enumerable: true,
             configurable: true,
             writable: true,
@@ -42,30 +42,19 @@ export class Dictionary {
         this._context = context;
         this.count = count;
         this.definitions = definitions;
-        this.proxified = fn.run(() => {
-            const handler = wrapProxyHandler("Dictionary", "throw", {
+        this.facade = fn.run(() => {
+            const handler = wrapProxyHandler("Dictionary", "doDefault", {
                 get(target, key) {
-                    assert.string(key, "Expecting string key");
+                    assert.string(key);
                     return target.has(key) ? target.get(key) : reflect.get(target, key);
-                },
-                getOwnPropertyDescriptor(target, key) {
-                    return Object.getOwnPropertyDescriptor(target, key);
                 }
             });
-            // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
+            // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
             return new Proxy(this, handler);
         });
     }
     /**
-     * Configures plugin.
-     *
-     * @param config - Plugin configuration.
-     */
-    static configure(config) {
-        o.assign(moduleConfig, config);
-    }
-    /**
-     * Creates class instance.
+     * Creates dictionary.
      *
      * @param definitions - Language definitions.
      * @param context - Context.
@@ -73,82 +62,69 @@ export class Dictionary {
      * @returns Dictionary.
      */
     static create(definitions, context, count) {
-        return new Dictionary(definitions, context, count).proxified;
-    }
-    /**
-     * Returns plugin configuration.
-     *
-     * @returns Plugin configuration.
-     */
-    static getConfiguration() {
-        return o.clone(moduleConfig);
+        return new Dictionary(definitions, context, count).facade;
     }
     context(context) {
         if (context === this._context)
-            return this.proxified;
-        let sub = this.subsPool.get(context);
+            return this.facade;
+        let sub = this.subs.get(context);
         if (sub) {
             // Already exists
         }
         else {
             sub = Dictionary.create(this.definitions, context, this.count);
-            this.subsPool.set(context, sub);
+            this.subs.set(context, sub);
         }
         return sub;
     }
     get(key) {
         const definitions = this.definitions[moduleConfig.localeName];
-        assert.not.empty(definitions, `Missing dictionary for locale: ${moduleConfig.localeName}`);
-        return definitions.get(key, this._context, [], this.count, replacementsPool)
-            .value;
+        return definitions.get(key, this._context, this.count, replacements).value;
     }
     has(key) {
         const definitions = this.definitions[moduleConfig.localeName];
-        assert.not.empty(definitions, `Missing dictionary for locale: ${moduleConfig.localeName}`);
         return definitions.has(key);
     }
     plural(count) {
         count = this.pluralReduce(count);
         if (count === this.count)
-            return this.proxified;
-        let sub = this.subsPool.get(count);
+            return this.facade;
+        let sub = this.subs.get(count);
         if (sub) {
             // Already exists
         }
         else {
             sub = Dictionary.create(this.definitions, this._context, count);
-            this.subsPool.set(count, sub);
+            this.subs.set(count, sub);
         }
         return sub;
     }
     with(search, replace) {
         switch (typeof replace) {
             case "number":
-                replacementsPool.set(search.toUpperCase(), cast.string(replace));
-                replacementsPool.set(search.toLowerCase(), cast.string(replace));
-                replacementsPool.set(s.ucFirst(search), cast.string(replace));
-                replacementsPool.set(s.lcFirst(search), cast.string(replace));
-                return this.proxified;
+                replacements.set(search.toUpperCase(), cast.string(replace));
+                replacements.set(search.toLowerCase(), cast.string(replace));
+                replacements.set(s.ucFirst(search), cast.string(replace));
+                replacements.set(s.lcFirst(search), cast.string(replace));
+                break;
             case "string":
-                replacementsPool.set(search.toUpperCase(), replace.toUpperCase());
-                replacementsPool.set(search.toLowerCase(), replace.toLowerCase());
-                replacementsPool.set(s.ucFirst(search), s.ucFirst(replace));
-                replacementsPool.set(s.lcFirst(search), s.lcFirst(replace));
-                return this.proxified;
+                replacements.set(search.toUpperCase(), replace.toUpperCase());
+                replacements.set(search.toLowerCase(), replace.toLowerCase());
+                replacements.set(s.ucFirst(search), s.ucFirst(replace));
+                replacements.set(s.lcFirst(search), s.lcFirst(replace));
         }
+        return this.facade;
     }
     /**
-     * Reduces count for plural word form.
+     * Reduces count for plural form.
      *
      * @param count - Count.
      * @returns Reduced count.
      */
     pluralReduce(count) {
         const definitions = this.definitions[moduleConfig.localeName];
-        assert.not.empty(definitions, `Missing dictionary for locale: ${moduleConfig.localeName}`);
         return definitions.pluralReduce(count);
     }
 }
-const moduleConfig = onDemand(() => reactiveStorage({ localeName: "en-US" }));
-const replacementsPool = new Map();
+const replacements = new Map();
 //# sourceMappingURL=Dictionary.js.map

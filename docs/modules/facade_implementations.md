@@ -63,19 +63,19 @@ ___
 
 ### handlePromise
 
-Renames and re-exports [facade-implementations/handlePromise](facade_implementations_handlePromise.md)
+Renames and re-exports [facade-implementations/handle-promise](facade_implementations_handle_promise.md)
 
 ___
 
 ### httpRequest
 
-Renames and re-exports [facade-implementations/httpRequest](facade_implementations_httpRequest.md)
+Renames and re-exports [facade-implementations/http-request](facade_implementations_http_request.md)
 
 ___
 
 ### inlineSearch
 
-Renames and re-exports [facade-implementations/inlineSearch](facade_implementations_inlineSearch.md)
+Renames and re-exports [facade-implementations/inline-search](facade_implementations_inline_search.md)
 
 ___
 
@@ -87,34 +87,34 @@ ___
 
 ### progressReporter
 
-Renames and re-exports [facade-implementations/progressReporter](facade_implementations_progressReporter.md)
+Renames and re-exports [facade-implementations/progress-reporter](facade_implementations_progress_reporter.md)
 
 ___
 
 ### reactiveStorage
 
-Renames and re-exports [facade-implementations/reactiveStorage](facade_implementations_reactiveStorage.md)
+Renames and re-exports [facade-implementations/reactive-storage](facade_implementations_reactive_storage.md)
 
 ___
 
 ### showAlert
 
-Renames and re-exports [facade-implementations/showAlert](facade_implementations_showAlert.md)
+Renames and re-exports [facade-implementations/show-alert](facade_implementations_show_alert.md)
 
 ___
 
 ### showConfirm
 
-Renames and re-exports [facade-implementations/showConfirm](facade_implementations_showConfirm.md)
+Renames and re-exports [facade-implementations/show-confirm](facade_implementations_show_confirm.md)
 
 ___
 
 ### testDelay
 
-Renames and re-exports [facade-implementations/testDelay](facade_implementations_testDelay.md)
+Renames and re-exports [facade-implementations/test-delay](facade_implementations_test_delay.md)
 
 ___
 
 ### uniqueId
 
-Renames and re-exports [facade-implementations/uniqueId](facade_implementations_uniqueId.md)
+Renames and re-exports [facade-implementations/unique-id](facade_implementations_unique_id.md)

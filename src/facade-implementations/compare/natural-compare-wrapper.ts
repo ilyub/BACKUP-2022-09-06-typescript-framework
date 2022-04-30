@@ -1,16 +1,9 @@
-import { o } from "@skylib/functions";
+import { defineFn } from "@skylib/functions";
 import naturalCompare from "natural-compare";
 import type { compare } from "@skylib/facades";
 
-export const implementation: compare.Facade = o.extend(
-  (x: unknown, y: unknown): number => {
-    // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
-    if ((x as number) > (y as number)) return 1;
-
-    // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
-    if ((x as number) < (y as number)) return -1;
-
-    return 0;
-  },
+export const naturalCompareWrapper: compare.Facade = defineFn(
+  // eslint-disable-next-line @skylib/require-jsdoc, no-type-assertion/no-type-assertion -- Ok
+  (x: unknown, y: unknown) => Math.sign((x as number) - (y as number)),
   { strings: naturalCompare }
 );

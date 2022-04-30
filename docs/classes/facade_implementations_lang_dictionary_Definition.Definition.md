@@ -18,7 +18,7 @@
 - [rulesRefDependent](facade_implementations_lang_dictionary_Definition.Definition.md#rulesrefdependent)
 - [rulesRefSecondary](facade_implementations_lang_dictionary_Definition.Definition.md#rulesrefsecondary)
 - [rulesVal](facade_implementations_lang_dictionary_Definition.Definition.md#rulesval)
-- [rulesWord](facade_implementations_lang_dictionary_Definition.Definition.md#rulesword)
+- [rulesWordDependent](facade_implementations_lang_dictionary_Definition.Definition.md#rulesworddependent)
 - [rulesWordSecondary](facade_implementations_lang_dictionary_Definition.Definition.md#ruleswordsecondary)
 - [sub](facade_implementations_lang_dictionary_Definition.Definition.md#sub)
 - [subs](facade_implementations_lang_dictionary_Definition.Definition.md#subs)
@@ -26,12 +26,6 @@
 
 ### Methods
 
-- [applyRulesRef](facade_implementations_lang_dictionary_Definition.Definition.md#applyrulesref)
-- [applyRulesRefDependent](facade_implementations_lang_dictionary_Definition.Definition.md#applyrulesrefdependent)
-- [applyRulesRefSecondary](facade_implementations_lang_dictionary_Definition.Definition.md#applyrulesrefsecondary)
-- [applyRulesVal](facade_implementations_lang_dictionary_Definition.Definition.md#applyrulesval)
-- [applyRulesWord](facade_implementations_lang_dictionary_Definition.Definition.md#applyrulesword)
-- [applyRulesWordSecondary](facade_implementations_lang_dictionary_Definition.Definition.md#applyruleswordsecondary)
 - [get](facade_implementations_lang_dictionary_Definition.Definition.md#get)
 
 ## Constructors
@@ -46,7 +40,7 @@ Creates class instance.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `raw` | [`RawDefinition`](../modules/facade_implementations_lang_dictionary_types.md#rawdefinition) | Raw definition. |
+| `raw` | [`RawDefinition`](../modules/facade_implementations_lang_dictionary_core.md#rawdefinition) | Raw definition. |
 | `id` | `NumStr` | ID. |
 
 ## Properties
@@ -65,43 +59,43 @@ ___
 
 ### rulesRef
 
-• `Protected` `Readonly` **rulesRef**: readonly `strings`[]
+• `Protected` `Readonly` **rulesRef**: [`Rules`](../modules/facade_implementations_lang_dictionary_core.md#rules)
 
 ___
 
 ### rulesRefDependent
 
-• `Protected` `Readonly` **rulesRefDependent**: readonly `strings`[]
+• `Protected` `Readonly` **rulesRefDependent**: [`Rules`](../modules/facade_implementations_lang_dictionary_core.md#rules)
 
 ___
 
 ### rulesRefSecondary
 
-• `Protected` `Readonly` **rulesRefSecondary**: readonly `strings`[]
+• `Protected` `Readonly` **rulesRefSecondary**: [`Rules`](../modules/facade_implementations_lang_dictionary_core.md#rules)
 
 ___
 
 ### rulesVal
 
-• `Protected` `Readonly` **rulesVal**: readonly `strings`[]
+• `Protected` `Readonly` **rulesVal**: [`Rules`](../modules/facade_implementations_lang_dictionary_core.md#rules)
 
 ___
 
-### rulesWord
+### rulesWordDependent
 
-• `Protected` `Readonly` **rulesWord**: readonly `strings`[]
+• `Protected` `Readonly` **rulesWordDependent**: [`Rules`](../modules/facade_implementations_lang_dictionary_core.md#rules)
 
 ___
 
 ### rulesWordSecondary
 
-• `Protected` `Readonly` **rulesWordSecondary**: readonly `strings`[]
+• `Protected` `Readonly` **rulesWordSecondary**: [`Rules`](../modules/facade_implementations_lang_dictionary_core.md#rules)
 
 ___
 
 ### sub
 
-• `Protected` `Readonly` **sub**: `undefined` \| [`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md) = `undefined`
+• `Protected` `Readonly` **sub**: `undefined` \| [`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)
 
 ___
 
@@ -117,137 +111,11 @@ ___
 
 ## Methods
 
-### applyRulesRef
-
-▸ `Protected` **applyRulesRef**(`word`, `owner`): [`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md)
-
-Applies rules to the word.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `word` | [`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md) | Word. |
-| `owner` | [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md) | Parent object. |
-
-#### Returns
-
-[`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md)
-
-Modified word.
-
-___
-
-### applyRulesRefDependent
-
-▸ `Protected` **applyRulesRefDependent**(`word`, `owner`): [`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md)
-
-Applies rules to the word.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `word` | [`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md) | Word. |
-| `owner` | [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md) | Parent object. |
-
-#### Returns
-
-[`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md)
-
-Modified word.
-
-___
-
-### applyRulesRefSecondary
-
-▸ `Protected` **applyRulesRefSecondary**(`word`, `owner`): [`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md)
-
-Applies rules to the word.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `word` | [`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md) | Word. |
-| `owner` | [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md) | Parent object. |
-
-#### Returns
-
-[`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md)
-
-Modified word.
-
-___
-
-### applyRulesVal
-
-▸ `Protected` **applyRulesVal**(`word`): [`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md)
-
-Applies rules to the word.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `word` | [`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md) | Word. |
-
-#### Returns
-
-[`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md)
-
-Modified word.
-
-___
-
-### applyRulesWord
-
-▸ `Protected` **applyRulesWord**(`word`, `owner`): [`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md)
-
-Applies rules to the word.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `word` | [`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md) | Word. |
-| `owner` | [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md) | Parent object. |
-
-#### Returns
-
-[`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md)
-
-Modified word.
-
-___
-
-### applyRulesWordSecondary
-
-▸ `Protected` **applyRulesWordSecondary**(`word`, `owner`): [`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md)
-
-Applies rules to the word.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `word` | [`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md) | Word. |
-| `owner` | [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md) | Parent object. |
-
-#### Returns
-
-[`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md)
-
-Modified word.
-
-___
-
 ### get
 
-▸ **get**(`owner`, `context`, `forms`, `count`, `replacements`): [`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md)
+▸ **get**(`owner`, `context`, `count`, `replacements`, `forms`): [`WordInfo`](../interfaces/facade_implementations_lang_dictionary_core.WordInfo.md)
 
-Returns word based on context, word forms, and count.
-Applies replacements.
+Returns word based on context, count, and replacements.
 
 #### Parameters
 
@@ -255,12 +123,12 @@ Applies replacements.
 | :------ | :------ | :------ |
 | `owner` | [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md) | Parent object. |
 | `context` | `undefined` \| ``"InXDays"`` | Context. |
-| `forms` | `strings` | Word form. |
 | `count` | `number` | Count for plural form. |
 | `replacements` | `ReadonlyMap`<`string`, `string`\> | Replacements. |
+| `forms` | `strings` | Candidate word forms. |
 
 #### Returns
 
-[`WordInfo`](../interfaces/facade_implementations_lang_dictionary_types.WordInfo.md)
+[`WordInfo`](../interfaces/facade_implementations_lang_dictionary_core.WordInfo.md)
 
 Word.

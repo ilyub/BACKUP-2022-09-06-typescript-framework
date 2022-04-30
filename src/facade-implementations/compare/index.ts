@@ -1,1 +1,2 @@
-export { implementation as naturalCompare } from "./natural-compare-wrapper";
+// eslint-disable-next-line @skylib/only-export-name -- Wait for @skylib/eslint-plugin update
+export { naturalCompareWrapper } from "./natural-compare-wrapper";

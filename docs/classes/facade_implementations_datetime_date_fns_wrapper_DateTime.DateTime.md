@@ -58,7 +58,7 @@
 
 ### constructor
 
-• **new DateTime**(`dt?`)
+• **new DateTime**(`date?`)
 
 Creates class instance.
 
@@ -66,7 +66,7 @@ Creates class instance.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `dt?` | `Date` \| `DateTime` \| `NumStr` | Date/time. |
+| `date?` | `Date` \| `DateTime` \| `NumStr` | Date. |
 
 ## Properties
 
@@ -141,13 +141,13 @@ ___
 
 ### format
 
-▸ **format**(`fmt`): `string`
+▸ **format**(`format`): `string`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `fmt` | `string` |
+| `format` | `string` |
 
 #### Returns
 
@@ -175,13 +175,13 @@ ___
 
 ### isSameDayOfMonth
 
-▸ **isSameDayOfMonth**(`dt`): `boolean`
+▸ **isSameDayOfMonth**(`date`): `boolean`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `dt` | `DateTime` |
+| `date` | `DateTime` |
 
 #### Returns
 
@@ -195,13 +195,13 @@ ___
 
 ### isSameHour
 
-▸ **isSameHour**(`dt`): `boolean`
+▸ **isSameHour**(`date`): `boolean`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `dt` | `DateTime` |
+| `date` | `DateTime` |
 
 #### Returns
 
@@ -215,13 +215,13 @@ ___
 
 ### isSameMinute
 
-▸ **isSameMinute**(`dt`): `boolean`
+▸ **isSameMinute**(`date`): `boolean`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `dt` | `DateTime` |
+| `date` | `DateTime` |
 
 #### Returns
 
@@ -235,13 +235,13 @@ ___
 
 ### isSameMonth
 
-▸ **isSameMonth**(`dt`): `boolean`
+▸ **isSameMonth**(`date`): `boolean`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `dt` | `DateTime` |
+| `date` | `DateTime` |
 
 #### Returns
 
@@ -255,13 +255,13 @@ ___
 
 ### isSameYear
 
-▸ **isSameYear**(`dt`): `boolean`
+▸ **isSameYear**(`date`): `boolean`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `dt` | `DateTime` |
+| `date` | `DateTime` |
 
 #### Returns
 
@@ -330,7 +330,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `day` | `number` |
-| `weekStartsOn` | [`FirstDayOfWeek`](../modules/facade_implementations_datetime_date_fns_wrapper_DateTime.md#firstdayofweek) |
+| `weekStartsOn` | [`FirstDayOfWeek`](../modules/facade_implementations_datetime_date_fns_wrapper_core.md#firstdayofweek) |
 
 #### Returns
 
@@ -486,7 +486,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `weekStartsOn` | [`FirstDayOfWeek`](../modules/facade_implementations_datetime_date_fns_wrapper_DateTime.md#firstdayofweek) |
+| `weekStartsOn` | [`FirstDayOfWeek`](../modules/facade_implementations_datetime_date_fns_wrapper_core.md#firstdayofweek) |
 
 #### Returns
 

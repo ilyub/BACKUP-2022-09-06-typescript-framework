@@ -1,10 +1,11 @@
+/* eslint-disable @skylib/consistent-filename -- Ok */
+
 import { implementations } from "@";
-import { google } from "@skylib/facades";
-import { assert, AssertionError } from "@skylib/functions";
+import { as, assert, AssertionError, fn } from "@skylib/functions";
 import $ from "jquery";
 import type { stringU, unknowns } from "@skylib/functions";
 
-const Google = implementations.google.Google;
+const { Google } = implementations.google;
 
 const getScript = jest
   .spyOn($, "getScript")
@@ -12,146 +13,135 @@ const getScript = jest
     assert.toBeTrue(args.length === 1);
     assert.toBeTrue(args[0] === "https://apis.google.com/js/api:client.js");
 
-    let clientId: stringU;
+    return {} as JQuery.jqXHR<stringU>;
+  });
 
-    // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
-    globalThis.gapi = {
-      auth2: {
-        init(params) {
-          clientId = params.client_id;
+globalThis.gapi = fn.run(() => {
+  return {
+    auth2: {
+      init(params) {
+        const clientId = params.client_id;
 
-          // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
-          const user = {
-            getAuthResponse() {
-              assert.not.empty(clientId);
+        const user = {
+          getAuthResponse() {
+            return { id_token: as.not.empty(clientId) };
+          }
+        } as gapi.auth2.GoogleUser;
 
-              return { id_token: `access-token-${clientId}` };
-            }
-          } as gapi.auth2.GoogleUser;
+        return {
+          then(
+            onInit: (googleAuth: gapi.auth2.GoogleAuthBase) => void,
+            onFailure: (reason: Reason) => void
+          ): void {
+            if (clientId === "init_error")
+              onFailure({ details: "Init error", error: "init_error" });
+            else
+              onInit({
+                currentUser: {
+                  get() {
+                    return user;
+                  }
+                },
+                isSignedIn: {
+                  get() {
+                    return clientId === "signedIn";
+                  }
+                },
+                async signIn() {
+                  await Promise.resolve();
 
-          // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
-          return {
-            // eslint-disable-next-line unicorn/no-thenable -- ???
-            then(
-              onInit: (googleAuth: gapi.auth2.GoogleAuth) => void,
-              onFailure: (reason: Reason) => void
-            ) {
-              if (clientId === "init_error")
-                onFailure({ details: "Init error", error: "init_error" });
-              else {
-                // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
-                const googleAuth = {
-                  currentUser: {
-                    get() {
-                      return user;
-                    }
-                  },
-                  isSignedIn: {
-                    get() {
-                      return params.client_id === "signedIn";
-                    }
-                  },
-                  async signIn() {
-                    await Promise.resolve();
-
-                    if (clientId === "popup_closed_by_user")
-                      // eslint-disable-next-line @typescript-eslint/no-throw-literal, etc/throw-error -- ???
+                  switch (clientId) {
+                    case "popup_closed_by_user":
                       throw {
                         details: "Popup closed by user",
                         error: "popup_closed_by_user"
                       };
 
-                    if (clientId === "unknown_error")
+                    case "unknown_error":
                       throw new Error("Unknown error");
 
-                    return user;
+                    default:
+                      return user;
                   }
-                } as gapi.auth2.GoogleAuth;
-
-                onInit(googleAuth);
-              }
-            }
-          } as unknown as gapi.auth2.GoogleAuth;
-        }
-      },
-      load(apiName, callback) {
-        assert.toBeTrue(apiName === "auth2");
-        assert.callable(callback);
-        callback();
+                }
+              } as gapi.auth2.GoogleAuthBase);
+          }
+        };
       }
-    } as typeof gapi;
+    },
+    load(apiName, callback) {
+      assert.toBeTrue(apiName === "auth2");
+      assert.callable(callback);
+      callback();
+    }
+  } as typeof gapi;
 
-    // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
-    return {} as JQuery.jqXHR<stringU>;
-  });
+  interface Reason {
+    details: string;
+    error: string;
+  }
+});
 
-interface Reason {
-  details: string;
-  error: string;
-}
+test("Google.idToken", async () => {
+  const google = new Google(undefined);
 
-test("google.idToken", async () => {
   const error = new AssertionError("Missing Google client ID");
 
   await expect(google.idToken()).rejects.toStrictEqual(error);
 });
 
-test("google.idToken: init_error", async () => {
+test("Google.idToken: init_error", async () => {
   const clientId = "init_error";
+
+  const google = new Google(clientId);
 
   const error = new Error("Error init_error: Init error");
 
-  google.setImplementation(new Google(clientId));
   await expect(google.idToken()).rejects.toStrictEqual(error);
 });
 
-test("google.idToken: popup_closed_by_user", async () => {
+test("Google.idToken: popup_closed_by_user", async () => {
   const clientId = "popup_closed_by_user";
 
-  google.setImplementation(new Google(clientId));
+  const google = new Google(clientId);
+
   await expect(google.idToken()).resolves.toBeUndefined();
 });
 
-test("google.idToken: signIn", async () => {
+test("Google.idToken: signIn", async () => {
   const clientId = "signIn";
 
-  const accessToken = `access-token-${clientId}`;
+  const google = new Google(clientId);
 
-  google.setImplementation(new Google(clientId));
-  await expect(google.idToken()).resolves.toStrictEqual(accessToken);
+  await expect(google.idToken()).resolves.toStrictEqual(clientId);
 });
 
-test("google.idToken: signedIn", async () => {
+test("Google.idToken: signedIn", async () => {
   const clientId = "signedIn";
 
-  const accessToken = `access-token-${clientId}`;
+  const google = new Google(clientId);
 
-  google.setImplementation(new Google(clientId));
-  await expect(google.idToken()).resolves.toStrictEqual(accessToken);
+  await expect(google.idToken()).resolves.toStrictEqual(clientId);
 });
 
-test("google.idToken: unknown_error", async () => {
+test("Google.idToken: unknown_error", async () => {
   const clientId = "unknown_error";
+
+  const google = new Google(clientId);
 
   const error = new Error("Unknown error");
 
-  google.setImplementation(new Google(clientId));
   await expect(google.idToken()).rejects.toStrictEqual(error);
 });
 
-test("google.loadSdk", async () => {
-  google.setImplementation(new Google(clientId));
+test("Google.loadSdk", async () => {
+  const google = new Google(clientId);
 
-  {
-    expect(getScript).not.toHaveBeenCalled();
-    await google.loadSdk();
-    expect(getScript).toHaveBeenCalledTimes(1);
-  }
-
-  {
-    await google.loadSdk();
-    expect(getScript).toHaveBeenCalledTimes(1);
-  }
+  expect(getScript).not.toHaveBeenCalled();
+  await google.loadSdk();
+  expect(getScript).toHaveBeenCalledTimes(1);
+  await google.loadSdk();
+  expect(getScript).toHaveBeenCalledTimes(1);
 
   async function clientId(): Promise<stringU> {
     await Promise.resolve();

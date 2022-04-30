@@ -37,7 +37,7 @@ Creates class instance.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `appId` | `stringU` \| `AsyncPromise`<`stringU`, `nevers`\> | Facebook app ID. |
+| `appId` | `stringU` \| `AsyncPromise`<`stringU`, `nevers`\> | App ID. |
 | `version` | `string` | Version. |
 
 ## Properties
@@ -50,7 +50,7 @@ ___
 
 ### sdk
 
-• `Protected` **sdk**: `undefined` \| `Promise`<`void`\> = `undefined`
+• `Protected` **sdk**: `undefined` \| `Promise`<`void`\>
 
 ___
 

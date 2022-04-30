@@ -18,28 +18,33 @@ export class Google {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: undefined
+            value: void 0
         });
         this.clientId = clientId;
     }
     async idToken() {
+        const sdk = await this._loadSdk();
         try {
-            await this.loadSdk();
-            assert.not.empty(this.sdk);
-            const sdk = await this.sdk;
             const user = sdk.isSignedIn.get()
                 ? sdk.currentUser.get()
                 : await sdk.signIn();
             return user.getAuthResponse().id_token;
         }
         catch (e) {
-            if (is.object.of(e, { error: is.string }, {}) &&
-                e.error === "popup_closed_by_user")
+            if (is.indexedObject(e) && e["error"] === "popup_closed_by_user")
                 return undefined;
             throw e;
         }
     }
     async loadSdk() {
+        await this._loadSdk();
+    }
+    /**
+     * Loads SDK.
+     *
+     * @returns SDK.
+     */
+    async _loadSdk() {
         var _a;
         this.sdk =
             (_a = this.sdk) !== null && _a !== void 0 ? _a : fn.run(async () => {
@@ -50,7 +55,7 @@ export class Google {
                 assert.not.empty(clientId, "Missing Google client ID");
                 return await new Promise((resolve, reject) => {
                     gapi.load("auth2", () => {
-                        // eslint-disable-next-line github/no-then -- ???
+                        // eslint-disable-next-line github/no-then -- Ok
                         gapi.auth2.init({ client_id: clientId }).then(googleAuth => {
                             resolve(googleAuth);
                         }, e => {
@@ -59,7 +64,7 @@ export class Google {
                     });
                 });
             });
-        await this.sdk;
+        return await this.sdk;
     }
 }
 //# sourceMappingURL=Google.js.map

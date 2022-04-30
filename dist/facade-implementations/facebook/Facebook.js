@@ -8,7 +8,7 @@ class Facebook {
     /**
      * Creates class instance.
      *
-     * @param appId - Facebook app ID.
+     * @param appId - App ID.
      * @param version - Version.
      */
     constructor(appId, version) {
@@ -23,7 +23,7 @@ class Facebook {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: undefined
+            value: void 0
         });
         Object.defineProperty(this, "version", {
             enumerable: true,

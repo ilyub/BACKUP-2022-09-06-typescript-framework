@@ -1,11 +1,9 @@
-import { reactiveStorage } from "@skylib/facades";
+import { moduleConfig } from "./core";
 import {
   assert,
   cast,
   fn,
-  onDemand,
   wrapProxyHandler,
-  o,
   reflect,
   s
 } from "@skylib/functions";
@@ -15,16 +13,7 @@ import type { LocaleName, NumStr, Rec } from "@skylib/functions";
 
 export class Dictionary implements lang.Dictionary<lang.Context> {
   /**
-   * Configures plugin.
-   *
-   * @param config - Plugin configuration.
-   */
-  public static configure(config: Partial<Dictionary.Configuration>): void {
-    o.assign(moduleConfig, config);
-  }
-
-  /**
-   * Creates class instance.
+   * Creates dictionary.
    *
    * @param definitions - Language definitions.
    * @param context - Context.
@@ -36,28 +25,19 @@ export class Dictionary implements lang.Dictionary<lang.Context> {
     context?: lang.Context,
     count?: number
   ): lang.Facade {
-    return new Dictionary(definitions, context, count).proxified;
-  }
-
-  /**
-   * Returns plugin configuration.
-   *
-   * @returns Plugin configuration.
-   */
-  public static getConfiguration(): Dictionary.Configuration {
-    return o.clone(moduleConfig);
+    return new Dictionary(definitions, context, count).facade;
   }
 
   public context(context: lang.Context): lang.Facade {
-    if (context === this._context) return this.proxified;
+    if (context === this._context) return this.facade;
 
-    let sub = this.subsPool.get(context);
+    let sub = this.subs.get(context);
 
     if (sub) {
       // Already exists
     } else {
       sub = Dictionary.create(this.definitions, context, this.count);
-      this.subsPool.set(context, sub);
+      this.subs.set(context, sub);
     }
 
     return sub;
@@ -66,22 +46,11 @@ export class Dictionary implements lang.Dictionary<lang.Context> {
   public get(key: string): string {
     const definitions = this.definitions[moduleConfig.localeName];
 
-    assert.not.empty(
-      definitions,
-      `Missing dictionary for locale: ${moduleConfig.localeName}`
-    );
-
-    return definitions.get(key, this._context, [], this.count, replacementsPool)
-      .value;
+    return definitions.get(key, this._context, this.count, replacements).value;
   }
 
   public has(key: string): boolean {
     const definitions = this.definitions[moduleConfig.localeName];
-
-    assert.not.empty(
-      definitions,
-      `Missing dictionary for locale: ${moduleConfig.localeName}`
-    );
 
     return definitions.has(key);
   }
@@ -89,15 +58,15 @@ export class Dictionary implements lang.Dictionary<lang.Context> {
   public plural(count: number): lang.Facade {
     count = this.pluralReduce(count);
 
-    if (count === this.count) return this.proxified;
+    if (count === this.count) return this.facade;
 
-    let sub = this.subsPool.get(count);
+    let sub = this.subs.get(count);
 
     if (sub) {
       // Already exists
     } else {
       sub = Dictionary.create(this.definitions, this._context, count);
-      this.subsPool.set(count, sub);
+      this.subs.set(count, sub);
     }
 
     return sub;
@@ -106,21 +75,21 @@ export class Dictionary implements lang.Dictionary<lang.Context> {
   public with(search: string, replace: NumStr): lang.Facade {
     switch (typeof replace) {
       case "number":
-        replacementsPool.set(search.toUpperCase(), cast.string(replace));
-        replacementsPool.set(search.toLowerCase(), cast.string(replace));
-        replacementsPool.set(s.ucFirst(search), cast.string(replace));
-        replacementsPool.set(s.lcFirst(search), cast.string(replace));
+        replacements.set(search.toUpperCase(), cast.string(replace));
+        replacements.set(search.toLowerCase(), cast.string(replace));
+        replacements.set(s.ucFirst(search), cast.string(replace));
+        replacements.set(s.lcFirst(search), cast.string(replace));
 
-        return this.proxified;
+        break;
 
       case "string":
-        replacementsPool.set(search.toUpperCase(), replace.toUpperCase());
-        replacementsPool.set(search.toLowerCase(), replace.toLowerCase());
-        replacementsPool.set(s.ucFirst(search), s.ucFirst(replace));
-        replacementsPool.set(s.lcFirst(search), s.lcFirst(replace));
-
-        return this.proxified;
+        replacements.set(search.toUpperCase(), replace.toUpperCase());
+        replacements.set(search.toLowerCase(), replace.toLowerCase());
+        replacements.set(s.ucFirst(search), s.ucFirst(replace));
+        replacements.set(s.lcFirst(search), s.lcFirst(replace));
     }
+
+    return this.facade;
   }
 
   protected readonly _context: lang.Context | undefined;
@@ -129,9 +98,9 @@ export class Dictionary implements lang.Dictionary<lang.Context> {
 
   protected readonly definitions: Rec<LocaleName, Definitions>;
 
-  protected readonly proxified: lang.Facade;
+  protected readonly facade: lang.Facade;
 
-  protected readonly subsPool = new Map<NumStr, lang.Facade>();
+  protected readonly subs = new Map<NumStr, lang.Facade>();
 
   /**
    * Creates class instance.
@@ -151,25 +120,22 @@ export class Dictionary implements lang.Dictionary<lang.Context> {
 
     this.definitions = definitions;
 
-    this.proxified = fn.run(() => {
-      const handler = wrapProxyHandler<Dictionary>("Dictionary", "throw", {
+    this.facade = fn.run(() => {
+      const handler = wrapProxyHandler<Dictionary>("Dictionary", "doDefault", {
         get(target, key) {
-          assert.string(key, "Expecting string key");
+          assert.string(key);
 
           return target.has(key) ? target.get(key) : reflect.get(target, key);
-        },
-        getOwnPropertyDescriptor(target, key) {
-          return Object.getOwnPropertyDescriptor(target, key);
         }
       });
 
-      // eslint-disable-next-line no-type-assertion/no-type-assertion -- ???
+      // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
       return new Proxy(this, handler) as unknown as lang.Facade;
     });
   }
 
   /**
-   * Reduces count for plural word form.
+   * Reduces count for plural form.
    *
    * @param count - Count.
    * @returns Reduced count.
@@ -177,23 +143,8 @@ export class Dictionary implements lang.Dictionary<lang.Context> {
   protected pluralReduce(count: number): number {
     const definitions = this.definitions[moduleConfig.localeName];
 
-    assert.not.empty(
-      definitions,
-      `Missing dictionary for locale: ${moduleConfig.localeName}`
-    );
-
     return definitions.pluralReduce(count);
   }
 }
 
-export namespace Dictionary {
-  export interface Configuration {
-    readonly localeName: LocaleName;
-  }
-}
-
-const moduleConfig = onDemand(() =>
-  reactiveStorage<Dictionary.Configuration>({ localeName: "en-US" })
-);
-
-const replacementsPool = new Map<string, string>();
+const replacements = new Map<string, string>();

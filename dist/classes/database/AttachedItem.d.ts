@@ -1,7 +1,7 @@
+import type { Item } from "./Item";
 import type { database } from "@skylib/facades";
 import type { stringU } from "@skylib/functions";
-import type { Item } from "./Item";
-export declare class AttachedItem<T extends Item = Item> {
+export declare abstract class AttachedItem<T extends Item = Item> {
     readonly _deleted: boolean;
     readonly _id: number;
     readonly _rev: number;
@@ -10,11 +10,11 @@ export declare class AttachedItem<T extends Item = Item> {
     readonly softDeleted: boolean;
     readonly updatedAt: stringU;
     /**
-     * Parent ID + attached item ID.
+     * Unique combined ID.
      */
     get id(): string;
     /**
-     * Returns parent item.
+     * Parent item.
      */
     get parent(): T;
     /**
@@ -34,23 +34,23 @@ export declare class AttachedItem<T extends Item = Item> {
     /**
      * Initializes parent.
      */
-    protected getParent(): T;
+    protected abstract getParent(): T;
 }
 export declare namespace AttachedItem {
     type AttachedItems = readonly AttachedItems[];
-    interface BaseAttachedItemDoc {
+    interface BulkAttachedItemDoc extends database.BaseBulkAttachedDocument, OwnProps {
+    }
+    type BulkAttachedItemDocs = readonly BulkAttachedItemDoc[];
+    interface ExistingAttachedItemDoc extends database.BaseExistingAttachedDocument, OwnProps {
+    }
+    type ExistingAttachedItemDocs = readonly ExistingAttachedItemDoc[];
+    interface OwnProps {
         readonly createdAt?: string;
         readonly deletedAt?: string;
         readonly softDeleted?: true;
         readonly updatedAt?: string;
     }
-    interface BulkAttachedItemDoc extends database.BaseBulkAttachedDocument, BaseAttachedItemDoc {
-    }
-    type BulkAttachedItemDocs = readonly BulkAttachedItemDoc[];
-    interface ExistingAttachedItemDoc extends database.BaseExistingAttachedDocument, BaseAttachedItemDoc {
-    }
-    type ExistingAttachedItemDocs = readonly ExistingAttachedItemDoc[];
-    interface PutAttachedItemDoc extends database.BasePutAttachedDocument, BaseAttachedItemDoc {
+    interface PutAttachedItemDoc extends database.BasePutAttachedDocument, OwnProps {
     }
     type PutAttachedItemDocs = readonly PutAttachedItemDoc[];
 }

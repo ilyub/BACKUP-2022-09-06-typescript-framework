@@ -8,9 +8,9 @@
 
 ### Interfaces
 
-- [BaseAttachedItemDoc](../interfaces/classes_database_AttachedItem.AttachedItem.BaseAttachedItemDoc.md)
 - [BulkAttachedItemDoc](../interfaces/classes_database_AttachedItem.AttachedItem.BulkAttachedItemDoc.md)
 - [ExistingAttachedItemDoc](../interfaces/classes_database_AttachedItem.AttachedItem.ExistingAttachedItemDoc.md)
+- [OwnProps](../interfaces/classes_database_AttachedItem.AttachedItem.OwnProps.md)
 - [PutAttachedItemDoc](../interfaces/classes_database_AttachedItem.AttachedItem.PutAttachedItemDoc.md)
 
 ### Type aliases

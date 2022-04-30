@@ -12,4 +12,4 @@
 
 ### Google
 
-Re-exports [Google](../classes/facade_implementations_google_Google.Google.md)
+Re-exports [Google](../classes/facade_implementations_google_Google.Google-1.md)

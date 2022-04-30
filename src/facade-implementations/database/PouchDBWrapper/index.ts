@@ -1,1 +1,0 @@
-export { PouchDBWrapper } from "./PouchDBWrapper";

@@ -6,13 +6,9 @@ import type {
   RawDefinitions,
   RawLanguage,
   WordInfo
-} from "./types";
+} from "./core";
 import type { lang } from "@skylib/facades";
-import type {
-  IndexedObject,
-  strings,
-  WritableIndexedObject
-} from "@skylib/functions";
+import type { strings } from "@skylib/functions";
 
 export class Definitions {
   public readonly pluralReduce: PluralReduce;
@@ -25,53 +21,49 @@ export class Definitions {
   public constructor(raw: RawLanguage) {
     validate(raw);
     this.pluralReduce = raw.pluralReduce;
-    this.wordForms = raw.wordForms;
+    this.wordForms = new Map(o.entries(raw.wordForms));
     this.words = getWords(raw);
   }
 
   /**
-   * Gets word based on context, count, and replacements.
+   * Returns word based on context, count, and replacements.
    *
-   * @param key - Word ID.
+   * @param key - Key.
    * @param context - Context.
-   * @param forms - Word forms or reference to wordForms.
    * @param count - Count for plural form.
    * @param replacements - Replacements.
+   * @param forms - Candidate word forms.
    * @returns Word.
    */
   public get(
     key: string,
     context: lang.Context | undefined,
-    forms: strings | string,
     count: number,
-    replacements: ReadonlyMap<string, string>
+    replacements: ReadonlyMap<string, string>,
+    forms: strings | string = []
   ): WordInfo {
-    if (is.string(forms)) {
-      const candidate = this.wordForms[forms];
+    if (is.string(forms)) forms = this.wordForms.get(forms) ?? [forms];
 
-      forms = candidate ? candidate : [forms];
-    }
-
-    const definition = this.words[key];
+    const definition = this.words.get(key);
 
     assert.not.empty(definition, `Unknown word: ${key}`);
 
-    return definition.get(this, context, forms, count, replacements);
+    return definition.get(this, context, count, replacements, forms);
   }
 
   /**
    * Checks if dictionary has word.
    *
-   * @param key - Word ID.
+   * @param key - Key.
    * @returns _True_ if dictionary has word, _false_ otherwise.
    */
-  public has(key: string): key is lang.Transforms<lang.Word> {
-    return is.not.empty(this.words[key]);
+  public has(key: string): boolean {
+    return this.words.has(key);
   }
 
-  protected readonly wordForms: IndexedObject<strings>;
+  protected readonly wordForms: ReadonlyMap<string, strings>;
 
-  protected readonly words: IndexedObject<Definition> = {};
+  protected readonly words: ReadonlyMap<string, Definition>;
 }
 
 interface Callback {
@@ -85,34 +77,45 @@ interface Callback {
 }
 
 /**
- * Builds word forms.
+ * Returns words.
  *
  * @param raw - Language definition.
- * @returns Word forms.
+ * @returns Words.
  */
-function getWords(raw: RawLanguage): IndexedObject<Definition> {
-  // eslint-disable-next-line @skylib/no-mutable-signature -- ???
-  const result: WritableIndexedObject<Definition> = {};
+function getWords(raw: RawLanguage): ReadonlyMap<string, Definition> {
+  const result = new Map<string, Definition>();
 
   for (const [key, value] of o.entries(raw.words)) {
-    result[s.lcFirst(key)] = new Definition(
-      map(value, x => s.lcFirst(x)),
-      s.lcFirst(key)
+    result.set(
+      s.lcFirst(key),
+      new Definition(
+        map(value, x => s.lcFirst(x)),
+        s.lcFirst(key)
+      )
     );
 
-    result[s.ucFirst(key)] = new Definition(
-      map(value, x => s.ucFirst(x)),
-      s.ucFirst(key)
+    result.set(
+      s.ucFirst(key),
+      new Definition(
+        map(value, x => s.ucFirst(x)),
+        s.ucFirst(key)
+      )
     );
 
-    result[key.toLowerCase()] = new Definition(
-      map(value, x => x.toLowerCase()),
-      key.toLowerCase()
+    result.set(
+      key.toLowerCase(),
+      new Definition(
+        map(value, x => x.toLowerCase()),
+        key.toLowerCase()
+      )
     );
 
-    result[key.toUpperCase()] = new Definition(
-      map(value, x => x.toUpperCase()),
-      key.toUpperCase()
+    result.set(
+      key.toUpperCase(),
+      new Definition(
+        map(value, x => x.toUpperCase()),
+        key.toUpperCase()
+      )
     );
   }
 
@@ -155,11 +158,7 @@ function mapDefinitions(
   definitions: RawDefinitions,
   callback: Callback
 ): RawDefinitions {
-  return o.fromEntries.exhaustive(
-    o
-      .entries(definitions)
-      .map(([key, definition]) => [key, map(definition, callback)])
-  );
+  return o.map(definitions, definition => map(definition, callback));
 }
 
 /**
@@ -169,13 +168,12 @@ function mapDefinitions(
  */
 function validate(raw: RawLanguage): void {
   assert.toBeTrue(
-    o
-      .entries(raw.wordForms)
-      .every(
-        ([key, forms]) =>
-          key === key.toLowerCase() &&
-          forms.every(form => form === form.toLowerCase())
-      ),
+    o.every(
+      raw.wordForms,
+      (forms, key) =>
+        key === key.toLowerCase() &&
+        forms.every(form => form === form.toLowerCase())
+    ),
     "Expecting lowercase word forms"
   );
 }

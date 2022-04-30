@@ -1,9 +1,17 @@
+import { DateTime } from "./DateTime";
+import { formatStrings, moduleConfig } from "./core";
+import { o } from "@skylib/functions";
 import { isValid, parse } from "date-fns";
-import { DateTime, formatStrings } from "./DateTime";
-export { DateTime, configure, getConfiguration } from "./DateTime";
-export const implementation = {
-    create(dt) {
-        return new DateTime(dt);
+export const dateFnsWrapper = {
+    DateTime,
+    configure(config) {
+        o.assign(moduleConfig, config);
+    },
+    create(date) {
+        return new DateTime(date);
+    },
+    getConfiguration() {
+        return moduleConfig;
     },
     now() {
         return new DateTime().toString();
@@ -14,9 +22,9 @@ export const implementation = {
     timeSec() {
         return Date.now() / 1000;
     },
-    validate(dt) {
+    validate(date) {
         const now = Date.now();
-        return formatStrings.some(formatString => isValid(parse(dt, formatString, now)));
+        return formatStrings.some(formatString => isValid(parse(date, formatString, now)));
     }
 };
 //# sourceMappingURL=index.js.map

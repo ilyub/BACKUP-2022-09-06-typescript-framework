@@ -1,0 +1,1 @@
+{"version":3,"file":"PouchRetryError.d.ts","sourceRoot":"","sources":["../../../../../src/facade-implementations/database/pouch-db-wrapper/errors/PouchRetryError.ts"],"names":[],"mappings":"AAAA,qBAAa,eAAgB,SAAQ,KAAK;IACxC,SAAyB,IAAI,qBAAqB;IAElD;;;;OAIG;gBACgB,OAAO,EAAE,MAAM;CAGnC"}

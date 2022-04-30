@@ -1,31 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getConfiguration = exports.configure = exports.DateTime = exports.moduleConfig = exports.formatStrings = void 0;
-const tslib_1 = require("tslib");
-const facades_1 = require("@skylib/facades");
+exports.DateTime = void 0;
+const core_1 = require("./core");
 const functions_1 = require("@skylib/functions");
 const date_fns_1 = require("date-fns");
-// eslint-disable-next-line import/no-duplicates -- Ok
-const en_US_1 = tslib_1.__importDefault(require("date-fns/locale/en-US"));
-exports.formatStrings = [
-    "yyyy-M-d h:m:s a",
-    "yyyy-M-d H:m:s",
-    "yyyy-M-d h:m a",
-    "yyyy-M-d H:m",
-    "yyyy-M-d"
-];
-exports.moduleConfig = (0, functions_1.onDemand)(() => (0, facades_1.reactiveStorage)({
-    firstDayOfWeek: 0,
-    locale: en_US_1.default,
-    pm: true
-}));
 class DateTime {
     /**
      * Creates class instance.
      *
-     * @param dt - Date/time.
+     * @param date - Date.
      */
-    constructor(dt) {
+    constructor(date) {
         // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
         Object.defineProperty(this, "value", {
             enumerable: true,
@@ -33,16 +18,25 @@ class DateTime {
             writable: true,
             value: void 0
         });
-        if (dt instanceof Date)
-            this.value = dt;
-        else if (dt instanceof DateTime)
-            this.value = new Date(dt.value);
-        else if (functions_1.is.number(dt))
-            this.value = new Date(dt);
-        else if (functions_1.is.string(dt))
-            this.value = parseString(dt);
+        if (date instanceof Date)
+            this.value = date;
+        else if (date instanceof DateTime)
+            this.value = date.value;
+        else if (functions_1.is.number(date))
+            this.value = new Date(date);
+        else if (functions_1.is.string(date))
+            this.value = parseString(date);
         else
             this.value = new Date();
+        function parseString(str) {
+            const now = Date.now();
+            for (const formatString of core_1.formatStrings) {
+                const result = (0, date_fns_1.parse)(str, formatString, now);
+                if ((0, date_fns_1.isValid)(result))
+                    return result;
+            }
+            throw new Error(`Unknown date format: ${str}`);
+        }
     }
     add(amount, unit) {
         const duration = {};
@@ -83,37 +77,37 @@ class DateTime {
     dayOfWeek() {
         return (0, date_fns_1.getDay)(this.value);
     }
-    format(fmt) {
-        fmt = exports.moduleConfig.pm
-            ? fmt
+    format(format) {
+        format = core_1.moduleConfig.pm
+            ? format
                 .replace(/H{4}/gu, "hh")
                 .replace(/H{3}/gu, "h")
                 .replace(/A/gu, "a")
                 .trim()
-            : fmt
+            : format
                 .replace(/H{4}/gu, "HH")
                 .replace(/H{3}/gu, "H")
                 .replace(/A/gu, "")
                 .trim();
-        return (0, date_fns_1.format)(this.value, fmt, { locale: exports.moduleConfig.locale });
+        return (0, date_fns_1.format)(this.value, format, { locale: core_1.moduleConfig.locale });
     }
     hours() {
         return (0, date_fns_1.getHours)(this.value);
     }
-    isSameDayOfMonth(dt) {
-        return (0, date_fns_1.isSameDay)(this.value, dt.toDate());
+    isSameDayOfMonth(date) {
+        return (0, date_fns_1.isSameDay)(this.value, date.toDate());
     }
-    isSameHour(dt) {
-        return (0, date_fns_1.isSameHour)(this.value, dt.toDate());
+    isSameHour(date) {
+        return (0, date_fns_1.isSameHour)(this.value, date.toDate());
     }
-    isSameMinute(dt) {
-        return (0, date_fns_1.isSameMinute)(this.value, dt.toDate());
+    isSameMinute(date) {
+        return (0, date_fns_1.isSameMinute)(this.value, date.toDate());
     }
-    isSameMonth(dt) {
-        return (0, date_fns_1.isSameMonth)(this.value, dt.toDate());
+    isSameMonth(date) {
+        return (0, date_fns_1.isSameMonth)(this.value, date.toDate());
     }
-    isSameYear(dt) {
-        return (0, date_fns_1.isSameYear)(this.value, dt.toDate());
+    isSameYear(date) {
+        return (0, date_fns_1.isSameYear)(this.value, date.toDate());
     }
     minutes() {
         return (0, date_fns_1.getMinutes)(this.value);
@@ -130,7 +124,7 @@ class DateTime {
         return this;
     }
     setDayOfWeekLocale(day) {
-        const weekStartsOn = exports.moduleConfig.firstDayOfWeek;
+        const weekStartsOn = core_1.moduleConfig.firstDayOfWeek;
         this.value = (0, date_fns_1.setDay)(this.value, day, { weekStartsOn });
         return this;
     }
@@ -167,7 +161,7 @@ class DateTime {
         return this;
     }
     setStartOfWeekLocale() {
-        const weekStartsOn = exports.moduleConfig.firstDayOfWeek;
+        const weekStartsOn = core_1.moduleConfig.firstDayOfWeek;
         this.value = (0, date_fns_1.startOfWeek)(this.value, { weekStartsOn });
         return this;
     }
@@ -213,7 +207,9 @@ class DateTime {
         return this.value;
     }
     toString() {
-        return (0, date_fns_1.format)(this.value, "yyyy-MM-dd HH:mm");
+        return (0, date_fns_1.getSeconds)(this.value)
+            ? (0, date_fns_1.format)(this.value, "yyyy-MM-dd HH:mm:ss")
+            : (0, date_fns_1.format)(this.value, "yyyy-MM-dd HH:mm");
     }
     toTime() {
         return this.value.getTime();
@@ -226,37 +222,4 @@ class DateTime {
     }
 }
 exports.DateTime = DateTime;
-/**
- * Configures plugin.
- *
- * @param config - Plugin configuration.
- */
-function configure(config) {
-    functions_1.o.assign(exports.moduleConfig, config);
-}
-exports.configure = configure;
-/**
- * Returns plugin configuration.
- *
- * @returns Plugin configuration.
- */
-function getConfiguration() {
-    return exports.moduleConfig;
-}
-exports.getConfiguration = getConfiguration;
-/**
- * Parses string.
- *
- * @param dt - Date/time.
- * @returns Date object.
- */
-function parseString(dt) {
-    const now = Date.now();
-    for (const formatString of exports.formatStrings) {
-        const result = (0, date_fns_1.parse)(dt, formatString, now);
-        if ((0, date_fns_1.isValid)(result))
-            return result;
-    }
-    throw new Error(`Invalid date: ${dt}`);
-}
 //# sourceMappingURL=DateTime.js.map

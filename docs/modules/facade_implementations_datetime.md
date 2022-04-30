@@ -12,4 +12,4 @@
 
 ### dateFnsWrapper
 
-Renames and re-exports [facade-implementations/datetime/date-fns-wrapper](facade_implementations_datetime_date_fns_wrapper.md)
+Re-exports [dateFnsWrapper](facade_implementations_datetime_date_fns_wrapper.md#datefnswrapper)

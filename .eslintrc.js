@@ -1,23 +1,29 @@
 module.exports = {
   extends: [require.resolve("@skylib/config/src/eslintrc")],
-  // eslint-disable-next-line no-warning-comments -- Wait for @skylib/config update
-  // fixme
   rules: {
-    "@skylib/class-only-export": "off",
-    "@skylib/only-export-name": "off",
-    "@skylib/prefer-readonly": "off",
-    "@skylib/primary-export-only": "off",
-    "import/no-internal-modules": [
+    // eslint-disable-next-line no-warning-comments -- Wait for @skylib/config update
+    // fixme
+    "@skylib/consistent-group-empty-lines": [
       "warn",
       {
-        allow: [
-          "@skylib/*/configs/*",
-          "@skylib/config/src/*",
-          "@skylib/functions/dist/testUtils",
-          "date-fns/locale/*",
-          "jest-extended/all",
-          "src/testUtils",
-          "ts-toolbelt/**"
+        rules: [
+          { selector: "ArrayExpression > .elements" },
+          { selector: "CallExpression > .arguments" },
+          { selector: "FunctionDeclaration > .params" },
+          { selector: "FunctionExpression > .params" },
+          { selector: "ImportDeclaration" },
+          { selector: "ObjectExpression > .properties" },
+          { selector: "TSDeclareFunction > .params" },
+          { selector: "TSFunctionType > .params" },
+          { selector: "TSInterfaceBody > .body" },
+          {
+            averageLinesGte: 3,
+            everyLinesGte: 2,
+            selector:
+              ":matches(BlockStatement, Program, SwitchCase, TSModuleBlock) > ExpressionStatement",
+            someHasDocComment: true,
+            someLinesGte: 6
+          }
         ]
       }
     ]

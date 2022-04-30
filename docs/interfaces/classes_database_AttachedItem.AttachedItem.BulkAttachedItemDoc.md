@@ -8,7 +8,7 @@
 
 - `BaseBulkAttachedDocument`
 
-- [`BaseAttachedItemDoc`](classes_database_AttachedItem.AttachedItem.BaseAttachedItemDoc.md)
+- [`OwnProps`](classes_database_AttachedItem.AttachedItem.OwnProps.md)
 
   ↳ **`BulkAttachedItemDoc`**
 
@@ -63,7 +63,7 @@ ___
 
 #### Inherited from
 
-[BaseAttachedItemDoc](classes_database_AttachedItem.AttachedItem.BaseAttachedItemDoc.md).[createdAt](classes_database_AttachedItem.AttachedItem.BaseAttachedItemDoc.md#createdat)
+[OwnProps](classes_database_AttachedItem.AttachedItem.OwnProps.md).[createdAt](classes_database_AttachedItem.AttachedItem.OwnProps.md#createdat)
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 #### Inherited from
 
-[BaseAttachedItemDoc](classes_database_AttachedItem.AttachedItem.BaseAttachedItemDoc.md).[deletedAt](classes_database_AttachedItem.AttachedItem.BaseAttachedItemDoc.md#deletedat)
+[OwnProps](classes_database_AttachedItem.AttachedItem.OwnProps.md).[deletedAt](classes_database_AttachedItem.AttachedItem.OwnProps.md#deletedat)
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 #### Inherited from
 
-[BaseAttachedItemDoc](classes_database_AttachedItem.AttachedItem.BaseAttachedItemDoc.md).[softDeleted](classes_database_AttachedItem.AttachedItem.BaseAttachedItemDoc.md#softdeleted)
+[OwnProps](classes_database_AttachedItem.AttachedItem.OwnProps.md).[softDeleted](classes_database_AttachedItem.AttachedItem.OwnProps.md#softdeleted)
 
 ___
 
@@ -103,4 +103,4 @@ ___
 
 #### Inherited from
 
-[BaseAttachedItemDoc](classes_database_AttachedItem.AttachedItem.BaseAttachedItemDoc.md).[updatedAt](classes_database_AttachedItem.AttachedItem.BaseAttachedItemDoc.md#updatedat)
+[OwnProps](classes_database_AttachedItem.AttachedItem.OwnProps.md).[updatedAt](classes_database_AttachedItem.AttachedItem.OwnProps.md#updatedat)

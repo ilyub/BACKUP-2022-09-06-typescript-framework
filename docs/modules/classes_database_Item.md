@@ -11,7 +11,3 @@
 ### Classes
 
 - [Item](../classes/classes_database_Item.Item-1.md)
-
-### Interfaces
-
-- [BaseItemDoc](../interfaces/classes_database_Item.BaseItemDoc.md)

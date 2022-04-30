@@ -3,26 +3,26 @@ import { a, fn, is, num, o } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { loremIpsum } from "lorem-ipsum";
 export const loremIpsumWrapper = {
-    boolean() {
-        return this.oneOf([true, false]);
+    boolean(trueWeight = 0.5, falseWeight = 0.5) {
+        return Math.random() < trueWeight / (trueWeight + falseWeight);
     },
     configure(config) {
         o.assign(moduleConfig, config);
     },
     date(from, to, step = 1, unit = "minute") {
-        const fromTime = is.string(from)
+        const from2 = is.string(from)
             ? datetime.create(from).toTime()
             : datetime
                 .create()
                 .add(...from)
                 .toTime();
-        const toTime = is.string(to)
+        const to2 = is.string(to)
             ? datetime.create(to).toTime()
             : datetime
                 .create()
                 .add(...to)
                 .toTime();
-        const stepTime = fn.run(() => {
+        const step2 = fn.run(() => {
             switch (unit) {
                 case "day":
                 case "days":
@@ -35,8 +35,8 @@ export const loremIpsumWrapper = {
                     return step * 60 * 1000;
             }
         });
-        const time = num.floor.step(_.random(fromTime, toTime), stepTime);
-        return datetime.create(new Date(time)).toString();
+        const time = num.floor.step(_.random(from2, to2), step2);
+        return datetime.create(time).toString();
     },
     getConfiguration() {
         return moduleConfig;

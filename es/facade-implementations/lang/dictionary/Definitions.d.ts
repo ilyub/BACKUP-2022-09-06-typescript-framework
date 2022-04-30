@@ -1,7 +1,7 @@
-import type { lang } from "@skylib/facades";
-import type { IndexedObject, strings } from "@skylib/functions";
 import { Definition } from "./Definition";
-import type { PluralReduce, RawLanguage, WordInfo } from "./types";
+import type { PluralReduce, RawLanguage, WordInfo } from "./core";
+import type { lang } from "@skylib/facades";
+import type { strings } from "@skylib/functions";
 export declare class Definitions {
     readonly pluralReduce: PluralReduce;
     /**
@@ -11,24 +11,24 @@ export declare class Definitions {
      */
     constructor(raw: RawLanguage);
     /**
-     * Gets word based on context, count, and replacements.
+     * Returns word based on context, count, and replacements.
      *
-     * @param key - Word ID.
+     * @param key - Key.
      * @param context - Context.
-     * @param forms - Word forms or reference to wordForms.
      * @param count - Count for plural form.
      * @param replacements - Replacements.
+     * @param forms - Candidate word forms.
      * @returns Word.
      */
-    get(key: string, context: lang.Context | undefined, forms: strings | string, count: number, replacements: ReadonlyMap<string, string>): WordInfo;
+    get(key: string, context: lang.Context | undefined, count: number, replacements: ReadonlyMap<string, string>, forms?: strings | string): WordInfo;
     /**
-     * Checks that dictionary has word.
+     * Checks if dictionary has word.
      *
-     * @param key - Word ID.
+     * @param key - Key.
      * @returns _True_ if dictionary has word, _false_ otherwise.
      */
-    has(key: string): key is lang.Transforms<lang.Word>;
-    protected readonly wordForms: IndexedObject<strings>;
-    protected readonly words: IndexedObject<Definition>;
+    has(key: string): boolean;
+    protected readonly wordForms: ReadonlyMap<string, strings>;
+    protected readonly words: ReadonlyMap<string, Definition>;
 }
 //# sourceMappingURL=Definitions.d.ts.map

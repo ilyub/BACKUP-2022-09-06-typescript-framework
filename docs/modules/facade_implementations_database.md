@@ -12,4 +12,4 @@
 
 ### PouchDBWrapper
 
-Re-exports [PouchDBWrapper](../classes/facade_implementations_database_PouchDBWrapper_PouchDBWrapper.PouchDBWrapper.md)
+Re-exports [PouchDBWrapper](../classes/facade_implementations_database_pouch_db_wrapper_PouchDBWrapper.PouchDBWrapper.md)

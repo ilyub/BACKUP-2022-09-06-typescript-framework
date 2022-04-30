@@ -7,26 +7,26 @@ const functions_1 = require("@skylib/functions");
 const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
 const lorem_ipsum_1 = require("lorem-ipsum");
 exports.loremIpsumWrapper = {
-    boolean() {
-        return this.oneOf([true, false]);
+    boolean(trueWeight = 0.5, falseWeight = 0.5) {
+        return Math.random() < trueWeight / (trueWeight + falseWeight);
     },
     configure(config) {
         functions_1.o.assign(moduleConfig, config);
     },
     date(from, to, step = 1, unit = "minute") {
-        const fromTime = functions_1.is.string(from)
+        const from2 = functions_1.is.string(from)
             ? facades_1.datetime.create(from).toTime()
             : facades_1.datetime
                 .create()
                 .add(...from)
                 .toTime();
-        const toTime = functions_1.is.string(to)
+        const to2 = functions_1.is.string(to)
             ? facades_1.datetime.create(to).toTime()
             : facades_1.datetime
                 .create()
                 .add(...to)
                 .toTime();
-        const stepTime = functions_1.fn.run(() => {
+        const step2 = functions_1.fn.run(() => {
             switch (unit) {
                 case "day":
                 case "days":
@@ -39,8 +39,8 @@ exports.loremIpsumWrapper = {
                     return step * 60 * 1000;
             }
         });
-        const time = functions_1.num.floor.step(_.random(fromTime, toTime), stepTime);
-        return facades_1.datetime.create(new Date(time)).toString();
+        const time = functions_1.num.floor.step(_.random(from2, to2), step2);
+        return facades_1.datetime.create(time).toString();
     },
     getConfiguration() {
         return moduleConfig;
