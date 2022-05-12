@@ -23,7 +23,7 @@ module.exports = {
     }
   ],
   extends: [
-    "@skylib/functions/configs/eslintrc.options.js",
+    "@skylib/functions/configs/eslintrc.options",
     "@skylib/facades/configs/eslintrc.options",
     "./configs/eslintrc.options.js"
   ]
