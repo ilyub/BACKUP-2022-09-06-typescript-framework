@@ -91,7 +91,7 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
       handler: reactiveStorage.Handler<T>,
       reducer?: reactiveStorage.Reducer<T>
     ): reactiveStorage.Observer {
-      const symbol = Symbol("reflect-storage.callback");
+      const symbol = Symbol("reflect-storage-callback");
 
       const callbacks = reflect.getMetadata(MetadataKey, obj);
 
@@ -127,6 +127,6 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
   }
 );
 
-const MetadataKey = Symbol("Callbacks");
+const MetadataKey = Symbol("reflect-storage-callbacks");
 
 const isCallbacks = is.factory(is.map.of, is.symbol, is.callable);

@@ -41,12 +41,12 @@
     "update-package-force-skylib": "ncu --dep peer --filter @skylib/* --upgrade"
   },
   "devDependencies": {
-    "@skylib/config": "^1.11.1",
+    "@skylib/config": "^1.12.0",
     "@skylib/eslint-plugin": "^0.1.27",
     "jest-mock-axios": "^4.6.1"
   },
   "peerDependencies": {
-    "@skylib/facades": "^3.0.0",
+    "@skylib/facades": "^3.1.1",
     "@skylib/functions": "^2.3.0",
     "@skylib/lodash-commonjs-es": "^0.1.0",
     "@skylib/typescript-types": "^1.0.0",

@@ -24,9 +24,7 @@ module.exports = {
   ],
   extends: [
     "@skylib/functions/configs/eslintrc.options.js",
-    // eslint-disable-next-line no-warning-comments -- Wait for @skylib/facades update
-    // fixme
-    // "@skylib/facades/configs/eslintrc.options",
+    "@skylib/facades/configs/eslintrc.options",
     "./configs/eslintrc.options.js"
   ]
 };
