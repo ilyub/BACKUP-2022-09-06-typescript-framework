@@ -1,9 +1,6 @@
 import { implementations } from "..";
 import { lang } from "@skylib/facades";
 import type { LocaleName } from "@skylib/functions";
-/**
- * Jest reset.
- */
 export declare const jestReset: (() => void) & {
     /**
      * Jest reset.
@@ -14,9 +11,6 @@ export declare const jestReset: (() => void) & {
      */
     dictionary(this: void, localeName: LocaleName, definitions: implementations.lang.dictionary.DefinitionsByLocale): void;
 };
-/**
- * Jest setup.
- */
 export declare const jestSetup: (() => void) & {
     /**
      * Jest setup.

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.uuidWrapper = void 0;
+// eslint-disable-next-line @skylib/only-export-name -- Wait for @skylib/eslint-plugin update
 var uuid_wrapper_1 = require("./uuid-wrapper");
 Object.defineProperty(exports, "uuidWrapper", { enumerable: true, get: function () { return uuid_wrapper_1.uuidWrapper; } });
 //# sourceMappingURL=index.js.map

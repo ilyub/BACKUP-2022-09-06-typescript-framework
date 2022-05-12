@@ -2,7 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reflectStorage = void 0;
 const functions_1 = require("@skylib/functions");
-exports.reflectStorage = (0, functions_1.defineFn)((obj) => {
+exports.reflectStorage = (0, functions_1.defineFn)(
+// eslint-disable-next-line @skylib/require-jsdoc -- Ok
+(obj) => {
     if (functions_1.reflect.hasMetadata(MetadataKey, obj))
         return obj;
     const result = new Proxy(obj, (0, functions_1.wrapProxyHandler)("reflectStorage", "doDefault", { get, set }));
@@ -31,12 +33,14 @@ exports.reflectStorage = (0, functions_1.defineFn)((obj) => {
         return false;
     }
 }, {
+    // eslint-disable-next-line @skylib/require-jsdoc -- Ok
     unwatch(obj, observer) {
         functions_1.assert.not.empty(observer.symbol);
         const callbacks = functions_1.reflect.getMetadata(MetadataKey, obj);
         functions_1.assert.byGuard(callbacks, isCallbacks);
         functions_1.reflect.defineMetadata(MetadataKey, functions_1.map.delete(callbacks, observer.symbol), obj);
     },
+    // eslint-disable-next-line @skylib/require-jsdoc -- Ok
     watch(obj, handler, reducer) {
         const symbol = Symbol("reflect-storage.callback");
         const callbacks = functions_1.reflect.getMetadata(MetadataKey, obj);

@@ -1,0 +1,1 @@
+{"version":3,"file":"PouchNotFoundError.js","sourceRoot":"","sources":["../../../../../../src/facade-implementations/database/pouchdb-wrapper/core/errors/PouchNotFoundError.ts"],"names":[],"mappings":";;;AAAA,MAAa,kBAAmB,SAAQ,KAAK;IAG3C;;;;OAIG;IACH,YAAmB,OAAe;QAChC,KAAK,CAAC,OAAO,CAAC,CAAC;QARjB;;;;mBAAgC,oBAAoB;WAAC;IASrD,CAAC;CACF;AAXD,gDAWC"}

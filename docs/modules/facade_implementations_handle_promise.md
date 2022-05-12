@@ -12,4 +12,4 @@
 
 ### promiseHandler
 
-Re-exports [promiseHandler](facade_implementations_handle_promise_promise_handler.md#promisehandler)
+Re-exports [promiseHandler](facade_implementations_handle_promise_promise_handler_promise_handler.md#promisehandler)

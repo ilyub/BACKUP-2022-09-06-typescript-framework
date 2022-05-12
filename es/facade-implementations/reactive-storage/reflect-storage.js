@@ -1,5 +1,7 @@
 import { assert, is, wrapProxyHandler, map, reflect, defineFn } from "@skylib/functions";
-export const reflectStorage = defineFn((obj) => {
+export const reflectStorage = defineFn(
+// eslint-disable-next-line @skylib/require-jsdoc -- Ok
+(obj) => {
     if (reflect.hasMetadata(MetadataKey, obj))
         return obj;
     const result = new Proxy(obj, wrapProxyHandler("reflectStorage", "doDefault", { get, set }));
@@ -28,12 +30,14 @@ export const reflectStorage = defineFn((obj) => {
         return false;
     }
 }, {
+    // eslint-disable-next-line @skylib/require-jsdoc -- Ok
     unwatch(obj, observer) {
         assert.not.empty(observer.symbol);
         const callbacks = reflect.getMetadata(MetadataKey, obj);
         assert.byGuard(callbacks, isCallbacks);
         reflect.defineMetadata(MetadataKey, map.delete(callbacks, observer.symbol), obj);
     },
+    // eslint-disable-next-line @skylib/require-jsdoc -- Ok
     watch(obj, handler, reducer) {
         const symbol = Symbol("reflect-storage.callback");
         const callbacks = reflect.getMetadata(MetadataKey, obj);

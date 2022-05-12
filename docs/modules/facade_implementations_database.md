@@ -6,10 +6,10 @@
 
 ### References
 
-- [PouchDBWrapper](facade_implementations_database.md#pouchdbwrapper)
+- [PouchWrapper](facade_implementations_database.md#pouchwrapper)
 
 ## References
 
-### PouchDBWrapper
+### PouchWrapper
 
-Re-exports [PouchDBWrapper](../classes/facade_implementations_database_pouch_db_wrapper_PouchDBWrapper.PouchDBWrapper.md)
+Re-exports [PouchWrapper](../classes/facade_implementations_database_pouchdb_wrapper_PouchWrapper.PouchWrapper.md)

@@ -4,10 +4,13 @@ exports.getConfiguration = exports.configure = exports.pluralReduce = exports.mo
 const facades_1 = require("@skylib/facades");
 const functions_1 = require("@skylib/functions");
 exports.moduleConfig = (0, functions_1.onDemand)(() => (0, facades_1.reactiveStorage)({ localeName: "en-US" }));
-exports.pluralReduce = (0, functions_1.defineFn)((count) => {
+exports.pluralReduce = (0, functions_1.defineFn)(
+// eslint-disable-next-line @skylib/require-jsdoc -- Ok
+(count) => {
     count = Math.abs(count);
     return count === 1 ? 1 : 2;
 }, {
+    // eslint-disable-next-line @skylib/require-jsdoc -- Ok
     ru(count) {
         count = Math.abs(count);
         if (count >= 10 && count <= 19)
@@ -38,7 +41,7 @@ exports.configure = configure;
  * @returns Plugin configuration.
  */
 function getConfiguration() {
-    return functions_1.o.clone(exports.moduleConfig);
+    return exports.moduleConfig;
 }
 exports.getConfiguration = getConfiguration;
 //# sourceMappingURL=index.js.map

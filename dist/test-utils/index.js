@@ -7,12 +7,13 @@ const expect_1 = require("./expect");
 const facades_1 = require("@skylib/facades");
 const functions_1 = require("@skylib/functions");
 const en_US_1 = tslib_1.__importDefault(require("date-fns/locale/en-US"));
+exports.jestReset = (0, functions_1.defineFn)(
 /**
  * Jest reset.
  */
-exports.jestReset = (0, functions_1.defineFn)(() => {
+() => {
     const { naturalCompareWrapper } = __1.implementations.compare;
-    const { PouchDBWrapper } = __1.implementations.database;
+    const { PouchWrapper } = __1.implementations.database;
     const { dateFnsWrapper } = __1.implementations.datetime;
     const { Facebook } = __1.implementations.facebook;
     const { loremIpsumWrapper } = __1.implementations.faker;
@@ -28,7 +29,7 @@ exports.jestReset = (0, functions_1.defineFn)(() => {
     const { uuidWrapper } = __1.implementations.uniqueId;
     {
         facades_1.compare.setImplementation(naturalCompareWrapper);
-        facades_1.database.setImplementation(new PouchDBWrapper());
+        facades_1.database.setImplementation(new PouchWrapper());
         facades_1.datetime.setImplementation(dateFnsWrapper);
         facades_1.facebook.setImplementation(new Facebook(undefined, "10.0"));
         facades_1.faker.setImplementation(loremIpsumWrapper);
@@ -99,10 +100,11 @@ exports.jestReset = (0, functions_1.defineFn)(() => {
         configure((0, functions_1.typedef)({ localeName }));
     }
 });
+exports.jestSetup = (0, functions_1.defineFn)(
 /**
  * Jest setup.
  */
-exports.jestSetup = (0, functions_1.defineFn)(() => {
+() => {
     expect.extend(expect_1.matchers);
     (0, exports.jestReset)();
 }, {

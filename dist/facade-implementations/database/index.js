@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PouchDBWrapper = void 0;
-var pouch_db_wrapper_1 = require("./pouch-db-wrapper");
-Object.defineProperty(exports, "PouchDBWrapper", { enumerable: true, get: function () { return pouch_db_wrapper_1.PouchDBWrapper; } });
+exports.PouchWrapper = void 0;
+// eslint-disable-next-line @skylib/only-export-name -- Wait for @skylib/eslint-plugin update
+var pouchdb_wrapper_1 = require("./pouchdb-wrapper");
+Object.defineProperty(exports, "PouchWrapper", { enumerable: true, get: function () { return pouchdb_wrapper_1.PouchWrapper; } });
 //# sourceMappingURL=index.js.map

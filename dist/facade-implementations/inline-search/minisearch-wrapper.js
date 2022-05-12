@@ -12,8 +12,8 @@ exports.minisearchWrapper = (0, api_1.createImplementation)(functions_1.fn.run((
             return this.items.filter(item => ids.has(item[this.idField]));
         }
         buildIndex(idField, fields, items) {
-            const result = new minisearch_1.default({ fields: functions_1.o.unfreeze(fields), idField });
-            result.addAll(functions_1.o.unfreeze(items));
+            const result = new minisearch_1.default({ fields: functions_1.a.clone(fields), idField });
+            result.addAll(functions_1.a.clone(items));
             return result;
         }
     };

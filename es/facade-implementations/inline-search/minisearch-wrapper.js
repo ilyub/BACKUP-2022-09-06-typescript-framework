@@ -1,5 +1,5 @@
 import { createImplementation, Engine as BaseEngine } from "./api";
-import { fn, o } from "@skylib/functions";
+import { a, fn } from "@skylib/functions";
 import MiniSearch from "minisearch";
 export const minisearchWrapper = createImplementation(fn.run(() => {
     return class Engine extends BaseEngine {
@@ -8,8 +8,8 @@ export const minisearchWrapper = createImplementation(fn.run(() => {
             return this.items.filter(item => ids.has(item[this.idField]));
         }
         buildIndex(idField, fields, items) {
-            const result = new MiniSearch({ fields: o.unfreeze(fields), idField });
-            result.addAll(o.unfreeze(items));
+            const result = new MiniSearch({ fields: a.clone(fields), idField });
+            result.addAll(a.clone(items));
             return result;
         }
     };

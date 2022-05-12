@@ -1,12 +1,6 @@
 import { defineFn } from "@skylib/functions";
 import naturalCompare from "natural-compare";
-export const naturalCompareWrapper = defineFn((x, y) => {
-    // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
-    if (x > y)
-        return 1;
-    // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
-    if (x < y)
-        return -1;
-    return 0;
-}, { strings: naturalCompare });
+export const naturalCompareWrapper = defineFn(
+// eslint-disable-next-line @skylib/require-jsdoc, no-type-assertion/no-type-assertion -- Ok
+(x, y) => Math.sign(x - y), { strings: naturalCompare });
 //# sourceMappingURL=natural-compare-wrapper.js.map

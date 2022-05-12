@@ -3,12 +3,13 @@ import { matchers } from "./expect";
 import { compare, database, datetime, facebook, faker, google, handlePromise, httpRequest, inlineSearch, lang, progressReporter, reactiveStorage, showAlert, showConfirm, testDelay, uniqueId } from "@skylib/facades";
 import { defineFn, typedef } from "@skylib/functions";
 import enUS from "date-fns/locale/en-US";
+export const jestReset = defineFn(
 /**
  * Jest reset.
  */
-export const jestReset = defineFn(() => {
+() => {
     const { naturalCompareWrapper } = implementations.compare;
-    const { PouchDBWrapper } = implementations.database;
+    const { PouchWrapper } = implementations.database;
     const { dateFnsWrapper } = implementations.datetime;
     const { Facebook } = implementations.facebook;
     const { loremIpsumWrapper } = implementations.faker;
@@ -24,7 +25,7 @@ export const jestReset = defineFn(() => {
     const { uuidWrapper } = implementations.uniqueId;
     {
         compare.setImplementation(naturalCompareWrapper);
-        database.setImplementation(new PouchDBWrapper());
+        database.setImplementation(new PouchWrapper());
         datetime.setImplementation(dateFnsWrapper);
         facebook.setImplementation(new Facebook(undefined, "10.0"));
         faker.setImplementation(loremIpsumWrapper);
@@ -95,10 +96,11 @@ export const jestReset = defineFn(() => {
         configure(typedef({ localeName }));
     }
 });
+export const jestSetup = defineFn(
 /**
  * Jest setup.
  */
-export const jestSetup = defineFn(() => {
+() => {
     expect.extend(matchers);
     jestReset();
 }, {

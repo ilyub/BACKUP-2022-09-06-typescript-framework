@@ -15,12 +15,8 @@
 
 • `Const` **jestReset**: () => `void` & { `dictionary`: (`this`: `void`, `localeName`: `LocaleName`, `definitions`: [`DefinitionsByLocale`](facade_implementations_lang_dictionary.md#definitionsbylocale)) => `void`  }
 
-Jest reset.
-
 ___
 
 ### jestSetup
 
 • `Const` **jestSetup**: () => `void` & { `dictionary`: (`this`: `void`, `localeName`: `LocaleName`, `definitions`: [`DefinitionsByLocale`](facade_implementations_lang_dictionary.md#definitionsbylocale)) => `void`  }
-
-Jest setup.

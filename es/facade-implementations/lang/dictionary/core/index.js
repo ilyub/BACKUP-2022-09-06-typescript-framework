@@ -1,10 +1,13 @@
 import { reactiveStorage } from "@skylib/facades";
 import { defineFn, o, onDemand } from "@skylib/functions";
 export const moduleConfig = onDemand(() => reactiveStorage({ localeName: "en-US" }));
-export const pluralReduce = defineFn((count) => {
+export const pluralReduce = defineFn(
+// eslint-disable-next-line @skylib/require-jsdoc -- Ok
+(count) => {
     count = Math.abs(count);
     return count === 1 ? 1 : 2;
 }, {
+    // eslint-disable-next-line @skylib/require-jsdoc -- Ok
     ru(count) {
         count = Math.abs(count);
         if (count >= 10 && count <= 19)
@@ -34,6 +37,6 @@ export function configure(config) {
  * @returns Plugin configuration.
  */
 export function getConfiguration() {
-    return o.clone(moduleConfig);
+    return moduleConfig;
 }
 //# sourceMappingURL=index.js.map

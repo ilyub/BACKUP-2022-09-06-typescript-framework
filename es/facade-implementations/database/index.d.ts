@@ -1,2 +1,2 @@
-export { PouchDBWrapper } from "./pouch-db-wrapper";
+export { PouchWrapper } from "./pouchdb-wrapper";
 //# sourceMappingURL=index.d.ts.map

@@ -4,29 +4,12 @@
 
 ## Table of contents
 
-### Namespaces
+### References
 
-- [promiseHandler](facade_implementations_handle_promise_promise_handler.promiseHandler.md)
-
-### Variables
-
-- [handlers](facade_implementations_handle_promise_promise_handler.md#handlers)
 - [promiseHandler](facade_implementations_handle_promise_promise_handler.md#promisehandler)
 
-## Variables
-
-### handlers
-
-• `Const` **handlers**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `error` | (`error`: `unknown`) => `void` |
-
-___
+## References
 
 ### promiseHandler
 
-• `Const` **promiseHandler**: `facade.Facade` & [`Configurable`](../interfaces/facade_implementations_handle_promise_promise_handler.promiseHandler.Configurable.md)
+Re-exports [promiseHandler](facade_implementations_handle_promise_promise_handler_promise_handler.md#promisehandler)
