@@ -1,12 +1,5 @@
+import type { Constructor } from "./types";
 import type { inlineSearch } from "@skylib/facades";
-
-export { Engine } from "./Engine";
-
-export type Constructor = new <T extends object>(
-  idField: string & keyof T,
-  fields: ReadonlyArray<string & keyof T>,
-  items: readonly T[]
-) => inlineSearch.Engine<T>;
 
 /**
  * Creates inline search facade implementation.
@@ -16,12 +9,10 @@ export type Constructor = new <T extends object>(
  */
 export function createImplementation(ctor: Constructor): inlineSearch.Facade {
   return {
-    create<T extends object>(
+    create: <T extends object>(
       idField: string & keyof T,
       fields: ReadonlyArray<string & keyof T>,
       items: readonly T[]
-    ): inlineSearch.Engine<T> {
-      return new ctor<T>(idField, fields, items);
-    }
+    ) => new ctor<T>(idField, fields, items)
   };
 }

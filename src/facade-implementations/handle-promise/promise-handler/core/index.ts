@@ -1,3 +1,4 @@
+import { handleError } from "./handle-error";
 import { progressReporter, showAlert } from "@skylib/facades";
 import { fn } from "@skylib/functions";
 import type { handlePromise as facade } from "@skylib/facades";
@@ -58,13 +59,4 @@ export function handle<T>(
 
     handleError(reason);
   }
-}
-
-/**
- * Handles PouchDB error.
- *
- * @param error - Error.
- */
-export function handleError(error: unknown): void {
-  throw error;
 }

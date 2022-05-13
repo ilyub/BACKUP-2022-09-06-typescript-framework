@@ -20,13 +20,11 @@ globalThis.FB = fn.run(() => {
   let appId: stringU;
 
   return {
-    getAuthResponse() {
-      return appId === "loggedIn" ? getAuthResponse() : null;
-    },
-    init(params) {
+    getAuthResponse: () => (appId === "loggedIn" ? getAuthResponse() : null),
+    init: params => {
       appId = params.appId;
     },
-    login(callback: (response: fb.StatusResponse) => void) {
+    login: (callback: (response: fb.StatusResponse) => void) => {
       callback({ authResponse: getAuthResponse(), status: getStatus() });
     }
   } as typeof FB;

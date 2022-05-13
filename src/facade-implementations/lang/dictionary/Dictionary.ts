@@ -122,7 +122,7 @@ export class Dictionary implements lang.Dictionary<lang.Context> {
 
     this.facade = fn.run(() => {
       const handler = wrapProxyHandler<Dictionary>("Dictionary", "doDefault", {
-        get(target, key) {
+        get: (target, key) => {
           assert.string(key);
 
           return target.has(key) ? target.get(key) : reflect.get(target, key);

@@ -72,7 +72,7 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
   },
   {
     // eslint-disable-next-line @skylib/require-jsdoc -- Ok
-    unwatch(obj: object, observer: reactiveStorage.Observer) {
+    unwatch: (obj: object, observer: reactiveStorage.Observer) => {
       assert.not.empty(observer.symbol);
 
       const callbacks = reflect.getMetadata(MetadataKey, obj);
@@ -86,11 +86,11 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
       );
     },
     // eslint-disable-next-line @skylib/require-jsdoc -- Ok
-    watch<T extends object>(
+    watch: <T extends object>(
       obj: T,
       handler: reactiveStorage.Handler<T>,
       reducer?: reactiveStorage.Reducer<T>
-    ): reactiveStorage.Observer {
+    ): reactiveStorage.Observer => {
       const symbol = Symbol("reflect-storage-callback");
 
       const callbacks = reflect.getMetadata(MetadataKey, obj);

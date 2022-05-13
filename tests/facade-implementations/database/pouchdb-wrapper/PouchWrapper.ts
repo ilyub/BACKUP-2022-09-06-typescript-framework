@@ -148,6 +148,7 @@ test("create: options.migrations", async () => {
     const db1 = pouchdb.create(name, {
       migrations: [
         {
+          // eslint-disable-next-line no-restricted-syntax -- Wait for @skylib/facades update
           async callback(): Promise<void> {
             await this.put({ _id: id });
           },

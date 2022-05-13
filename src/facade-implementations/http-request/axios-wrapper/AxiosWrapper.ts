@@ -7,29 +7,25 @@ export class AxiosWrapper implements httpRequest.Facade {
   /**
    * Configures plugin.
    *
-   * @param this - No this.
    * @param config - Plugin configuration.
    */
-  public configure(this: void, config: PartialConfiguration): void {
+  public readonly configure = (config: PartialConfiguration): void => {
     o.assign(moduleConfig, config);
-  }
+  };
 
   /**
    * Returns plugin configuration.
    *
-   * @param this - No this.
    * @returns Plugin configuration.
    */
-  public getConfiguration(this: void): Configuration {
-    return moduleConfig;
-  }
+  public readonly getConfiguration = (): Configuration => moduleConfig;
 
-  public async send(
+  public readonly send = async (
     url: string,
     method = "get",
     data = {},
     headers = {}
-  ): Promise<unknown> {
+  ): Promise<unknown> => {
     const response = await axios({
       data,
       headers,
@@ -39,7 +35,7 @@ export class AxiosWrapper implements httpRequest.Facade {
     });
 
     return response.data as unknown;
-  }
+  };
 }
 
 const moduleConfig: Configuration = { timeout: 30_000 };

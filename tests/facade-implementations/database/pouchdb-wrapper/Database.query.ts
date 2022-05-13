@@ -434,9 +434,7 @@ test("reactiveQuery", async () => {
 
     const config: database.ReactiveConfig = {
       conditions: { type: { eq: "a" } },
-      update(doc) {
-        return doc["type"] === "a";
-      }
+      update: doc => doc["type"] === "a"
     };
 
     const result = db.reactiveQuery(config);
@@ -473,9 +471,7 @@ test("reactiveQueryAttached", async () => {
 
     const config: database.ReactiveConfigAttached = {
       conditions: { type: { eq: "a" } },
-      update(doc) {
-        return doc["type"] === "a";
-      }
+      update: doc => doc["type"] === "a"
     };
 
     const result = db.reactiveQueryAttached(config);

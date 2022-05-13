@@ -12,44 +12,34 @@ export class DateFnsWrapper implements datetime.Facade {
   /**
    * Configures plugin.
    *
-   * @param this - No this.
    * @param config - Plugin configuration.
    */
-  public configure(this: void, config: PartialConfiguration): void {
+  public readonly configure = (config: PartialConfiguration): void => {
     o.assign(moduleConfig, config);
-  }
+  };
 
-  public create(date?: Date | datetime.DateTime | NumStr): DateTime {
-    return new DateTime(date);
-  }
+  public readonly create = (
+    date?: Date | datetime.DateTime | NumStr
+  ): DateTime => new DateTime(date);
 
   /**
    * Returns plugin configuration.
    *
-   * @param this - No this.
    * @returns Plugin configuration.
    */
-  public getConfiguration(this: void): Configuration {
-    return moduleConfig;
-  }
+  public readonly getConfiguration = (): Configuration => moduleConfig;
 
-  public now(): string {
-    return new DateTime().toString();
-  }
+  public readonly now = (): string => new DateTime().toString();
 
-  public time(): number {
-    return Date.now();
-  }
+  public readonly time = (): number => Date.now();
 
-  public timeSec(): number {
-    return Date.now() / 1000;
-  }
+  public readonly timeSec = (): number => Date.now() / 1000;
 
-  public validate(date: string): boolean {
+  public readonly validate = (date: string): boolean => {
     const now = Date.now();
 
     return formatStrings.some(formatString =>
       isValid(parse(date, formatString, now))
     );
-  }
+  };
 }

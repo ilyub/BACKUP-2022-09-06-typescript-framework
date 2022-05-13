@@ -19,35 +19,27 @@ const getScript = jest
 globalThis.gapi = fn.run(() => {
   return {
     auth2: {
-      init(params) {
+      init: params => {
         const clientId = params.client_id;
 
         const user = {
-          getAuthResponse() {
+          getAuthResponse: () => {
             return { id_token: as.not.empty(clientId) };
           }
         } as gapi.auth2.GoogleUser;
 
         return {
-          then(
+          then: (
             onInit: (googleAuth: gapi.auth2.GoogleAuthBase) => void,
             onFailure: (reason: Reason) => void
-          ): void {
+          ): void => {
             if (clientId === "init_error")
               onFailure({ details: "Init error", error: "init_error" });
             else
               onInit({
-                currentUser: {
-                  get() {
-                    return user;
-                  }
-                },
-                isSignedIn: {
-                  get() {
-                    return clientId === "signedIn";
-                  }
-                },
-                async signIn() {
+                currentUser: { get: () => user },
+                isSignedIn: { get: () => clientId === "signedIn" },
+                signIn: async () => {
                   await Promise.resolve();
 
                   switch (clientId) {
@@ -69,7 +61,7 @@ globalThis.gapi = fn.run(() => {
         };
       }
     },
-    load(apiName, callback) {
+    load: (apiName, callback) => {
       assert.toBeTrue(apiName === "auth2");
       assert.callable(callback);
       callback();

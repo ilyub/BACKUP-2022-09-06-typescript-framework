@@ -77,9 +77,7 @@ test("reactiveCount", async () => {
 
     const config = reactiveStorage<Writable<database.ReactiveConfig>>({
       conditions: { type: { eq: "a" } },
-      update(doc) {
-        return doc["type"] === "a";
-      }
+      update: doc => doc["type"] === "a"
     });
 
     const result = db.reactiveCount(config);
@@ -119,9 +117,7 @@ test("reactiveCountAttached", async () => {
   await testUtils.run(async () => {
     const config = reactiveStorage<Writable<database.ReactiveConfigAttached>>({
       conditions: { type: { eq: "a" } },
-      update(doc): boolean {
-        return doc["type"] === "a";
-      }
+      update: doc => doc["type"] === "a"
     });
 
     const db = database.create(uniqueId());

@@ -140,19 +140,17 @@ export const jestReset = defineFn(
     /**
      * Jest reset.
      *
-     * @param this - No this.
      * @param localeName - Locale name.
      * @param definitions - Language definitions.
      */
-    dictionary(
-      this: void,
+    dictionary: (
       localeName: LocaleName,
       definitions: implementations.lang.dictionary.DefinitionsByLocale
-    ): void {
-      const { Dictionary, configure } = implementations.lang.dictionary;
+    ): void => {
+      const { dictionary } = implementations.lang;
 
-      lang.setImplementation(Dictionary.create(definitions));
-      configure(
+      lang.setImplementation(dictionary.Dictionary.create(definitions));
+      dictionary.configure(
         typedef<implementations.lang.dictionary.Configuration>({ localeName })
       );
     }
@@ -171,15 +169,13 @@ export const jestSetup = defineFn(
     /**
      * Jest setup.
      *
-     * @param this - No this.
      * @param localeName - Locale name.
      * @param definitions - Language definitions.
      */
-    dictionary(
-      this: void,
+    dictionary: (
       localeName: LocaleName,
       definitions: implementations.lang.dictionary.DefinitionsByLocale
-    ): void {
+    ): void => {
       jestReset.dictionary(localeName, definitions);
     }
   }

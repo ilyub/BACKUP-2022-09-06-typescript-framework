@@ -1,3 +1,4 @@
+import type { BuildIndex } from "./types";
 import type { inlineSearch } from "@skylib/facades";
 
 export abstract class Engine<T extends object, I>
@@ -9,14 +10,16 @@ export abstract class Engine<T extends object, I>
    * @param idField - ID field.
    * @param fields - Searchable fields.
    * @param items - Items.
+   * @param buildIndex - Index builder.
    */
   public constructor(
     idField: string & keyof T,
     fields: ReadonlyArray<string & keyof T>,
-    items: readonly T[]
+    items: readonly T[],
+    buildIndex: BuildIndex<T, I>
   ) {
     this.idField = idField;
-    this.index = this.buildIndex(idField, fields, items);
+    this.index = buildIndex(idField, fields, items);
     this.items = items;
   }
 
@@ -27,18 +30,4 @@ export abstract class Engine<T extends object, I>
   protected readonly index: I;
 
   protected readonly items: readonly T[];
-
-  /**
-   * Builds index.
-   *
-   * @param idField - ID field.
-   * @param fields - Searchable fields.
-   * @param items - Items.
-   * @returns Index.
-   */
-  protected abstract buildIndex(
-    idField: string & keyof T,
-    fields: ReadonlyArray<string & keyof T>,
-    items: readonly T[]
-  ): I;
 }

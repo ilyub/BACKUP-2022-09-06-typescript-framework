@@ -9,13 +9,11 @@ export const configurableTestDelay: configurableTestDelay.Configurable &
   },
   {
     // eslint-disable-next-line @skylib/require-jsdoc -- Ok
-    configure(config: Partial<configurableTestDelay.Configuration>) {
+    configure: (config: Partial<configurableTestDelay.Configuration>) => {
       o.assign(moduleConfig, config);
     },
     // eslint-disable-next-line @skylib/require-jsdoc -- Ok
-    getConfiguration() {
-      return moduleConfig;
-    }
+    getConfiguration: () => moduleConfig
   }
 );
 

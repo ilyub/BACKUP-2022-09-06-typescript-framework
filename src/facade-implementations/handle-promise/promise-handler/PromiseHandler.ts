@@ -8,40 +8,37 @@ export class PromiseHandler implements handlePromise.Facade {
   /**
    * Configures plugin.
    *
-   * @param this - No this.
    * @param config - Plugin configuration.
    */
-  public configure(this: void, config: PartialConfiguration): void {
+  public readonly configure = (config: PartialConfiguration): void => {
     o.assign(moduleConfig, config);
-  }
+  };
 
   /**
    * Returns plugin configuration.
    *
-   * @param this - No this.
    * @returns Plugin configuration.
    */
-  public getConfiguration(this: void): Configuration {
-    return moduleConfig;
-  }
+  public readonly getConfiguration = (): Configuration => moduleConfig;
 
-  public async runAll(): Promise<void> {
+  public readonly runAll = async (): Promise<void> => {
     await Promise.all(promises.values());
-  }
+  };
 
-  public running(): boolean {
-    return promises.size > 0;
-  }
+  public readonly running = (): boolean => promises.size > 0;
 
-  public silent<T>(mixed: AsyncPromise<T>, errorMessage = ""): void {
+  public readonly silent = <T>(
+    mixed: AsyncPromise<T>,
+    errorMessage = ""
+  ): void => {
     handle(mixed, undefined, errorMessage);
-  }
+  };
 
-  public verbose<T>(
+  public readonly verbose = <T>(
     mixed: AsyncPromise<T>,
     type: handlePromise.Type,
     errorMessage = ""
-  ): void {
+  ): void => {
     handle(mixed, type, errorMessage);
-  }
+  };
 }

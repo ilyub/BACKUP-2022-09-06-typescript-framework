@@ -1,6 +1,6 @@
 import { implementations } from "@";
 // eslint-disable-next-line @skylib/consistent-import, import/no-internal-modules -- Ok
-import * as core from "@/facade-implementations/handle-promise/promise-handler/core";
+import * as handleError from "@/facade-implementations/handle-promise/promise-handler/core/handle-error";
 import { fn, wait } from "@skylib/functions";
 import * as testUtils from "@skylib/functions/dist/test-utils";
 import type { booleanU } from "@skylib/functions";
@@ -13,7 +13,7 @@ const alertFn = fn.run(() => {
   return result;
 });
 
-const errorSpy = jest.spyOn(core, "handleError");
+const errorSpy = jest.spyOn(handleError, "handleError");
 
 const { promiseHandler } = implementations.handlePromise;
 
@@ -35,11 +35,11 @@ test("configure, getConfiguration", () => {
   expect(getConfiguration().expectedDurations.createDb).toBe(1001);
 });
 
-test("handlers.error", () => {
+test("handleError", () => {
   const error = new Error("Sample error");
 
   expect(() => {
-    core.handleError(error);
+    handleError.handleError(error);
   }).toThrow(error);
 });
 

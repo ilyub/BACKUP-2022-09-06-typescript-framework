@@ -496,6 +496,21 @@ export class Database implements database.Database {
 
   protected readonly config: Required<Configuration>;
 
+  /**
+   * Creates reactive storage.
+   *
+   * @returns Reactive storage.
+   */
+  protected readonly createReactiveStorage = <
+    T
+  >(): database.ReactiveResponse<T> =>
+    reactiveStorage({
+      loaded: false,
+      loading: true,
+      refresh: fn.noop,
+      unsubscribe: fn.noop
+    });
+
   // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected db: PouchProxy | undefined;
 
@@ -692,20 +707,6 @@ export class Database implements database.Database {
     } catch (e) {
       assert.instance(e, PouchConflictError, assert.wrapError(e));
     }
-  }
-
-  /**
-   * Creates reactive storage.
-   *
-   * @returns Reactive storage.
-   */
-  protected createReactiveStorage<T>(): database.ReactiveResponse<T> {
-    return reactiveStorage({
-      loaded: false,
-      loading: true,
-      refresh: fn.noop,
-      unsubscribe: fn.noop
-    });
   }
 
   /**

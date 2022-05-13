@@ -6,26 +6,24 @@ import type { Configuration, PartialConfiguration } from "./types";
 import type { faker } from "@skylib/facades";
 
 export class LoremIpsumWrapper implements faker.Facade {
-  public boolean(trueWeight = 0.5, falseWeight = 0.5): boolean {
-    return Math.random() < trueWeight / (trueWeight + falseWeight);
-  }
+  public readonly boolean = (trueWeight = 0.5, falseWeight = 0.5): boolean =>
+    Math.random() < trueWeight / (trueWeight + falseWeight);
 
   /**
    * Configures plugin.
    *
-   * @param this - No this.
    * @param config - Plugin configuration.
    */
-  public configure(this: void, config: PartialConfiguration): void {
+  public readonly configure = (config: PartialConfiguration): void => {
     o.assign(moduleConfig, config);
-  }
+  };
 
-  public date(
+  public readonly date = (
     from: faker.TimeInterval | string,
     to: faker.TimeInterval | string,
     step = 1,
     unit: faker.TimeUnit = "minute"
-  ): string {
+  ): string => {
     const from2 = is.string(from)
       ? datetime.create(from).toTime()
       : datetime
@@ -59,33 +57,28 @@ export class LoremIpsumWrapper implements faker.Facade {
     const time = num.floor.step(_.random(from2, to2), step2);
 
     return datetime.create(time).toString();
-  }
+  };
 
   /**
    * Returns plugin configuration.
    *
-   * @param this - No this.
    * @returns Plugin configuration.
    */
-  public getConfiguration(this: void): Configuration {
-    return moduleConfig;
-  }
+  public readonly getConfiguration = (): Configuration => moduleConfig;
 
-  public number(from: number, to: number, step = 1): number {
-    return num.floor.step(_.random(from, to), step);
-  }
+  public readonly number = (from: number, to: number, step = 1): number =>
+    num.floor.step(_.random(from, to), step);
 
-  public oneOf<T>(values: readonly T[]): T {
-    return a.get(values, _.random(0, values.length - 1));
-  }
+  public readonly oneOf = <T>(values: readonly T[]): T =>
+    a.get(values, _.random(0, values.length - 1));
 
-  public paragraph(
+  public readonly paragraph = (
     minSentences?: number,
     maxSentences?: number,
     minWords?: number,
     maxWords?: number
-  ): string {
-    return loremIpsum({
+  ): string =>
+    loremIpsum({
       paragraphLowerBound: minSentences ?? moduleConfig.minSentences,
       paragraphUpperBound: maxSentences ?? moduleConfig.maxSentences,
       sentenceLowerBound: minWords ?? moduleConfig.minWords,
@@ -93,29 +86,25 @@ export class LoremIpsumWrapper implements faker.Facade {
       suffix: "\n",
       units: "paragraphs"
     });
-  }
 
-  public phrase(minWords?: number, maxWords?: number): string {
-    return loremIpsum({
+  public readonly phrase = (minWords?: number, maxWords?: number): string =>
+    loremIpsum({
       sentenceLowerBound: minWords ?? moduleConfig.minWords,
       sentenceUpperBound: maxWords ?? moduleConfig.maxWords,
       suffix: "\n",
       units: "sentences"
     }).replace(/\.$/u, "");
-  }
 
-  public sentence(minWords?: number, maxWords?: number): string {
-    return loremIpsum({
+  public readonly sentence = (minWords?: number, maxWords?: number): string =>
+    loremIpsum({
       sentenceLowerBound: minWords ?? moduleConfig.minWords,
       sentenceUpperBound: maxWords ?? moduleConfig.maxWords,
       suffix: "\n",
       units: "sentences"
     });
-  }
 
-  public word(): string {
-    return loremIpsum({ suffix: "\n", units: "words" });
-  }
+  public readonly word = (): string =>
+    loremIpsum({ suffix: "\n", units: "words" });
 }
 
 const moduleConfig: Configuration = {

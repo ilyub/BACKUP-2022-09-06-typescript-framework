@@ -10,9 +10,8 @@ export const jsConfirm: showConfirm.Facade = defineFn(
   },
   {
     // eslint-disable-next-line @skylib/require-jsdoc, @typescript-eslint/require-await -- Ok
-    async async(message: string) {
+    async: async (message: string) =>
       // eslint-disable-next-line no-alert -- Ok
-      return confirm(message);
-    }
+      confirm(message)
   }
 );
