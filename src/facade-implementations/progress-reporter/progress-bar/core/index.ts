@@ -2,8 +2,8 @@ import type { Writable } from "@skylib/functions";
 
 export const moduleConfig: Configuration = {
   activeClass: "progress-bar-active",
-  enabled: false,
-  finalEasing: false,
+  enabled: true,
+  finalEasing: true,
   finalEasingSpeed: 500,
   latency: 0,
   precision: 3,
