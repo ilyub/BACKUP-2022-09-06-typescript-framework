@@ -8,9 +8,14 @@ import type {
   WordInfo
 } from "./core";
 import type { lang } from "@skylib/facades";
-import type { strings } from "@skylib/functions";
+import type { strings, Rec, WritableIndexedRecord } from "@skylib/functions";
 
 export class Definitions {
+  public readonly keys: Rec<
+    lang.Transform<lang.Word>,
+    lang.Transform<lang.Word>
+  >;
+
   public readonly pluralReduce: PluralReduce;
 
   /**
@@ -20,6 +25,19 @@ export class Definitions {
    */
   public constructor(raw: RawLanguage) {
     validate(raw);
+
+    // eslint-disable-next-line @skylib/no-mutable-signature -- Ok
+    const keys: WritableIndexedRecord = {};
+
+    for (const key of o.keys(raw.words)) {
+      keys[s.lcFirst(key)] = s.lcFirst(key);
+      keys[s.ucFirst(key)] = s.ucFirst(key);
+      keys[key.toLowerCase()] = key.toLowerCase();
+      keys[key.toUpperCase()] = key.toUpperCase();
+    }
+
+    // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
+    this.keys = keys as typeof this.keys;
     this.pluralReduce = raw.pluralReduce;
     this.wordForms = new Map(o.entries(raw.wordForms));
     this.words = getWords(raw);

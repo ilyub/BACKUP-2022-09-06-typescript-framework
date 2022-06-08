@@ -5,13 +5,15 @@ import {
   fn,
   wrapProxyHandler,
   reflect,
-  s
+  s,
+  o,
+  a
 } from "@skylib/functions";
 import type { Definitions } from "./Definitions";
 import type { lang } from "@skylib/facades";
 import type { LocaleName, NumStr, Rec } from "@skylib/functions";
 
-export class Dictionary implements lang.Dictionary<lang.Context> {
+export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
   /**
    * Creates dictionary.
    *
@@ -28,6 +30,11 @@ export class Dictionary implements lang.Dictionary<lang.Context> {
     return new Dictionary(definitions, context, count).facade;
   }
 
+  public readonly keys: Rec<
+    lang.Transform<lang.Word>,
+    lang.Transform<lang.Word>
+  >;
+
   public context(context: lang.Context): lang.Facade {
     if (context === this._context) return this.facade;
 
@@ -43,13 +50,21 @@ export class Dictionary implements lang.Dictionary<lang.Context> {
     return sub;
   }
 
-  public get(key: string): string {
+  public get(key: lang.Transform<lang.Word>): string {
     const definitions = this.definitions[moduleConfig.localeName];
 
     return definitions.get(key, this._context, this.count, replacements).value;
   }
 
-  public has(key: string): boolean {
+  public getIfExists(key: string): string {
+    const definitions = this.definitions[moduleConfig.localeName];
+
+    return definitions.has(key)
+      ? definitions.get(key, this._context, this.count, replacements).value
+      : key;
+  }
+
+  public has(key: string): key is lang.Transform<lang.Word> {
     const definitions = this.definitions[moduleConfig.localeName];
 
     return definitions.has(key);
@@ -114,13 +129,7 @@ export class Dictionary implements lang.Dictionary<lang.Context> {
     context?: lang.Context,
     count = 1
   ) {
-    this._context = context;
-
-    this.count = count;
-
-    this.definitions = definitions;
-
-    this.facade = fn.run(() => {
+    const facade = fn.run(() => {
       const handler = wrapProxyHandler<Dictionary>("Dictionary", "doDefault", {
         get: (target, key) => {
           assert.string(key);
@@ -132,6 +141,12 @@ export class Dictionary implements lang.Dictionary<lang.Context> {
       // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
       return new Proxy(this, handler) as unknown as lang.Facade;
     });
+
+    this._context = context;
+    this.count = count;
+    this.definitions = definitions;
+    this.facade = facade;
+    this.keys = a.first(o.values(definitions)).keys;
   }
 
   /**
