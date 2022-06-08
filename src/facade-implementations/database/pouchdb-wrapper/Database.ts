@@ -740,7 +740,7 @@ export class Database implements database.Database {
           // Already applied
         } else {
           // eslint-disable-next-line no-await-in-loop -- Ok
-          await migration.callback.call(this);
+          await migration.callback(this);
           migrations = { ...migrations, [migration.id]: true };
 
           // eslint-disable-next-line no-await-in-loop -- Ok

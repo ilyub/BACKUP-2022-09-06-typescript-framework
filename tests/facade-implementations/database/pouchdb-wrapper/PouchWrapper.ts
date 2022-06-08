@@ -149,8 +149,8 @@ test("create: options.migrations", async () => {
       migrations: [
         {
           // eslint-disable-next-line no-restricted-syntax -- Wait for @skylib/facades update
-          async callback(): Promise<void> {
-            await this.put({ _id: id });
+          async callback(db): Promise<void> {
+            await db.put({ _id: id });
           },
           id: "migration1"
         }
@@ -180,7 +180,7 @@ test("create: options.migrations", async () => {
       await expect(db2.exists(id)).resolves.toBeTrue();
       expect(callback1).not.toHaveBeenCalled();
       expect(callback2).toHaveBeenCalledTimes(1);
-      expect(callback2).toHaveBeenCalledWith();
+      expect(callback2).toHaveBeenCalledWith(db2);
       callback2.mockClear();
     }
   });
