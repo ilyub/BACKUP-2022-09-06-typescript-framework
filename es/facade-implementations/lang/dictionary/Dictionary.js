@@ -1,5 +1,5 @@
 import { moduleConfig } from "./core";
-import { assert, cast, fn, wrapProxyHandler, reflect, s } from "@skylib/functions";
+import { a, assert, cast, evaluate, o, s, wrapProxyHandler } from "@skylib/functions";
 export class Dictionary {
     /**
      * Creates class instance.
@@ -9,6 +9,12 @@ export class Dictionary {
      * @param count - Count for plural form.
      */
     constructor(definitions, context, count = 1) {
+        Object.defineProperty(this, "keys", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
         Object.defineProperty(this, "_context", {
             enumerable: true,
             configurable: true,
@@ -39,19 +45,22 @@ export class Dictionary {
             writable: true,
             value: new Map()
         });
-        this._context = context;
-        this.count = count;
-        this.definitions = definitions;
-        this.facade = fn.run(() => {
+        const facade = evaluate(() => {
             const handler = wrapProxyHandler("Dictionary", "doDefault", {
-                get(target, key) {
+                get: (target, key) => {
                     assert.string(key);
-                    return target.has(key) ? target.get(key) : reflect.get(target, key);
+                    // eslint-disable-next-line no-restricted-syntax -- Ok
+                    return target.has(key) ? target.get(key) : o.get(target, key);
                 }
             });
             // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
             return new Proxy(this, handler);
         });
+        this._context = context;
+        this.count = count;
+        this.definitions = definitions;
+        this.facade = facade;
+        this.keys = a.first(o.values(definitions)).keys;
     }
     /**
      * Creates dictionary.
@@ -80,6 +89,12 @@ export class Dictionary {
     get(key) {
         const definitions = this.definitions[moduleConfig.localeName];
         return definitions.get(key, this._context, this.count, replacements).value;
+    }
+    getIfExists(key) {
+        const definitions = this.definitions[moduleConfig.localeName];
+        return definitions.has(key)
+            ? definitions.get(key, this._context, this.count, replacements).value
+            : key;
     }
     has(key) {
         const definitions = this.definitions[moduleConfig.localeName];

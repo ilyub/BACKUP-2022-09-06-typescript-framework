@@ -158,7 +158,7 @@ Finally, to delete a document, include a _deleted parameter with the value true.
 | :------ | :------ |
 | `docs` | `PutDocument`<[`Content`](facade_implementations_database_pouchdb_wrapper_core_types_pouchdb.Content.md) & `Model`\>[] |
 | `options` | ``null`` \| `BulkDocsOptions` |
-| `callback` | `Callback`<(`Response` \| `Error`)[]\> |
+| `callback` | `Callback`<(`Error` \| `Response`)[]\> |
 
 #### Returns
 
@@ -168,7 +168,7 @@ Finally, to delete a document, include a _deleted parameter with the value true.
 
 PouchDB.Database.bulkDocs
 
-▸ **bulkDocs**<`Model`\>(`docs`, `options?`): `Promise`<(`Response` \| `Error`)[]\>
+▸ **bulkDocs**<`Model`\>(`docs`, `options?`): `Promise`<(`Error` \| `Response`)[]\>
 
 Create, update or delete multiple documents. The docs argument is an array of documents.
 If you omit an _id parameter on a given document, the database will create a new document and assign the ID for you.
@@ -191,7 +191,7 @@ Finally, to delete a document, include a _deleted parameter with the value true.
 
 #### Returns
 
-`Promise`<(`Response` \| `Error`)[]\>
+`Promise`<(`Error` \| `Response`)[]\>
 
 #### Inherited from
 
@@ -703,7 +703,7 @@ Get attachment data
 | `attachmentId` | `string` |
 | `options` | `Object` |
 | `options.rev?` | `string` |
-| `callback` | `Callback`<`Blob` \| `Buffer`\> |
+| `callback` | `Callback`<`Buffer` \| `Blob`\> |
 
 #### Returns
 
@@ -713,7 +713,7 @@ Get attachment data
 
 PouchDB.Database.getAttachment
 
-▸ **getAttachment**(`docId`, `attachmentId`, `options?`): `Promise`<`Blob` \| `Buffer`\>
+▸ **getAttachment**(`docId`, `attachmentId`, `options?`): `Promise`<`Buffer` \| `Blob`\>
 
 Get attachment data
 
@@ -728,7 +728,7 @@ Get attachment data
 
 #### Returns
 
-`Promise`<`Blob` \| `Buffer`\>
+`Promise`<`Buffer` \| `Blob`\>
 
 #### Inherited from
 
@@ -744,7 +744,7 @@ Get attachment data
 | :------ | :------ |
 | `docId` | `string` |
 | `attachmentId` | `string` |
-| `callback` | `Callback`<`Blob` \| `Buffer`\> |
+| `callback` | `Callback`<`Buffer` \| `Blob`\> |
 
 #### Returns
 

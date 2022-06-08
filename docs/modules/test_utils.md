@@ -13,10 +13,10 @@
 
 ### jestReset
 
-• `Const` **jestReset**: () => `void` & { `dictionary`: (`this`: `void`, `localeName`: `LocaleName`, `definitions`: [`DefinitionsByLocale`](facade_implementations_lang_dictionary.md#definitionsbylocale)) => `void`  }
+• `Const` **jestReset**: () => `void` & `Readonly`<{ `dictionary`: (`localeName`: `LocaleName`, `definitions`: [`DefinitionsByLocale`](facade_implementations_lang_dictionary.md#definitionsbylocale)) => `void`  }\>
 
 ___
 
 ### jestSetup
 
-• `Const` **jestSetup**: () => `void` & { `dictionary`: (`this`: `void`, `localeName`: `LocaleName`, `definitions`: [`DefinitionsByLocale`](facade_implementations_lang_dictionary.md#definitionsbylocale)) => `void`  }
+• `Const` **jestSetup**: () => `void` & `Readonly`<{ `dictionary`: (`localeName`: `LocaleName`, `definitions`: [`DefinitionsByLocale`](facade_implementations_lang_dictionary.md#definitionsbylocale)) => `void`  }\>

@@ -6,7 +6,7 @@ export const jsAlert = defineFn(
     alert(message);
 }, {
     // eslint-disable-next-line @skylib/require-jsdoc, @typescript-eslint/require-await -- Ok
-    async async(message) {
+    async: async (message) => {
         // eslint-disable-next-line no-alert -- Ok
         alert(message);
     }

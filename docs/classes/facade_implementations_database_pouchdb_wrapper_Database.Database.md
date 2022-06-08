@@ -312,7 +312,7 @@ ___
 
 ### createReactiveStorage
 
-▸ `Protected` **createReactiveStorage**<`T`\>(): `ReactiveResponse`<`T`\>
+▸ `Protected` `Readonly` **createReactiveStorage**<`T`\>(): `ReactiveResponse`<`T`\>
 
 Creates reactive storage.
 

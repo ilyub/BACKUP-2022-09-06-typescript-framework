@@ -8,7 +8,6 @@ export class DateTime {
      * @param date - Date.
      */
     constructor(date) {
-        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
         Object.defineProperty(this, "value", {
             enumerable: true,
             configurable: true,

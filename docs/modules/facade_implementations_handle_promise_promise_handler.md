@@ -4,12 +4,16 @@
 
 ## Table of contents
 
-### References
+### Namespaces
+
+- [promiseHandler](facade_implementations_handle_promise_promise_handler.promiseHandler.md)
+
+### Variables
 
 - [promiseHandler](facade_implementations_handle_promise_promise_handler.md#promisehandler)
 
-## References
+## Variables
 
 ### promiseHandler
 
-Re-exports [promiseHandler](facade_implementations_handle_promise_promise_handler_promise_handler.md#promisehandler)
+• `Const` **promiseHandler**: [`Configurable`](../interfaces/facade_implementations_handle_promise_promise_handler_core.Configurable.md) & `handlePromise.Facade`

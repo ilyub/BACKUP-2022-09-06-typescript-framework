@@ -13,14 +13,14 @@
 - [OwnProps](../interfaces/classes_database_AttachedItem.AttachedItem.OwnProps.md)
 - [PutAttachedItemDoc](../interfaces/classes_database_AttachedItem.AttachedItem.PutAttachedItemDoc.md)
 
-### Type aliases
+### Type Aliases
 
 - [AttachedItems](classes_database_AttachedItem.AttachedItem.md#attacheditems)
 - [BulkAttachedItemDocs](classes_database_AttachedItem.AttachedItem.md#bulkattacheditemdocs)
 - [ExistingAttachedItemDocs](classes_database_AttachedItem.AttachedItem.md#existingattacheditemdocs)
 - [PutAttachedItemDocs](classes_database_AttachedItem.AttachedItem.md#putattacheditemdocs)
 
-## Type aliases
+## Type Aliases
 
 ### AttachedItems
 

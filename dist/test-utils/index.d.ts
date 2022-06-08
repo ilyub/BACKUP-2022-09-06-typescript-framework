@@ -1,24 +1,22 @@
 import { implementations } from "..";
 import { lang } from "@skylib/facades";
 import type { LocaleName } from "@skylib/functions";
-export declare const jestReset: (() => void) & {
+export declare const jestReset: (() => void) & Readonly<{
     /**
      * Jest reset.
      *
-     * @param this - No this.
      * @param localeName - Locale name.
      * @param definitions - Language definitions.
      */
-    dictionary(this: void, localeName: LocaleName, definitions: implementations.lang.dictionary.DefinitionsByLocale): void;
-};
-export declare const jestSetup: (() => void) & {
+    dictionary: (localeName: LocaleName, definitions: implementations.lang.dictionary.DefinitionsByLocale) => void;
+}>;
+export declare const jestSetup: (() => void) & Readonly<{
     /**
      * Jest setup.
      *
-     * @param this - No this.
      * @param localeName - Locale name.
      * @param definitions - Language definitions.
      */
-    dictionary(this: void, localeName: LocaleName, definitions: implementations.lang.dictionary.DefinitionsByLocale): void;
-};
+    dictionary: (localeName: LocaleName, definitions: implementations.lang.dictionary.DefinitionsByLocale) => void;
+}>;
 //# sourceMappingURL=index.d.ts.map

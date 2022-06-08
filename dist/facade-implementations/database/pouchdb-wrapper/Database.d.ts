@@ -1,6 +1,6 @@
 import { PouchProxy } from "./PouchProxy";
 import { database } from "@skylib/facades";
-import type { ReactiveHandler, RawQueryOptions, RawQueryOptionsAttached, RawQueryResponse, Configuration, ReactiveHandlerAttached, ReactiveRequest, ReactiveRequestAttached, PouchChanges, PouchDatabase, PouchDatabaseConfiguration, MapReduce } from "./core";
+import type { Configuration, MapReduce, PouchChanges, PouchDatabase, PouchDatabaseConfiguration, RawQueryOptions, RawQueryOptionsAttached, RawQueryResponse, ReactiveHandler, ReactiveHandlerAttached, ReactiveRequest, ReactiveRequestAttached } from "./core";
 import type { Writable } from "@skylib/functions";
 export declare class Database implements database.Database {
     /**
@@ -58,6 +58,12 @@ export declare class Database implements database.Database {
     protected readonly changesHandlers: Map<`subscription-id-${string}`, database.ChangesHandler>;
     protected readonly changesHandlersAttached: Map<`attached-subscription-id-${string}`, database.AttachedChangesHandler>;
     protected readonly config: Required<Configuration>;
+    /**
+     * Creates reactive storage.
+     *
+     * @returns Reactive storage.
+     */
+    protected readonly createReactiveStorage: <T>() => database.ReactiveResponse<T>;
     protected db: PouchProxy | undefined;
     protected readonly name: string;
     protected readonly options: Required<database.DatabaseOptions>;
@@ -91,12 +97,6 @@ export declare class Database implements database.Database {
      * @param mapReduce - Map/reduce function.
      */
     protected createDesignDocument(mapReduce: MapReduce): Promise<void>;
-    /**
-     * Creates reactive storage.
-     *
-     * @returns Reactive storage.
-     */
-    protected createReactiveStorage<T>(): database.ReactiveResponse<T>;
     /**
      * Returns PouchProxy instance.
      *

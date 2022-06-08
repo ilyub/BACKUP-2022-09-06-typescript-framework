@@ -1,7 +1,7 @@
 import type { Definitions } from "./Definitions";
 import type { lang } from "@skylib/facades";
 import type { LocaleName, NumStr, Rec } from "@skylib/functions";
-export declare class Dictionary implements lang.Dictionary<lang.Context> {
+export declare class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
     /**
      * Creates dictionary.
      *
@@ -11,9 +11,11 @@ export declare class Dictionary implements lang.Dictionary<lang.Context> {
      * @returns Dictionary.
      */
     static create(definitions: Rec<LocaleName, Definitions>, context?: lang.Context, count?: number): lang.Facade;
+    readonly keys: Rec<lang.Transform<lang.Word>, lang.Transform<lang.Word>>;
     context(context: lang.Context): lang.Facade;
-    get(key: string): string;
-    has(key: string): boolean;
+    get(key: lang.Transform<lang.Word>): string;
+    getIfExists(key: string): string;
+    has(key: string): key is lang.Transform<lang.Word>;
     plural(count: number): lang.Facade;
     with(search: string, replace: NumStr): lang.Facade;
     protected readonly _context: lang.Context | undefined;

@@ -173,8 +173,8 @@ function applyRuleRef(word, rule, owner) {
     // eslint-disable-next-line @skylib/disallow-by-regexp -- Wait for @skylib/config update
     // Format: <replacement-id:form>
     const search = a.first(rule);
-    const replacementId = a.get(rule, 1);
-    const form = a.get(rule, 2).toLowerCase();
+    const replacementId = a.second(rule);
+    const form = a.third(rule).toLowerCase();
     const key = as.not.empty(word.replacements.get(replacementId), `Missing replacement: ${replacementId}`);
     const replacement = owner.get(key, word.context, word.count, word.replacements, form);
     return Object.assign(Object.assign({}, word), { forms: replacement.forms, value: word.value.replace(search, replacement.value) });
@@ -191,7 +191,7 @@ function applyRuleRefDependent(word, rule, owner) {
     // eslint-disable-next-line @skylib/disallow-by-regexp -- Wait for @skylib/config update
     // Format: <replacement-id>
     const search = a.first(rule);
-    const replacementId = a.get(rule, 1);
+    const replacementId = a.second(rule);
     const key = as.not.empty(word.replacements.get(replacementId), `Missing replacement: ${replacementId}`);
     const replacement = owner.get(key, word.context, word.count, word.replacements, word.forms);
     return Object.assign(Object.assign({}, word), { value: word.value.replace(search, replacement.value) });
@@ -208,8 +208,8 @@ function applyRuleRefSecondary(word, rule, owner) {
     // eslint-disable-next-line @skylib/disallow-by-regexp -- Wait for @skylib/config update
     // Format: <replacement-id.form>
     const search = a.first(rule);
-    const replacementId = a.get(rule, 1);
-    const form = a.get(rule, 2).toLowerCase();
+    const replacementId = a.second(rule);
+    const form = a.third(rule).toLowerCase();
     const key = as.not.empty(word.replacements.get(replacementId), `Missing replacement: ${replacementId}`);
     const replacement = owner.get(key, word.context, 1, word.replacements, form);
     return Object.assign(Object.assign({}, word), { value: word.value.replace(search, replacement.value) });
@@ -224,7 +224,7 @@ function applyRuleRefSecondary(word, rule, owner) {
 function applyRuleVal(word, rule) {
     // Format: @replacement-id
     const search = a.first(rule);
-    const replacementId = a.get(rule, 1);
+    const replacementId = a.second(rule);
     const replacement = as.not.empty(word.replacements.get(replacementId), `Missing replacement: ${replacementId}`);
     return Object.assign(Object.assign({}, word), { value: word.value.replace(search, replacement) });
 }
@@ -239,7 +239,7 @@ function applyRuleVal(word, rule) {
 function applyRuleWordDependent(word, rule, owner) {
     // Format: {key}
     const search = a.first(rule);
-    const key = a.get(rule, 1);
+    const key = a.second(rule);
     const replacement = owner.get(key, word.context, word.count, word.replacements, word.forms);
     return Object.assign(Object.assign({}, word), { value: word.value.replace(search, replacement.value) });
 }
@@ -254,8 +254,8 @@ function applyRuleWordDependent(word, rule, owner) {
 function applyRuleWordSecondary(word, rule, owner) {
     // Format: {key.form}
     const search = a.first(rule);
-    const key = a.get(rule, 1);
-    const form = a.get(rule, 2).toLowerCase();
+    const key = a.second(rule);
+    const form = a.third(rule).toLowerCase();
     const replacement = owner.get(key, word.context, 1, word.replacements, form);
     return Object.assign(Object.assign({}, word), { value: word.value.replace(search, replacement.value) });
 }

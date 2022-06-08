@@ -6,7 +6,7 @@
 
 ## Implements
 
-- `Dictionary`<`lang.Context`\>
+- `Dictionary`<`lang.Word`, `lang.Context`\>
 
 ## Table of contents
 
@@ -20,12 +20,14 @@
 - [count](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#count)
 - [definitions](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#definitions)
 - [facade](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#facade)
+- [keys](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#keys)
 - [subs](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#subs)
 
 ### Methods
 
 - [context](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#context)
 - [get](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#get)
+- [getIfExists](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#getifexists)
 - [has](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#has)
 - [plural](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#plural)
 - [pluralReduce](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#pluralreduce)
@@ -74,6 +76,16 @@ ___
 
 ___
 
+### keys
+
+• `Readonly` **keys**: `Rec`<`Transform`<`Word`\>, `Transform`<`Word`\>\>
+
+#### Implementation of
+
+lang.Dictionary.keys
+
+___
+
 ### subs
 
 • `Protected` `Readonly` **subs**: `Map`<`NumStr`, `Facade`\>
@@ -108,7 +120,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `key` | `string` |
+| `key` | `Transform`<`Word`\> |
 
 #### Returns
 
@@ -120,9 +132,9 @@ lang.Dictionary.get
 
 ___
 
-### has
+### getIfExists
 
-▸ **has**(`key`): `boolean`
+▸ **getIfExists**(`key`): `string`
 
 #### Parameters
 
@@ -132,7 +144,27 @@ ___
 
 #### Returns
 
-`boolean`
+`string`
+
+#### Implementation of
+
+lang.Dictionary.getIfExists
+
+___
+
+### has
+
+▸ **has**(`key`): key is Transform<Word\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `key` | `string` |
+
+#### Returns
+
+key is Transform<Word\>
 
 #### Implementation of
 

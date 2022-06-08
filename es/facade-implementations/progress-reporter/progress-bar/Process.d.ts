@@ -5,16 +5,13 @@ export declare class Process implements progressReporter.Process {
     /**
      * Returns progress.
      *
-     * @param this - No this.
      * @returns Progress.
      */
-    static getProgress(this: void): number;
+    static readonly getProgress: () => number;
     /**
      * Resets to initial state.
-     *
-     * @param this - No this.
      */
-    static reset(this: void): void;
+    static readonly reset: () => void;
     /**
      * Creates class instance.
      */
@@ -25,10 +22,8 @@ export declare class Process implements progressReporter.Process {
     setWeight(value: number): this;
     /**
      * Updates progress bar state.
-     *
-     * @param this - No this.
      */
-    protected static update(this: void): void;
+    protected static readonly update: () => void;
     protected readonly created: number;
     protected readonly state: Writable<ProcessState>;
     /**

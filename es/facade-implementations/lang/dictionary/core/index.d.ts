@@ -1,7 +1,7 @@
 import type { lang } from "@skylib/facades";
 import type { LocaleName, NumStr, PartialRecord, Rec, strings } from "@skylib/functions";
 export declare const moduleConfig: Configuration;
-export declare const pluralReduce: PluralReduce & PluralReduceInternational;
+export declare const pluralReduce: PluralReduce & Readonly<PluralReduceInternational>;
 export interface Configuration {
     readonly localeName: LocaleName;
 }

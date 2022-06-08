@@ -140,15 +140,9 @@ ___
 
 ### getProgress
 
-▸ `Static` **getProgress**(`this`): `number`
+▸ `Static` `Readonly` **getProgress**(): `number`
 
 Returns progress.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `this` | `void` | No this. |
 
 #### Returns
 
@@ -160,15 +154,9 @@ ___
 
 ### reset
 
-▸ `Static` **reset**(`this`): `void`
+▸ `Static` `Readonly` **reset**(): `void`
 
 Resets to initial state.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `this` | `void` | No this. |
 
 #### Returns
 
@@ -178,15 +166,9 @@ ___
 
 ### update
 
-▸ `Static` `Protected` **update**(`this`): `void`
+▸ `Static` `Protected` `Readonly` **update**(): `void`
 
 Updates progress bar state.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `this` | `void` | No this. |
 
 #### Returns
 

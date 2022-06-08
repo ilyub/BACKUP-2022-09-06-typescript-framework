@@ -18,7 +18,6 @@ class Facebook {
             writable: true,
             value: void 0
         });
-        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
         Object.defineProperty(this, "sdk", {
             enumerable: true,
             configurable: true,
@@ -56,7 +55,7 @@ class Facebook {
     async loadSdk() {
         var _a;
         this.sdk =
-            (_a = this.sdk) !== null && _a !== void 0 ? _a : functions_1.fn.run(async () => {
+            (_a = this.sdk) !== null && _a !== void 0 ? _a : (0, functions_1.evaluate)(async () => {
                 await jquery_1.default.getScript("https://connect.facebook.net/en_US/sdk.js");
                 const appId = functions_1.is.callable(this.appId)
                     ? await this.appId()

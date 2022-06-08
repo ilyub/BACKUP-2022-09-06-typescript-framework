@@ -9,13 +9,11 @@ async () => {
         await (0, functions_1.wait)(moduleConfig.timeout);
 }, {
     // eslint-disable-next-line @skylib/require-jsdoc -- Ok
-    configure(config) {
+    configure: (config) => {
         functions_1.o.assign(moduleConfig, config);
     },
     // eslint-disable-next-line @skylib/require-jsdoc -- Ok
-    getConfiguration() {
-        return moduleConfig;
-    }
+    getConfiguration: () => moduleConfig
 });
 const moduleConfig = {
     enabled: false,

@@ -14,7 +14,7 @@
 - [RawLanguage](../interfaces/facade_implementations_lang_dictionary_core.RawLanguage.md)
 - [WordInfo](../interfaces/facade_implementations_lang_dictionary_core.WordInfo.md)
 
-### Type aliases
+### Type Aliases
 
 - [RawDefinition](facade_implementations_lang_dictionary_core.md#rawdefinition)
 - [Rules](facade_implementations_lang_dictionary_core.md#rules)
@@ -29,7 +29,7 @@
 - [configure](facade_implementations_lang_dictionary_core.md#configure)
 - [getConfiguration](facade_implementations_lang_dictionary_core.md#getconfiguration)
 
-## Type aliases
+## Type Aliases
 
 ### RawDefinition
 
@@ -51,7 +51,7 @@ ___
 
 ### pluralReduce
 
-• `Const` **pluralReduce**: [`PluralReduce`](../interfaces/facade_implementations_lang_dictionary_core.PluralReduce.md) & [`PluralReduceInternational`](../interfaces/facade_implementations_lang_dictionary_core.PluralReduceInternational.md)
+• `Const` **pluralReduce**: [`PluralReduce`](../interfaces/facade_implementations_lang_dictionary_core.PluralReduce.md) & `Readonly`<[`PluralReduceInternational`](../interfaces/facade_implementations_lang_dictionary_core.PluralReduceInternational.md)\>
 
 ## Functions
 

@@ -6,11 +6,12 @@
 
 ### Interfaces
 
+- [Configurable](../interfaces/facade_implementations_progress_reporter_progress_bar_core.Configurable.md)
 - [Configuration](../interfaces/facade_implementations_progress_reporter_progress_bar_core.Configuration.md)
 - [PartialConfiguration](../interfaces/facade_implementations_progress_reporter_progress_bar_core.PartialConfiguration.md)
 - [ProcessState](../interfaces/facade_implementations_progress_reporter_progress_bar_core.ProcessState.md)
 
-### Type aliases
+### Type Aliases
 
 - [State](facade_implementations_progress_reporter_progress_bar_core.md#state)
 
@@ -23,7 +24,7 @@
 - [finalEasing](facade_implementations_progress_reporter_progress_bar_core.md#finaleasing)
 - [growProgress](facade_implementations_progress_reporter_progress_bar_core.md#growprogress)
 
-## Type aliases
+## Type Aliases
 
 ### State
 

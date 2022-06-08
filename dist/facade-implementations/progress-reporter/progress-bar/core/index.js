@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.growProgress = exports.finalEasing = exports.moduleConfig = void 0;
 exports.moduleConfig = {
     activeClass: "progress-bar-active",
-    enabled: false,
-    finalEasing: false,
+    enabled: true,
+    finalEasing: true,
     finalEasingSpeed: 500,
     latency: 0,
     precision: 3,

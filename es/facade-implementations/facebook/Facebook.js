@@ -1,4 +1,4 @@
-import { assert, fn, is } from "@skylib/functions";
+import { assert, evaluate, is } from "@skylib/functions";
 import $ from "jquery";
 export class Facebook {
     /**
@@ -14,7 +14,6 @@ export class Facebook {
             writable: true,
             value: void 0
         });
-        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
         Object.defineProperty(this, "sdk", {
             enumerable: true,
             configurable: true,
@@ -52,7 +51,7 @@ export class Facebook {
     async loadSdk() {
         var _a;
         this.sdk =
-            (_a = this.sdk) !== null && _a !== void 0 ? _a : fn.run(async () => {
+            (_a = this.sdk) !== null && _a !== void 0 ? _a : evaluate(async () => {
                 await $.getScript("https://connect.facebook.net/en_US/sdk.js");
                 const appId = is.callable(this.appId)
                     ? await this.appId()

@@ -1,4 +1,4 @@
-import type { PouchChanges, Content, PouchChangesHandler, PouchChangesOptions, PouchDatabase, PouchDatabaseConfiguration, PouchError, PouchGetMeta, PouchIdMeta, PouchPutDocument, PouchPutDocuments, PouchQueryOptions, PouchQueryResponse, PouchResponse } from "./core";
+import type { Content, PouchChanges, PouchChangesHandler, PouchChangesOptions, PouchDatabase, PouchDatabaseConfiguration, PouchError, PouchGetMeta, PouchIdMeta, PouchPutDocument, PouchPutDocuments, PouchQueryOptions, PouchQueryResponse, PouchResponse } from "./core";
 export declare class PouchProxy {
     /**
      * Creates class instance.

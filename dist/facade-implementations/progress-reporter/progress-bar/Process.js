@@ -31,30 +31,6 @@ class Process {
         processes = functions_1.set.add(processes, this);
         Process.update();
     }
-    /**
-     * Returns progress.
-     *
-     * @param this - No this.
-     * @returns Progress.
-     */
-    static getProgress() {
-        return functions_1.num.round(progress, core_1.moduleConfig.precision);
-    }
-    /**
-     * Resets to initial state.
-     *
-     * @param this - No this.
-     */
-    static reset() {
-        if (processes.size) {
-            processes = new Set();
-            progress = 0;
-            functions_1.programFlow.clearTimeout(timeout);
-            (0, jquery_1.default)(core_1.moduleConfig.selector)
-                .removeClass(core_1.moduleConfig.activeClass)
-                .css("width", "");
-        }
-    }
     done() {
         this.state.state = "finalEasing";
         this.state.lastUpdate = Date.now();
@@ -80,11 +56,58 @@ class Process {
         return this;
     }
     /**
-     * Updates progress bar state.
-     *
-     * @param this - No this.
+     * Updates internal state.
      */
-    static update() {
+    update() {
+        switch (this.state.state) {
+            case "auto":
+                (0, core_1.growProgress)(this.state);
+                break;
+            case "finalEasing":
+                (0, core_1.finalEasing)(this.state);
+                break;
+            default:
+        }
+    }
+}
+exports.Process = Process;
+/**
+ * Returns progress.
+ *
+ * @returns Progress.
+ */
+Object.defineProperty(Process, "getProgress", {
+    enumerable: true,
+    configurable: true,
+    writable: true,
+    value: () => functions_1.num.round(progress, core_1.moduleConfig.precision)
+});
+/**
+ * Resets to initial state.
+ */
+Object.defineProperty(Process, "reset", {
+    enumerable: true,
+    configurable: true,
+    writable: true,
+    value: () => {
+        if (processes.size) {
+            processes = new Set();
+            progress = 0;
+            functions_1.programFlow.clearTimeout(timeout);
+            (0, jquery_1.default)(core_1.moduleConfig.selector)
+                .removeClass(core_1.moduleConfig.activeClass)
+                .css("width", "");
+        }
+    }
+});
+/**
+ * Updates progress bar state.
+ */
+Object.defineProperty(Process, "update", {
+    enumerable: true,
+    configurable: true,
+    writable: true,
+    value: () => {
         if (core_1.moduleConfig.enabled) {
             const now = Date.now();
             const all = functions_1.a.fromIterable(processes);
@@ -110,22 +133,7 @@ class Process {
         else
             Process.reset();
     }
-    /**
-     * Updates internal state.
-     */
-    update() {
-        switch (this.state.state) {
-            case "auto":
-                (0, core_1.growProgress)(this.state);
-                break;
-            case "finalEasing":
-                (0, core_1.finalEasing)(this.state);
-                break;
-            default:
-        }
-    }
-}
-exports.Process = Process;
+});
 let processes = new Set();
 let progress = 0;
 let timeout;

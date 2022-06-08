@@ -20,12 +20,12 @@
 - [PouchQueryResponse](../interfaces/facade_implementations_database_pouchdb_wrapper_core_types_pouchdb.PouchQueryResponse.md)
 - [PouchResponse](../interfaces/facade_implementations_database_pouchdb_wrapper_core_types_pouchdb.PouchResponse.md)
 
-### Type aliases
+### Type Aliases
 
 - [PouchDatabaseConfiguration](facade_implementations_database_pouchdb_wrapper_core_types_pouchdb.md#pouchdatabaseconfiguration)
 - [PouchPutDocuments](facade_implementations_database_pouchdb_wrapper_core_types_pouchdb.md#pouchputdocuments)
 
-## Type aliases
+## Type Aliases
 
 ### PouchDatabaseConfiguration
 

@@ -12,13 +12,13 @@
 - [OwnProps](../interfaces/classes_database_Item.Item.OwnProps.md)
 - [PutItemDoc](../interfaces/classes_database_Item.Item.PutItemDoc.md)
 
-### Type aliases
+### Type Aliases
 
 - [ExistingItemDocs](classes_database_Item.Item.md#existingitemdocs)
 - [Items](classes_database_Item.Item.md#items)
 - [PutItemDocs](classes_database_Item.Item.md#putitemdocs)
 
-## Type aliases
+## Type Aliases
 
 ### ExistingItemDocs
 

@@ -1,0 +1,1 @@
+{"version":3,"file":"create-implementation.js","sourceRoot":"","sources":["../../../../src/facade-implementations/inline-search/core/create-implementation.ts"],"names":[],"mappings":"AAGA;;;;;GAKG;AACH,MAAM,UAAU,oBAAoB,CAAC,IAAiB;IACpD,OAAO;QACL,MAAM,EAAE,CACN,OAAyB,EACzB,MAAuC,EACvC,KAAmB,EACnB,EAAE,CAAC,IAAI,IAAI,CAAI,OAAO,EAAE,MAAM,EAAE,KAAK,CAAC;KACzC,CAAC;AACJ,CAAC"}

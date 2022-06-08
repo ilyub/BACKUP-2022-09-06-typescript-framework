@@ -9,7 +9,7 @@ exports.isDocsResponse = functions_1.is.object.factory({
     docs: exports.isDocResponses,
     settled: functions_1.is.boolean
 }, {});
-exports.isExistingDocument = functions_1.fn.run(() => {
+exports.isExistingDocument = (0, functions_1.evaluate)(() => {
     const isBaseStoredAttachedDocument = functions_1.is.object.factory({ _id: functions_1.is.number, _rev: functions_1.is.number }, { _deleted: functions_1.is.true, parentDoc: functions_1.is.never });
     const isBaseStoredAttachedDocuments = functions_1.is.factory(functions_1.is.array.of, isBaseStoredAttachedDocument);
     return functions_1.is.object.factory({ _id: functions_1.is.string, _rev: functions_1.is.string }, {

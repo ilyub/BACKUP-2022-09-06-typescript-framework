@@ -29,7 +29,7 @@ function getMapReduce(options, queryOptions, caseSensitiveSorting) {
         descending,
         caseSensitiveSorting
     ]));
-    const key = functions_1.fn.run(() => {
+    const key = (0, functions_1.evaluate)(() => {
         if (functions_1.is.empty(sortBy))
             return `[${group2}, null, doc._id]`;
         return caseSensitiveSorting
@@ -131,7 +131,7 @@ function getMapReduceAttached(options, queryOptions, caseSensitiveSorting) {
         descending,
         caseSensitiveSorting
     ]));
-    const key = functions_1.fn.run(() => {
+    const key = (0, functions_1.evaluate)(() => {
         if (functions_1.is.empty(sortBy))
             return `[${group2}, null, doc._id, id]`;
         return caseSensitiveSorting

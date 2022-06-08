@@ -21,12 +21,12 @@
 - [message](facade_implementations_database_pouchdb_wrapper_core_errors_PouchRetryError.PouchRetryError.md#message)
 - [name](facade_implementations_database_pouchdb_wrapper_core_errors_PouchRetryError.PouchRetryError.md#name)
 - [stack](facade_implementations_database_pouchdb_wrapper_core_errors_PouchRetryError.PouchRetryError.md#stack)
+- [prepareStackTrace](facade_implementations_database_pouchdb_wrapper_core_errors_PouchRetryError.PouchRetryError.md#preparestacktrace)
 - [stackTraceLimit](facade_implementations_database_pouchdb_wrapper_core_errors_PouchRetryError.PouchRetryError.md#stacktracelimit)
 
 ### Methods
 
 - [captureStackTrace](facade_implementations_database_pouchdb_wrapper_core_errors_PouchRetryError.PouchRetryError.md#capturestacktrace)
-- [prepareStackTrace](facade_implementations_database_pouchdb_wrapper_core_errors_PouchRetryError.PouchRetryError.md#preparestacktrace)
 
 ## Constructors
 
@@ -78,6 +78,35 @@ Error.stack
 
 ___
 
+### prepareStackTrace
+
+▪ `Static` `Optional` **prepareStackTrace**: (`err`: `Error`, `stackTraces`: `CallSite`[]) => `any`
+
+#### Type declaration
+
+▸ (`err`, `stackTraces`): `any`
+
+Optional override for formatting stack traces
+
+**`see`** https://v8.dev/docs/stack-trace-api#customizing-stack-traces
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `err` | `Error` |
+| `stackTraces` | `CallSite`[] |
+
+##### Returns
+
+`any`
+
+#### Inherited from
+
+Error.prepareStackTrace
+
+___
+
 ### stackTraceLimit
 
 ▪ `Static` **stackTraceLimit**: `number`
@@ -108,28 +137,3 @@ Create .stack property on a target object
 #### Inherited from
 
 Error.captureStackTrace
-
-___
-
-### prepareStackTrace
-
-▸ `Static` `Optional` **prepareStackTrace**(`err`, `stackTraces`): `any`
-
-Optional override for formatting stack traces
-
-**`see`** https://v8.dev/docs/stack-trace-api#customizing-stack-traces
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `err` | `Error` |
-| `stackTraces` | `CallSite`[] |
-
-#### Returns
-
-`any`
-
-#### Inherited from
-
-Error.prepareStackTrace

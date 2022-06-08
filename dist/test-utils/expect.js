@@ -2,12 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.matchers = exports.progressToBe = exports.datetimeToBe = void 0;
 const tslib_1 = require("tslib");
-const __1 = require("..");
+// eslint-disable-next-line import/no-internal-modules -- Ok
+const DateTime_1 = require("../facade-implementations/datetime/date-fns-wrapper/DateTime");
 const facades_1 = require("@skylib/facades");
 const functions_1 = require("@skylib/functions");
 const jquery_1 = tslib_1.__importDefault(require("jquery"));
 const datetimeToBe = (got, expected) => {
-    functions_1.assert.instance(got, __1.implementations.datetime.dateFnsWrapper.DateTime);
+    functions_1.assert.instance(got, DateTime_1.DateTime);
     return got.toTime() === new Date(expected).getTime()
         ? {
             message: () => `Expected date not to be "${expected}"`,

@@ -16,4 +16,4 @@
 
 ### progressBar
 
-• `Const` **progressBar**: [`Configurable`](../interfaces/facade_implementations_progress_reporter_progress_bar.progressBar.Configurable.md) & `progressReporter.Facade`
+• `Const` **progressBar**: [`Configurable`](../interfaces/facade_implementations_progress_reporter_progress_bar_core.Configurable.md) & `progressReporter.Facade`

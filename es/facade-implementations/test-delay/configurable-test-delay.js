@@ -1,4 +1,4 @@
-import { wait, o, defineFn } from "@skylib/functions";
+import { defineFn, o, wait } from "@skylib/functions";
 export const configurableTestDelay = defineFn(
 // eslint-disable-next-line @skylib/require-jsdoc -- Ok
 async () => {
@@ -6,13 +6,11 @@ async () => {
         await wait(moduleConfig.timeout);
 }, {
     // eslint-disable-next-line @skylib/require-jsdoc -- Ok
-    configure(config) {
+    configure: (config) => {
         o.assign(moduleConfig, config);
     },
     // eslint-disable-next-line @skylib/require-jsdoc -- Ok
-    getConfiguration() {
-        return moduleConfig;
-    }
+    getConfiguration: () => moduleConfig
 });
 const moduleConfig = {
     enabled: false,

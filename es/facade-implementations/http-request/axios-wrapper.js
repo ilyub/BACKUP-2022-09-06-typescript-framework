@@ -1,13 +1,11 @@
 import { o } from "@skylib/functions";
 import axios from "axios";
 export const axiosWrapper = {
-    configure(config) {
+    configure: (config) => {
         o.assign(moduleConfig, config);
     },
-    getConfiguration() {
-        return moduleConfig;
-    },
-    async send(url, method = "get", data = {}, headers = {}) {
+    getConfiguration: () => moduleConfig,
+    send: async (url, method = "get", data = {}, headers = {}) => {
         const response = await axios({
             data,
             headers,

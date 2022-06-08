@@ -12,6 +12,7 @@
 
 ### Properties
 
+- [keys](facade_implementations_lang_dictionary_Definitions.Definitions.md#keys)
 - [pluralReduce](facade_implementations_lang_dictionary_Definitions.Definitions.md#pluralreduce)
 - [wordForms](facade_implementations_lang_dictionary_Definitions.Definitions.md#wordforms)
 - [words](facade_implementations_lang_dictionary_Definitions.Definitions.md#words)
@@ -36,6 +37,12 @@ Creates class instance.
 | `raw` | [`RawLanguage`](../interfaces/facade_implementations_lang_dictionary_core.RawLanguage.md) | Language definition. |
 
 ## Properties
+
+### keys
+
+• `Readonly` **keys**: `Rec`<`Transform`<`Word`\>, `Transform`<`Word`\>\>
+
+___
 
 ### pluralReduce
 

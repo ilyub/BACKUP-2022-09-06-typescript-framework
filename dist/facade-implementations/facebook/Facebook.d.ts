@@ -1,5 +1,5 @@
 import type { facebook } from "@skylib/facades";
-import type { stringU, AsyncPromise } from "@skylib/functions";
+import type { AsyncPromise, stringU } from "@skylib/functions";
 export declare class Facebook implements facebook.Facade {
     /**
      * Creates class instance.

@@ -1,7 +1,7 @@
 import type { Definitions } from "./Definitions";
 import type { RawDefinition, Rules, WordInfo } from "./core";
 import type { lang } from "@skylib/facades";
-import type { NumStr, strings, IndexedObject } from "@skylib/functions";
+import type { IndexedObject, NumStr, strings } from "@skylib/functions";
 export declare class Definition {
     /**
      * Creates class instance.

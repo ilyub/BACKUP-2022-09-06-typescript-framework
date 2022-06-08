@@ -5,10 +5,10 @@ export const pluralReduce = defineFn(
 // eslint-disable-next-line @skylib/require-jsdoc -- Ok
 (count) => {
     count = Math.abs(count);
-    return count === 1 ? 1 : 2;
+    return Math.abs(count) === 1 ? 1 : 2;
 }, {
     // eslint-disable-next-line @skylib/require-jsdoc -- Ok
-    ru(count) {
+    ru: (count) => {
         count = Math.abs(count);
         if (count >= 10 && count <= 19)
             return 5;

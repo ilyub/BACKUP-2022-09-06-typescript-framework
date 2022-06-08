@@ -66,7 +66,7 @@ Creates class instance.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `date?` | `Date` \| `DateTime` \| `NumStr` | Date. |
+| `date?` | `NumStr` \| `Date` \| `DateTime` | Date. |
 
 ## Properties
 

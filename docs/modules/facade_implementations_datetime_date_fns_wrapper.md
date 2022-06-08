@@ -16,4 +16,4 @@
 
 ### dateFnsWrapper
 
-• `Const` **dateFnsWrapper**: [`Configurable`](../interfaces/facade_implementations_datetime_date_fns_wrapper.dateFnsWrapper.Configurable.md) & `datetime.Facade`
+• `Const` **dateFnsWrapper**: [`Configurable`](../interfaces/facade_implementations_datetime_date_fns_wrapper_core.Configurable.md) & `datetime.Facade`

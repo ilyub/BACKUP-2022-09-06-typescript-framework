@@ -1,9 +1,10 @@
-import { implementations } from "..";
+// eslint-disable-next-line import/no-internal-modules -- Ok
+import { DateTime } from "../facade-implementations/datetime/date-fns-wrapper/DateTime";
 import { progressReporter } from "@skylib/facades";
 import { assert } from "@skylib/functions";
 import $ from "jquery";
 export const datetimeToBe = (got, expected) => {
-    assert.instance(got, implementations.datetime.dateFnsWrapper.DateTime);
+    assert.instance(got, DateTime);
     return got.toTime() === new Date(expected).getTime()
         ? {
             message: () => `Expected date not to be "${expected}"`,

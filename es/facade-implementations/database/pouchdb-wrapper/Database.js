@@ -1,8 +1,8 @@
 import { __rest } from "tslib";
 import { PouchProxy } from "./PouchProxy";
-import { PouchConflictError, PouchNotFoundError, PouchRetryError, extractDoc, extractAttachedDoc, isDocsResponse, isExistingDocument, isExistingAttachedDocument, validatePutDocument, getMapReduceAttached, getMapReduce } from "./core";
+import { PouchConflictError, PouchNotFoundError, PouchRetryError, extractAttachedDoc, extractDoc, getMapReduce, getMapReduceAttached, isDocsResponse, isExistingAttachedDocument, isExistingDocument, validatePutDocument } from "./core";
 import { database, handlePromise, reactiveStorage } from "@skylib/facades";
-import { a, Accumulator, assert, fn, is, num, o, programFlow } from "@skylib/functions";
+import { Accumulator, ErrorArg, a, assert, evaluate, fn, is, num, o, programFlow } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { collate } from "pouchdb-collate";
 export class Database {
@@ -15,7 +15,6 @@ export class Database {
      * @param pouchConfig - PouchDB configuration.
      */
     constructor(name, options = {}, config = {}, pouchConfig = {}) {
-        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
         Object.defineProperty(this, "changes", {
             enumerable: true,
             configurable: true,
@@ -40,7 +39,22 @@ export class Database {
             writable: true,
             value: void 0
         });
-        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
+        /**
+         * Creates reactive storage.
+         *
+         * @returns Reactive storage.
+         */
+        Object.defineProperty(this, "createReactiveStorage", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: () => reactiveStorage({
+                loaded: false,
+                loading: true,
+                refresh: fn.noop,
+                unsubscribe: fn.noop
+            })
+        });
         Object.defineProperty(this, "db", {
             enumerable: true,
             configurable: true,
@@ -134,7 +148,7 @@ export class Database {
             return await this.get(id);
         }
         catch (e) {
-            assert.instance(e, PouchNotFoundError, assert.wrapError(e));
+            assert.instance(e, PouchNotFoundError, ErrorArg.wrapError(e));
             return undefined;
         }
     }
@@ -143,7 +157,7 @@ export class Database {
             return await this.getAttached(id, parentId);
         }
         catch (e) {
-            assert.instance(e, PouchNotFoundError, assert.wrapError(e));
+            assert.instance(e, PouchNotFoundError, ErrorArg.wrapError(e));
             return undefined;
         }
     }
@@ -187,7 +201,7 @@ export class Database {
             return await this.put(doc);
         }
         catch (e) {
-            assert.instance(e, PouchConflictError, assert.wrapError(e));
+            assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
             return undefined;
         }
     }
@@ -196,7 +210,7 @@ export class Database {
             return await this.putAttached(parentId, doc);
         }
         catch (e) {
-            assert.instance(e, PouchConflictError, assert.wrapError(e));
+            assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
             return undefined;
         }
     }
@@ -361,7 +375,7 @@ export class Database {
             });
         }
         catch (e) {
-            assert.instance(e, PouchConflictError, assert.wrapError(e));
+            assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
             return undefined;
         }
     }
@@ -405,7 +419,7 @@ export class Database {
                         .length))
                 : 0,
             docs: queryOptions.docs
-                ? fn.run(() => {
+                ? evaluate(() => {
                     const items = _.flatten(groups.map(group => group.docs)).filter(item => mapReduce.output(item.doc));
                     items.sort((item1, item2) => collate(item1.key, item2.key));
                     if (descending)
@@ -434,7 +448,7 @@ export class Database {
             return true;
         }
         catch (e) {
-            assert.instance(e, PouchConflictError, assert.wrapError(e));
+            assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
             return false;
         }
     }
@@ -452,21 +466,8 @@ export class Database {
             });
         }
         catch (e) {
-            assert.instance(e, PouchConflictError, assert.wrapError(e));
+            assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
         }
-    }
-    /**
-     * Creates reactive storage.
-     *
-     * @returns Reactive storage.
-     */
-    createReactiveStorage() {
-        return reactiveStorage({
-            loaded: false,
-            loading: true,
-            refresh: fn.noop,
-            unsubscribe: fn.noop
-        });
     }
     /**
      * Returns PouchProxy instance.
@@ -486,7 +487,7 @@ export class Database {
      */
     async migrate() {
         if (this.options.migrations.length) {
-            let migrations = await fn.run(async () => {
+            let migrations = await evaluate(async () => {
                 const result = await this.getIfExists("migrations");
                 return result !== null && result !== void 0 ? result : { _id: "migrations" };
             });
@@ -496,7 +497,7 @@ export class Database {
                 }
                 else {
                     // eslint-disable-next-line no-await-in-loop -- Ok
-                    await migration.callback.call(this);
+                    await migration.callback(this);
                     migrations = Object.assign(Object.assign({}, migrations), { [migration.id]: true });
                     // eslint-disable-next-line no-await-in-loop -- Ok
                     const { id, rev } = await this.put(migrations);
@@ -519,7 +520,7 @@ export class Database {
             return await this._rawQuery(mapReduce, options, queryOptions);
         }
         catch (e) {
-            assert.instance(e, PouchNotFoundError, assert.wrapError(e));
+            assert.instance(e, PouchNotFoundError, ErrorArg.wrapError(e));
             await this.createDesignDocument(mapReduce);
             return await this._rawQuery(mapReduce, options, queryOptions);
         }

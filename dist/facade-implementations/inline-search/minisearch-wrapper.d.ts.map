@@ -1,1 +1,1 @@
-{"version":3,"file":"minisearch-wrapper.d.ts","sourceRoot":"","sources":["../../../src/facade-implementations/inline-search/minisearch-wrapper.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,iBAAiB,CAAC;AAEpD,eAAO,MAAM,iBAAiB,EAAE,YAAY,CAAC,MA0B5C,CAAC"}
+{"version":3,"file":"minisearch-wrapper.d.ts","sourceRoot":"","sources":["../../../src/facade-implementations/inline-search/minisearch-wrapper.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,iBAAiB,CAAC;AAEpD,eAAO,MAAM,iBAAiB,EAAE,YAAY,CAAC,MAyB5C,CAAC"}

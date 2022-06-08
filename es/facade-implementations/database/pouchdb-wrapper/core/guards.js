@@ -1,4 +1,4 @@
-import { fn, is } from "@skylib/functions";
+import { evaluate, is } from "@skylib/functions";
 export const isDocResponse = is.object.factory({ doc: is.unknown, key: is.unknown }, {});
 export const isDocResponses = is.factory(is.array.of, isDocResponse);
 export const isDocsResponse = is.object.factory({
@@ -6,7 +6,7 @@ export const isDocsResponse = is.object.factory({
     docs: isDocResponses,
     settled: is.boolean
 }, {});
-export const isExistingDocument = fn.run(() => {
+export const isExistingDocument = evaluate(() => {
     const isBaseStoredAttachedDocument = is.object.factory({ _id: is.number, _rev: is.number }, { _deleted: is.true, parentDoc: is.never });
     const isBaseStoredAttachedDocuments = is.factory(is.array.of, isBaseStoredAttachedDocument);
     return is.object.factory({ _id: is.string, _rev: is.string }, {

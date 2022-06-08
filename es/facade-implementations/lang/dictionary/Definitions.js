@@ -7,6 +7,12 @@ export class Definitions {
      * @param raw - Language definition.
      */
     constructor(raw) {
+        Object.defineProperty(this, "keys", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
         Object.defineProperty(this, "pluralReduce", {
             enumerable: true,
             configurable: true,
@@ -26,6 +32,16 @@ export class Definitions {
             value: void 0
         });
         validate(raw);
+        // eslint-disable-next-line @skylib/no-mutable-signature -- Ok
+        const keys = {};
+        for (const key of o.keys(raw.words)) {
+            keys[s.lcFirst(key)] = s.lcFirst(key);
+            keys[s.ucFirst(key)] = s.ucFirst(key);
+            keys[key.toLowerCase()] = key.toLowerCase();
+            keys[key.toUpperCase()] = key.toUpperCase();
+        }
+        // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
+        this.keys = keys;
         this.pluralReduce = raw.pluralReduce;
         this.wordForms = new Map(o.entries(raw.wordForms));
         this.words = getWords(raw);

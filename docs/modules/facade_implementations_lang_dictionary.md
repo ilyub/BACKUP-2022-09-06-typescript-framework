@@ -14,7 +14,7 @@
 - [getConfiguration](facade_implementations_lang_dictionary.md#getconfiguration)
 - [pluralReduce](facade_implementations_lang_dictionary.md#pluralreduce)
 
-### Type aliases
+### Type Aliases
 
 - [DefinitionsByLocale](facade_implementations_lang_dictionary.md#definitionsbylocale)
 
@@ -60,7 +60,7 @@ ___
 
 Re-exports [pluralReduce](facade_implementations_lang_dictionary_core.md#pluralreduce)
 
-## Type aliases
+## Type Aliases
 
 ### DefinitionsByLocale
 

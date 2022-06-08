@@ -9,9 +9,8 @@ export const jsConfirm = defineFn(
         failure === null || failure === void 0 ? void 0 : failure();
 }, {
     // eslint-disable-next-line @skylib/require-jsdoc, @typescript-eslint/require-await -- Ok
-    async async(message) {
-        // eslint-disable-next-line no-alert -- Ok
-        return confirm(message);
-    }
+    async: async (message) => 
+    // eslint-disable-next-line no-alert -- Ok
+    confirm(message)
 });
 //# sourceMappingURL=js-confirm.js.map

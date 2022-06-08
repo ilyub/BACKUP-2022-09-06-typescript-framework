@@ -90,14 +90,13 @@ exports.jestReset = (0, functions_1.defineFn)(
     /**
      * Jest reset.
      *
-     * @param this - No this.
      * @param localeName - Locale name.
      * @param definitions - Language definitions.
      */
-    dictionary(localeName, definitions) {
-        const { Dictionary, configure } = __1.implementations.lang.dictionary;
-        facades_1.lang.setImplementation(Dictionary.create(definitions));
-        configure((0, functions_1.typedef)({ localeName }));
+    dictionary: (localeName, definitions) => {
+        const { dictionary } = __1.implementations.lang;
+        facades_1.lang.setImplementation(dictionary.Dictionary.create(definitions));
+        dictionary.configure((0, functions_1.typedef)({ localeName }));
     }
 });
 exports.jestSetup = (0, functions_1.defineFn)(
@@ -111,11 +110,10 @@ exports.jestSetup = (0, functions_1.defineFn)(
     /**
      * Jest setup.
      *
-     * @param this - No this.
      * @param localeName - Locale name.
      * @param definitions - Language definitions.
      */
-    dictionary(localeName, definitions) {
+    dictionary: (localeName, definitions) => {
         exports.jestReset.dictionary(localeName, definitions);
     }
 });

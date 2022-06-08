@@ -18,7 +18,6 @@ class Database {
      * @param pouchConfig - PouchDB configuration.
      */
     constructor(name, options = {}, config = {}, pouchConfig = {}) {
-        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
         Object.defineProperty(this, "changes", {
             enumerable: true,
             configurable: true,
@@ -43,7 +42,22 @@ class Database {
             writable: true,
             value: void 0
         });
-        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
+        /**
+         * Creates reactive storage.
+         *
+         * @returns Reactive storage.
+         */
+        Object.defineProperty(this, "createReactiveStorage", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: () => (0, facades_1.reactiveStorage)({
+                loaded: false,
+                loading: true,
+                refresh: functions_1.fn.noop,
+                unsubscribe: functions_1.fn.noop
+            })
+        });
         Object.defineProperty(this, "db", {
             enumerable: true,
             configurable: true,
@@ -137,7 +151,7 @@ class Database {
             return await this.get(id);
         }
         catch (e) {
-            functions_1.assert.instance(e, core_1.PouchNotFoundError, functions_1.assert.wrapError(e));
+            functions_1.assert.instance(e, core_1.PouchNotFoundError, functions_1.ErrorArg.wrapError(e));
             return undefined;
         }
     }
@@ -146,7 +160,7 @@ class Database {
             return await this.getAttached(id, parentId);
         }
         catch (e) {
-            functions_1.assert.instance(e, core_1.PouchNotFoundError, functions_1.assert.wrapError(e));
+            functions_1.assert.instance(e, core_1.PouchNotFoundError, functions_1.ErrorArg.wrapError(e));
             return undefined;
         }
     }
@@ -190,7 +204,7 @@ class Database {
             return await this.put(doc);
         }
         catch (e) {
-            functions_1.assert.instance(e, core_1.PouchConflictError, functions_1.assert.wrapError(e));
+            functions_1.assert.instance(e, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(e));
             return undefined;
         }
     }
@@ -199,7 +213,7 @@ class Database {
             return await this.putAttached(parentId, doc);
         }
         catch (e) {
-            functions_1.assert.instance(e, core_1.PouchConflictError, functions_1.assert.wrapError(e));
+            functions_1.assert.instance(e, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(e));
             return undefined;
         }
     }
@@ -364,7 +378,7 @@ class Database {
             });
         }
         catch (e) {
-            functions_1.assert.instance(e, core_1.PouchConflictError, functions_1.assert.wrapError(e));
+            functions_1.assert.instance(e, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(e));
             return undefined;
         }
     }
@@ -408,7 +422,7 @@ class Database {
                         .length))
                 : 0,
             docs: queryOptions.docs
-                ? functions_1.fn.run(() => {
+                ? (0, functions_1.evaluate)(() => {
                     const items = _.flatten(groups.map(group => group.docs)).filter(item => mapReduce.output(item.doc));
                     items.sort((item1, item2) => (0, pouchdb_collate_1.collate)(item1.key, item2.key));
                     if (descending)
@@ -437,7 +451,7 @@ class Database {
             return true;
         }
         catch (e) {
-            functions_1.assert.instance(e, core_1.PouchConflictError, functions_1.assert.wrapError(e));
+            functions_1.assert.instance(e, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(e));
             return false;
         }
     }
@@ -455,21 +469,8 @@ class Database {
             });
         }
         catch (e) {
-            functions_1.assert.instance(e, core_1.PouchConflictError, functions_1.assert.wrapError(e));
+            functions_1.assert.instance(e, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(e));
         }
-    }
-    /**
-     * Creates reactive storage.
-     *
-     * @returns Reactive storage.
-     */
-    createReactiveStorage() {
-        return (0, facades_1.reactiveStorage)({
-            loaded: false,
-            loading: true,
-            refresh: functions_1.fn.noop,
-            unsubscribe: functions_1.fn.noop
-        });
     }
     /**
      * Returns PouchProxy instance.
@@ -489,7 +490,7 @@ class Database {
      */
     async migrate() {
         if (this.options.migrations.length) {
-            let migrations = await functions_1.fn.run(async () => {
+            let migrations = await (0, functions_1.evaluate)(async () => {
                 const result = await this.getIfExists("migrations");
                 return result !== null && result !== void 0 ? result : { _id: "migrations" };
             });
@@ -499,7 +500,7 @@ class Database {
                 }
                 else {
                     // eslint-disable-next-line no-await-in-loop -- Ok
-                    await migration.callback.call(this);
+                    await migration.callback(this);
                     migrations = Object.assign(Object.assign({}, migrations), { [migration.id]: true });
                     // eslint-disable-next-line no-await-in-loop -- Ok
                     const { id, rev } = await this.put(migrations);
@@ -522,7 +523,7 @@ class Database {
             return await this._rawQuery(mapReduce, options, queryOptions);
         }
         catch (e) {
-            functions_1.assert.instance(e, core_1.PouchNotFoundError, functions_1.assert.wrapError(e));
+            functions_1.assert.instance(e, core_1.PouchNotFoundError, functions_1.ErrorArg.wrapError(e));
             await this.createDesignDocument(mapReduce);
             return await this._rawQuery(mapReduce, options, queryOptions);
         }

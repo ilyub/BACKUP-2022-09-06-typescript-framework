@@ -49,7 +49,6 @@ export class AttachedItem {
             writable: true,
             value: void 0
         });
-        // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
         Object.defineProperty(this, "_parent", {
             enumerable: true,
             configurable: true,

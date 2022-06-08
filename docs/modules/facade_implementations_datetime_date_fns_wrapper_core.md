@@ -6,10 +6,11 @@
 
 ### Interfaces
 
+- [Configurable](../interfaces/facade_implementations_datetime_date_fns_wrapper_core.Configurable.md)
 - [Configuration](../interfaces/facade_implementations_datetime_date_fns_wrapper_core.Configuration.md)
 - [PartialConfiguration](../interfaces/facade_implementations_datetime_date_fns_wrapper_core.PartialConfiguration.md)
 
-### Type aliases
+### Type Aliases
 
 - [FirstDayOfWeek](facade_implementations_datetime_date_fns_wrapper_core.md#firstdayofweek)
 
@@ -18,7 +19,7 @@
 - [formatStrings](facade_implementations_datetime_date_fns_wrapper_core.md#formatstrings)
 - [moduleConfig](facade_implementations_datetime_date_fns_wrapper_core.md#moduleconfig)
 
-## Type aliases
+## Type Aliases
 
 ### FirstDayOfWeek
 

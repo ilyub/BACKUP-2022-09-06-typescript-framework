@@ -10,7 +10,7 @@
 - [DocsResponse](../interfaces/facade_implementations_database_pouchdb_wrapper_core_guards.DocsResponse.md)
 - [WrappablePouchError](../interfaces/facade_implementations_database_pouchdb_wrapper_core_guards.WrappablePouchError.md)
 
-### Type aliases
+### Type Aliases
 
 - [DocResponses](facade_implementations_database_pouchdb_wrapper_core_guards.md#docresponses)
 
@@ -23,7 +23,7 @@
 - [isExistingDocument](facade_implementations_database_pouchdb_wrapper_core_guards.md#isexistingdocument)
 - [isWrappablePouchError](facade_implementations_database_pouchdb_wrapper_core_guards.md#iswrappablepoucherror)
 
-## Type aliases
+## Type Aliases
 
 ### DocResponses
 

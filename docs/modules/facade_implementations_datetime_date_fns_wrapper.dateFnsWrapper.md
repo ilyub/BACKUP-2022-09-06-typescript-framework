@@ -6,16 +6,12 @@
 
 ## Table of contents
 
-### Interfaces
-
-- [Configurable](../interfaces/facade_implementations_datetime_date_fns_wrapper.dateFnsWrapper.Configurable.md)
-
-### Type aliases
+### Type Aliases
 
 - [Configuration](facade_implementations_datetime_date_fns_wrapper.dateFnsWrapper.md#configuration)
 - [PartialConfiguration](facade_implementations_datetime_date_fns_wrapper.dateFnsWrapper.md#partialconfiguration)
 
-## Type aliases
+## Type Aliases
 
 ### Configuration
 
