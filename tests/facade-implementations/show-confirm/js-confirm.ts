@@ -1,7 +1,7 @@
 import { implementations } from "@";
-import { fn } from "@skylib/functions";
+import { evaluate } from "@skylib/functions";
 
-const confirmFn = fn.run(() => {
+const confirmFn = evaluate(() => {
   const result = jest.fn();
 
   globalThis.confirm = result;

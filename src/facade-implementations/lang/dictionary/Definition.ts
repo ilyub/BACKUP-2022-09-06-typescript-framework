@@ -2,7 +2,7 @@ import { a, as, assert, is, o, regexp } from "@skylib/functions";
 import type { Definitions } from "./Definitions";
 import type { RawDefinition, Rules, WordInfo } from "./core";
 import type { lang } from "@skylib/facades";
-import type { NumStr, strings, IndexedObject } from "@skylib/functions";
+import type { IndexedObject, NumStr, strings } from "@skylib/functions";
 
 export class Definition {
   /**
@@ -169,9 +169,9 @@ function applyRuleRef(
   // Format: <replacement-id:form>
   const search = a.first(rule);
 
-  const replacementId = a.get(rule, 1);
+  const replacementId = a.second(rule);
 
-  const form = a.get(rule, 2).toLowerCase();
+  const form = a.third(rule).toLowerCase();
 
   const key = as.not.empty(
     word.replacements.get(replacementId),
@@ -210,7 +210,7 @@ function applyRuleRefDependent(
   // Format: <replacement-id>
   const search = a.first(rule);
 
-  const replacementId = a.get(rule, 1);
+  const replacementId = a.second(rule);
 
   const key = as.not.empty(
     word.replacements.get(replacementId),
@@ -245,9 +245,9 @@ function applyRuleRefSecondary(
   // Format: <replacement-id.form>
   const search = a.first(rule);
 
-  const replacementId = a.get(rule, 1);
+  const replacementId = a.second(rule);
 
-  const form = a.get(rule, 2).toLowerCase();
+  const form = a.third(rule).toLowerCase();
 
   const key = as.not.empty(
     word.replacements.get(replacementId),
@@ -270,7 +270,7 @@ function applyRuleVal(word: WordInfo, rule: strings): WordInfo {
   // Format: @replacement-id
   const search = a.first(rule);
 
-  const replacementId = a.get(rule, 1);
+  const replacementId = a.second(rule);
 
   const replacement = as.not.empty(
     word.replacements.get(replacementId),
@@ -296,7 +296,7 @@ function applyRuleWordDependent(
   // Format: {key}
   const search = a.first(rule);
 
-  const key = a.get(rule, 1);
+  const key = a.second(rule);
 
   const replacement = owner.get(
     key,
@@ -325,9 +325,9 @@ function applyRuleWordSecondary(
   // Format: {key.form}
   const search = a.first(rule);
 
-  const key = a.get(rule, 1);
+  const key = a.second(rule);
 
-  const form = a.get(rule, 2).toLowerCase();
+  const form = a.third(rule).toLowerCase();
 
   const replacement = owner.get(key, word.context, 1, word.replacements, form);
 

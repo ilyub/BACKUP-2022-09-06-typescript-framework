@@ -3,8 +3,8 @@ import { testDelay } from "@skylib/facades";
 import { a } from "@skylib/functions";
 import pouchdb from "pouchdb";
 import type {
-  PouchChanges,
   Content,
+  PouchChanges,
   PouchChangesHandler,
   PouchChangesOptions,
   PouchDatabase,

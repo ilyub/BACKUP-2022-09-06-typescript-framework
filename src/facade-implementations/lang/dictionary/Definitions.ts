@@ -8,7 +8,7 @@ import type {
   WordInfo
 } from "./core";
 import type { lang } from "@skylib/facades";
-import type { strings, Rec, WritableIndexedRecord } from "@skylib/functions";
+import type { Rec, WritableIndexedRecord, strings } from "@skylib/functions";
 
 export class Definitions {
   public readonly keys: Rec<

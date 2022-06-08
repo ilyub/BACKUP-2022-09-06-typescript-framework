@@ -1,7 +1,7 @@
-import { assert, fn, is } from "@skylib/functions";
+import { assert, evaluate, is } from "@skylib/functions";
 import $ from "jquery";
 import type { google } from "@skylib/facades";
-import type { stringU, AsyncPromise } from "@skylib/functions";
+import type { AsyncPromise, stringU } from "@skylib/functions";
 
 export class Google implements google.Facade {
   /**
@@ -36,7 +36,6 @@ export class Google implements google.Facade {
 
   protected readonly clientId: AsyncPromise<stringU> | stringU;
 
-  // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected sdk: Promise<Google.Auth> | undefined;
 
   /**
@@ -47,7 +46,7 @@ export class Google implements google.Facade {
   protected async _loadSdk(): Promise<Google.Auth> {
     this.sdk =
       this.sdk ??
-      fn.run(async () => {
+      evaluate(async () => {
         await $.getScript("https://apis.google.com/js/api:client.js");
 
         const clientId = is.callable(this.clientId)

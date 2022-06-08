@@ -3,20 +3,22 @@ import {
   PouchConflictError,
   PouchNotFoundError,
   PouchRetryError,
-  extractDoc,
   extractAttachedDoc,
-  isDocsResponse,
-  isExistingDocument,
-  isExistingAttachedDocument,
-  validatePutDocument,
+  extractDoc,
+  getMapReduce,
   getMapReduceAttached,
-  getMapReduce
+  isDocsResponse,
+  isExistingAttachedDocument,
+  isExistingDocument,
+  validatePutDocument
 } from "./core";
 import { database, handlePromise, reactiveStorage } from "@skylib/facades";
 import {
-  a,
   Accumulator,
+  ErrorArg,
+  a,
   assert,
+  evaluate,
   fn,
   is,
   num,
@@ -26,20 +28,20 @@ import {
 import * as _ from "@skylib/lodash-commonjs-es";
 import { collate } from "pouchdb-collate";
 import type {
-  ReactiveHandler,
-  RawQueryOptions,
-  RawQueryOptionsAttached,
-  RawQueryResponse,
   Configuration,
-  ReactiveHandlerAttached,
-  ReactiveRequest,
-  ReactiveRequestAttached,
+  MapReduce,
   PouchChanges,
   PouchDatabase,
   PouchDatabaseConfiguration,
-  MapReduce
+  RawQueryOptions,
+  RawQueryOptionsAttached,
+  RawQueryResponse,
+  ReactiveHandler,
+  ReactiveHandlerAttached,
+  ReactiveRequest,
+  ReactiveRequestAttached
 } from "./core";
-import type { numbers, numberU, unknowns, Writable } from "@skylib/functions";
+import type { Writable, numberU, numbers, unknowns } from "@skylib/functions";
 
 export class Database implements database.Database {
   /**
@@ -175,7 +177,7 @@ export class Database implements database.Database {
     try {
       return await this.get(id);
     } catch (e) {
-      assert.instance(e, PouchNotFoundError, assert.wrapError(e));
+      assert.instance(e, PouchNotFoundError, ErrorArg.wrapError(e));
 
       return undefined;
     }
@@ -188,7 +190,7 @@ export class Database implements database.Database {
     try {
       return await this.getAttached(id, parentId);
     } catch (e) {
-      assert.instance(e, PouchNotFoundError, assert.wrapError(e));
+      assert.instance(e, PouchNotFoundError, ErrorArg.wrapError(e));
 
       return undefined;
     }
@@ -254,7 +256,7 @@ export class Database implements database.Database {
     try {
       return await this.put(doc);
     } catch (e) {
-      assert.instance(e, PouchConflictError, assert.wrapError(e));
+      assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
 
       return undefined;
     }
@@ -267,7 +269,7 @@ export class Database implements database.Database {
     try {
       return await this.putAttached(parentId, doc);
     } catch (e) {
-      assert.instance(e, PouchConflictError, assert.wrapError(e));
+      assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
 
       return undefined;
     }
@@ -481,7 +483,6 @@ export class Database implements database.Database {
     this.refreshSubscription();
   }
 
-  // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected changes: PouchChanges | undefined;
 
   protected readonly changesHandlers = new Map<
@@ -511,7 +512,6 @@ export class Database implements database.Database {
       unsubscribe: fn.noop
     });
 
-  // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected db: PouchProxy | undefined;
 
   protected readonly name: string;
@@ -583,7 +583,7 @@ export class Database implements database.Database {
         return { ...item, parentRev: response.rev };
       });
     } catch (e) {
-      assert.instance(e, PouchConflictError, assert.wrapError(e));
+      assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
 
       return undefined;
     }
@@ -646,7 +646,7 @@ export class Database implements database.Database {
           )
         : 0,
       docs: queryOptions.docs
-        ? fn.run((): unknowns => {
+        ? evaluate((): unknowns => {
             const items = _.flatten(groups.map(group => group.docs)).filter(
               item => mapReduce.output(item.doc)
             );
@@ -685,7 +685,7 @@ export class Database implements database.Database {
 
       return true;
     } catch (e) {
-      assert.instance(e, PouchConflictError, assert.wrapError(e));
+      assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
 
       return false;
     }
@@ -705,7 +705,7 @@ export class Database implements database.Database {
         views: { default: mapReduce.mapReduce }
       });
     } catch (e) {
-      assert.instance(e, PouchConflictError, assert.wrapError(e));
+      assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
     }
   }
 
@@ -729,7 +729,7 @@ export class Database implements database.Database {
    */
   protected async migrate(): Promise<void> {
     if (this.options.migrations.length) {
-      let migrations = await fn.run<database.PutDocument>(async () => {
+      let migrations = await evaluate<database.PutDocument>(async () => {
         const result = await this.getIfExists("migrations");
 
         return result ?? { _id: "migrations" };
@@ -782,7 +782,7 @@ export class Database implements database.Database {
     try {
       return await this._rawQuery(mapReduce, options, queryOptions);
     } catch (e) {
-      assert.instance(e, PouchNotFoundError, assert.wrapError(e));
+      assert.instance(e, PouchNotFoundError, ErrorArg.wrapError(e));
       await this.createDesignDocument(mapReduce);
 
       return await this._rawQuery(mapReduce, options, queryOptions);

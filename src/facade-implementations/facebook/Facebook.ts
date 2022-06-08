@@ -1,7 +1,7 @@
-import { assert, fn, is } from "@skylib/functions";
+import { assert, evaluate, is } from "@skylib/functions";
 import $ from "jquery";
 import type { facebook } from "@skylib/facades";
-import type { stringU, AsyncPromise } from "@skylib/functions";
+import type { AsyncPromise, stringU } from "@skylib/functions";
 
 export class Facebook implements facebook.Facade {
   /**
@@ -43,7 +43,7 @@ export class Facebook implements facebook.Facade {
   public async loadSdk(): Promise<void> {
     this.sdk =
       this.sdk ??
-      fn.run(async () => {
+      evaluate(async () => {
         await $.getScript("https://connect.facebook.net/en_US/sdk.js");
 
         const appId = is.callable(this.appId)
@@ -65,7 +65,6 @@ export class Facebook implements facebook.Facade {
 
   protected readonly appId: AsyncPromise<stringU> | stringU;
 
-  // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected sdk: Promise<void> | undefined;
 
   protected readonly version: string;

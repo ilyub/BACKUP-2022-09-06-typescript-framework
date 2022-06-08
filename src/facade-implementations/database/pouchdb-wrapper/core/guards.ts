@@ -1,4 +1,4 @@
-import { fn, is } from "@skylib/functions";
+import { evaluate, is } from "@skylib/functions";
 import type { database } from "@skylib/facades";
 
 export const isDocResponse = is.object.factory<DocResponse>(
@@ -17,7 +17,7 @@ export const isDocsResponse = is.object.factory<DocsResponse>(
   {}
 );
 
-export const isExistingDocument = fn.run(() => {
+export const isExistingDocument = evaluate(() => {
   const isBaseStoredAttachedDocument =
     is.object.factory<database.BaseStoredAttachedDocument>(
       { _id: is.number, _rev: is.number },

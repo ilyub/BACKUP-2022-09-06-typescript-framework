@@ -1,10 +1,11 @@
 import {
   assert,
+  defineFn,
   is,
-  wrapProxyHandler,
   map,
+  o,
   reflect,
-  defineFn
+  wrapProxyHandler
 } from "@skylib/functions";
 import type { reactiveStorage } from "@skylib/facades";
 
@@ -36,7 +37,8 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
       target: O,
       key: PropertyKey
     ): unknown {
-      const value = reflect.get(target, key);
+      // eslint-disable-next-line no-restricted-syntax -- Ok
+      const value = o.get(target, key);
 
       return is.object(value)
         ? new Proxy(
@@ -51,7 +53,8 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
       key: PropertyKey,
       value: unknown
     ): boolean {
-      const oldValue = reflect.get(target, key);
+      // eslint-disable-next-line no-restricted-syntax -- Ok
+      const oldValue = o.get(target, key);
 
       if (reflect.set(target, key, value)) {
         if (value === oldValue) {

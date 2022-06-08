@@ -1,10 +1,10 @@
 import { implementations } from "./src";
 import * as testUtils from "./src/test-utils";
-import { fn } from "@skylib/functions";
+import { evaluate } from "@skylib/functions";
 import * as functionsTestUtils from "@skylib/functions/dist/test-utils";
 
-const definitions = fn.run<implementations.lang.dictionary.DefinitionsByLocale>(
-  () => {
+const definitions =
+  evaluate<implementations.lang.dictionary.DefinitionsByLocale>(() => {
     const { dictionary } = implementations.lang;
 
     const enUs = new dictionary.Definitions({
@@ -26,8 +26,7 @@ const definitions = fn.run<implementations.lang.dictionary.DefinitionsByLocale>(
     });
 
     return { "en-US": enUs, "ru-RU": enUs };
-  }
-);
+  });
 
 functionsTestUtils.jestSetup();
 testUtils.jestSetup();

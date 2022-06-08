@@ -1,5 +1,3 @@
-/* eslint-disable @skylib/consistent-filename -- Ok */
-
 import { implementations } from "@";
 import { uniqueId } from "@skylib/facades";
 import { a } from "@skylib/functions";
@@ -17,9 +15,9 @@ test("bulkDocs", async () => {
     { lastAttachedDocs: [3], x: 3 }
   ]);
 
-  const { id: id2, rev: rev2 } = a.get(responses, 0);
+  const { id: id2, rev: rev2 } = a.first(responses);
 
-  const { id: id3, rev: rev3 } = a.get(responses, 1);
+  const { id: id3, rev: rev3 } = a.second(responses);
 
   const doc1 = await db.get(id1);
 
@@ -73,9 +71,9 @@ test("bulkDocsAttached", async () => {
     { parentDoc: { _id: id2, _rev: uniqueId() }, y: 2 }
   ]);
 
-  const { parentRev: rev1 } = a.get(responses, 0);
+  const { parentRev: rev1 } = a.first(responses);
 
-  const { parentRev: rev2 } = a.get(responses, 1);
+  const { parentRev: rev2 } = a.second(responses);
 
   const attachedDoc1 = await db.getAttached(0, id1);
 

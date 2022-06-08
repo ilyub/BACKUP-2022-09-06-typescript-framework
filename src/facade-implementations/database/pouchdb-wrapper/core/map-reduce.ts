@@ -1,5 +1,5 @@
 import { datetime, uniqueId } from "@skylib/facades";
-import { assert, cast, fn, is, json, num, o } from "@skylib/functions";
+import { assert, cast, evaluate, is, json, num, o } from "@skylib/functions";
 import sha256 from "sha256";
 import type {
   Filter,
@@ -8,7 +8,7 @@ import type {
   RawQueryOptionsAttached
 } from "./types";
 import type { database } from "@skylib/facades";
-import type { strings, Writable } from "@skylib/functions";
+import type { Writable, strings } from "@skylib/functions";
 
 /**
  * Creates map/reduce function.
@@ -47,7 +47,7 @@ export function getMapReduce(
     ])
   );
 
-  const key = fn.run(() => {
+  const key = evaluate(() => {
     if (is.empty(sortBy)) return `[${group2}, null, doc._id]`;
 
     return caseSensitiveSorting
@@ -166,7 +166,7 @@ export function getMapReduceAttached(
     ])
   );
 
-  const key = fn.run<string>(() => {
+  const key = evaluate<string>(() => {
     if (is.empty(sortBy)) return `[${group2}, null, doc._id, id]`;
 
     return caseSensitiveSorting

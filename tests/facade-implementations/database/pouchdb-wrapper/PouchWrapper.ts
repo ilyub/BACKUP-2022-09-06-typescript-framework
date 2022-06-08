@@ -1,5 +1,3 @@
-/* eslint-disable @skylib/consistent-filename -- Ok */
-
 import { implementations } from "@";
 // eslint-disable-next-line import/no-internal-modules -- Ok
 import { Database } from "@/facade-implementations/database/pouchdb-wrapper/Database";

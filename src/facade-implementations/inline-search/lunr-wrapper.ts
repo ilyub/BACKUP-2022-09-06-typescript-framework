@@ -1,4 +1,4 @@
-import { createImplementation, Engine as BaseEngine } from "./core";
+import { Engine as BaseEngine, createImplementation } from "./core";
 import lunr from "lunr";
 import type { inlineSearch } from "@skylib/facades";
 

@@ -1,5 +1,3 @@
-/* eslint-disable @skylib/consistent-filename -- Ok */
-
 import { implementations } from "@";
 import {
   PouchConflictError,
@@ -137,9 +135,9 @@ test("putAttachedBulk", async () => {
 
   const responses = await db.putAttachedBulk(id, [{ y: 1 }, { y: 2 }]);
 
-  const { parentId: id1, parentRev: rev1 } = a.get(responses, 0);
+  const { parentId: id1, parentRev: rev1 } = a.first(responses);
 
-  const { parentId: id2, parentRev: rev2 } = a.get(responses, 1);
+  const { parentId: id2, parentRev: rev2 } = a.second(responses);
 
   const doc1 = await db.getAttached(0, id1);
 

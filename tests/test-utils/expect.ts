@@ -2,7 +2,7 @@
 import { datetimeToBe, progressToBe } from "@/test-utils/expect";
 import { datetime } from "@skylib/facades";
 
-test("executionTimeToBe", () => {
+test("datetimeToBe", () => {
   {
     const result = datetimeToBe(
       datetime.create("1950-01-01 14:30"),

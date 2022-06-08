@@ -1,4 +1,4 @@
-import { wait, o, defineFn } from "@skylib/functions";
+import { defineFn, o, wait } from "@skylib/functions";
 import type { testDelay as facade } from "@skylib/facades";
 
 export const configurableTestDelay: configurableTestDelay.Configurable &

@@ -1,5 +1,3 @@
-/* eslint-disable @skylib/consistent-filename -- Ok */
-
 import { classes } from "@";
 import { uniqueId } from "@skylib/facades";
 

@@ -1,7 +1,5 @@
-/* eslint-disable @skylib/consistent-filename -- Ok */
-
 import { implementations } from "@";
-import { as, assert, AssertionError, fn } from "@skylib/functions";
+import { AssertionError, as, assert, evaluate } from "@skylib/functions";
 import $ from "jquery";
 import type { stringU, unknowns } from "@skylib/functions";
 
@@ -16,7 +14,7 @@ const getScript = jest
     return {} as JQuery.jqXHR<stringU>;
   });
 
-globalThis.FB = fn.run(() => {
+globalThis.FB = evaluate(() => {
   let appId: stringU;
 
   return {

@@ -1,5 +1,5 @@
 import { implementations } from "@";
-import { fn, typedef } from "@skylib/functions";
+import { evaluate, typedef } from "@skylib/functions";
 import type { faker } from "@skylib/facades";
 
 const loremIpsum = implementations.faker.loremIpsumWrapper;
@@ -17,7 +17,7 @@ test("configure, getConfiguration", () => {
 });
 
 test.each(
-  fn.run(() => {
+  evaluate(() => {
     return typedef<Cases>([
       {
         from: [0, "days"],

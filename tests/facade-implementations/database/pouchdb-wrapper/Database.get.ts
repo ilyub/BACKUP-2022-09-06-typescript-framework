@@ -1,9 +1,7 @@
-/* eslint-disable @skylib/consistent-filename -- Ok */
-
 import { implementations } from "@";
 // eslint-disable-next-line import/no-internal-modules -- Ok
 import { PouchNotFoundError } from "@/facade-implementations/database/pouchdb-wrapper/core/errors";
-import { handlePromise, uniqueId, database } from "@skylib/facades";
+import { database, handlePromise, uniqueId } from "@skylib/facades";
 import { fn, wait } from "@skylib/functions";
 import * as testUtils from "@skylib/functions/dist/test-utils";
 

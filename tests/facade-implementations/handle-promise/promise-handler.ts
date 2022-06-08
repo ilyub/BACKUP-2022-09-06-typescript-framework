@@ -1,11 +1,11 @@
 import { implementations } from "@";
 // eslint-disable-next-line @skylib/consistent-import, import/no-internal-modules -- Ok
 import * as handleError from "@/facade-implementations/handle-promise/promise-handler/core/handle-error";
-import { fn, wait } from "@skylib/functions";
+import { evaluate, fn, wait } from "@skylib/functions";
 import * as testUtils from "@skylib/functions/dist/test-utils";
 import type { booleanU } from "@skylib/functions";
 
-const alertFn = fn.run(() => {
+const alertFn = evaluate(() => {
   const result = jest.fn();
 
   globalThis.alert = result;

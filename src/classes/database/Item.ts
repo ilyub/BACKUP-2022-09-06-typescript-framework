@@ -1,6 +1,6 @@
 import { o } from "@skylib/functions";
 import type { database } from "@skylib/facades";
-import type { numbers, stringU, UndefinedStyle } from "@skylib/functions";
+import type { UndefinedStyle, numbers, stringU } from "@skylib/functions";
 
 export class Item {
   public readonly _deleted: boolean;

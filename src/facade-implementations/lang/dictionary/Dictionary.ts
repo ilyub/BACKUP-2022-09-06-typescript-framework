@@ -1,13 +1,12 @@
 import { moduleConfig } from "./core";
 import {
+  a,
   assert,
   cast,
-  fn,
-  wrapProxyHandler,
-  reflect,
-  s,
+  evaluate,
   o,
-  a
+  s,
+  wrapProxyHandler
 } from "@skylib/functions";
 import type { Definitions } from "./Definitions";
 import type { lang } from "@skylib/facades";
@@ -129,12 +128,13 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
     context?: lang.Context,
     count = 1
   ) {
-    const facade = fn.run(() => {
+    const facade = evaluate(() => {
       const handler = wrapProxyHandler<Dictionary>("Dictionary", "doDefault", {
         get: (target, key) => {
           assert.string(key);
 
-          return target.has(key) ? target.get(key) : reflect.get(target, key);
+          // eslint-disable-next-line no-restricted-syntax -- Ok
+          return target.has(key) ? target.get(key) : o.get(target, key);
         }
       });
 

@@ -1,7 +1,7 @@
 import { o } from "@skylib/functions";
 import type { Item } from "./Item";
 import type { database } from "@skylib/facades";
-import type { stringU, UndefinedStyle } from "@skylib/functions";
+import type { UndefinedStyle, stringU } from "@skylib/functions";
 
 export abstract class AttachedItem<T extends Item = Item> {
   public readonly _deleted: boolean;
@@ -70,7 +70,6 @@ export abstract class AttachedItem<T extends Item = Item> {
     type Source = UndefinedStyle<AttachedItem.ExistingAttachedItemDoc>;
   }
 
-  // eslint-disable-next-line @skylib/prefer-readonly-props -- Ok
   protected _parent: T | undefined;
 
   protected readonly _parentDoc: database.BaseExistingDocument;

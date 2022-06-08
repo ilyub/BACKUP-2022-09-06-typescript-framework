@@ -1,6 +1,6 @@
 import { handleError } from "./handle-error";
 import { progressReporter, showAlert } from "@skylib/facades";
-import { fn } from "@skylib/functions";
+import { evaluate } from "@skylib/functions";
 import type { handlePromise as facade } from "@skylib/facades";
 import type { AsyncPromise, Rec } from "@skylib/functions";
 
@@ -51,7 +51,7 @@ export function handle<T>(
 ): void {
   const id = Symbol("promise-id");
 
-  const promise = fn.run(mixed);
+  const promise = evaluate(mixed);
 
   const progress = type
     ? progressReporter.spawn().setAuto(moduleConfig.expectedDurations[type])

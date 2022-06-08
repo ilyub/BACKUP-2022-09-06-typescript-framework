@@ -1,5 +1,3 @@
-/* eslint-disable @skylib/consistent-filename -- Ok */
-
 import {
   PouchProxy
   // eslint-disable-next-line import/no-internal-modules -- Ok

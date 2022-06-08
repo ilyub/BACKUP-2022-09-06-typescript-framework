@@ -1,5 +1,3 @@
-/* eslint-disable @skylib/consistent-filename -- Ok */
-
 import { implementations } from "@";
 import { database, handlePromise, uniqueId } from "@skylib/facades";
 import { wait } from "@skylib/functions";

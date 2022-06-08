@@ -3,25 +3,21 @@ import { a, num, programFlow, set } from "@skylib/functions";
 import $ from "jquery";
 import type { ProcessState } from "./core";
 import type { progressReporter } from "@skylib/facades";
-import type { numberU, Writable } from "@skylib/functions";
+import type { Writable, numberU } from "@skylib/functions";
 
 export class Process implements progressReporter.Process {
   /**
    * Returns progress.
    *
-   * @param this - No this.
    * @returns Progress.
    */
-  public static getProgress(this: void): number {
-    return num.round(progress, moduleConfig.precision);
-  }
+  public static readonly getProgress = (): number =>
+    num.round(progress, moduleConfig.precision);
 
   /**
    * Resets to initial state.
-   *
-   * @param this - No this.
    */
-  public static reset(this: void): void {
+  public static readonly reset = (): void => {
     if (processes.size) {
       processes = new Set();
       progress = 0;
@@ -30,7 +26,7 @@ export class Process implements progressReporter.Process {
         .removeClass(moduleConfig.activeClass)
         .css("width", "");
     }
-  }
+  };
 
   /**
    * Creates class instance.
@@ -74,10 +70,8 @@ export class Process implements progressReporter.Process {
 
   /**
    * Updates progress bar state.
-   *
-   * @param this - No this.
    */
-  protected static update(this: void): void {
+  protected static readonly update = (): void => {
     if (moduleConfig.enabled) {
       const now = Date.now();
 
@@ -108,7 +102,7 @@ export class Process implements progressReporter.Process {
         );
       } else Process.reset();
     } else Process.reset();
-  }
+  };
 
   protected readonly created = Date.now();
 
