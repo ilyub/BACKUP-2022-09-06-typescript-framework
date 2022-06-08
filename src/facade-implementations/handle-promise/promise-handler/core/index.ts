@@ -16,6 +16,21 @@ export const moduleConfig: Configuration = {
 
 export const promises = new Map<symbol, Promise<unknown>>();
 
+export interface Configurable {
+  /**
+   * Configures plugin.
+   *
+   * @param config - Plugin configuration.
+   */
+  readonly configure: (config: PartialConfiguration) => void;
+  /**
+   * Returns plugin configuration.
+   *
+   * @returns Plugin configuration.
+   */
+  readonly getConfiguration: () => Configuration;
+}
+
 export interface Configuration {
   readonly expectedDurations: Rec<facade.Type, number>;
 }

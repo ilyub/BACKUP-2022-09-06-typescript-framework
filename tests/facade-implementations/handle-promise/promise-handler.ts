@@ -148,7 +148,7 @@ test("verbose: Async", async () => {
 
   await testUtils.run(async () => {
     document.body.innerHTML = '<div id="progressBar">';
-    promiseHandler.verbose(callback, "createDb");
+    promiseHandler("createDb", callback);
     await wait(1000);
     expect("#progressBar").progressToBe(0.593);
     await wait(1000);
@@ -172,7 +172,7 @@ test("verbose: Error", async () => {
     errorSpy.mockImplementationOnce(fn.noop);
 
     {
-      promiseHandler.verbose(fail, "createDb", errorMessage);
+      promiseHandler("createDb", fail, errorMessage);
       expect(alertFn).not.toHaveBeenCalled();
       expect(errorSpy).not.toHaveBeenCalled();
     }
@@ -197,7 +197,7 @@ test("verbose: Promise", async () => {
   expect.hasAssertions();
 
   await testUtils.run(async () => {
-    promiseHandler.verbose(wait(2000), "createDb");
+    promiseHandler("createDb", wait(2000));
     await wait(1000);
     expect("#progressBar").progressToBe(0.593);
     await wait(1000);
