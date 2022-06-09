@@ -29,10 +29,7 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
     return new Dictionary(definitions, context, count).facade;
   }
 
-  public readonly keys: Rec<
-    lang.Transform<lang.Word>,
-    lang.Transform<lang.Word>
-  >;
+  public readonly keys: Rec<lang.Transform, lang.Transform>;
 
   public context(context: lang.Context): lang.Facade {
     if (context === this._context) return this.facade;
@@ -49,13 +46,17 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
     return sub;
   }
 
-  public get(key: lang.Transform<lang.Word>): string {
+  public get(key: lang.Key): string {
+    if (key.startsWith("plain:")) return key.slice(6);
+
     const definitions = this.definitions[moduleConfig.localeName];
 
     return definitions.get(key, this._context, this.count, replacements).value;
   }
 
   public getIfExists(key: string): string {
+    if (key.startsWith("plain:")) return key.slice(6);
+
     const definitions = this.definitions[moduleConfig.localeName];
 
     return definitions.has(key)
@@ -63,7 +64,9 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
       : key;
   }
 
-  public has(key: string): key is lang.Transform<lang.Word> {
+  public has(key: string): key is lang.Key {
+    if (key.startsWith("plain:")) return true;
+
     const definitions = this.definitions[moduleConfig.localeName];
 
     return definitions.has(key);

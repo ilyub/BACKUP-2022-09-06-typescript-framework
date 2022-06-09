@@ -11,10 +11,7 @@ import type { lang } from "@skylib/facades";
 import type { Rec, WritableIndexedRecord, strings } from "@skylib/functions";
 
 export class Definitions {
-  public readonly keys: Rec<
-    lang.Transform<lang.Word>,
-    lang.Transform<lang.Word>
-  >;
+  public readonly keys: Rec<lang.Transform, lang.Transform>;
 
   public readonly pluralReduce: PluralReduce;
 

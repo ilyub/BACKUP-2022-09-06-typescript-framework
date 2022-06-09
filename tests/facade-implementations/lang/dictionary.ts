@@ -113,12 +113,14 @@ test("Dictionary.get", () => {
   expect(dictionary.get("mustBeValidString")).toBe("введите корректную Строку");
   expect(dictionary.get("MUSTBEVALIDSTRING")).toBe("ВВЕДИТЕ КОРРЕКТНУЮ СТРОКУ");
   expect(dictionary.get("mustbevalidstring")).toBe("введите корректную строку");
+  expect(dictionary.get("plain:Unknown")).toBe("Unknown");
 });
 
 test("Dictionary.getIfExists", () => {
   expect(dictionary.getIfExists("Day")).toBe("Day");
   configure({ localeName: "ru-RU" });
   expect(dictionary.getIfExists("Day")).toBe("День");
+  expect(dictionary.getIfExists("plain:Unknown")).toBe("Unknown");
   expect(dictionary.getIfExists("Unknown")).toBe("Unknown");
 });
 
@@ -132,7 +134,8 @@ test("Dictionary.has", () => {
   expect(dictionary.has("mustBeValidString")).toBeTrue();
   expect(dictionary.has("MUSTBEVALIDSTRING")).toBeTrue();
   expect(dictionary.has("mustbevalidstring")).toBeTrue();
-  expect(dictionary.has("unknown")).toBeFalse();
+  expect(dictionary.has("plain:Unknown")).toBeTrue();
+  expect(dictionary.has("Unknown")).toBeFalse();
 });
 
 test.each([
