@@ -11,11 +11,11 @@ export declare class Dictionary implements lang.Dictionary<lang.Word, lang.Conte
      * @returns Dictionary.
      */
     static create(definitions: Rec<LocaleName, Definitions>, context?: lang.Context, count?: number): lang.Facade;
-    readonly keys: Rec<lang.Transform<lang.Word>, lang.Transform<lang.Word>>;
+    readonly keys: Rec<lang.Transform, lang.Transform>;
     context(context: lang.Context): lang.Facade;
-    get(key: lang.Transform<lang.Word>): string;
+    get(key: lang.Key): string;
     getIfExists(key: string): string;
-    has(key: string): key is lang.Transform<lang.Word>;
+    has(key: string): key is lang.Key;
     plural(count: number): lang.Facade;
     with(search: string, replace: NumStr): lang.Facade;
     protected readonly _context: lang.Context | undefined;

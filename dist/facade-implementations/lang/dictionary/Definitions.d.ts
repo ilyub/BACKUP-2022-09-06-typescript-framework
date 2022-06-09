@@ -3,7 +3,7 @@ import type { PluralReduce, RawLanguage, WordInfo } from "./core";
 import type { lang } from "@skylib/facades";
 import type { Rec, strings } from "@skylib/functions";
 export declare class Definitions {
-    readonly keys: Rec<lang.Transform<lang.Word>, lang.Transform<lang.Word>>;
+    readonly keys: Rec<lang.Transform, lang.Transform>;
     readonly pluralReduce: PluralReduce;
     /**
      * Creates class instance.

@@ -120,7 +120,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `key` | `Transform`<`Word`\> |
+| `key` | `Key`<`Word`\> |
 
 #### Returns
 
@@ -154,7 +154,7 @@ ___
 
 ### has
 
-▸ **has**(`key`): key is Transform<Word\>
+▸ **has**(`key`): key is Key<Word\>
 
 #### Parameters
 
@@ -164,7 +164,7 @@ ___
 
 #### Returns
 
-key is Transform<Word\>
+key is Key<Word\>
 
 #### Implementation of
 

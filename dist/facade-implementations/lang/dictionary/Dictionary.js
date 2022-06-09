@@ -90,16 +90,22 @@ class Dictionary {
         return sub;
     }
     get(key) {
+        if (key.startsWith("plain:"))
+            return key.slice(6);
         const definitions = this.definitions[core_1.moduleConfig.localeName];
         return definitions.get(key, this._context, this.count, replacements).value;
     }
     getIfExists(key) {
+        if (key.startsWith("plain:"))
+            return key.slice(6);
         const definitions = this.definitions[core_1.moduleConfig.localeName];
         return definitions.has(key)
             ? definitions.get(key, this._context, this.count, replacements).value
             : key;
     }
     has(key) {
+        if (key.startsWith("plain:"))
+            return true;
         const definitions = this.definitions[core_1.moduleConfig.localeName];
         return definitions.has(key);
     }
