@@ -31,6 +31,9 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
 
   public readonly keys: Rec<lang.Transform, lang.Transform>;
 
+  // eslint-disable-next-line @skylib/require-jsdoc -- Ok
+  public readonly plain = (str: string): lang.Plain => `plain:${str}`;
+
   public context(context: lang.Context): lang.Facade {
     if (context === this._context) return this.facade;
 

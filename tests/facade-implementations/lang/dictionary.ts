@@ -138,6 +138,11 @@ test("Dictionary.has", () => {
   expect(dictionary.has("Unknown")).toBeFalse();
 });
 
+test("Dictionary.plain", () => {
+  expect(dictionary.plain("str1")).toStartWith("plain:str1");
+  expect(dictionary.plain("str2")).toStartWith("plain:str2");
+});
+
 test.each([
   {
     count: 1,
