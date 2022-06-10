@@ -29,6 +29,7 @@
 - [get](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#get)
 - [getIfExists](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#getifexists)
 - [has](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#has)
+- [plain](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#plain)
 - [plural](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#plural)
 - [pluralReduce](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#pluralreduce)
 - [with](facade_implementations_lang_dictionary_Dictionary.Dictionary.md#with)
@@ -169,6 +170,26 @@ key is Key<Word\>
 #### Implementation of
 
 lang.Dictionary.has
+
+___
+
+### plain
+
+▸ `Readonly` **plain**(`str`): \`plain:${string}\`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `str` | `string` |
+
+#### Returns
+
+\`plain:${string}\`
+
+#### Implementation of
+
+lang.Dictionary.plain
 
 ___
 

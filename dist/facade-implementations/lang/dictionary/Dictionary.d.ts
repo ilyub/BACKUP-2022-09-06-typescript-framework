@@ -12,6 +12,7 @@ export declare class Dictionary implements lang.Dictionary<lang.Word, lang.Conte
      */
     static create(definitions: Rec<LocaleName, Definitions>, context?: lang.Context, count?: number): lang.Facade;
     readonly keys: Rec<lang.Transform, lang.Transform>;
+    readonly plain: (str: string) => lang.Plain;
     context(context: lang.Context): lang.Facade;
     get(key: lang.Key): string;
     getIfExists(key: string): string;

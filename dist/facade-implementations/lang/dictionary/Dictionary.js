@@ -18,6 +18,13 @@ class Dictionary {
             writable: true,
             value: void 0
         });
+        // eslint-disable-next-line @skylib/require-jsdoc -- Ok
+        Object.defineProperty(this, "plain", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: (str) => `plain:${str}`
+        });
         Object.defineProperty(this, "_context", {
             enumerable: true,
             configurable: true,
