@@ -2,6 +2,7 @@ import { reactiveStorage } from "@skylib/facades";
 import { onDemand } from "@skylib/functions";
 import enUS from "date-fns/locale/en-US";
 import type { strings } from "@skylib/functions";
+import type { Locale } from "date-fns";
 
 export const formatStrings: strings = [
   "yyyy-M-d h:m:s a",
