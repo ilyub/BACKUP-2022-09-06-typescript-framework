@@ -4,6 +4,8 @@ export * as database from "./database";
 
 export * as datetime from "./datetime";
 
+export * as dump from "./dump";
+
 export * as facebook from "./facebook";
 
 export * as faker from "./faker";
