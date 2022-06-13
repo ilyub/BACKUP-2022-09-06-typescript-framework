@@ -11,7 +11,6 @@
 
 ## <a name="modules"></a>Modules
 
-- actions
-  - [classes](https://ilyub.github.io/typescript-framework/modules/classes.html) - Classes.
-  - [facade-implementations](https://ilyub.github.io/typescript-framework/modules/facade_implementations.html) - Facade implementations.
-  - [test-utils](https://ilyub.github.io/typescript-framework/modules/test_utils.html) - Test utils.
+- [classes](https://ilyub.github.io/typescript-framework/modules/classes.html) - Classes.
+- [facade-implementations](https://ilyub.github.io/typescript-framework/modules/facade_implementations.html) - Facade implementations.
+- [test-utils](https://ilyub.github.io/typescript-framework/modules/test_utils.html) - Test utils.
