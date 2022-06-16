@@ -635,38 +635,41 @@ export class Database implements database.Database {
       .filter(isDocsResponse);
 
     return {
-      count: queryOptions.count
-        ? num.sum(
-            ...groups.map(group =>
-              group.settled
-                ? group.count
-                : group.docs.map(item => item.doc).filter(mapReduce.output)
-                    .length
+      count:
+        queryOptions.count ?? false
+          ? num.sum(
+              ...groups.map(group =>
+                group.settled
+                  ? group.count
+                  : group.docs.map(item => item.doc).filter(mapReduce.output)
+                      .length
+              )
             )
-          )
-        : 0,
-      docs: queryOptions.docs
-        ? evaluate((): unknowns => {
-            const items = _.flatten(groups.map(group => group.docs)).filter(
-              item => mapReduce.output(item.doc)
-            );
+          : 0,
+      docs:
+        queryOptions.docs ?? false
+          ? evaluate((): unknowns => {
+              const items = _.flatten(groups.map(group => group.docs)).filter(
+                item => mapReduce.output(item.doc)
+              );
 
-            items.sort((item1, item2) => collate(item1.key, item2.key));
+              items.sort((item1, item2) => collate(item1.key, item2.key));
 
-            if (descending) items.reverse();
+              if (descending) items.reverse();
 
-            return items.slice(skip, skip + limit).map(doc => doc.doc);
-          })
-        : [],
+              return items.slice(skip, skip + limit).map(doc => doc.doc);
+            })
+          : [],
       mapReduce,
-      unsettledCount: queryOptions.unsettledCount
-        ? num.sum(
-            0,
-            ...groups
-              .filter(group => !group.settled)
-              .map(group => group.docs.length)
-          )
-        : 0
+      unsettledCount:
+        queryOptions.unsettledCount ?? false
+          ? num.sum(
+              0,
+              ...groups
+                .filter(group => !group.settled)
+                .map(group => group.docs.length)
+            )
+          : 0
     };
   }
 
