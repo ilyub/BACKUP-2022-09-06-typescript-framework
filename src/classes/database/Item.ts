@@ -65,20 +65,25 @@ export class Item {
 export namespace Item {
   export interface ExistingItemDoc
     extends database.BaseExistingDocument,
-      OwnProps {}
+      ItemProps {}
 
   export type ExistingItemDocs = readonly ExistingItemDoc[];
 
-  export type Items = readonly Items[];
-
-  export interface OwnProps {
+  export interface ItemProps {
     readonly createdAt?: string;
     readonly deletedAt?: string;
     readonly softDeleted?: true;
     readonly updatedAt?: string;
   }
 
-  export interface PutItemDoc extends database.BasePutDocument, OwnProps {}
+  export type Items = readonly Items[];
+
+  /**
+   * @deprecated
+   */
+  export interface OwnProps extends ItemProps {}
+
+  export interface PutItemDoc extends database.BasePutDocument, ItemProps {}
 
   export type PutItemDocs = readonly PutItemDoc[];
 }
