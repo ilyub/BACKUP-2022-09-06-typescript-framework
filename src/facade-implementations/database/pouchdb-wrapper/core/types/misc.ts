@@ -28,9 +28,12 @@ export interface MapReduce {
 
 export interface RawQueryOptions {
   readonly conditions: database.Conditions;
-  readonly count?: true;
-  readonly docs?: true;
-  readonly unsettledCount?: true;
+  // eslint-disable-next-line no-restricted-syntax -- Ok
+  readonly count?: boolean;
+  // eslint-disable-next-line no-restricted-syntax -- Ok
+  readonly docs?: boolean;
+  // eslint-disable-next-line no-restricted-syntax -- Ok
+  readonly unsettledCount?: boolean;
 }
 
 export interface RawQueryOptionsAttached extends RawQueryOptions {
