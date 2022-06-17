@@ -37,7 +37,7 @@
     "update-package-force": "ncu --dep dev,peer,prod --upgrade"
   },
   "devDependencies": {
-    "@skylib/config": "^1.15.0",
+    "@skylib/config": "^1.16.0",
     "@skylib/eslint-plugin": "^0.1.28",
     "jest-mock-axios": "^4.6.1"
   },
