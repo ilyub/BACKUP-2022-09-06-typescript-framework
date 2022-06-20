@@ -20,33 +20,65 @@
   "publisher": "ilyub",
   "main": "dist/index.js",
   "module": "es/index.js",
+  "files": [
+    "/configs",
+    "/dist",
+    "/es",
+    "!dist/dev",
+    "!es/dev"
+  ],
   "scripts": {
-    "build": "tsc --project tsconfig-build.json",
-    "build-doc": "typedoc src",
-    "build-es": "tsc --project tsconfig-build-es.json",
+    "add-tags": "php node_modules/@skylib/config/src/utils/add-tags.php",
+    "audit": "npm audit",
+    "browserslist": "echo Skip browserslist",
+    "build": "cf ./dist & tsc --project tsconfig-build.json",
+    "build-doc": "cf ./docs & typedoc src & cpy docs-static/* docs",
+    "build-es": "cf ./es & tsc --project tsconfig-build-es.json",
+    "clean-install": "npm clean-install --no-audit --strict-peer-deps",
+    "clear-cache": "cf cache node_modules/.cache",
+    "commit-msg": "npm run commitlint",
     "commitlint": "commitlint --edit",
     "commitlint-all": "commitlint --config commitlint-all.config.js --from=",
+    "compile": "echo Skip compile",
+    "config-lint": "node node_modules/@skylib/config/src/utils/config-lint.js",
+    "delete-tags": "php node_modules/@skylib/config/src/utils/delete-tags.php",
+    "full-check": "php node_modules/@skylib/config/src/utils/full-check.php",
+    "install-deps": "npm install --no-audit --strict-peer-deps",
     "lint": "eslint --fix --max-warnings 0 --no-error-on-unmatched-pattern *.{js,ts} {__mocks__,configs,fixtures,src,tests}/**/*.{js,ts,vue}",
-    "lint-fast": "eslint --config .eslintrc.fast.js --fix --max-warnings 0 --no-error-on-unmatched-pattern *.{js,ts} {__mocks__,configs,fixtures,src,tests}/**/*.{js,ts,vue}",
-    "lint-no-fix": "eslint --max-warnings 0 --no-error-on-unmatched-pattern *.{js,ts} {__mocks__,configs,fixtures,src,tests}/**/*.{js,ts,vue}",
+    "lint-fast": "npm run lint --config .eslintrc.fast.js",
+    "lint-no-fix": "set TIMING=1 & npm run lint --fix",
     "package-json-lint": "npmPkgJsonLint .",
-    "prepare": "cpy node_modules/@skylib/config/src/git-hooks/* .git/hooks",
-    "test": "jest",
-    "test-fast": "jest --config=jest.config.fast.js",
+    "php-cs-fixer": "php-cs-fixer fix --verbose",
+    "post-commit": "php node_modules/@skylib/config/src/utils/post-commit.php",
+    "pre-commit": "php node_modules/@skylib/config/src/utils/pre-commit.php",
+    "prepare": "husky install node_modules/@skylib/config/src/git-hooks",
+    "publish": "publish-if-not-exists",
+    "regenerate-lock-file": "npm install --no-audit --package-lock-only --strict-peer-deps",
+    "serve": "echo Skip serve",
+    "sonar": "sonar-scanner",
+    "stylelint": "echo Skip stylelint",
+    "stylelint-html": "echo Skip stylelint-html",
+    "stylelint-html-no-fix": "echo Skip stylelint-html-no-fix",
+    "stylelint-no-fix": "echo Skip stylelint-no-fix",
+    "test": "cf ./lcov-report & jest",
+    "test-fast": "cf ./lcov-report & jest --config=jest.config.fast.js",
     "tsc": "tsc --noEmit",
+    "update": "npm update --no-audit --strict-peer-deps",
     "update-package-check": "ncu --dep dev,peer,prod",
-    "update-package-force": "ncu --dep dev,peer,prod --upgrade"
+    "update-package-force": "ncu --dep dev,peer,prod --upgrade",
+    "upgrade": "npm run update-package-force & npm run install-deps",
+    "vue-tsc": "echo Skip vue-tsc"
   },
   "devDependencies": {
-    "@skylib/config": "^1.16.0",
-    "@skylib/eslint-plugin": "^0.1.28",
+    "@skylib/config": "^3.0.1",
+    "@skylib/eslint-plugin": "^0.1.31",
     "jest-mock-axios": "^4.6.1"
   },
   "peerDependencies": {
-    "@skylib/facades": ">=4",
-    "@skylib/functions": ">=2",
-    "@skylib/lodash-commonjs-es": ">=0",
-    "@skylib/typescript-types": ">=1",
+    "@skylib/facades": "^4.5.1",
+    "@skylib/functions": "^2.5.0",
+    "@skylib/lodash-commonjs-es": "^0.1.1",
+    "@skylib/typescript-types": "^1.0.0",
     "@types/facebook-js-sdk": ">=3",
     "@types/gapi.auth2": ">=0",
     "@types/jquery": ">=3",
@@ -74,5 +106,11 @@
   "engines": {
     "node": ">=14.0.0",
     "npm": ">=7.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "overrides": {
+    "package-json": "8.1.0"
   }
 }
