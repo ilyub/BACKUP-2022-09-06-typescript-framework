@@ -1,5 +1,4 @@
 import { implementations } from "@";
-// eslint-disable-next-line import/no-internal-modules -- Ok
 import { Database } from "@/facade-implementations/database/pouchdb-wrapper/Database";
 import { datetime, uniqueId } from "@skylib/facades";
 import { wait } from "@skylib/functions";
@@ -146,8 +145,7 @@ test("create: options.migrations", async () => {
     const db1 = pouchdb.create(name, {
       migrations: [
         {
-          // eslint-disable-next-line no-restricted-syntax -- Wait for @skylib/facades update
-          async callback(db): Promise<void> {
+          callback: async (db): Promise<void> => {
             await db.put({ _id: id });
           },
           id: "migration1"
@@ -170,16 +168,14 @@ test("create: options.migrations", async () => {
 
     {
       await wait(1000);
-      expect(callback1).not.toHaveBeenCalled();
-      expect(callback2).not.toHaveBeenCalled();
+      expect(callback1).mockCallsToBe();
+      expect(callback2).mockCallsToBe();
     }
 
     {
       await expect(db2.exists(id)).resolves.toBeTrue();
-      expect(callback1).not.toHaveBeenCalled();
-      expect(callback2).toHaveBeenCalledTimes(1);
-      expect(callback2).toHaveBeenCalledWith(db2);
-      callback2.mockClear();
+      expect(callback1).mockCallsToBe();
+      expect(callback2).mockCallsToBe([db2]);
     }
   });
 });

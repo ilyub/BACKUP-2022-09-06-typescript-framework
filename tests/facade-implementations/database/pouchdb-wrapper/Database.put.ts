@@ -2,10 +2,10 @@ import { implementations } from "@";
 import {
   PouchConflictError,
   PouchRetryError
-  // eslint-disable-next-line import/no-internal-modules -- Ok
 } from "@/facade-implementations/database/pouchdb-wrapper/core/errors";
 import { uniqueId } from "@skylib/facades";
 import { a } from "@skylib/functions";
+import type { database } from "@skylib/facades";
 
 const pouchdb = new implementations.database.PouchWrapper();
 
@@ -30,7 +30,7 @@ test("put", async () => {
 test("put: Invalid attached document", async () => {
   const db = pouchdb.create(uniqueId());
 
-  const doc = { attachedDocs: [{ _id: 2, _rev: 1 }] };
+  const doc: database.PutDocument = { attachedDocs: [{ _id: 2, _rev: 1 }] };
 
   const error = new Error("Invalid attached document");
 

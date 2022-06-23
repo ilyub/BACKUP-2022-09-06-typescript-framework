@@ -14,13 +14,11 @@ const { jsAlert } = implementations.showAlert;
 test("showAlert", () => {
   alertFn.mockImplementationOnce(fn.noop);
   jsAlert("Sample message");
-  expect(alertFn).toHaveBeenCalledTimes(1);
-  expect(alertFn).toHaveBeenCalledWith("Sample message");
+  expect(alertFn).mockCallsToBe(["Sample message"]);
 });
 
 test("showAlert.async", async () => {
   alertFn.mockImplementationOnce(fn.noop);
   await jsAlert.async("Sample message");
-  expect(alertFn).toHaveBeenCalledTimes(1);
-  expect(alertFn).toHaveBeenCalledWith("Sample message");
+  expect(alertFn).mockCallsToBe(["Sample message"]);
 });

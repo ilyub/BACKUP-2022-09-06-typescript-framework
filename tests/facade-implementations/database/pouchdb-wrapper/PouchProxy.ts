@@ -1,9 +1,5 @@
-import {
-  PouchProxy
-  // eslint-disable-next-line import/no-internal-modules -- Ok
-} from "@/facade-implementations/database/pouchdb-wrapper/PouchProxy";
+import { PouchProxy } from "@/facade-implementations/database/pouchdb-wrapper/PouchProxy";
 import { uniqueId } from "@skylib/facades";
-// eslint-disable-next-line import/no-internal-modules -- Ok
 import type { PouchPutDocuments } from "@/facade-implementations/database/pouchdb-wrapper/core/types";
 
 test("bulkDocs", async () => {

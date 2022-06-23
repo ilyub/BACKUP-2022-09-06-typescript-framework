@@ -395,7 +395,7 @@ function condsToStr(
  * @returns Filter function.
  */
 function createFilter(conds: string): Filter {
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion -- ???
+  // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func -- ???
   return new Function("doc", `return ${conds};`) as Filter;
 }
 
@@ -407,7 +407,7 @@ function createFilter(conds: string): Filter {
  * @returns Filter function.
  */
 function createFilterAttached(conds: string, parentConds: string): Filter {
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion -- ???
+  // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func -- ???
   return new Function(
     "attached",
     uglify(`

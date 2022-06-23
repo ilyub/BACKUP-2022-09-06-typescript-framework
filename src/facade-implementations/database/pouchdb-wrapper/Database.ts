@@ -108,7 +108,7 @@ export class Database implements database.Database {
         )
     );
 
-    return _.flatten(responses);
+    return responses.flat();
   }
 
   public async count(conditions: database.Conditions = {}): Promise<number> {
@@ -176,8 +176,8 @@ export class Database implements database.Database {
   ): Promise<database.ExistingDocument | undefined> {
     try {
       return await this.get(id);
-    } catch (e) {
-      assert.instance(e, PouchNotFoundError, ErrorArg.wrapError(e));
+    } catch (error) {
+      assert.instance(error, PouchNotFoundError, ErrorArg.wrapError(error));
 
       return undefined;
     }
@@ -189,8 +189,8 @@ export class Database implements database.Database {
   ): Promise<database.ExistingAttachedDocument | undefined> {
     try {
       return await this.getAttached(id, parentId);
-    } catch (e) {
-      assert.instance(e, PouchNotFoundError, ErrorArg.wrapError(e));
+    } catch (error) {
+      assert.instance(error, PouchNotFoundError, ErrorArg.wrapError(error));
 
       return undefined;
     }
@@ -255,8 +255,8 @@ export class Database implements database.Database {
   ): Promise<database.PutResponse | undefined> {
     try {
       return await this.put(doc);
-    } catch (e) {
-      assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
+    } catch (error) {
+      assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
 
       return undefined;
     }
@@ -268,8 +268,8 @@ export class Database implements database.Database {
   ): Promise<database.PutAttachedResponse | undefined> {
     try {
       return await this.putAttached(parentId, doc);
-    } catch (e) {
-      assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
+    } catch (error) {
+      assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
 
       return undefined;
     }
@@ -483,6 +483,7 @@ export class Database implements database.Database {
     this.refreshSubscription();
   }
 
+  // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
   protected changes: PouchChanges | undefined;
 
   protected readonly changesHandlers = new Map<
@@ -512,6 +513,7 @@ export class Database implements database.Database {
       unsubscribe: fn.noop
     });
 
+  // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
   protected db: PouchProxy | undefined;
 
   protected readonly name: string;
@@ -582,8 +584,8 @@ export class Database implements database.Database {
       return result.map(item => {
         return { ...item, parentRev: response.rev };
       });
-    } catch (e) {
-      assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
+    } catch (error) {
+      assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
 
       return undefined;
     }
@@ -617,13 +619,11 @@ export class Database implements database.Database {
       limit: limit + skip
     });
 
-    const toSettle = _.flatten(
-      response.rows
-        .map(row => row.value as unknown)
-        .filter(isDocsResponse)
-        .filter(group => !group.settled)
-        .map(group => group.docs)
-    )
+    const toSettle = response.rows
+      .map(row => row.value as unknown)
+      .filter(isDocsResponse)
+      .filter(group => !group.settled)
+      .flatMap(group => group.docs)
       .map(doc => doc.doc)
       .filter(mapReduce.settle);
 
@@ -649,9 +649,9 @@ export class Database implements database.Database {
       docs:
         queryOptions.docs ?? false
           ? evaluate((): unknowns => {
-              const items = _.flatten(groups.map(group => group.docs)).filter(
-                item => mapReduce.output(item.doc)
-              );
+              const items = groups
+                .flatMap(group => group.docs)
+                .filter(item => mapReduce.output(item.doc));
 
               items.sort((item1, item2) => collate(item1.key, item2.key));
 
@@ -687,8 +687,8 @@ export class Database implements database.Database {
       await db.put({ ...doc, views: { default: mapReduce.mapReduce } });
 
       return true;
-    } catch (e) {
-      assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
+    } catch (error) {
+      assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
 
       return false;
     }
@@ -707,8 +707,8 @@ export class Database implements database.Database {
         _id: `_design/${mapReduce.id}`,
         views: { default: mapReduce.mapReduce }
       });
-    } catch (e) {
-      assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
+    } catch (error) {
+      assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
     }
   }
 
@@ -731,7 +731,7 @@ export class Database implements database.Database {
    * Applies migrations.
    */
   protected async migrate(): Promise<void> {
-    if (this.options.migrations.length) {
+    if (this.options.migrations.length > 0) {
       let migrations = await evaluate<database.PutDocument>(async () => {
         const result = await this.getIfExists("migrations");
 
@@ -784,8 +784,8 @@ export class Database implements database.Database {
 
     try {
       return await this._rawQuery(mapReduce, options, queryOptions);
-    } catch (e) {
-      assert.instance(e, PouchNotFoundError, ErrorArg.wrapError(e));
+    } catch (error) {
+      assert.instance(error, PouchNotFoundError, ErrorArg.wrapError(error));
       await this.createDesignDocument(mapReduce);
 
       return await this._rawQuery(mapReduce, options, queryOptions);
@@ -1087,13 +1087,16 @@ export class Database implements database.Database {
           value => {
             assert.byGuard(value.doc, isExistingDocument);
 
-            if (this.changesHandlers.size) {
+            if (this.changesHandlers.size > 0) {
               const doc = extractDoc(value.doc);
 
               for (const handler of this.changesHandlers.values()) handler(doc);
             }
 
-            if (this.changesHandlersAttached.size && value.doc.lastAttachedDocs)
+            if (
+              this.changesHandlersAttached.size > 0 &&
+              value.doc.lastAttachedDocs
+            )
               for (const lastAttachedDoc of value.doc.lastAttachedDocs) {
                 const attachedDoc = extractAttachedDoc(
                   value.doc,

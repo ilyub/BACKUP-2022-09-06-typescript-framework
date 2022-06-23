@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-internal-modules -- Ok
 import { handlePouchError } from "@/facade-implementations/database/pouchdb-wrapper/core";
 
 test("handlePouchError", () => {

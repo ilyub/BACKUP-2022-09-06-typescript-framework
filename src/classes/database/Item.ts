@@ -72,7 +72,7 @@ export namespace Item {
   export interface ItemProps {
     readonly createdAt?: string;
     readonly deletedAt?: string;
-    // eslint-disable-next-line no-restricted-syntax -- Ok
+    // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
     readonly softDeleted?: true;
     readonly updatedAt?: string;
   }

@@ -19,9 +19,7 @@ test("reset: callback", async () => {
 
   const callback = jest.fn();
 
-  expect(callback).not.toHaveBeenCalled();
+  expect(callback).mockCallsToBe();
   await db.reset(callback);
-  expect(callback).toHaveBeenCalledTimes(1);
-  expect(callback).toHaveBeenCalledWith();
-  callback.mockClear();
+  expect(callback).mockCallsToBe([]);
 });

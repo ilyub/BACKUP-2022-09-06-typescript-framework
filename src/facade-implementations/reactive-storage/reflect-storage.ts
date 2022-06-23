@@ -3,7 +3,6 @@ import {
   defineFn,
   is,
   map,
-  o,
   reflect,
   wrapProxyHandler
 } from "@skylib/functions";
@@ -20,7 +19,6 @@ declare global {
 }
 
 export const reflectStorage: reactiveStorage.Facade = defineFn(
-  // eslint-disable-next-line @skylib/require-jsdoc -- Ok
   <T extends object>(obj: T): T => {
     if (reflect.hasMetadata(MetadataKey, obj)) return obj;
 
@@ -37,8 +35,8 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
       target: O,
       key: PropertyKey
     ): unknown {
-      // eslint-disable-next-line no-restricted-syntax -- Ok
-      const value = o.get(target, key);
+      // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
+      const value = reflect.get(target, key);
 
       return is.object(value)
         ? new Proxy(
@@ -53,9 +51,10 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
       key: PropertyKey,
       value: unknown
     ): boolean {
-      // eslint-disable-next-line no-restricted-syntax -- Ok
-      const oldValue = o.get(target, key);
+      // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
+      const oldValue = reflect.get(target, key);
 
+      // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
       if (reflect.set(target, key, value)) {
         if (value === oldValue) {
           // Not modified
@@ -74,7 +73,6 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
     }
   },
   {
-    // eslint-disable-next-line @skylib/require-jsdoc -- Ok
     unwatch: (obj: object, observer: reactiveStorage.Observer) => {
       assert.not.empty(observer.symbol);
 
@@ -88,7 +86,6 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
         obj
       );
     },
-    // eslint-disable-next-line @skylib/require-jsdoc -- Ok
     watch: <T extends object>(
       obj: T,
       handler: reactiveStorage.Handler<T>,

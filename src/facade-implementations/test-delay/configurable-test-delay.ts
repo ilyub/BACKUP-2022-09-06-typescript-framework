@@ -3,16 +3,13 @@ import type { testDelay as facade } from "@skylib/facades";
 
 export const configurableTestDelay: configurableTestDelay.Configurable &
   facade.Facade = defineFn(
-  // eslint-disable-next-line @skylib/require-jsdoc -- Ok
   async () => {
     if (moduleConfig.enabled) await wait(moduleConfig.timeout);
   },
   {
-    // eslint-disable-next-line @skylib/require-jsdoc -- Ok
     configure: (config: Partial<configurableTestDelay.Configuration>) => {
       o.assign(moduleConfig, config);
     },
-    // eslint-disable-next-line @skylib/require-jsdoc -- Ok
     getConfiguration: () => moduleConfig
   }
 );

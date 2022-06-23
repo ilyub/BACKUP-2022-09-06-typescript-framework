@@ -165,7 +165,6 @@ function applyRuleRef(
   rule: strings,
   owner: Definitions
 ): WordInfo {
-  // eslint-disable-next-line @skylib/disallow-by-regexp -- Wait for @skylib/config update
   // Format: <replacement-id:form>
   const search = a.first(rule);
 
@@ -206,7 +205,6 @@ function applyRuleRefDependent(
   rule: strings,
   owner: Definitions
 ): WordInfo {
-  // eslint-disable-next-line @skylib/disallow-by-regexp -- Wait for @skylib/config update
   // Format: <replacement-id>
   const search = a.first(rule);
 
@@ -241,7 +239,6 @@ function applyRuleRefSecondary(
   rule: strings,
   owner: Definitions
 ): WordInfo {
-  // eslint-disable-next-line @skylib/disallow-by-regexp -- Wait for @skylib/config update
   // Format: <replacement-id.form>
   const search = a.first(rule);
 

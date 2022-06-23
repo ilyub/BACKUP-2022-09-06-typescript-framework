@@ -1,5 +1,4 @@
 import { implementations } from "@";
-// eslint-disable-next-line import/no-internal-modules -- Ok
 import { PouchNotFoundError } from "@/facade-implementations/database/pouchdb-wrapper/core/errors";
 import { database, handlePromise, uniqueId } from "@skylib/facades";
 import { fn, wait } from "@skylib/functions";
@@ -172,9 +171,7 @@ test("reactiveGet: PouchNotFoundError", async () => {
     await db.put(doc);
     errorSpy.mockImplementationOnce(fn.noop);
     await wait(1000);
-    expect(errorSpy).toHaveBeenCalledTimes(1);
-    expect(errorSpy).toHaveBeenCalledWith(...args);
-    errorSpy.mockClear();
+    expect(errorSpy).mockCallsToBe(args);
   });
 });
 
@@ -260,8 +257,6 @@ test("reactiveGetAttached: PouchNotFoundError", async () => {
     await db.putAttached(id, doc);
     errorSpy.mockImplementationOnce(fn.noop);
     await wait(1000);
-    expect(errorSpy).toHaveBeenCalledTimes(1);
-    expect(errorSpy).toHaveBeenCalledWith(...args);
-    errorSpy.mockClear();
+    expect(errorSpy).mockCallsToBe(args);
   });
 });

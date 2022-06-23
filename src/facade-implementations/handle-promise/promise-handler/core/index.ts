@@ -58,7 +58,6 @@ export function handle<T>(
     : undefined;
 
   promises.set(id, promise);
-  // eslint-disable-next-line github/no-then, promise/prefer-await-to-then -- Ok
   promise.catch(rejected).then(fulfilled).catch(rejected);
 
   function fulfilled(): void {

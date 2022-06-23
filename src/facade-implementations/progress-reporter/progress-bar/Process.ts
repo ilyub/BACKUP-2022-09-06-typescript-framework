@@ -18,7 +18,7 @@ export class Process implements progressReporter.Process {
    * Resets to initial state.
    */
   public static readonly reset = (): void => {
-    if (processes.size) {
+    if (processes.size > 0) {
       processes = new Set();
       progress = 0;
       programFlow.clearTimeout(timeout);

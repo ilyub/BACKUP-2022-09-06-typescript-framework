@@ -21,13 +21,11 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
    * @param count - Count for plural form.
    * @returns Dictionary.
    */
-  public static create(
+  public static readonly create = (
     definitions: Rec<LocaleName, Definitions>,
     context?: lang.Context,
     count?: number
-  ): lang.Facade {
-    return new Dictionary(definitions, context, count).facade;
-  }
+  ): lang.Facade => new Dictionary(definitions, context, count).facade;
 
   public readonly keys: Rec<lang.Transform, lang.Transform>;
 
@@ -139,12 +137,11 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
         get: (target, key) => {
           assert.string(key);
 
-          // eslint-disable-next-line no-restricted-syntax -- Ok
+          // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
           return target.has(key) ? target.get(key) : o.get(target, key);
         }
       });
 
-      // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
       return new Proxy(this, handler) as unknown as lang.Facade;
     });
 

@@ -33,7 +33,6 @@ export class Definitions {
       keys[key.toUpperCase()] = key.toUpperCase();
     }
 
-    // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
     this.keys = keys as typeof this.keys;
     this.pluralReduce = raw.pluralReduce;
     this.wordForms = new Map(o.entries(raw.wordForms));

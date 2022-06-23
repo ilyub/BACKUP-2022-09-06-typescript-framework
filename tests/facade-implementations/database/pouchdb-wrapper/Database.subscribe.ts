@@ -30,12 +30,8 @@ test("subscribe, unsubscribe", async () => {
     };
 
     await wait(1000);
-    expect(handler1).toHaveBeenCalledTimes(1);
-    expect(handler1).toHaveBeenCalledWith(expected1);
-    expect(handler2).toHaveBeenCalledTimes(1);
-    expect(handler2).toHaveBeenCalledWith(expected1);
-    handler1.mockClear();
-    handler2.mockClear();
+    expect(handler1).mockCallsToBe([expected1]);
+    expect(handler2).mockCallsToBe([expected1]);
 
     const { parentId: id2, parentRev: rev2 } = await db.putAttached(id1, {});
 
@@ -48,20 +44,16 @@ test("subscribe, unsubscribe", async () => {
     };
 
     await wait(1000);
-    expect(handler1).toHaveBeenCalledTimes(1);
-    expect(handler1).toHaveBeenCalledWith(expected2);
-    expect(handler2).toHaveBeenCalledTimes(1);
-    expect(handler2).toHaveBeenCalledWith(expected2);
-    handler1.mockClear();
-    handler2.mockClear();
+    expect(handler1).mockCallsToBe([expected2]);
+    expect(handler2).mockCallsToBe([expected2]);
 
     {
       db.unsubscribe(subscription1);
       db.unsubscribe(subscription2);
       await db.put({});
       await wait(1000);
-      expect(handler1).not.toHaveBeenCalled();
-      expect(handler2).not.toHaveBeenCalled();
+      expect(handler1).mockCallsToBe();
+      expect(handler2).mockCallsToBe();
     }
   });
 });
@@ -96,15 +88,13 @@ test("subscribeAttached, unsubscribeAttached", async () => {
     };
 
     await wait(1000);
-    expect(handler).toHaveBeenCalledTimes(1);
-    expect(handler).toHaveBeenCalledWith(expected);
-    handler.mockClear();
+    expect(handler).mockCallsToBe([expected]);
 
     {
       db.unsubscribeAttached(subscription);
       await db.putAttached(id, { y: 2 });
       await wait(1000);
-      expect(handler).not.toHaveBeenCalled();
+      expect(handler).mockCallsToBe();
     }
   });
 });

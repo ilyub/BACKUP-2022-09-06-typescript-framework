@@ -27,6 +27,7 @@ globalThis.gapi = evaluate(() => {
         } as gapi.auth2.GoogleUser;
 
         return {
+          // eslint-disable-next-line unicorn/no-thenable -- Ok
           then: (
             onInit: (googleAuth: gapi.auth2.GoogleAuthBase) => void,
             onFailure: (reason: Reason) => void
@@ -42,6 +43,7 @@ globalThis.gapi = evaluate(() => {
 
                   switch (clientId) {
                     case "popup_closed_by_user":
+                      // eslint-disable-next-line @typescript-eslint/no-throw-literal, etc/throw-error -- Ok
                       throw {
                         details: "Popup closed by user",
                         error: "popup_closed_by_user"
@@ -127,11 +129,13 @@ test("Google.idToken: unknown_error", async () => {
 test("Google.loadSdk", async () => {
   const google = new Google(clientId);
 
-  expect(getScript).not.toHaveBeenCalled();
+  const expected = ["https://apis.google.com/js/api:client.js"];
+
+  expect(getScript).mockCallsToBe();
   await google.loadSdk();
-  expect(getScript).toHaveBeenCalledTimes(1);
+  expect(getScript).mockCallsToBe(expected);
   await google.loadSdk();
-  expect(getScript).toHaveBeenCalledTimes(1);
+  expect(getScript).mockCallsToBe();
 
   async function clientId(): Promise<stringU> {
     await Promise.resolve();

@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-internal-modules -- Ok
 import { datetimeToBe, progressToBe } from "@/test-utils/expect";
 import { datetime } from "@skylib/facades";
 

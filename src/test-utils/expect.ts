@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-internal-modules -- Ok
 import { DateTime } from "../facade-implementations/datetime/date-fns-wrapper/DateTime";
 import { progressReporter } from "@skylib/facades";
 import { assert } from "@skylib/functions";

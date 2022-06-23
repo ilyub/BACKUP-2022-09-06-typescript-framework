@@ -26,7 +26,6 @@ test.each<classes.database.AttachedItem.ExistingAttachedItemDoc>([
   expect(item.doc()).toStrictEqual(doc);
   expect(item._id).toStrictEqual(doc._id);
   expect(item._rev).toStrictEqual(doc._rev);
-  // eslint-disable-next-line no-restricted-syntax -- Wait for @skylib/config update
   expect(item.id).toBe(`${doc.parentDoc._id}:${doc._id}`);
   expect(item.parent.doc()).toStrictEqual(doc.parentDoc);
   expect(item.parent.doc()).toStrictEqual(doc.parentDoc);

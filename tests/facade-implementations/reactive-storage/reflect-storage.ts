@@ -11,21 +11,19 @@ test("reducer", () => {
 
   {
     obj.x = 1;
-    expect(callback).toHaveBeenCalledTimes(1);
-    expect(callback).toHaveBeenCalledWith({ x: 1, y: { z: 0 } });
-    callback.mockClear();
+    expect(callback).mockCallsToBe([{ x: 1, y: { z: 0 } }]);
   }
 
   {
     obj.y.z = 1;
-    expect(callback).not.toHaveBeenCalled();
+    expect(callback).mockCallsToBe();
   }
 
   {
     reflectStorage.unwatch(obj, observer);
     obj.x = 2;
     obj.y.z = 2;
-    expect(callback).not.toHaveBeenCalled();
+    expect(callback).mockCallsToBe();
   }
 
   {
@@ -45,23 +43,19 @@ test("watch, unwatch", () => {
 
   {
     obj.x = 1;
-    expect(callback).toHaveBeenCalledTimes(1);
-    expect(callback).toHaveBeenCalledWith({ x: 1, y: { z: 0 } });
-    callback.mockClear();
+    expect(callback).mockCallsToBe([{ x: 1, y: { z: 0 } }]);
   }
 
   {
     obj.y.z = 1;
-    expect(callback).toHaveBeenCalledTimes(1);
-    expect(callback).toHaveBeenCalledWith({ x: 1, y: { z: 1 } });
-    callback.mockClear();
+    expect(callback).mockCallsToBe([{ x: 1, y: { z: 1 } }]);
   }
 
   {
     reflectStorage.unwatch(obj, observer);
     obj.x = 2;
     obj.y.z = 2;
-    expect(callback).not.toHaveBeenCalled();
+    expect(callback).mockCallsToBe();
   }
 
   {

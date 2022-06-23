@@ -1,8 +1,8 @@
-const config = require("@skylib/config/src/jest-preset");
+const { jest } = require("@skylib/config");
 
 module.exports = {
   moduleNameMapper: {
-    ...config.moduleNameMapper,
+    ...jest.preset.moduleNameMapper,
     [/^pouchdb$/u.source]: require.resolve("pouchdb/dist/pouchdb.js")
   },
   preset: "@skylib/config/src",

@@ -1,5 +1,4 @@
 import { implementations } from "@";
-// eslint-disable-next-line @skylib/consistent-import, import/no-internal-modules -- Ok
 import * as handleError from "@/facade-implementations/handle-promise/promise-handler/core/handle-error";
 import { evaluate, fn, wait } from "@skylib/functions";
 import * as testUtils from "@skylib/functions/dist/test-utils";
@@ -112,15 +111,14 @@ test("silent: Error", async () => {
 
     {
       promiseHandler.silent(fail);
-      expect(alertFn).not.toHaveBeenCalled();
-      expect(errorSpy).not.toHaveBeenCalled();
+      expect(alertFn).mockCallsToBe();
+      expect(errorSpy).mockCallsToBe();
     }
 
     {
       await wait(1000);
-      expect(alertFn).not.toHaveBeenCalled();
-      expect(errorSpy).toHaveBeenCalledTimes(1);
-      expect(errorSpy).toHaveBeenCalledWith(error);
+      expect(alertFn).mockCallsToBe();
+      expect(errorSpy).mockCallsToBe([error]);
     }
 
     async function fail(): Promise<void> {
@@ -147,6 +145,7 @@ test("verbose: Async", async () => {
   expect.hasAssertions();
 
   await testUtils.run(async () => {
+    // eslint-disable-next-line github/no-inner-html -- Ok
     document.body.innerHTML = '<div id="progressBar">';
     promiseHandler("createDb", callback);
     await wait(1000);
@@ -173,16 +172,14 @@ test("verbose: Error", async () => {
 
     {
       promiseHandler("createDb", fail, errorMessage);
-      expect(alertFn).not.toHaveBeenCalled();
-      expect(errorSpy).not.toHaveBeenCalled();
+      expect(alertFn).mockCallsToBe();
+      expect(errorSpy).mockCallsToBe();
     }
 
     {
       await wait(2000);
-      expect(alertFn).toHaveBeenCalledTimes(1);
-      expect(alertFn).toHaveBeenCalledWith(errorMessage);
-      expect(errorSpy).toHaveBeenCalledTimes(1);
-      expect(errorSpy).toHaveBeenCalledWith(error);
+      expect(alertFn).mockCallsToBe([errorMessage]);
+      expect(errorSpy).mockCallsToBe([error]);
     }
 
     async function fail(): Promise<void> {

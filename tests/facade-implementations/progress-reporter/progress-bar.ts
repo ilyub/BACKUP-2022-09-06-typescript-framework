@@ -7,6 +7,7 @@ const { progressBar } = implementations.progressReporter;
 testUtils.installFakeTimer();
 
 beforeEach(() => {
+  // eslint-disable-next-line github/no-inner-html -- Ok
   document.body.innerHTML = '<div id="progressBar">';
 });
 

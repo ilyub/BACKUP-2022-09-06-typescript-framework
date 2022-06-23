@@ -14,14 +14,24 @@ export const moduleConfig = onDemand(() =>
 );
 
 export const pluralReduce = defineFn<PluralReduce, PluralReduceInternational>(
-  // eslint-disable-next-line @skylib/require-jsdoc -- Ok
+  /**
+   * Reduces count for plural form.
+   *
+   * @param count - Count.
+   * @returns Reduced count.
+   */
   (count: number) => {
     count = Math.abs(count);
 
     return Math.abs(count) === 1 ? 1 : 2;
   },
   {
-    // eslint-disable-next-line @skylib/require-jsdoc -- Ok
+    /**
+     * Reduces count for plural form.
+     *
+     * @param count - Count.
+     * @returns Reduced count.
+     */
     ru: (count: number) => {
       count = Math.abs(count);
 

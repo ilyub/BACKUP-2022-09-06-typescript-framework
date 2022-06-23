@@ -22,11 +22,11 @@ export class Google implements google.Facade {
         : await sdk.signIn();
 
       return user.getAuthResponse().id_token;
-    } catch (e) {
-      if (is.indexedObject(e) && e["error"] === "popup_closed_by_user")
+    } catch (error) {
+      if (is.indexedObject(error) && error["error"] === "popup_closed_by_user")
         return undefined;
 
-      throw e;
+      throw error;
     }
   }
 
@@ -36,6 +36,7 @@ export class Google implements google.Facade {
 
   protected readonly clientId: AsyncPromise<stringU> | stringU;
 
+  // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
   protected sdk: Promise<Google.Auth> | undefined;
 
   /**
@@ -61,13 +62,12 @@ export class Google implements google.Facade {
             reject: (reason: unknown) => void
           ) => {
             gapi.load("auth2", () => {
-              // eslint-disable-next-line github/no-then -- Ok
               gapi.auth2.init({ client_id: clientId }).then(
                 googleAuth => {
                   resolve(googleAuth);
                 },
-                e => {
-                  reject(new Error(`Error ${e.error}: ${e.details}`));
+                error => {
+                  reject(new Error(`Error ${error.error}: ${error.details}`));
                 }
               );
             });

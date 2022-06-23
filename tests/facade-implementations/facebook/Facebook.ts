@@ -105,11 +105,13 @@ test("Facebook.accessToken: unknown", async () => {
 test("Facebook.loadSdk", async () => {
   const facebook = new Facebook(appId, "10.0");
 
-  expect(getScript).not.toHaveBeenCalled();
+  const expected = ["https://connect.facebook.net/en_US/sdk.js"];
+
+  expect(getScript).mockCallsToBe();
   await facebook.loadSdk();
-  expect(getScript).toHaveBeenCalledTimes(1);
+  expect(getScript).mockCallsToBe(expected);
   await facebook.loadSdk();
-  expect(getScript).toHaveBeenCalledTimes(1);
+  expect(getScript).mockCallsToBe();
 
   async function appId(): Promise<stringU> {
     await Promise.resolve();

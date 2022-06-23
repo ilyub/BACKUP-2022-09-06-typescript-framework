@@ -65,6 +65,7 @@ export class Facebook implements facebook.Facade {
 
   protected readonly appId: AsyncPromise<stringU> | stringU;
 
+  // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
   protected sdk: Promise<void> | undefined;
 
   protected readonly version: string;
