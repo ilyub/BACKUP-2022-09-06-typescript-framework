@@ -8,7 +8,7 @@
 
 - `BaseExistingDocument`
 
-- [`OwnProps`](classes_database_Item.Item.OwnProps.md)
+- [`ItemProps`](classes_database_Item.Item.ItemProps.md)
 
   ↳ **`ExistingItemDoc`**
 
@@ -74,7 +74,7 @@ ___
 
 #### Inherited from
 
-[OwnProps](classes_database_Item.Item.OwnProps.md).[createdAt](classes_database_Item.Item.OwnProps.md#createdat)
+[ItemProps](classes_database_Item.Item.ItemProps.md).[createdAt](classes_database_Item.Item.ItemProps.md#createdat)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Inherited from
 
-[OwnProps](classes_database_Item.Item.OwnProps.md).[deletedAt](classes_database_Item.Item.OwnProps.md#deletedat)
+[ItemProps](classes_database_Item.Item.ItemProps.md).[deletedAt](classes_database_Item.Item.ItemProps.md#deletedat)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Inherited from
 
-[OwnProps](classes_database_Item.Item.OwnProps.md).[softDeleted](classes_database_Item.Item.OwnProps.md#softdeleted)
+[ItemProps](classes_database_Item.Item.ItemProps.md).[softDeleted](classes_database_Item.Item.ItemProps.md#softdeleted)
 
 ___
 
@@ -114,4 +114,4 @@ ___
 
 #### Inherited from
 
-[OwnProps](classes_database_Item.Item.OwnProps.md).[updatedAt](classes_database_Item.Item.OwnProps.md#updatedat)
+[ItemProps](classes_database_Item.Item.ItemProps.md).[updatedAt](classes_database_Item.Item.ItemProps.md#updatedat)

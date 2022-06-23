@@ -174,7 +174,6 @@ exports.Definition = Definition;
  * @returns Modified word.
  */
 function applyRuleRef(word, rule, owner) {
-    // eslint-disable-next-line @skylib/disallow-by-regexp -- Wait for @skylib/config update
     // Format: <replacement-id:form>
     const search = functions_1.a.first(rule);
     const replacementId = functions_1.a.second(rule);
@@ -192,7 +191,6 @@ function applyRuleRef(word, rule, owner) {
  * @returns Modified word.
  */
 function applyRuleRefDependent(word, rule, owner) {
-    // eslint-disable-next-line @skylib/disallow-by-regexp -- Wait for @skylib/config update
     // Format: <replacement-id>
     const search = functions_1.a.first(rule);
     const replacementId = functions_1.a.second(rule);
@@ -209,7 +207,6 @@ function applyRuleRefDependent(word, rule, owner) {
  * @returns Modified word.
  */
 function applyRuleRefSecondary(word, rule, owner) {
-    // eslint-disable-next-line @skylib/disallow-by-regexp -- Wait for @skylib/config update
     // Format: <replacement-id.form>
     const search = functions_1.a.first(rule);
     const replacementId = functions_1.a.second(rule);

@@ -59,11 +59,10 @@ class Dictionary {
             const handler = (0, functions_1.wrapProxyHandler)("Dictionary", "doDefault", {
                 get: (target, key) => {
                     functions_1.assert.string(key);
-                    // eslint-disable-next-line no-restricted-syntax -- Ok
+                    // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
                     return target.has(key) ? target.get(key) : functions_1.o.get(target, key);
                 }
             });
-            // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
             return new Proxy(this, handler);
         });
         this._context = context;
@@ -71,17 +70,6 @@ class Dictionary {
         this.definitions = definitions;
         this.facade = facade;
         this.keys = functions_1.a.first(functions_1.o.values(definitions)).keys;
-    }
-    /**
-     * Creates dictionary.
-     *
-     * @param definitions - Language definitions.
-     * @param context - Context.
-     * @param count - Count for plural form.
-     * @returns Dictionary.
-     */
-    static create(definitions, context, count) {
-        return new Dictionary(definitions, context, count).facade;
     }
     context(context) {
         if (context === this._context)
@@ -158,5 +146,19 @@ class Dictionary {
     }
 }
 exports.Dictionary = Dictionary;
+/**
+ * Creates dictionary.
+ *
+ * @param definitions - Language definitions.
+ * @param context - Context.
+ * @param count - Count for plural form.
+ * @returns Dictionary.
+ */
+Object.defineProperty(Dictionary, "create", {
+    enumerable: true,
+    configurable: true,
+    writable: true,
+    value: (definitions, context, count) => new Dictionary(definitions, context, count).facade
+});
 const replacements = new Map();
 //# sourceMappingURL=Dictionary.js.map

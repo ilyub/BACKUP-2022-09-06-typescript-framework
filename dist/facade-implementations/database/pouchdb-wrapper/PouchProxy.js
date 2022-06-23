@@ -33,8 +33,8 @@ class PouchProxy {
         try {
             return await this.db.bulkDocs(functions_1.a.clone(docs));
         }
-        catch (e) {
-            throw (0, core_1.wrapPouchError)(e);
+        catch (error) {
+            throw (0, core_1.wrapPouchError)(error);
         }
     }
     /**
@@ -58,8 +58,8 @@ class PouchProxy {
         try {
             await this.db.destroy();
         }
-        catch (e) {
-            throw (0, core_1.wrapPouchError)(e);
+        catch (error) {
+            throw (0, core_1.wrapPouchError)(error);
         }
     }
     /**
@@ -73,8 +73,8 @@ class PouchProxy {
         try {
             return await this.db.get(id);
         }
-        catch (e) {
-            throw (0, core_1.wrapPouchError)(e);
+        catch (error) {
+            throw (0, core_1.wrapPouchError)(error);
         }
     }
     /**
@@ -96,8 +96,8 @@ class PouchProxy {
         try {
             return await this.db.post(doc);
         }
-        catch (e) {
-            throw (0, core_1.wrapPouchError)(e);
+        catch (error) {
+            throw (0, core_1.wrapPouchError)(error);
         }
     }
     /**
@@ -111,8 +111,8 @@ class PouchProxy {
         try {
             return await this.db.put(doc);
         }
-        catch (e) {
-            throw (0, core_1.wrapPouchError)(e);
+        catch (error) {
+            throw (0, core_1.wrapPouchError)(error);
         }
     }
     /**
@@ -127,8 +127,8 @@ class PouchProxy {
         try {
             return await this.db.query(mapReduce, options);
         }
-        catch (e) {
-            throw (0, core_1.wrapPouchError)(e);
+        catch (error) {
+            throw (0, core_1.wrapPouchError)(error);
         }
     }
 }

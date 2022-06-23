@@ -256,7 +256,7 @@ ___
 
 ### create
 
-▸ `Static` **create**(`definitions`, `context?`, `count?`): `Facade`
+▸ `Static` `Readonly` **create**(`definitions`, `context?`, `count?`): `Facade`
 
 Creates dictionary.
 

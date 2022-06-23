@@ -15,6 +15,7 @@ export class Database {
      * @param pouchConfig - PouchDB configuration.
      */
     constructor(name, options = {}, config = {}, pouchConfig = {}) {
+        // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
         Object.defineProperty(this, "changes", {
             enumerable: true,
             configurable: true,
@@ -55,6 +56,7 @@ export class Database {
                 unsubscribe: fn.noop
             })
         });
+        // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
         Object.defineProperty(this, "db", {
             enumerable: true,
             configurable: true,
@@ -109,7 +111,7 @@ export class Database {
         const responses = await Promise.all(a
             .fromIterable(groups)
             .map(async ([parentId, group]) => await this.putAttachedBulk(parentId, group)));
-        return _.flatten(responses);
+        return responses.flat();
     }
     async count(conditions = {}) {
         const response = await this.rawQuery({}, { conditions, count: true });
@@ -147,8 +149,8 @@ export class Database {
         try {
             return await this.get(id);
         }
-        catch (e) {
-            assert.instance(e, PouchNotFoundError, ErrorArg.wrapError(e));
+        catch (error) {
+            assert.instance(error, PouchNotFoundError, ErrorArg.wrapError(error));
             return undefined;
         }
     }
@@ -156,8 +158,8 @@ export class Database {
         try {
             return await this.getAttached(id, parentId);
         }
-        catch (e) {
-            assert.instance(e, PouchNotFoundError, ErrorArg.wrapError(e));
+        catch (error) {
+            assert.instance(error, PouchNotFoundError, ErrorArg.wrapError(error));
             return undefined;
         }
     }
@@ -200,8 +202,8 @@ export class Database {
         try {
             return await this.put(doc);
         }
-        catch (e) {
-            assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
+        catch (error) {
+            assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
             return undefined;
         }
     }
@@ -209,8 +211,8 @@ export class Database {
         try {
             return await this.putAttached(parentId, doc);
         }
-        catch (e) {
-            assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
+        catch (error) {
+            assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
             return undefined;
         }
     }
@@ -374,8 +376,8 @@ export class Database {
                 return Object.assign(Object.assign({}, item), { parentRev: response.rev });
             });
         }
-        catch (e) {
-            assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
+        catch (error) {
+            assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
             return undefined;
         }
     }
@@ -388,7 +390,7 @@ export class Database {
      * @returns Documents.
      */
     async _rawQuery(mapReduce, options, queryOptions) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d, _e, _f;
         const db = await this.getDb();
         const descending = (_a = options.descending) !== null && _a !== void 0 ? _a : false;
         const skip = (_b = options.skip) !== null && _b !== void 0 ? _b : 0;
@@ -399,11 +401,11 @@ export class Database {
             group_level: mapReduce.groupLevel,
             limit: limit + skip
         });
-        const toSettle = _.flatten(response.rows
+        const toSettle = response.rows
             .map(row => row.value)
             .filter(isDocsResponse)
             .filter(group => !group.settled)
-            .map(group => group.docs))
+            .flatMap(group => group.docs)
             .map(doc => doc.doc)
             .filter(mapReduce.settle);
         if (toSettle.length >= this.config.reindexThreshold)
@@ -412,15 +414,17 @@ export class Database {
             .map(row => row.value)
             .filter(isDocsResponse);
         return {
-            count: queryOptions.count
+            count: ((_d = queryOptions.count) !== null && _d !== void 0 ? _d : false)
                 ? num.sum(...groups.map(group => group.settled
                     ? group.count
                     : group.docs.map(item => item.doc).filter(mapReduce.output)
                         .length))
                 : 0,
-            docs: queryOptions.docs
+            docs: ((_e = queryOptions.docs) !== null && _e !== void 0 ? _e : false)
                 ? evaluate(() => {
-                    const items = _.flatten(groups.map(group => group.docs)).filter(item => mapReduce.output(item.doc));
+                    const items = groups
+                        .flatMap(group => group.docs)
+                        .filter(item => mapReduce.output(item.doc));
                     items.sort((item1, item2) => collate(item1.key, item2.key));
                     if (descending)
                         items.reverse();
@@ -428,7 +432,7 @@ export class Database {
                 })
                 : [],
             mapReduce,
-            unsettledCount: queryOptions.unsettledCount
+            unsettledCount: ((_f = queryOptions.unsettledCount) !== null && _f !== void 0 ? _f : false)
                 ? num.sum(0, ...groups
                     .filter(group => !group.settled)
                     .map(group => group.docs.length))
@@ -447,8 +451,8 @@ export class Database {
             await db.put(Object.assign(Object.assign({}, doc), { views: { default: mapReduce.mapReduce } }));
             return true;
         }
-        catch (e) {
-            assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
+        catch (error) {
+            assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
             return false;
         }
     }
@@ -465,8 +469,8 @@ export class Database {
                 views: { default: mapReduce.mapReduce }
             });
         }
-        catch (e) {
-            assert.instance(e, PouchConflictError, ErrorArg.wrapError(e));
+        catch (error) {
+            assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
         }
     }
     /**
@@ -486,7 +490,7 @@ export class Database {
      * Applies migrations.
      */
     async migrate() {
-        if (this.options.migrations.length) {
+        if (this.options.migrations.length > 0) {
             let migrations = await evaluate(async () => {
                 const result = await this.getIfExists("migrations");
                 return result !== null && result !== void 0 ? result : { _id: "migrations" };
@@ -519,8 +523,8 @@ export class Database {
         try {
             return await this._rawQuery(mapReduce, options, queryOptions);
         }
-        catch (e) {
-            assert.instance(e, PouchNotFoundError, ErrorArg.wrapError(e));
+        catch (error) {
+            assert.instance(error, PouchNotFoundError, ErrorArg.wrapError(error));
             await this.createDesignDocument(mapReduce);
             return await this._rawQuery(mapReduce, options, queryOptions);
         }
@@ -735,12 +739,13 @@ export class Database {
             else
                 this.changes = this.db.changes(value => {
                     assert.byGuard(value.doc, isExistingDocument);
-                    if (this.changesHandlers.size) {
+                    if (this.changesHandlers.size > 0) {
                         const doc = extractDoc(value.doc);
                         for (const handler of this.changesHandlers.values())
                             handler(doc);
                     }
-                    if (this.changesHandlersAttached.size && value.doc.lastAttachedDocs)
+                    if (this.changesHandlersAttached.size > 0 &&
+                        value.doc.lastAttachedDocs)
                         for (const lastAttachedDoc of value.doc.lastAttachedDocs) {
                             const attachedDoc = extractAttachedDoc(value.doc, lastAttachedDoc, true);
                             assert.not.empty(attachedDoc);

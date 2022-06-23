@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.matchers = exports.progressToBe = exports.datetimeToBe = void 0;
 const tslib_1 = require("tslib");
-// eslint-disable-next-line import/no-internal-modules -- Ok
 const DateTime_1 = require("../facade-implementations/datetime/date-fns-wrapper/DateTime");
 const facades_1 = require("@skylib/facades");
 const functions_1 = require("@skylib/functions");

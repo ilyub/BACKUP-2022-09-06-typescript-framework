@@ -85,7 +85,7 @@ Object.defineProperty(Process, "reset", {
     configurable: true,
     writable: true,
     value: () => {
-        if (processes.size) {
+        if (processes.size > 0) {
             processes = new Set();
             progress = 0;
             programFlow.clearTimeout(timeout);

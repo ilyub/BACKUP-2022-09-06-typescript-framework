@@ -2,12 +2,22 @@ import { reactiveStorage } from "@skylib/facades";
 import { defineFn, o, onDemand } from "@skylib/functions";
 export const moduleConfig = onDemand(() => reactiveStorage({ localeName: "en-US" }));
 export const pluralReduce = defineFn(
-// eslint-disable-next-line @skylib/require-jsdoc -- Ok
+/**
+ * Reduces count for plural form.
+ *
+ * @param count - Count.
+ * @returns Reduced count.
+ */
 (count) => {
     count = Math.abs(count);
     return Math.abs(count) === 1 ? 1 : 2;
 }, {
-    // eslint-disable-next-line @skylib/require-jsdoc -- Ok
+    /**
+     * Reduces count for plural form.
+     *
+     * @param count - Count.
+     * @returns Reduced count.
+     */
     ru: (count) => {
         count = Math.abs(count);
         if (count >= 10 && count <= 19)

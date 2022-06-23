@@ -14,6 +14,7 @@ export class Facebook {
             writable: true,
             value: void 0
         });
+        // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
         Object.defineProperty(this, "sdk", {
             enumerable: true,
             configurable: true,

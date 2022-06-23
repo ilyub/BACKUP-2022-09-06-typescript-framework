@@ -170,7 +170,6 @@ export class Definition {
  * @returns Modified word.
  */
 function applyRuleRef(word, rule, owner) {
-    // eslint-disable-next-line @skylib/disallow-by-regexp -- Wait for @skylib/config update
     // Format: <replacement-id:form>
     const search = a.first(rule);
     const replacementId = a.second(rule);
@@ -188,7 +187,6 @@ function applyRuleRef(word, rule, owner) {
  * @returns Modified word.
  */
 function applyRuleRefDependent(word, rule, owner) {
-    // eslint-disable-next-line @skylib/disallow-by-regexp -- Wait for @skylib/config update
     // Format: <replacement-id>
     const search = a.first(rule);
     const replacementId = a.second(rule);
@@ -205,7 +203,6 @@ function applyRuleRefDependent(word, rule, owner) {
  * @returns Modified word.
  */
 function applyRuleRefSecondary(word, rule, owner) {
-    // eslint-disable-next-line @skylib/disallow-by-regexp -- Wait for @skylib/config update
     // Format: <replacement-id.form>
     const search = a.first(rule);
     const replacementId = a.second(rule);

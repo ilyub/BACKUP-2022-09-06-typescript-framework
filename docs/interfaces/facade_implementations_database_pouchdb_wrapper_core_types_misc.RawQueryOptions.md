@@ -29,16 +29,16 @@ ___
 
 ### count
 
-• `Optional` `Readonly` **count**: ``true``
+• `Optional` `Readonly` **count**: `boolean`
 
 ___
 
 ### docs
 
-• `Optional` `Readonly` **docs**: ``true``
+• `Optional` `Readonly` **docs**: `boolean`
 
 ___
 
 ### unsettledCount
 
-• `Optional` `Readonly` **unsettledCount**: ``true``
+• `Optional` `Readonly` **unsettledCount**: `boolean`

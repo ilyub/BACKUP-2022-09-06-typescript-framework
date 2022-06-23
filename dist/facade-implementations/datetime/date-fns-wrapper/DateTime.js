@@ -11,6 +11,7 @@ class DateTime {
      * @param date - Date.
      */
     constructor(date) {
+        // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
         Object.defineProperty(this, "value", {
             enumerable: true,
             configurable: true,

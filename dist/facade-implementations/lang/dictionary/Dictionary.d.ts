@@ -10,7 +10,7 @@ export declare class Dictionary implements lang.Dictionary<lang.Word, lang.Conte
      * @param count - Count for plural form.
      * @returns Dictionary.
      */
-    static create(definitions: Rec<LocaleName, Definitions>, context?: lang.Context, count?: number): lang.Facade;
+    static readonly create: (definitions: Rec<LocaleName, Definitions>, context?: lang.Context, count?: number) => lang.Facade;
     readonly keys: Rec<lang.Transform, lang.Transform>;
     readonly plain: (str: string) => lang.Plain;
     context(context: lang.Context): lang.Facade;

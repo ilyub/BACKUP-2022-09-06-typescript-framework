@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uniqueId = exports.testDelay = exports.showConfirm = exports.showAlert = exports.reactiveStorage = exports.progressReporter = exports.lang = exports.inlineSearch = exports.httpRequest = exports.handlePromise = exports.google = exports.faker = exports.facebook = exports.datetime = exports.database = exports.compare = void 0;
+exports.uniqueId = exports.testDelay = exports.showConfirm = exports.showAlert = exports.reactiveStorage = exports.progressReporter = exports.lang = exports.inlineSearch = exports.httpRequest = exports.handlePromise = exports.google = exports.faker = exports.facebook = exports.dump = exports.datetime = exports.database = exports.compare = void 0;
 const tslib_1 = require("tslib");
 exports.compare = tslib_1.__importStar(require("./compare"));
 exports.database = tslib_1.__importStar(require("./database"));
 exports.datetime = tslib_1.__importStar(require("./datetime"));
+exports.dump = tslib_1.__importStar(require("./dump"));
 exports.facebook = tslib_1.__importStar(require("./facebook"));
 exports.faker = tslib_1.__importStar(require("./faker"));
 exports.google = tslib_1.__importStar(require("./google"));

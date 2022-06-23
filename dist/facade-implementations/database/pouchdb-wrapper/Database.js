@@ -18,6 +18,7 @@ class Database {
      * @param pouchConfig - PouchDB configuration.
      */
     constructor(name, options = {}, config = {}, pouchConfig = {}) {
+        // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
         Object.defineProperty(this, "changes", {
             enumerable: true,
             configurable: true,
@@ -58,6 +59,7 @@ class Database {
                 unsubscribe: functions_1.fn.noop
             })
         });
+        // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
         Object.defineProperty(this, "db", {
             enumerable: true,
             configurable: true,
@@ -112,7 +114,7 @@ class Database {
         const responses = await Promise.all(functions_1.a
             .fromIterable(groups)
             .map(async ([parentId, group]) => await this.putAttachedBulk(parentId, group)));
-        return _.flatten(responses);
+        return responses.flat();
     }
     async count(conditions = {}) {
         const response = await this.rawQuery({}, { conditions, count: true });
@@ -150,8 +152,8 @@ class Database {
         try {
             return await this.get(id);
         }
-        catch (e) {
-            functions_1.assert.instance(e, core_1.PouchNotFoundError, functions_1.ErrorArg.wrapError(e));
+        catch (error) {
+            functions_1.assert.instance(error, core_1.PouchNotFoundError, functions_1.ErrorArg.wrapError(error));
             return undefined;
         }
     }
@@ -159,8 +161,8 @@ class Database {
         try {
             return await this.getAttached(id, parentId);
         }
-        catch (e) {
-            functions_1.assert.instance(e, core_1.PouchNotFoundError, functions_1.ErrorArg.wrapError(e));
+        catch (error) {
+            functions_1.assert.instance(error, core_1.PouchNotFoundError, functions_1.ErrorArg.wrapError(error));
             return undefined;
         }
     }
@@ -203,8 +205,8 @@ class Database {
         try {
             return await this.put(doc);
         }
-        catch (e) {
-            functions_1.assert.instance(e, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(e));
+        catch (error) {
+            functions_1.assert.instance(error, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(error));
             return undefined;
         }
     }
@@ -212,8 +214,8 @@ class Database {
         try {
             return await this.putAttached(parentId, doc);
         }
-        catch (e) {
-            functions_1.assert.instance(e, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(e));
+        catch (error) {
+            functions_1.assert.instance(error, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(error));
             return undefined;
         }
     }
@@ -377,8 +379,8 @@ class Database {
                 return Object.assign(Object.assign({}, item), { parentRev: response.rev });
             });
         }
-        catch (e) {
-            functions_1.assert.instance(e, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(e));
+        catch (error) {
+            functions_1.assert.instance(error, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(error));
             return undefined;
         }
     }
@@ -391,7 +393,7 @@ class Database {
      * @returns Documents.
      */
     async _rawQuery(mapReduce, options, queryOptions) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d, _e, _f;
         const db = await this.getDb();
         const descending = (_a = options.descending) !== null && _a !== void 0 ? _a : false;
         const skip = (_b = options.skip) !== null && _b !== void 0 ? _b : 0;
@@ -402,11 +404,11 @@ class Database {
             group_level: mapReduce.groupLevel,
             limit: limit + skip
         });
-        const toSettle = _.flatten(response.rows
+        const toSettle = response.rows
             .map(row => row.value)
             .filter(core_1.isDocsResponse)
             .filter(group => !group.settled)
-            .map(group => group.docs))
+            .flatMap(group => group.docs)
             .map(doc => doc.doc)
             .filter(mapReduce.settle);
         if (toSettle.length >= this.config.reindexThreshold)
@@ -415,15 +417,17 @@ class Database {
             .map(row => row.value)
             .filter(core_1.isDocsResponse);
         return {
-            count: queryOptions.count
+            count: ((_d = queryOptions.count) !== null && _d !== void 0 ? _d : false)
                 ? functions_1.num.sum(...groups.map(group => group.settled
                     ? group.count
                     : group.docs.map(item => item.doc).filter(mapReduce.output)
                         .length))
                 : 0,
-            docs: queryOptions.docs
+            docs: ((_e = queryOptions.docs) !== null && _e !== void 0 ? _e : false)
                 ? (0, functions_1.evaluate)(() => {
-                    const items = _.flatten(groups.map(group => group.docs)).filter(item => mapReduce.output(item.doc));
+                    const items = groups
+                        .flatMap(group => group.docs)
+                        .filter(item => mapReduce.output(item.doc));
                     items.sort((item1, item2) => (0, pouchdb_collate_1.collate)(item1.key, item2.key));
                     if (descending)
                         items.reverse();
@@ -431,7 +435,7 @@ class Database {
                 })
                 : [],
             mapReduce,
-            unsettledCount: queryOptions.unsettledCount
+            unsettledCount: ((_f = queryOptions.unsettledCount) !== null && _f !== void 0 ? _f : false)
                 ? functions_1.num.sum(0, ...groups
                     .filter(group => !group.settled)
                     .map(group => group.docs.length))
@@ -450,8 +454,8 @@ class Database {
             await db.put(Object.assign(Object.assign({}, doc), { views: { default: mapReduce.mapReduce } }));
             return true;
         }
-        catch (e) {
-            functions_1.assert.instance(e, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(e));
+        catch (error) {
+            functions_1.assert.instance(error, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(error));
             return false;
         }
     }
@@ -468,8 +472,8 @@ class Database {
                 views: { default: mapReduce.mapReduce }
             });
         }
-        catch (e) {
-            functions_1.assert.instance(e, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(e));
+        catch (error) {
+            functions_1.assert.instance(error, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(error));
         }
     }
     /**
@@ -489,7 +493,7 @@ class Database {
      * Applies migrations.
      */
     async migrate() {
-        if (this.options.migrations.length) {
+        if (this.options.migrations.length > 0) {
             let migrations = await (0, functions_1.evaluate)(async () => {
                 const result = await this.getIfExists("migrations");
                 return result !== null && result !== void 0 ? result : { _id: "migrations" };
@@ -522,8 +526,8 @@ class Database {
         try {
             return await this._rawQuery(mapReduce, options, queryOptions);
         }
-        catch (e) {
-            functions_1.assert.instance(e, core_1.PouchNotFoundError, functions_1.ErrorArg.wrapError(e));
+        catch (error) {
+            functions_1.assert.instance(error, core_1.PouchNotFoundError, functions_1.ErrorArg.wrapError(error));
             await this.createDesignDocument(mapReduce);
             return await this._rawQuery(mapReduce, options, queryOptions);
         }
@@ -738,12 +742,13 @@ class Database {
             else
                 this.changes = this.db.changes(value => {
                     functions_1.assert.byGuard(value.doc, core_1.isExistingDocument);
-                    if (this.changesHandlers.size) {
+                    if (this.changesHandlers.size > 0) {
                         const doc = (0, core_1.extractDoc)(value.doc);
                         for (const handler of this.changesHandlers.values())
                             handler(doc);
                     }
-                    if (this.changesHandlersAttached.size && value.doc.lastAttachedDocs)
+                    if (this.changesHandlersAttached.size > 0 &&
+                        value.doc.lastAttachedDocs)
                         for (const lastAttachedDoc of value.doc.lastAttachedDocs) {
                             const attachedDoc = (0, core_1.extractAttachedDoc)(value.doc, lastAttachedDoc, true);
                             functions_1.assert.not.empty(attachedDoc);

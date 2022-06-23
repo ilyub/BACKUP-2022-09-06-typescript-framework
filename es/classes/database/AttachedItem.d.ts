@@ -37,20 +37,25 @@ export declare abstract class AttachedItem<T extends Item = Item> {
     protected abstract getParent(): T;
 }
 export declare namespace AttachedItem {
-    type AttachedItems = readonly AttachedItems[];
-    interface BulkAttachedItemDoc extends database.BaseBulkAttachedDocument, OwnProps {
-    }
-    type BulkAttachedItemDocs = readonly BulkAttachedItemDoc[];
-    interface ExistingAttachedItemDoc extends database.BaseExistingAttachedDocument, OwnProps {
-    }
-    type ExistingAttachedItemDocs = readonly ExistingAttachedItemDoc[];
-    interface OwnProps {
+    interface AttachedItemProps {
         readonly createdAt?: string;
         readonly deletedAt?: string;
         readonly softDeleted?: true;
         readonly updatedAt?: string;
     }
-    interface PutAttachedItemDoc extends database.BasePutAttachedDocument, OwnProps {
+    type AttachedItems = readonly AttachedItems[];
+    interface BulkAttachedItemDoc extends database.BaseBulkAttachedDocument, AttachedItemProps {
+    }
+    type BulkAttachedItemDocs = readonly BulkAttachedItemDoc[];
+    interface ExistingAttachedItemDoc extends database.BaseExistingAttachedDocument, AttachedItemProps {
+    }
+    type ExistingAttachedItemDocs = readonly ExistingAttachedItemDoc[];
+    /**
+     * @deprecated
+     */
+    interface OwnProps extends AttachedItemProps {
+    }
+    interface PutAttachedItemDoc extends database.BasePutAttachedDocument, AttachedItemProps {
     }
     type PutAttachedItemDocs = readonly PutAttachedItemDoc[];
 }

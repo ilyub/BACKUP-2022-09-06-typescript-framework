@@ -4,6 +4,8 @@ import * as database_1 from "./database";
 export { database_1 as database };
 import * as datetime_1 from "./datetime";
 export { datetime_1 as datetime };
+import * as dump_1 from "./dump";
+export { dump_1 as dump };
 import * as facebook_1 from "./facebook";
 export { facebook_1 as facebook };
 import * as faker_1 from "./faker";

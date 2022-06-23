@@ -56,11 +56,10 @@ export class Dictionary {
             const handler = wrapProxyHandler("Dictionary", "doDefault", {
                 get: (target, key) => {
                     assert.string(key);
-                    // eslint-disable-next-line no-restricted-syntax -- Ok
+                    // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
                     return target.has(key) ? target.get(key) : o.get(target, key);
                 }
             });
-            // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
             return new Proxy(this, handler);
         });
         this._context = context;
@@ -68,17 +67,6 @@ export class Dictionary {
         this.definitions = definitions;
         this.facade = facade;
         this.keys = a.first(o.values(definitions)).keys;
-    }
-    /**
-     * Creates dictionary.
-     *
-     * @param definitions - Language definitions.
-     * @param context - Context.
-     * @param count - Count for plural form.
-     * @returns Dictionary.
-     */
-    static create(definitions, context, count) {
-        return new Dictionary(definitions, context, count).facade;
     }
     context(context) {
         if (context === this._context)
@@ -154,5 +142,19 @@ export class Dictionary {
         return definitions.pluralReduce(count);
     }
 }
+/**
+ * Creates dictionary.
+ *
+ * @param definitions - Language definitions.
+ * @param context - Context.
+ * @param count - Count for plural form.
+ * @returns Dictionary.
+ */
+Object.defineProperty(Dictionary, "create", {
+    enumerable: true,
+    configurable: true,
+    writable: true,
+    value: (definitions, context, count) => new Dictionary(definitions, context, count).facade
+});
 const replacements = new Map();
 //# sourceMappingURL=Dictionary.js.map

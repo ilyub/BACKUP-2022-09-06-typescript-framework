@@ -4,15 +4,13 @@
 
 [classes/database/AttachedItem](../modules/classes_database_AttachedItem.md).[AttachedItem](../modules/classes_database_AttachedItem.AttachedItem.md).OwnProps
 
+**`deprecated`**
+
 ## Hierarchy
 
-- **`OwnProps`**
+- [`AttachedItemProps`](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md)
 
-  ↳ [`BulkAttachedItemDoc`](classes_database_AttachedItem.AttachedItem.BulkAttachedItemDoc.md)
-
-  ↳ [`ExistingAttachedItemDoc`](classes_database_AttachedItem.AttachedItem.ExistingAttachedItemDoc.md)
-
-  ↳ [`PutAttachedItemDoc`](classes_database_AttachedItem.AttachedItem.PutAttachedItemDoc.md)
+  ↳ **`OwnProps`**
 
 ## Table of contents
 
@@ -29,11 +27,19 @@
 
 • `Optional` `Readonly` **createdAt**: `string`
 
+#### Inherited from
+
+[AttachedItemProps](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md).[createdAt](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md#createdat)
+
 ___
 
 ### deletedAt
 
 • `Optional` `Readonly` **deletedAt**: `string`
+
+#### Inherited from
+
+[AttachedItemProps](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md).[deletedAt](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md#deletedat)
 
 ___
 
@@ -41,8 +47,16 @@ ___
 
 • `Optional` `Readonly` **softDeleted**: ``true``
 
+#### Inherited from
+
+[AttachedItemProps](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md).[softDeleted](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md#softdeleted)
+
 ___
 
 ### updatedAt
 
 • `Optional` `Readonly` **updatedAt**: `string`
+
+#### Inherited from
+
+[AttachedItemProps](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md).[updatedAt](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md#updatedat)

@@ -12,8 +12,9 @@ class PouchProxy extends PouchProxy_1.PouchProxy {
      * @param config - Database configuration.
      */
     constructor(name, config) {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires -- Ok
-        pouchdb_1.default.plugin(require("pouchdb-adapter-memory"));
+        // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-var-requires, unicorn/prefer-module -- Ok
+        const plugin = require("pouchdb-adapter-memory");
+        pouchdb_1.default.plugin(plugin);
         super(name, Object.assign(Object.assign({}, config), { adapter: "memory" }));
     }
 }

@@ -1,4 +1,5 @@
 import type { strings } from "@skylib/functions";
+import type { Locale } from "date-fns";
 export declare const formatStrings: strings;
 export declare const moduleConfig: Configuration;
 export interface Configurable {

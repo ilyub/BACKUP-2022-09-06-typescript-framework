@@ -8,6 +8,7 @@
 
 ### Interfaces
 
+- [AttachedItemProps](../interfaces/classes_database_AttachedItem.AttachedItem.AttachedItemProps.md)
 - [BulkAttachedItemDoc](../interfaces/classes_database_AttachedItem.AttachedItem.BulkAttachedItemDoc.md)
 - [ExistingAttachedItemDoc](../interfaces/classes_database_AttachedItem.AttachedItem.ExistingAttachedItemDoc.md)
 - [OwnProps](../interfaces/classes_database_AttachedItem.AttachedItem.OwnProps.md)

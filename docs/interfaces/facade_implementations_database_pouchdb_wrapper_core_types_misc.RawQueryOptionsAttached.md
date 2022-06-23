@@ -34,7 +34,7 @@ ___
 
 ### count
 
-• `Optional` `Readonly` **count**: ``true``
+• `Optional` `Readonly` **count**: `boolean`
 
 #### Inherited from
 
@@ -44,7 +44,7 @@ ___
 
 ### docs
 
-• `Optional` `Readonly` **docs**: ``true``
+• `Optional` `Readonly` **docs**: `boolean`
 
 #### Inherited from
 
@@ -60,7 +60,7 @@ ___
 
 ### unsettledCount
 
-• `Optional` `Readonly` **unsettledCount**: ``true``
+• `Optional` `Readonly` **unsettledCount**: `boolean`
 
 #### Inherited from
 

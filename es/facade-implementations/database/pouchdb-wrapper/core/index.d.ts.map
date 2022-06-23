@@ -1,1 +1,1 @@
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../../../../src/facade-implementations/database/pouchdb-wrapper/core/index.ts"],"names":[],"mappings":"AACA,cAAc,UAAU,CAAC;AAGzB,cAAc,UAAU,CAAC;AAGzB,cAAc,cAAc,CAAC;AAG7B,cAAc,QAAQ,CAAC;AAGvB,cAAc,SAAS,CAAC"}
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../../../../src/facade-implementations/database/pouchdb-wrapper/core/index.ts"],"names":[],"mappings":"AAAA,cAAc,UAAU,CAAC;AAEzB,cAAc,UAAU,CAAC;AAEzB,cAAc,cAAc,CAAC;AAE7B,cAAc,QAAQ,CAAC;AAEvB,cAAc,SAAS,CAAC"}

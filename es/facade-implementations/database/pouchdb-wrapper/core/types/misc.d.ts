@@ -24,9 +24,9 @@ export interface MapReduce {
 }
 export interface RawQueryOptions {
     readonly conditions: database.Conditions;
-    readonly count?: true;
-    readonly docs?: true;
-    readonly unsettledCount?: true;
+    readonly count?: boolean;
+    readonly docs?: boolean;
+    readonly unsettledCount?: boolean;
 }
 export interface RawQueryOptionsAttached extends RawQueryOptions {
     readonly parentConditions: database.Conditions;

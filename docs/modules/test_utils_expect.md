@@ -30,7 +30,7 @@
 
 ### datetimeToBe
 
-▸ **datetimeToBe**(`got`, ...`args`): `ExpectReturnType`
+▸ **datetimeToBe**(`got`, ...`args`): `Result`
 
 #### Parameters
 
@@ -41,13 +41,13 @@
 
 #### Returns
 
-`ExpectReturnType`
+`Result`
 
 ___
 
 ### progressToBe
 
-▸ **progressToBe**(`got`, ...`args`): `ExpectReturnType`
+▸ **progressToBe**(`got`, ...`args`): `Result`
 
 #### Parameters
 
@@ -58,4 +58,4 @@ ___
 
 #### Returns
 
-`ExpectReturnType`
+`Result`

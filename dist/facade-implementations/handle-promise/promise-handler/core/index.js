@@ -28,7 +28,6 @@ function handle(mixed, type, errorMessage) {
         ? facades_1.progressReporter.spawn().setAuto(exports.moduleConfig.expectedDurations[type])
         : undefined;
     exports.promises.set(id, promise);
-    // eslint-disable-next-line github/no-then, promise/prefer-await-to-then -- Ok
     promise.catch(rejected).then(fulfilled).catch(rejected);
     function fulfilled() {
         exports.promises.delete(id);

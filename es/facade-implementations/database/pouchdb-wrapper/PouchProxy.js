@@ -29,8 +29,8 @@ export class PouchProxy {
         try {
             return await this.db.bulkDocs(a.clone(docs));
         }
-        catch (e) {
-            throw wrapPouchError(e);
+        catch (error) {
+            throw wrapPouchError(error);
         }
     }
     /**
@@ -54,8 +54,8 @@ export class PouchProxy {
         try {
             await this.db.destroy();
         }
-        catch (e) {
-            throw wrapPouchError(e);
+        catch (error) {
+            throw wrapPouchError(error);
         }
     }
     /**
@@ -69,8 +69,8 @@ export class PouchProxy {
         try {
             return await this.db.get(id);
         }
-        catch (e) {
-            throw wrapPouchError(e);
+        catch (error) {
+            throw wrapPouchError(error);
         }
     }
     /**
@@ -92,8 +92,8 @@ export class PouchProxy {
         try {
             return await this.db.post(doc);
         }
-        catch (e) {
-            throw wrapPouchError(e);
+        catch (error) {
+            throw wrapPouchError(error);
         }
     }
     /**
@@ -107,8 +107,8 @@ export class PouchProxy {
         try {
             return await this.db.put(doc);
         }
-        catch (e) {
-            throw wrapPouchError(e);
+        catch (error) {
+            throw wrapPouchError(error);
         }
     }
     /**
@@ -123,8 +123,8 @@ export class PouchProxy {
         try {
             return await this.db.query(mapReduce, options);
         }
-        catch (e) {
-            throw wrapPouchError(e);
+        catch (error) {
+            throw wrapPouchError(error);
         }
     }
 }

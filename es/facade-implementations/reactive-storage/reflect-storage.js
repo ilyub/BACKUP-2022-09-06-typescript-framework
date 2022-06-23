@@ -1,22 +1,21 @@
-import { assert, defineFn, is, map, o, reflect, wrapProxyHandler } from "@skylib/functions";
-export const reflectStorage = defineFn(
-// eslint-disable-next-line @skylib/require-jsdoc -- Ok
-(obj) => {
+import { assert, defineFn, is, map, reflect, wrapProxyHandler } from "@skylib/functions";
+export const reflectStorage = defineFn((obj) => {
     if (reflect.hasMetadata(MetadataKey, obj))
         return obj;
     const result = new Proxy(obj, wrapProxyHandler("reflectStorage", "doDefault", { get, set }));
     reflect.defineMetadata(MetadataKey, new Map(), result);
     return result;
     function get(target, key) {
-        // eslint-disable-next-line no-restricted-syntax -- Ok
-        const value = o.get(target, key);
+        // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
+        const value = reflect.get(target, key);
         return is.object(value)
             ? new Proxy(value, wrapProxyHandler("reflectStorage", "doDefault", { get, set }))
             : value;
     }
     function set(target, key, value) {
-        // eslint-disable-next-line no-restricted-syntax -- Ok
-        const oldValue = o.get(target, key);
+        // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
+        const oldValue = reflect.get(target, key);
+        // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
         if (reflect.set(target, key, value)) {
             if (value === oldValue) {
                 // Not modified
@@ -32,14 +31,12 @@ export const reflectStorage = defineFn(
         return false;
     }
 }, {
-    // eslint-disable-next-line @skylib/require-jsdoc -- Ok
     unwatch: (obj, observer) => {
         assert.not.empty(observer.symbol);
         const callbacks = reflect.getMetadata(MetadataKey, obj);
         assert.byGuard(callbacks, isCallbacks);
         reflect.defineMetadata(MetadataKey, map.delete(callbacks, observer.symbol), obj);
     },
-    // eslint-disable-next-line @skylib/require-jsdoc -- Ok
     watch: (obj, handler, reducer) => {
         const symbol = Symbol("reflect-storage-callback");
         const callbacks = reflect.getMetadata(MetadataKey, obj);

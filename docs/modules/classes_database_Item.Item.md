@@ -9,6 +9,7 @@
 ### Interfaces
 
 - [ExistingItemDoc](../interfaces/classes_database_Item.Item.ExistingItemDoc.md)
+- [ItemProps](../interfaces/classes_database_Item.Item.ItemProps.md)
 - [OwnProps](../interfaces/classes_database_Item.Item.OwnProps.md)
 - [PutItemDoc](../interfaces/classes_database_Item.Item.PutItemDoc.md)
 

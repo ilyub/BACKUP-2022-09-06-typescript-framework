@@ -4,13 +4,13 @@
 
 [classes/database/Item](../modules/classes_database_Item.md).[Item](../modules/classes_database_Item.Item.md).OwnProps
 
+**`deprecated`**
+
 ## Hierarchy
 
-- **`OwnProps`**
+- [`ItemProps`](classes_database_Item.Item.ItemProps.md)
 
-  ↳ [`ExistingItemDoc`](classes_database_Item.Item.ExistingItemDoc.md)
-
-  ↳ [`PutItemDoc`](classes_database_Item.Item.PutItemDoc.md)
+  ↳ **`OwnProps`**
 
 ## Table of contents
 
@@ -27,11 +27,19 @@
 
 • `Optional` `Readonly` **createdAt**: `string`
 
+#### Inherited from
+
+[ItemProps](classes_database_Item.Item.ItemProps.md).[createdAt](classes_database_Item.Item.ItemProps.md#createdat)
+
 ___
 
 ### deletedAt
 
 • `Optional` `Readonly` **deletedAt**: `string`
+
+#### Inherited from
+
+[ItemProps](classes_database_Item.Item.ItemProps.md).[deletedAt](classes_database_Item.Item.ItemProps.md#deletedat)
 
 ___
 
@@ -39,8 +47,16 @@ ___
 
 • `Optional` `Readonly` **softDeleted**: ``true``
 
+#### Inherited from
+
+[ItemProps](classes_database_Item.Item.ItemProps.md).[softDeleted](classes_database_Item.Item.ItemProps.md#softdeleted)
+
 ___
 
 ### updatedAt
 
 • `Optional` `Readonly` **updatedAt**: `string`
+
+#### Inherited from
+
+[ItemProps](classes_database_Item.Item.ItemProps.md).[updatedAt](classes_database_Item.Item.ItemProps.md#updatedat)

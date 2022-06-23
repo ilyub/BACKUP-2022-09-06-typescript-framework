@@ -13,6 +13,7 @@ export class Google {
             writable: true,
             value: void 0
         });
+        // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
         Object.defineProperty(this, "sdk", {
             enumerable: true,
             configurable: true,
@@ -29,10 +30,10 @@ export class Google {
                 : await sdk.signIn();
             return user.getAuthResponse().id_token;
         }
-        catch (e) {
-            if (is.indexedObject(e) && e["error"] === "popup_closed_by_user")
+        catch (error) {
+            if (is.indexedObject(error) && error["error"] === "popup_closed_by_user")
                 return undefined;
-            throw e;
+            throw error;
         }
     }
     async loadSdk() {
@@ -54,11 +55,10 @@ export class Google {
                 assert.not.empty(clientId, "Missing Google client ID");
                 return await new Promise((resolve, reject) => {
                     gapi.load("auth2", () => {
-                        // eslint-disable-next-line github/no-then -- Ok
                         gapi.auth2.init({ client_id: clientId }).then(googleAuth => {
                             resolve(googleAuth);
-                        }, e => {
-                            reject(new Error(`Error ${e.error}: ${e.details}`));
+                        }, error => {
+                            reject(new Error(`Error ${error.error}: ${error.details}`));
                         });
                     });
                 });

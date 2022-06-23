@@ -25,7 +25,6 @@ export function handle(mixed, type, errorMessage) {
         ? progressReporter.spawn().setAuto(moduleConfig.expectedDurations[type])
         : undefined;
     promises.set(id, promise);
-    // eslint-disable-next-line github/no-then, promise/prefer-await-to-then -- Ok
     promise.catch(rejected).then(fulfilled).catch(rejected);
     function fulfilled() {
         promises.delete(id);

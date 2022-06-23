@@ -52,6 +52,7 @@ class AttachedItem {
             writable: true,
             value: void 0
         });
+        // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
         Object.defineProperty(this, "_parent", {
             enumerable: true,
             configurable: true,

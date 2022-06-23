@@ -9,6 +9,7 @@
 - [compare](facade_implementations.md#compare)
 - [database](facade_implementations.md#database)
 - [datetime](facade_implementations.md#datetime)
+- [dump](facade_implementations.md#dump)
 - [facebook](facade_implementations.md#facebook)
 - [faker](facade_implementations.md#faker)
 - [google](facade_implementations.md#google)
@@ -40,6 +41,12 @@ ___
 ### datetime
 
 Renames and re-exports [facade-implementations/datetime](facade_implementations_datetime.md)
+
+___
+
+### dump
+
+Renames and re-exports [facade-implementations/dump](facade_implementations_dump.md)
 
 ___
 

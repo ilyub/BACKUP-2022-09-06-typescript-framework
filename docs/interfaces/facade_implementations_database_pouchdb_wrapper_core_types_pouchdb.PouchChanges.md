@@ -44,7 +44,7 @@
 
 #### Inherited from
 
-PouchDB.Core.Changes.\_\_@toStringTag@194
+PouchDB.Core.Changes.\_\_@toStringTag@201
 
 ## Methods
 

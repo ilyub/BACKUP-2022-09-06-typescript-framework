@@ -305,7 +305,7 @@ function condsToStr(source, conditions) {
  * @returns Filter function.
  */
 function createFilter(conds) {
-    // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion -- ???
+    // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func -- ???
     return new Function("doc", `return ${conds};`);
 }
 /**
@@ -316,7 +316,7 @@ function createFilter(conds) {
  * @returns Filter function.
  */
 function createFilterAttached(conds, parentConds) {
-    // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func, no-type-assertion/no-type-assertion -- ???
+    // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func -- ???
     return new Function("attached", uglify(`
       doc = attached.parentDoc;
       return ${conds} && ${parentConds};
