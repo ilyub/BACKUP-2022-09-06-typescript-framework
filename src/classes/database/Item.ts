@@ -63,13 +63,7 @@ export class Item {
 }
 
 export namespace Item {
-  export interface ExistingItemDoc
-    extends database.BaseExistingDocument,
-      ItemProps {}
-
-  export type ExistingItemDocs = readonly ExistingItemDoc[];
-
-  export interface ItemProps {
+  export interface Content {
     readonly createdAt?: string;
     readonly deletedAt?: string;
     // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
@@ -77,14 +71,25 @@ export namespace Item {
     readonly updatedAt?: string;
   }
 
+  export interface ExistingItemDoc
+    extends database.BaseExistingDocument,
+      Content {}
+
+  export type ExistingItemDocs = readonly ExistingItemDoc[];
+
+  /**
+   * @deprecated
+   */
+  export interface ItemProps extends Content {}
+
   export type Items = readonly Items[];
 
   /**
    * @deprecated
    */
-  export interface OwnProps extends ItemProps {}
+  export interface OwnProps extends Content {}
 
-  export interface PutItemDoc extends database.BasePutDocument, ItemProps {}
+  export interface PutItemDoc extends database.BasePutDocument, Content {}
 
   export type PutItemDocs = readonly PutItemDoc[];
 }

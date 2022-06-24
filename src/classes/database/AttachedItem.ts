@@ -82,7 +82,20 @@ export abstract class AttachedItem<T extends Item = Item> {
 }
 
 export namespace AttachedItem {
-  export interface AttachedItemProps {
+  /**
+   * @deprecated
+   */
+  export interface AttachedItemProps extends Content {}
+
+  export type AttachedItems = readonly AttachedItems[];
+
+  export interface BulkAttachedItemDoc
+    extends database.BaseBulkAttachedDocument,
+      Content {}
+
+  export type BulkAttachedItemDocs = readonly BulkAttachedItemDoc[];
+
+  export interface Content {
     readonly createdAt?: string;
     readonly deletedAt?: string;
     // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
@@ -90,28 +103,20 @@ export namespace AttachedItem {
     readonly updatedAt?: string;
   }
 
-  export type AttachedItems = readonly AttachedItems[];
-
-  export interface BulkAttachedItemDoc
-    extends database.BaseBulkAttachedDocument,
-      AttachedItemProps {}
-
-  export type BulkAttachedItemDocs = readonly BulkAttachedItemDoc[];
-
   export interface ExistingAttachedItemDoc
     extends database.BaseExistingAttachedDocument,
-      AttachedItemProps {}
+      Content {}
 
   export type ExistingAttachedItemDocs = readonly ExistingAttachedItemDoc[];
 
   /**
    * @deprecated
    */
-  export interface OwnProps extends AttachedItemProps {}
+  export interface OwnProps extends Content {}
 
   export interface PutAttachedItemDoc
     extends database.BasePutAttachedDocument,
-      AttachedItemProps {}
+      Content {}
 
   export type PutAttachedItemDocs = readonly PutAttachedItemDoc[];
 }
