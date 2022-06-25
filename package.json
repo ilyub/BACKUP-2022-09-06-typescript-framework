@@ -40,9 +40,10 @@
     "config-lint": "node node_modules/@skylib/config/src/utils/config-lint.js",
     "delete-tags": "php node_modules/@skylib/config/src/utils/delete-tags.php",
     "full-check": "php node_modules/@skylib/config/src/utils/full-check.php",
-    "lint": "eslint --fix --max-warnings 0 --no-error-on-unmatched-pattern *.{js,ts} {__mocks__,configs,fixtures,src,tests}/**/*.{js,ts,vue}",
+    "lint": "npm run lint-no-fix --fix",
     "lint-fast": "npm run lint --config .eslintrc.fast.js",
-    "lint-no-fix": "set TIMING=1 & npm run lint --fix",
+    "lint-no-fix": "eslint --max-warnings 0 --no-error-on-unmatched-pattern *.{js,ts} {__mocks__,configs,fixtures,src,tests}/**/*.{js,ts,vue}",
+    "lint-no-fix-profile": "set TIMING=1 & npm run lint-no-fix",
     "npm:audit": "npm audit",
     "npm:clean-install": "npm clean-install --no-audit --strict-peer-deps",
     "npm:install": "npm install --no-audit --strict-peer-deps",
@@ -62,13 +63,13 @@
     "upgrade": "npm run update-package-force & npm run npm:install"
   },
   "devDependencies": {
-    "@skylib/config": "^3.1.3",
+    "@skylib/config": "^3.4.0",
     "@skylib/eslint-plugin": "^0.1.32",
     "jest-mock-axios": "^4.6.1"
   },
   "peerDependencies": {
-    "@skylib/facades": "^4.5.1",
-    "@skylib/functions": "^2.5.1",
+    "@skylib/facades": "^4.6.0",
+    "@skylib/functions": "^3.0.1",
     "@skylib/lodash-commonjs-es": "^0.1.1",
     "@skylib/typescript-types": "^1.0.0",
     "@types/facebook-js-sdk": ">=3",
