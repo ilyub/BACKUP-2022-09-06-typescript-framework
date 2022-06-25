@@ -26,7 +26,7 @@ export const jestReset = defineFn(
   /**
    * Jest reset.
    */
-  (): void => {
+  () => {
     const { naturalCompareWrapper } = implementations.compare;
 
     const { PouchWrapper } = implementations.database;
@@ -146,7 +146,7 @@ export const jestReset = defineFn(
     dictionary: (
       localeName: LocaleName,
       definitions: implementations.lang.dictionary.DefinitionsByLocale
-    ): void => {
+    ) => {
       const { dictionary } = implementations.lang;
 
       lang.setImplementation(dictionary.Dictionary.create(definitions));
@@ -161,7 +161,7 @@ export const jestSetup = defineFn(
   /**
    * Jest setup.
    */
-  (): void => {
+  () => {
     expect.extend(matchers);
     jestReset();
   },
@@ -175,7 +175,7 @@ export const jestSetup = defineFn(
     dictionary: (
       localeName: LocaleName,
       definitions: implementations.lang.dictionary.DefinitionsByLocale
-    ): void => {
+    ) => {
       jestReset.dictionary(localeName, definitions);
     }
   }

@@ -137,7 +137,6 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
         get: (target, key) => {
           assert.string(key);
 
-          // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
           return target.has(key) ? target.get(key) : o.get(target, key);
         }
       });

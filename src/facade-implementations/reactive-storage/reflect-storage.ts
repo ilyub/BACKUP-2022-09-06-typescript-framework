@@ -35,7 +35,6 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
       target: O,
       key: PropertyKey
     ): unknown {
-      // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
       const value = reflect.get(target, key);
 
       return is.object(value)
@@ -51,17 +50,17 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
       key: PropertyKey,
       value: unknown
     ): boolean {
-      // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
       const oldValue = reflect.get(target, key);
 
-      // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
       if (reflect.set(target, key, value)) {
         if (value === oldValue) {
           // Not modified
         } else {
-          const callbacks = reflect.getMetadata(MetadataKey, result);
-
-          assert.byGuard(callbacks, isCallbacks);
+          const callbacks = reflect.getMetadata(
+            MetadataKey,
+            result,
+            isCallbacks
+          );
 
           for (const callback of callbacks.values()) callback();
         }
@@ -76,9 +75,7 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
     unwatch: (obj: object, observer: reactiveStorage.Observer) => {
       assert.not.empty(observer.symbol);
 
-      const callbacks = reflect.getMetadata(MetadataKey, obj);
-
-      assert.byGuard(callbacks, isCallbacks);
+      const callbacks = reflect.getMetadata(MetadataKey, obj, isCallbacks);
 
       reflect.defineMetadata(
         MetadataKey,
@@ -93,9 +90,7 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
     ): reactiveStorage.Observer => {
       const symbol = Symbol("reflect-storage-callback");
 
-      const callbacks = reflect.getMetadata(MetadataKey, obj);
-
-      assert.byGuard(callbacks, isCallbacks);
+      const callbacks = reflect.getMetadata(MetadataKey, obj, isCallbacks);
 
       if (reducer) {
         let reduced = reducer(obj);

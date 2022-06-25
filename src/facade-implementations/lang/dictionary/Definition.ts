@@ -2,7 +2,7 @@ import { a, as, assert, is, o, regexp } from "@skylib/functions";
 import type { Definitions } from "./Definitions";
 import type { RawDefinition, Rules, WordInfo } from "./core";
 import type { lang } from "@skylib/facades";
-import type { IndexedObject, NumStr, strings } from "@skylib/functions";
+import type { IndexedRecord, NumStr, strings } from "@skylib/functions";
 
 export class Definition {
   /**
@@ -129,7 +129,7 @@ export class Definition {
     return word;
   }
 
-  protected readonly contexts: IndexedObject<NumStr> = {};
+  protected readonly contexts: IndexedRecord<NumStr> = {};
 
   protected readonly id: NumStr;
 
@@ -147,7 +147,7 @@ export class Definition {
 
   protected readonly sub: Definition | undefined;
 
-  protected readonly subs: IndexedObject<Definition> = {};
+  protected readonly subs: IndexedRecord<Definition> = {};
 
   protected readonly value: string;
 }

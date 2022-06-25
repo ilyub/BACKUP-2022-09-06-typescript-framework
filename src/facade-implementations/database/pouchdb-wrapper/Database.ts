@@ -17,6 +17,7 @@ import {
   Accumulator,
   ErrorArg,
   a,
+  as,
   assert,
   evaluate,
   fn,
@@ -281,9 +282,7 @@ export class Database implements database.Database {
   ): Promise<database.ExistingDocuments> {
     const response = await this.rawQuery(options, { conditions, docs: true });
 
-    assert.array.of(response.docs, isExistingDocument);
-
-    return response.docs;
+    return as.array.of(response.docs, isExistingDocument);
   }
 
   public async queryAttached(
@@ -297,9 +296,7 @@ export class Database implements database.Database {
       parentConditions
     });
 
-    assert.array.of(response.docs, isExistingAttachedDocument);
-
-    return response.docs;
+    return as.array.of(response.docs, isExistingAttachedDocument);
   }
 
   public reactiveCount(

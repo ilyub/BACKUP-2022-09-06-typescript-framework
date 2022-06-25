@@ -63,8 +63,7 @@ globalThis.gapi = evaluate(() => {
     },
     load: (apiName, callback) => {
       assert.toBeTrue(apiName === "auth2");
-      assert.callable(callback);
-      callback();
+      as.callable(callback)();
     }
   } as typeof gapi;
 
