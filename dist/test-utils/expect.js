@@ -7,7 +7,7 @@ const facades_1 = require("@skylib/facades");
 const functions_1 = require("@skylib/functions");
 const jquery_1 = tslib_1.__importDefault(require("jquery"));
 const datetimeToBe = (got, expected) => {
-    functions_1.assert.instance(got, DateTime_1.DateTime);
+    functions_1.assert.instanceOf(got, DateTime_1.DateTime, "Expecting DateTime instance");
     return got.toTime() === new Date(expected).getTime()
         ? {
             message: () => `Expected date not to be "${expected}"`,
@@ -20,7 +20,7 @@ const datetimeToBe = (got, expected) => {
 };
 exports.datetimeToBe = datetimeToBe;
 const progressToBe = (got, expected) => {
-    functions_1.assert.string(got);
+    functions_1.assert.string(got, "Expecting string");
     const gotProgress = facades_1.progressReporter.getProgress();
     const classOptions = gotProgress === 0
         ? new Set([undefined, ""])

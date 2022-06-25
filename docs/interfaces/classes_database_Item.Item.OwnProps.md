@@ -8,7 +8,7 @@
 
 ## Hierarchy
 
-- [`ItemProps`](classes_database_Item.Item.ItemProps.md)
+- [`Content`](classes_database_Item.Item.Content.md)
 
   ↳ **`OwnProps`**
 
@@ -29,7 +29,7 @@
 
 #### Inherited from
 
-[ItemProps](classes_database_Item.Item.ItemProps.md).[createdAt](classes_database_Item.Item.ItemProps.md#createdat)
+[Content](classes_database_Item.Item.Content.md).[createdAt](classes_database_Item.Item.Content.md#createdat)
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 #### Inherited from
 
-[ItemProps](classes_database_Item.Item.ItemProps.md).[deletedAt](classes_database_Item.Item.ItemProps.md#deletedat)
+[Content](classes_database_Item.Item.Content.md).[deletedAt](classes_database_Item.Item.Content.md#deletedat)
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 #### Inherited from
 
-[ItemProps](classes_database_Item.Item.ItemProps.md).[softDeleted](classes_database_Item.Item.ItemProps.md#softdeleted)
+[Content](classes_database_Item.Item.Content.md).[softDeleted](classes_database_Item.Item.Content.md#softdeleted)
 
 ___
 
@@ -59,4 +59,4 @@ ___
 
 #### Inherited from
 
-[ItemProps](classes_database_Item.Item.ItemProps.md).[updatedAt](classes_database_Item.Item.ItemProps.md#updatedat)
+[Content](classes_database_Item.Item.Content.md).[updatedAt](classes_database_Item.Item.Content.md#updatedat)

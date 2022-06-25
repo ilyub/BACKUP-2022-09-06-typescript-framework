@@ -8,6 +8,7 @@
 
 ### Interfaces
 
+- [Content](../interfaces/classes_database_Item.Item.Content.md)
 - [ExistingItemDoc](../interfaces/classes_database_Item.Item.ExistingItemDoc.md)
 - [ItemProps](../interfaces/classes_database_Item.Item.ItemProps.md)
 - [OwnProps](../interfaces/classes_database_Item.Item.OwnProps.md)

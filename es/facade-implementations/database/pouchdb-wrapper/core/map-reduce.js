@@ -214,7 +214,7 @@ function and(conditions) {
     conditions = conditions.filter(condition => condition !== "true");
     if (conditions.length === 0)
         return "true";
-    assert.toBeFalse(conditions.includes("false"));
+    assert.toBeFalse(conditions.includes("false"), "Condition is always false");
     return conditions.join(" && ");
 }
 /**

@@ -10,6 +10,7 @@
 
 - [AttachedItemProps](../interfaces/classes_database_AttachedItem.AttachedItem.AttachedItemProps.md)
 - [BulkAttachedItemDoc](../interfaces/classes_database_AttachedItem.AttachedItem.BulkAttachedItemDoc.md)
+- [Content](../interfaces/classes_database_AttachedItem.AttachedItem.Content.md)
 - [ExistingAttachedItemDoc](../interfaces/classes_database_AttachedItem.AttachedItem.ExistingAttachedItemDoc.md)
 - [OwnProps](../interfaces/classes_database_AttachedItem.AttachedItem.OwnProps.md)
 - [PutAttachedItemDoc](../interfaces/classes_database_AttachedItem.AttachedItem.PutAttachedItemDoc.md)

@@ -1,7 +1,7 @@
 import type { Definitions } from "./Definitions";
 import type { RawDefinition, Rules, WordInfo } from "./core";
 import type { lang } from "@skylib/facades";
-import type { IndexedObject, NumStr, strings } from "@skylib/functions";
+import type { IndexedRecord, NumStr, strings } from "@skylib/functions";
 export declare class Definition {
     /**
      * Creates class instance.
@@ -21,7 +21,7 @@ export declare class Definition {
      * @returns Word.
      */
     get(owner: Definitions, context: lang.Context | undefined, count: number, replacements: ReadonlyMap<string, string>, forms: strings): WordInfo;
-    protected readonly contexts: IndexedObject<NumStr>;
+    protected readonly contexts: IndexedRecord<NumStr>;
     protected readonly id: NumStr;
     protected readonly rulesRef: Rules;
     protected readonly rulesRefDependent: Rules;
@@ -30,7 +30,7 @@ export declare class Definition {
     protected readonly rulesWordDependent: Rules;
     protected readonly rulesWordSecondary: Rules;
     protected readonly sub: Definition | undefined;
-    protected readonly subs: IndexedObject<Definition>;
+    protected readonly subs: IndexedRecord<Definition>;
     protected readonly value: string;
 }
 //# sourceMappingURL=Definition.d.ts.map

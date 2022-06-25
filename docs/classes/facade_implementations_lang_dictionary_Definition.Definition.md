@@ -47,7 +47,7 @@ Creates class instance.
 
 ### contexts
 
-• `Protected` `Readonly` **contexts**: `IndexedObject`<`NumStr`\> = `{}`
+• `Protected` `Readonly` **contexts**: `IndexedRecord`<`NumStr`\> = `{}`
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 ### subs
 
-• `Protected` `Readonly` **subs**: `IndexedObject`<[`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)\> = `{}`
+• `Protected` `Readonly` **subs**: `IndexedRecord`<[`Definition`](facade_implementations_lang_dictionary_Definition.Definition.md)\> = `{}`
 
 ___
 

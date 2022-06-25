@@ -153,7 +153,7 @@ class Database {
             return await this.get(id);
         }
         catch (error) {
-            functions_1.assert.instance(error, core_1.PouchNotFoundError, functions_1.ErrorArg.wrapError(error));
+            functions_1.assert.instanceOf(error, core_1.PouchNotFoundError, functions_1.assert.wrapError(error));
             return undefined;
         }
     }
@@ -162,7 +162,7 @@ class Database {
             return await this.getAttached(id, parentId);
         }
         catch (error) {
-            functions_1.assert.instance(error, core_1.PouchNotFoundError, functions_1.ErrorArg.wrapError(error));
+            functions_1.assert.instanceOf(error, core_1.PouchNotFoundError, functions_1.assert.wrapError(error));
             return undefined;
         }
     }
@@ -179,14 +179,13 @@ class Database {
         (0, core_1.validatePutDocument)(doc);
         const db = await this.getDb();
         if (doc.attachedDocs && doc.attachedDocs.length === 0) {
-            functions_1.assert.not.empty(doc._id);
-            functions_1.assert.not.empty(doc._rev);
+            functions_1.assert.not.empty(doc._id, "Missing ID");
+            functions_1.assert.not.empty(doc._rev, "Missing revision");
             const storedDoc = await db.get(doc._id);
-            functions_1.assert.not.empty(storedDoc.attachedDocs);
-            doc = Object.assign(Object.assign({}, doc), { attachedDocs: storedDoc.attachedDocs });
+            doc = Object.assign(Object.assign({}, doc), { attachedDocs: functions_1.as.not.empty(storedDoc.attachedDocs) });
         }
         const response = await db.post(functions_1.o.omit(doc, "lastAttachedDocs"));
-        functions_1.assert.toBeTrue(response.ok);
+        functions_1.assert.toBeTrue(response.ok, "Unexpected failed response");
         return _.pick(response, ["id", "rev"]);
     }
     async putAttached(parentId, doc) {
@@ -206,7 +205,7 @@ class Database {
             return await this.put(doc);
         }
         catch (error) {
-            functions_1.assert.instance(error, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(error));
+            functions_1.assert.instanceOf(error, core_1.PouchConflictError, functions_1.assert.wrapError(error));
             return undefined;
         }
     }
@@ -215,14 +214,13 @@ class Database {
             return await this.putAttached(parentId, doc);
         }
         catch (error) {
-            functions_1.assert.instance(error, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(error));
+            functions_1.assert.instanceOf(error, core_1.PouchConflictError, functions_1.assert.wrapError(error));
             return undefined;
         }
     }
     async query(conditions = {}, options = {}) {
         const response = await this.rawQuery(options, { conditions, docs: true });
-        functions_1.assert.array.of(response.docs, core_1.isExistingDocument);
-        return response.docs;
+        return functions_1.as.array.of(response.docs, core_1.isExistingDocument);
     }
     async queryAttached(conditions = {}, parentConditions = {}, options = {}) {
         const response = await this.rawQuery(options, {
@@ -230,8 +228,7 @@ class Database {
             docs: true,
             parentConditions
         });
-        functions_1.assert.array.of(response.docs, core_1.isExistingAttachedDocument);
-        return response.docs;
+        return functions_1.as.array.of(response.docs, core_1.isExistingAttachedDocument);
     }
     reactiveCount(config) {
         return this.reactiveFactoryQuery(this.count.bind(this), config);
@@ -329,12 +326,12 @@ class Database {
         return response.unsettledCount;
     }
     unsubscribe(id) {
-        functions_1.assert.toBeTrue(this.changesHandlers.has(id));
+        functions_1.assert.toBeTrue(this.changesHandlers.has(id), "Invalid ID");
         this.changesHandlers.delete(id);
         this.refreshSubscription();
     }
     unsubscribeAttached(id) {
-        functions_1.assert.toBeTrue(this.changesHandlersAttached.has(id));
+        functions_1.assert.toBeTrue(this.changesHandlersAttached.has(id), "Invalid ID");
         this.changesHandlersAttached.delete(id);
         this.refreshSubscription();
     }
@@ -380,7 +377,7 @@ class Database {
             });
         }
         catch (error) {
-            functions_1.assert.instance(error, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(error));
+            functions_1.assert.instanceOf(error, core_1.PouchConflictError, functions_1.assert.wrapError(error));
             return undefined;
         }
     }
@@ -455,7 +452,7 @@ class Database {
             return true;
         }
         catch (error) {
-            functions_1.assert.instance(error, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(error));
+            functions_1.assert.instanceOf(error, core_1.PouchConflictError, functions_1.assert.wrapError(error));
             return false;
         }
     }
@@ -473,7 +470,7 @@ class Database {
             });
         }
         catch (error) {
-            functions_1.assert.instance(error, core_1.PouchConflictError, functions_1.ErrorArg.wrapError(error));
+            functions_1.assert.instanceOf(error, core_1.PouchConflictError, functions_1.assert.wrapError(error));
         }
     }
     /**
@@ -527,7 +524,7 @@ class Database {
             return await this._rawQuery(mapReduce, options, queryOptions);
         }
         catch (error) {
-            functions_1.assert.instance(error, core_1.PouchNotFoundError, functions_1.ErrorArg.wrapError(error));
+            functions_1.assert.instanceOf(error, core_1.PouchNotFoundError, functions_1.assert.wrapError(error));
             await this.createDesignDocument(mapReduce);
             return await this._rawQuery(mapReduce, options, queryOptions);
         }
@@ -562,10 +559,10 @@ class Database {
             value: await request
         });
         const subscription = this.subscribe(doc => {
-            functions_1.assert.toBeTrue(mutableResult.loaded);
+            functions_1.assert.toBeTrue(mutableResult.loaded, "Not loaded");
             handler(doc, mutableResult);
         });
-        functions_1.assert.toBeTrue(mutableResult.loaded);
+        functions_1.assert.toBeTrue(mutableResult.loaded, "Not loaded");
         return mutableResult;
     }
     /**
@@ -598,10 +595,10 @@ class Database {
             value: await request
         });
         const subscription = this.subscribeAttached(doc => {
-            functions_1.assert.toBeTrue(mutableResult.loaded);
+            functions_1.assert.toBeTrue(mutableResult.loaded, "Not loaded");
             handler(doc, mutableResult);
         });
-        functions_1.assert.toBeTrue(mutableResult.loaded);
+        functions_1.assert.toBeTrue(mutableResult.loaded, "Not loaded");
         return mutableResult;
     }
     /**
@@ -643,7 +640,7 @@ class Database {
         });
         let timeout;
         updateTimeout();
-        functions_1.assert.toBeTrue(mutableResult.loaded);
+        functions_1.assert.toBeTrue(mutableResult.loaded, "Not loaded");
         return mutableResult;
         function refresh() {
             facades_1.handlePromise.silent(async () => {
@@ -699,7 +696,7 @@ class Database {
         });
         let timeout;
         updateTimeout();
-        functions_1.assert.toBeTrue(mutableResult.loaded);
+        functions_1.assert.toBeTrue(mutableResult.loaded, "Not loaded");
         return mutableResult;
         function refresh() {
             facades_1.handlePromise.silent(async () => {
@@ -741,7 +738,7 @@ class Database {
             }
             else
                 this.changes = this.db.changes(value => {
-                    functions_1.assert.byGuard(value.doc, core_1.isExistingDocument);
+                    functions_1.assert.byGuard(value.doc, core_1.isExistingDocument, "Expecting existing document");
                     if (this.changesHandlers.size > 0) {
                         const doc = (0, core_1.extractDoc)(value.doc);
                         for (const handler of this.changesHandlers.values())
@@ -750,8 +747,7 @@ class Database {
                     if (this.changesHandlersAttached.size > 0 &&
                         value.doc.lastAttachedDocs)
                         for (const lastAttachedDoc of value.doc.lastAttachedDocs) {
-                            const attachedDoc = (0, core_1.extractAttachedDoc)(value.doc, lastAttachedDoc, true);
-                            functions_1.assert.not.empty(attachedDoc);
+                            const attachedDoc = functions_1.as.not.empty((0, core_1.extractAttachedDoc)(value.doc, lastAttachedDoc, true));
                             for (const handler of this.changesHandlersAttached.values())
                                 handler(attachedDoc);
                         }

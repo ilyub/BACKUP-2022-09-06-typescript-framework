@@ -8,7 +8,7 @@
 
 - `BaseExistingAttachedDocument`
 
-- [`AttachedItemProps`](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md)
+- [`Content`](classes_database_AttachedItem.AttachedItem.Content.md)
 
   ↳ **`ExistingAttachedItemDoc`**
 
@@ -63,7 +63,7 @@ ___
 
 #### Inherited from
 
-[AttachedItemProps](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md).[createdAt](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md#createdat)
+[Content](classes_database_AttachedItem.AttachedItem.Content.md).[createdAt](classes_database_AttachedItem.AttachedItem.Content.md#createdat)
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 #### Inherited from
 
-[AttachedItemProps](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md).[deletedAt](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md#deletedat)
+[Content](classes_database_AttachedItem.AttachedItem.Content.md).[deletedAt](classes_database_AttachedItem.AttachedItem.Content.md#deletedat)
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 #### Inherited from
 
-[AttachedItemProps](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md).[softDeleted](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md#softdeleted)
+[Content](classes_database_AttachedItem.AttachedItem.Content.md).[softDeleted](classes_database_AttachedItem.AttachedItem.Content.md#softdeleted)
 
 ___
 
@@ -103,4 +103,4 @@ ___
 
 #### Inherited from
 
-[AttachedItemProps](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md).[updatedAt](classes_database_AttachedItem.AttachedItem.AttachedItemProps.md#updatedat)
+[Content](classes_database_AttachedItem.AttachedItem.Content.md).[updatedAt](classes_database_AttachedItem.AttachedItem.Content.md#updatedat)

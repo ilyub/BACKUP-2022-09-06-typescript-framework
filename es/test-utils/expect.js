@@ -3,7 +3,7 @@ import { progressReporter } from "@skylib/facades";
 import { assert } from "@skylib/functions";
 import $ from "jquery";
 export const datetimeToBe = (got, expected) => {
-    assert.instance(got, DateTime);
+    assert.instanceOf(got, DateTime, "Expecting DateTime instance");
     return got.toTime() === new Date(expected).getTime()
         ? {
             message: () => `Expected date not to be "${expected}"`,
@@ -15,7 +15,7 @@ export const datetimeToBe = (got, expected) => {
         };
 };
 export const progressToBe = (got, expected) => {
-    assert.string(got);
+    assert.string(got, "Expecting string");
     const gotProgress = progressReporter.getProgress();
     const classOptions = gotProgress === 0
         ? new Set([undefined, ""])

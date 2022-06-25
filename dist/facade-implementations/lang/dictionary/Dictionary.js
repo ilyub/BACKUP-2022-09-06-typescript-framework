@@ -58,8 +58,7 @@ class Dictionary {
         const facade = (0, functions_1.evaluate)(() => {
             const handler = (0, functions_1.wrapProxyHandler)("Dictionary", "doDefault", {
                 get: (target, key) => {
-                    functions_1.assert.string(key);
-                    // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
+                    functions_1.assert.string(key, "Expecting string key");
                     return target.has(key) ? target.get(key) : functions_1.o.get(target, key);
                 }
             });

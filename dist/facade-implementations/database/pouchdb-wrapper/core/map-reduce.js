@@ -220,7 +220,7 @@ function and(conditions) {
     conditions = conditions.filter(condition => condition !== "true");
     if (conditions.length === 0)
         return "true";
-    functions_1.assert.toBeFalse(conditions.includes("false"));
+    functions_1.assert.toBeFalse(conditions.includes("false"), "Condition is always false");
     return conditions.join(" && ");
 }
 /**

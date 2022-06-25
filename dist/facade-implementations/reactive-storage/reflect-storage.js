@@ -1,6 +1,8 @@
 "use strict";
+/* skylib/eslint-plugin disable @skylib/functions/no-restricted-syntax[no-reflect-get] */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reflectStorage = void 0;
+/* skylib/eslint-plugin disable @skylib/functions/no-restricted-syntax[no-reflect-set] */
 const functions_1 = require("@skylib/functions");
 exports.reflectStorage = (0, functions_1.defineFn)((obj) => {
     if (functions_1.reflect.hasMetadata(MetadataKey, obj))
@@ -9,23 +11,19 @@ exports.reflectStorage = (0, functions_1.defineFn)((obj) => {
     functions_1.reflect.defineMetadata(MetadataKey, new Map(), result);
     return result;
     function get(target, key) {
-        // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
         const value = functions_1.reflect.get(target, key);
         return functions_1.is.object(value)
             ? new Proxy(value, (0, functions_1.wrapProxyHandler)("reflectStorage", "doDefault", { get, set }))
             : value;
     }
     function set(target, key, value) {
-        // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
         const oldValue = functions_1.reflect.get(target, key);
-        // eslint-disable-next-line @skylib/functions/no-restricted-syntax -- Ok
         if (functions_1.reflect.set(target, key, value)) {
             if (value === oldValue) {
                 // Not modified
             }
             else {
-                const callbacks = functions_1.reflect.getMetadata(MetadataKey, result);
-                functions_1.assert.byGuard(callbacks, isCallbacks);
+                const callbacks = functions_1.reflect.getMetadata(MetadataKey, result, isCallbacks);
                 for (const callback of callbacks.values())
                     callback();
             }
@@ -35,15 +33,12 @@ exports.reflectStorage = (0, functions_1.defineFn)((obj) => {
     }
 }, {
     unwatch: (obj, observer) => {
-        functions_1.assert.not.empty(observer.symbol);
-        const callbacks = functions_1.reflect.getMetadata(MetadataKey, obj);
-        functions_1.assert.byGuard(callbacks, isCallbacks);
-        functions_1.reflect.defineMetadata(MetadataKey, functions_1.map.delete(callbacks, observer.symbol), obj);
+        const callbacks = functions_1.reflect.getMetadata(MetadataKey, obj, isCallbacks);
+        functions_1.reflect.defineMetadata(MetadataKey, functions_1.map.delete(callbacks, functions_1.as.not.empty(observer.symbol)), obj);
     },
     watch: (obj, handler, reducer) => {
         const symbol = Symbol("reflect-storage-callback");
-        const callbacks = functions_1.reflect.getMetadata(MetadataKey, obj);
-        functions_1.assert.byGuard(callbacks, isCallbacks);
+        const callbacks = functions_1.reflect.getMetadata(MetadataKey, obj, isCallbacks);
         if (reducer) {
             let reduced = reducer(obj);
             functions_1.reflect.defineMetadata(MetadataKey, functions_1.map.set(callbacks, symbol, () => {

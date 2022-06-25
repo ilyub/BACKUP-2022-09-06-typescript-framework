@@ -24,22 +24,27 @@ export declare class Item {
     protected readonly lastAttachedDocs: numbers | undefined;
 }
 export declare namespace Item {
-    interface ExistingItemDoc extends database.BaseExistingDocument, ItemProps {
-    }
-    type ExistingItemDocs = readonly ExistingItemDoc[];
-    interface ItemProps {
+    interface Content {
         readonly createdAt?: string;
         readonly deletedAt?: string;
         readonly softDeleted?: true;
         readonly updatedAt?: string;
     }
+    interface ExistingItemDoc extends database.BaseExistingDocument, Content {
+    }
+    type ExistingItemDocs = readonly ExistingItemDoc[];
+    /**
+     * @deprecated
+     */
+    interface ItemProps extends Content {
+    }
     type Items = readonly Items[];
     /**
      * @deprecated
      */
-    interface OwnProps extends ItemProps {
+    interface OwnProps extends Content {
     }
-    interface PutItemDoc extends database.BasePutDocument, ItemProps {
+    interface PutItemDoc extends database.BasePutDocument, Content {
     }
     type PutItemDocs = readonly PutItemDoc[];
 }

@@ -2,7 +2,7 @@ import { __rest } from "tslib";
 import { PouchProxy } from "./PouchProxy";
 import { PouchConflictError, PouchNotFoundError, PouchRetryError, extractAttachedDoc, extractDoc, getMapReduce, getMapReduceAttached, isDocsResponse, isExistingAttachedDocument, isExistingDocument, validatePutDocument } from "./core";
 import { database, handlePromise, reactiveStorage } from "@skylib/facades";
-import { Accumulator, ErrorArg, a, assert, evaluate, fn, is, num, o, programFlow } from "@skylib/functions";
+import { Accumulator, a, as, assert, evaluate, fn, is, num, o, programFlow } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
 import { collate } from "pouchdb-collate";
 export class Database {
@@ -150,7 +150,7 @@ export class Database {
             return await this.get(id);
         }
         catch (error) {
-            assert.instance(error, PouchNotFoundError, ErrorArg.wrapError(error));
+            assert.instanceOf(error, PouchNotFoundError, assert.wrapError(error));
             return undefined;
         }
     }
@@ -159,7 +159,7 @@ export class Database {
             return await this.getAttached(id, parentId);
         }
         catch (error) {
-            assert.instance(error, PouchNotFoundError, ErrorArg.wrapError(error));
+            assert.instanceOf(error, PouchNotFoundError, assert.wrapError(error));
             return undefined;
         }
     }
@@ -176,14 +176,13 @@ export class Database {
         validatePutDocument(doc);
         const db = await this.getDb();
         if (doc.attachedDocs && doc.attachedDocs.length === 0) {
-            assert.not.empty(doc._id);
-            assert.not.empty(doc._rev);
+            assert.not.empty(doc._id, "Missing ID");
+            assert.not.empty(doc._rev, "Missing revision");
             const storedDoc = await db.get(doc._id);
-            assert.not.empty(storedDoc.attachedDocs);
-            doc = Object.assign(Object.assign({}, doc), { attachedDocs: storedDoc.attachedDocs });
+            doc = Object.assign(Object.assign({}, doc), { attachedDocs: as.not.empty(storedDoc.attachedDocs) });
         }
         const response = await db.post(o.omit(doc, "lastAttachedDocs"));
-        assert.toBeTrue(response.ok);
+        assert.toBeTrue(response.ok, "Unexpected failed response");
         return _.pick(response, ["id", "rev"]);
     }
     async putAttached(parentId, doc) {
@@ -203,7 +202,7 @@ export class Database {
             return await this.put(doc);
         }
         catch (error) {
-            assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
+            assert.instanceOf(error, PouchConflictError, assert.wrapError(error));
             return undefined;
         }
     }
@@ -212,14 +211,13 @@ export class Database {
             return await this.putAttached(parentId, doc);
         }
         catch (error) {
-            assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
+            assert.instanceOf(error, PouchConflictError, assert.wrapError(error));
             return undefined;
         }
     }
     async query(conditions = {}, options = {}) {
         const response = await this.rawQuery(options, { conditions, docs: true });
-        assert.array.of(response.docs, isExistingDocument);
-        return response.docs;
+        return as.array.of(response.docs, isExistingDocument);
     }
     async queryAttached(conditions = {}, parentConditions = {}, options = {}) {
         const response = await this.rawQuery(options, {
@@ -227,8 +225,7 @@ export class Database {
             docs: true,
             parentConditions
         });
-        assert.array.of(response.docs, isExistingAttachedDocument);
-        return response.docs;
+        return as.array.of(response.docs, isExistingAttachedDocument);
     }
     reactiveCount(config) {
         return this.reactiveFactoryQuery(this.count.bind(this), config);
@@ -326,12 +323,12 @@ export class Database {
         return response.unsettledCount;
     }
     unsubscribe(id) {
-        assert.toBeTrue(this.changesHandlers.has(id));
+        assert.toBeTrue(this.changesHandlers.has(id), "Invalid ID");
         this.changesHandlers.delete(id);
         this.refreshSubscription();
     }
     unsubscribeAttached(id) {
-        assert.toBeTrue(this.changesHandlersAttached.has(id));
+        assert.toBeTrue(this.changesHandlersAttached.has(id), "Invalid ID");
         this.changesHandlersAttached.delete(id);
         this.refreshSubscription();
     }
@@ -377,7 +374,7 @@ export class Database {
             });
         }
         catch (error) {
-            assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
+            assert.instanceOf(error, PouchConflictError, assert.wrapError(error));
             return undefined;
         }
     }
@@ -452,7 +449,7 @@ export class Database {
             return true;
         }
         catch (error) {
-            assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
+            assert.instanceOf(error, PouchConflictError, assert.wrapError(error));
             return false;
         }
     }
@@ -470,7 +467,7 @@ export class Database {
             });
         }
         catch (error) {
-            assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
+            assert.instanceOf(error, PouchConflictError, assert.wrapError(error));
         }
     }
     /**
@@ -524,7 +521,7 @@ export class Database {
             return await this._rawQuery(mapReduce, options, queryOptions);
         }
         catch (error) {
-            assert.instance(error, PouchNotFoundError, ErrorArg.wrapError(error));
+            assert.instanceOf(error, PouchNotFoundError, assert.wrapError(error));
             await this.createDesignDocument(mapReduce);
             return await this._rawQuery(mapReduce, options, queryOptions);
         }
@@ -559,10 +556,10 @@ export class Database {
             value: await request
         });
         const subscription = this.subscribe(doc => {
-            assert.toBeTrue(mutableResult.loaded);
+            assert.toBeTrue(mutableResult.loaded, "Not loaded");
             handler(doc, mutableResult);
         });
-        assert.toBeTrue(mutableResult.loaded);
+        assert.toBeTrue(mutableResult.loaded, "Not loaded");
         return mutableResult;
     }
     /**
@@ -595,10 +592,10 @@ export class Database {
             value: await request
         });
         const subscription = this.subscribeAttached(doc => {
-            assert.toBeTrue(mutableResult.loaded);
+            assert.toBeTrue(mutableResult.loaded, "Not loaded");
             handler(doc, mutableResult);
         });
-        assert.toBeTrue(mutableResult.loaded);
+        assert.toBeTrue(mutableResult.loaded, "Not loaded");
         return mutableResult;
     }
     /**
@@ -640,7 +637,7 @@ export class Database {
         });
         let timeout;
         updateTimeout();
-        assert.toBeTrue(mutableResult.loaded);
+        assert.toBeTrue(mutableResult.loaded, "Not loaded");
         return mutableResult;
         function refresh() {
             handlePromise.silent(async () => {
@@ -696,7 +693,7 @@ export class Database {
         });
         let timeout;
         updateTimeout();
-        assert.toBeTrue(mutableResult.loaded);
+        assert.toBeTrue(mutableResult.loaded, "Not loaded");
         return mutableResult;
         function refresh() {
             handlePromise.silent(async () => {
@@ -738,7 +735,7 @@ export class Database {
             }
             else
                 this.changes = this.db.changes(value => {
-                    assert.byGuard(value.doc, isExistingDocument);
+                    assert.byGuard(value.doc, isExistingDocument, "Expecting existing document");
                     if (this.changesHandlers.size > 0) {
                         const doc = extractDoc(value.doc);
                         for (const handler of this.changesHandlers.values())
@@ -747,8 +744,7 @@ export class Database {
                     if (this.changesHandlersAttached.size > 0 &&
                         value.doc.lastAttachedDocs)
                         for (const lastAttachedDoc of value.doc.lastAttachedDocs) {
-                            const attachedDoc = extractAttachedDoc(value.doc, lastAttachedDoc, true);
-                            assert.not.empty(attachedDoc);
+                            const attachedDoc = as.not.empty(extractAttachedDoc(value.doc, lastAttachedDoc, true));
                             for (const handler of this.changesHandlersAttached.values())
                                 handler(attachedDoc);
                         }
