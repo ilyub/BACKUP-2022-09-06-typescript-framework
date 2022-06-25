@@ -135,7 +135,7 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
     const facade = evaluate(() => {
       const handler = wrapProxyHandler<Dictionary>("Dictionary", "doDefault", {
         get: (target, key) => {
-          assert.string(key);
+          assert.string(key, "Expecting string key");
 
           return target.has(key) ? target.get(key) : o.get(target, key);
         }

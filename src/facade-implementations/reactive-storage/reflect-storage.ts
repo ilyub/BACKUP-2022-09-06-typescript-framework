@@ -1,5 +1,9 @@
+/* skylib/eslint-plugin disable @skylib/functions/no-restricted-syntax[no-reflect-get] */
+
+/* skylib/eslint-plugin disable @skylib/functions/no-restricted-syntax[no-reflect-set] */
+
 import {
-  assert,
+  as,
   defineFn,
   is,
   map,
@@ -73,13 +77,11 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
   },
   {
     unwatch: (obj: object, observer: reactiveStorage.Observer) => {
-      assert.not.empty(observer.symbol);
-
       const callbacks = reflect.getMetadata(MetadataKey, obj, isCallbacks);
 
       reflect.defineMetadata(
         MetadataKey,
-        map.delete(callbacks, observer.symbol),
+        map.delete(callbacks, as.not.empty(observer.symbol)),
         obj
       );
     },

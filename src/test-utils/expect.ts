@@ -29,7 +29,7 @@ export const datetimeToBe: testUtils.ExpectFromMatcher<"datetimeToBe"> = (
   got: unknown,
   expected: string
 ) => {
-  assert.instance(got, DateTime);
+  assert.instanceOf(got, DateTime, "Expecting DateTime instance");
 
   return got.toTime() === new Date(expected).getTime()
     ? {
@@ -47,7 +47,7 @@ export const progressToBe: testUtils.ExpectFromMatcher<"progressToBe"> = (
   got: unknown,
   expected: number
 ) => {
-  assert.string(got);
+  assert.string(got, "Expecting string");
 
   const gotProgress = progressReporter.getProgress();
 

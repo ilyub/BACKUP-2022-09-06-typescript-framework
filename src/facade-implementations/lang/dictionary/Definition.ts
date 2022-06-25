@@ -172,10 +172,9 @@ function applyRuleRef(
 
   const form = a.third(rule).toLowerCase();
 
-  const key = as.not.empty(
-    word.replacements.get(replacementId),
-    `Missing replacement: ${replacementId}`
-  );
+  const key = word.replacements.get(replacementId);
+
+  assert.not.empty(key, `Missing replacement: ${replacementId}`);
 
   const replacement = owner.get(
     key,
@@ -210,10 +209,9 @@ function applyRuleRefDependent(
 
   const replacementId = a.second(rule);
 
-  const key = as.not.empty(
-    word.replacements.get(replacementId),
-    `Missing replacement: ${replacementId}`
-  );
+  const key = word.replacements.get(replacementId);
+
+  assert.not.empty(key, `Missing replacement: ${replacementId}`);
 
   const replacement = owner.get(
     key,
@@ -246,10 +244,9 @@ function applyRuleRefSecondary(
 
   const form = a.third(rule).toLowerCase();
 
-  const key = as.not.empty(
-    word.replacements.get(replacementId),
-    `Missing replacement: ${replacementId}`
-  );
+  const key = word.replacements.get(replacementId);
+
+  assert.not.empty(key, `Missing replacement: ${replacementId}`);
 
   const replacement = owner.get(key, word.context, 1, word.replacements, form);
 
@@ -269,10 +266,9 @@ function applyRuleVal(word: WordInfo, rule: strings): WordInfo {
 
   const replacementId = a.second(rule);
 
-  const replacement = as.not.empty(
-    word.replacements.get(replacementId),
-    `Missing replacement: ${replacementId}`
-  );
+  const replacement = word.replacements.get(replacementId);
+
+  assert.not.empty(replacement, `Missing replacement: ${replacementId}`);
 
   return { ...word, value: word.value.replace(search, replacement) };
 }

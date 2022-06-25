@@ -15,7 +15,6 @@ import {
 import { database, handlePromise, reactiveStorage } from "@skylib/facades";
 import {
   Accumulator,
-  ErrorArg,
   a,
   as,
   assert,
@@ -178,7 +177,7 @@ export class Database implements database.Database {
     try {
       return await this.get(id);
     } catch (error) {
-      assert.instance(error, PouchNotFoundError, ErrorArg.wrapError(error));
+      assert.instanceOf(error, PouchNotFoundError, assert.wrapError(error));
 
       return undefined;
     }
@@ -191,7 +190,7 @@ export class Database implements database.Database {
     try {
       return await this.getAttached(id, parentId);
     } catch (error) {
-      assert.instance(error, PouchNotFoundError, ErrorArg.wrapError(error));
+      assert.instanceOf(error, PouchNotFoundError, assert.wrapError(error));
 
       return undefined;
     }
@@ -214,18 +213,17 @@ export class Database implements database.Database {
     const db = await this.getDb();
 
     if (doc.attachedDocs && doc.attachedDocs.length === 0) {
-      assert.not.empty(doc._id);
-      assert.not.empty(doc._rev);
+      assert.not.empty(doc._id, "Missing ID");
+      assert.not.empty(doc._rev, "Missing revision");
 
       const storedDoc = await db.get(doc._id);
 
-      assert.not.empty(storedDoc.attachedDocs);
-      doc = { ...doc, attachedDocs: storedDoc.attachedDocs };
+      doc = { ...doc, attachedDocs: as.not.empty(storedDoc.attachedDocs) };
     }
 
     const response = await db.post(o.omit(doc, "lastAttachedDocs"));
 
-    assert.toBeTrue(response.ok);
+    assert.toBeTrue(response.ok, "Unexpected failed response");
 
     return _.pick(response, ["id", "rev"]);
   }
@@ -257,7 +255,7 @@ export class Database implements database.Database {
     try {
       return await this.put(doc);
     } catch (error) {
-      assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
+      assert.instanceOf(error, PouchConflictError, assert.wrapError(error));
 
       return undefined;
     }
@@ -270,7 +268,7 @@ export class Database implements database.Database {
     try {
       return await this.putAttached(parentId, doc);
     } catch (error) {
-      assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
+      assert.instanceOf(error, PouchConflictError, assert.wrapError(error));
 
       return undefined;
     }
@@ -469,13 +467,13 @@ export class Database implements database.Database {
   }
 
   public unsubscribe(id: database.SubscriptionId): void {
-    assert.toBeTrue(this.changesHandlers.has(id));
+    assert.toBeTrue(this.changesHandlers.has(id), "Invalid ID");
     this.changesHandlers.delete(id);
     this.refreshSubscription();
   }
 
   public unsubscribeAttached(id: database.AttachedSubscriptionId): void {
-    assert.toBeTrue(this.changesHandlersAttached.has(id));
+    assert.toBeTrue(this.changesHandlersAttached.has(id), "Invalid ID");
     this.changesHandlersAttached.delete(id);
     this.refreshSubscription();
   }
@@ -582,7 +580,7 @@ export class Database implements database.Database {
         return { ...item, parentRev: response.rev };
       });
     } catch (error) {
-      assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
+      assert.instanceOf(error, PouchConflictError, assert.wrapError(error));
 
       return undefined;
     }
@@ -685,7 +683,7 @@ export class Database implements database.Database {
 
       return true;
     } catch (error) {
-      assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
+      assert.instanceOf(error, PouchConflictError, assert.wrapError(error));
 
       return false;
     }
@@ -705,7 +703,7 @@ export class Database implements database.Database {
         views: { default: mapReduce.mapReduce }
       });
     } catch (error) {
-      assert.instance(error, PouchConflictError, ErrorArg.wrapError(error));
+      assert.instanceOf(error, PouchConflictError, assert.wrapError(error));
     }
   }
 
@@ -782,7 +780,7 @@ export class Database implements database.Database {
     try {
       return await this._rawQuery(mapReduce, options, queryOptions);
     } catch (error) {
-      assert.instance(error, PouchNotFoundError, ErrorArg.wrapError(error));
+      assert.instanceOf(error, PouchNotFoundError, assert.wrapError(error));
       await this.createDesignDocument(mapReduce);
 
       return await this._rawQuery(mapReduce, options, queryOptions);
@@ -832,11 +830,11 @@ export class Database implements database.Database {
     });
 
     const subscription = this.subscribe(doc => {
-      assert.toBeTrue(mutableResult.loaded);
+      assert.toBeTrue(mutableResult.loaded, "Not loaded");
       handler(doc, mutableResult);
     });
 
-    assert.toBeTrue(mutableResult.loaded);
+    assert.toBeTrue(mutableResult.loaded, "Not loaded");
 
     return mutableResult;
   }
@@ -884,11 +882,11 @@ export class Database implements database.Database {
     });
 
     const subscription = this.subscribeAttached(doc => {
-      assert.toBeTrue(mutableResult.loaded);
+      assert.toBeTrue(mutableResult.loaded, "Not loaded");
       handler(doc, mutableResult);
     });
 
-    assert.toBeTrue(mutableResult.loaded);
+    assert.toBeTrue(mutableResult.loaded, "Not loaded");
 
     return mutableResult;
   }
@@ -948,7 +946,7 @@ export class Database implements database.Database {
     let timeout: numberU;
 
     updateTimeout();
-    assert.toBeTrue(mutableResult.loaded);
+    assert.toBeTrue(mutableResult.loaded, "Not loaded");
 
     return mutableResult;
 
@@ -1028,7 +1026,7 @@ export class Database implements database.Database {
     let timeout: numberU;
 
     updateTimeout();
-    assert.toBeTrue(mutableResult.loaded);
+    assert.toBeTrue(mutableResult.loaded, "Not loaded");
 
     return mutableResult;
 
@@ -1082,7 +1080,11 @@ export class Database implements database.Database {
       } else
         this.changes = this.db.changes(
           value => {
-            assert.byGuard(value.doc, isExistingDocument);
+            assert.byGuard(
+              value.doc,
+              isExistingDocument,
+              "Expecting existing document"
+            );
 
             if (this.changesHandlers.size > 0) {
               const doc = extractDoc(value.doc);
@@ -1095,13 +1097,9 @@ export class Database implements database.Database {
               value.doc.lastAttachedDocs
             )
               for (const lastAttachedDoc of value.doc.lastAttachedDocs) {
-                const attachedDoc = extractAttachedDoc(
-                  value.doc,
-                  lastAttachedDoc,
-                  true
+                const attachedDoc = as.not.empty(
+                  extractAttachedDoc(value.doc, lastAttachedDoc, true)
                 );
-
-                assert.not.empty(attachedDoc);
 
                 for (const handler of this.changesHandlersAttached.values())
                   handler(attachedDoc);

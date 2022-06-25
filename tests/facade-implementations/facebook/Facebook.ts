@@ -8,8 +8,11 @@ const { Facebook } = implementations.facebook;
 const getScript = jest
   .spyOn($, "getScript")
   .mockImplementation((...args: unknowns) => {
-    assert.toBeTrue(args.length === 1);
-    assert.toBeTrue(args[0] === "https://connect.facebook.net/en_US/sdk.js");
+    assert.toBeTrue(
+      args.length === 1 &&
+        args[0] === "https://connect.facebook.net/en_US/sdk.js",
+      "Invalid args"
+    );
 
     return {} as JQuery.jqXHR<stringU>;
   });

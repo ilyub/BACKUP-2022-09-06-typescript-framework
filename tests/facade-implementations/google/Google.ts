@@ -8,8 +8,11 @@ const { Google } = implementations.google;
 const getScript = jest
   .spyOn($, "getScript")
   .mockImplementation((...args: unknowns) => {
-    assert.toBeTrue(args.length === 1);
-    assert.toBeTrue(args[0] === "https://apis.google.com/js/api:client.js");
+    assert.toBeTrue(
+      args.length === 1 &&
+        args[0] === "https://apis.google.com/js/api:client.js",
+      "Invalid args"
+    );
 
     return {} as JQuery.jqXHR<stringU>;
   });
@@ -62,7 +65,7 @@ globalThis.gapi = evaluate(() => {
       }
     },
     load: (apiName, callback) => {
-      assert.toBeTrue(apiName === "auth2");
+      assert.toBeTrue(apiName === "auth2", "Expecting auth2 API");
       as.callable(callback)();
     }
   } as typeof gapi;

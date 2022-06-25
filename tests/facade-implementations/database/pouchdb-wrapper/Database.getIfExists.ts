@@ -1,6 +1,6 @@
 import { implementations } from "@";
 import { handlePromise, uniqueId } from "@skylib/facades";
-import { assert, wait } from "@skylib/functions";
+import { wait } from "@skylib/functions";
 import * as testUtils from "@skylib/functions/dist/test-utils";
 import type { database } from "@skylib/facades";
 
@@ -112,7 +112,6 @@ test("reactiveGetIfExists", async () => {
 
     expect(result.loaded).toBeFalse();
     await handlePromise.runAll();
-    assert.toBeTrue(result.loaded);
     expect(result.value).toBeUndefined();
 
     const { rev } = await db.put({ _id: id, x: 1 });
@@ -152,7 +151,6 @@ test("reactiveGetIfExistsAttached", async () => {
 
     expect(result.loaded).toBeFalse();
     await handlePromise.runAll();
-    assert.toBeTrue(result.loaded);
     expect(result.value).toBeUndefined();
 
     const { parentRev: rev } = await db.putAttached(id, { y: 2 });
