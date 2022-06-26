@@ -1,5 +1,4 @@
 import { implementations } from "@";
-// eslint-disable-next-line import/no-unresolved -- Wait for @skylib/config update
 import jestMockAxios from "jest-mock-axios";
 
 const axios = implementations.httpRequest.axiosWrapper;
