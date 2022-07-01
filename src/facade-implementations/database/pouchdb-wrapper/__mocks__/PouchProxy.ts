@@ -1,6 +1,5 @@
 import { PouchProxy as BasePouchDBProxy } from "../PouchProxy";
 import pouchdb from "pouchdb";
-// eslint-disable-next-line boundaries/element-types -- Wait for @skylib/config update
 import type { PouchDatabaseConfiguration } from "../core";
 
 export class PouchProxy extends BasePouchDBProxy {
