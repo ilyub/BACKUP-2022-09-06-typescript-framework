@@ -5,8 +5,9 @@ module.exports = {
       {
         sources: [
           {
+            _id: "test-utils",
             altLocalNames: ["frameworkTestUtils"],
-            sourcePattern: "@skylib/framework/{dist,es}/test-utils",
+            source: "@skylib/framework/{dist,es}/test-utils",
             type: "wildcard"
           }
         ]
