@@ -1,5 +1,5 @@
 {
-  "extends": "node_modules/@skylib/config/src/typedoc",
+  "extends": "@skylib/config/src/typedoc",
   "name": "Typescript framework",
   "out": "docs",
   "tsconfig": "tsconfig-typedoc.json"
