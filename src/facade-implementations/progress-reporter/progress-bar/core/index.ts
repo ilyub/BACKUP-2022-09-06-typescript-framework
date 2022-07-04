@@ -9,7 +9,7 @@ export const moduleConfig: Configuration = {
   precision: 3,
   selector: "#progressBar",
   updateInterval: 100
-};
+} as const;
 
 export interface Configurable {
   /**

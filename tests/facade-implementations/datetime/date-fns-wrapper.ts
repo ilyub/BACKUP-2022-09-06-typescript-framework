@@ -68,7 +68,7 @@ test.each([
   { date: "1950-06-15 14:30", expected: 15 },
   { date: "1950-06-30 14:30", expected: 30 }
 ])("DateTime.dayOfMonth", ({ date, expected }) => {
-  expect(d(date).dayOfMonth()).toStrictEqual(expected);
+  expect(d(date).dayOfMonth()).toBe(expected);
 });
 
 test.each([
@@ -77,9 +77,9 @@ test.each([
   { date: "1950-06-17 14:30", expected: 6 }
 ])("DateTime.dayOfWeek", ({ date, expected }) => {
   dateFns.configure({ firstDayOfWeek: 0 });
-  expect(d(date).dayOfWeek()).toStrictEqual(expected);
+  expect(d(date).dayOfWeek()).toBe(expected);
   dateFns.configure({ firstDayOfWeek: 1 });
-  expect(d(date).dayOfWeek()).toStrictEqual(expected);
+  expect(d(date).dayOfWeek()).toBe(expected);
 });
 
 test.each([
@@ -92,7 +92,7 @@ test.each([
   { expected: "14:30", format: "H:mm" }
 ])("DateTime.format: English", ({ expected, format }) => {
   dateFns.configure({ locale: enUS, pm: true });
-  expect(d().format(format)).toStrictEqual(expected);
+  expect(d().format(format)).toBe(expected);
 });
 
 test.each([
@@ -105,7 +105,7 @@ test.each([
   { expected: "14:30", format: "H:mm" }
 ])("DateTime.format: Russian", ({ expected, format }) => {
   dateFns.configure({ locale: ru, pm: false });
-  expect(d().format(format)).toStrictEqual(expected);
+  expect(d().format(format)).toBe(expected);
 });
 
 test.each([
@@ -113,7 +113,7 @@ test.each([
   { date: "1950-06-15 12:30", expected: 12 },
   { date: "1950-06-15 23:30", expected: 23 }
 ])("DateTime.hours", ({ date, expected }) => {
-  expect(d(date).hours()).toStrictEqual(expected);
+  expect(d(date).hours()).toBe(expected);
 });
 
 test.each([
@@ -124,7 +124,7 @@ test.each([
   { date: "1950-07-15 14:30", expected: false },
   { date: "1951-06-15 14:30", expected: false }
 ])("DateTime.isSameDayOfMonth", ({ date, expected }) => {
-  expect(d().isSameDayOfMonth(d(date))).toStrictEqual(expected);
+  expect(d().isSameDayOfMonth(d(date))).toBe(expected);
 });
 
 test.each([
@@ -135,7 +135,7 @@ test.each([
   { date: "1950-07-15 14:30", expected: false },
   { date: "1951-06-15 14:30", expected: false }
 ])("DateTime.isSameHour", ({ date, expected }) => {
-  expect(d().isSameHour(d(date))).toStrictEqual(expected);
+  expect(d().isSameHour(d(date))).toBe(expected);
 });
 
 test.each([
@@ -146,7 +146,7 @@ test.each([
   { date: "1950-07-15 14:30", expected: false },
   { date: "1951-06-15 14:30", expected: false }
 ])("DateTime.isSameMinute", ({ date, expected }) => {
-  expect(d().isSameMinute(d(date))).toStrictEqual(expected);
+  expect(d().isSameMinute(d(date))).toBe(expected);
 });
 
 test.each([
@@ -157,7 +157,7 @@ test.each([
   { date: "1950-07-15 14:30", expected: false },
   { date: "1951-06-15 14:30", expected: false }
 ])("DateTime.isSameMonth", ({ date, expected }) => {
-  expect(d().isSameMonth(d(date))).toStrictEqual(expected);
+  expect(d().isSameMonth(d(date))).toBe(expected);
 });
 
 test.each([
@@ -168,7 +168,7 @@ test.each([
   { date: "1950-07-15 14:30", expected: true },
   { date: "1951-06-15 14:30", expected: false }
 ])("DateTime.isSameYear", ({ date, expected }) => {
-  expect(d().isSameYear(d(date))).toStrictEqual(expected);
+  expect(d().isSameYear(d(date))).toBe(expected);
 });
 
 test.each([
@@ -176,7 +176,7 @@ test.each([
   { date: "1950-06-15 14:30", expected: 30 },
   { date: "1950-06-15 14:59", expected: 59 }
 ])("DateTime.minutes", ({ date, expected }) => {
-  expect(d(date).minutes()).toStrictEqual(expected);
+  expect(d(date).minutes()).toBe(expected);
 });
 
 test.each([
@@ -184,7 +184,7 @@ test.each([
   { date: "1950-06-15 14:30", expected: 5 },
   { date: "1950-12-15 14:30", expected: 11 }
 ])("DateTime.month", ({ date, expected }) => {
-  expect(d(date).month()).toStrictEqual(expected);
+  expect(d(date).month()).toBe(expected);
 });
 
 test.each([
@@ -326,22 +326,22 @@ test.each(["1950-06-15 14:30", "1950-06-15 14:30:30"])(
   "DateTime.toString",
   date => {
     dateFns.configure({ pm: true });
-    expect(d(date).toString()).toStrictEqual(date);
+    expect(d(date).toString()).toBe(date);
     dateFns.configure({ pm: false });
-    expect(d(date).toString()).toStrictEqual(date);
+    expect(d(date).toString()).toBe(date);
   }
 );
 
 test("DateTime.toTime", () => {
   const date = new Date();
 
-  expect(d(date).toTime()).toStrictEqual(date.getTime());
+  expect(d(date).toTime()).toBe(date.getTime());
 });
 
 test("DateTime.toTimeSec", () => {
   const date = new Date();
 
-  expect(d(date).toTimeSec()).toStrictEqual(date.getTime() / 1000);
+  expect(d(date).toTimeSec()).toBe(date.getTime() / 1000);
 });
 
 test.each([
@@ -349,7 +349,7 @@ test.each([
   { date: "1951-06-15 14:30", expected: 1951 },
   { date: "1952-06-15 14:30", expected: 1952 }
 ])("DateTime.year", ({ date, expected }) => {
-  expect(d(date).year()).toStrictEqual(expected);
+  expect(d(date).year()).toBe(expected);
 });
 
 test("configure, getConfiguration", () => {
@@ -414,15 +414,15 @@ test("create", () => {
 });
 
 test("now", () => {
-  expect(dateFns.now()).toStrictEqual(dateFns.create().toString());
+  expect(dateFns.now()).toBe(dateFns.create().toString());
 });
 
 test("time", () => {
-  expect(dateFns.time()).toStrictEqual(Date.now());
+  expect(dateFns.time()).toBe(Date.now());
 });
 
 test("timeSec", () => {
-  expect(dateFns.timeSec()).toStrictEqual(Date.now() / 1000);
+  expect(dateFns.timeSec()).toBe(Date.now() / 1000);
 });
 
 test.each([
@@ -440,5 +440,5 @@ test.each([
   { date: "1", expected: false },
   { date: "", expected: false }
 ])("validate", ({ date, expected }) => {
-  expect(dateFns.validate(date)).toStrictEqual(expected);
+  expect(dateFns.validate(date)).toBe(expected);
 });

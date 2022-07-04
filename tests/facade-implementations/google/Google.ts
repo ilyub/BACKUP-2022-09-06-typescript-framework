@@ -107,7 +107,7 @@ test("Google.idToken: signIn", async () => {
 
   const google = new Google(clientId);
 
-  await expect(google.idToken()).resolves.toStrictEqual(clientId);
+  await expect(google.idToken()).resolves.toBe(clientId);
 });
 
 test("Google.idToken: signedIn", async () => {
@@ -115,7 +115,7 @@ test("Google.idToken: signedIn", async () => {
 
   const google = new Google(clientId);
 
-  await expect(google.idToken()).resolves.toStrictEqual(clientId);
+  await expect(google.idToken()).resolves.toBe(clientId);
 });
 
 test("Google.idToken: unknown_error", async () => {

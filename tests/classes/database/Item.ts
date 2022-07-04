@@ -13,6 +13,6 @@ test.each<classes.database.Item.ExistingItemDoc>([
   const item = new classes.database.Item(doc);
 
   expect(item.doc()).toStrictEqual(doc);
-  expect(item._id).toStrictEqual(doc._id);
-  expect(item._rev).toStrictEqual(doc._rev);
+  expect(item._id).toBe(doc._id);
+  expect(item._rev).toBe(doc._rev);
 });

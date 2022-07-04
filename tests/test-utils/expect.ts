@@ -11,7 +11,7 @@ test("datetimeToBe", () => {
     const expected = 'Expected date not to be "1950-01-01 14:30"';
 
     expect(result.pass).toBeTrue();
-    expect(result.message()).toStrictEqual(expected);
+    expect(result.message()).toBe(expected);
   }
 
   {
@@ -24,7 +24,7 @@ test("datetimeToBe", () => {
       'Expected date ("1950-01-01 14:30") to be "1950-01-01 14:31"';
 
     expect(result.pass).toBeFalse();
-    expect(result.message()).toStrictEqual(expected);
+    expect(result.message()).toBe(expected);
   }
 });
 
@@ -35,7 +35,7 @@ test("progressToBe", () => {
     const expected = "Expected progress not to be 0";
 
     expect(result.pass).toBeTrue();
-    expect(result.message()).toStrictEqual(expected);
+    expect(result.message()).toBe(expected);
   }
 
   {
@@ -44,6 +44,6 @@ test("progressToBe", () => {
     const expected = "Expected progress (0) to be 1";
 
     expect(result.pass).toBeFalse();
-    expect(result.message()).toStrictEqual(expected);
+    expect(result.message()).toBe(expected);
   }
 });

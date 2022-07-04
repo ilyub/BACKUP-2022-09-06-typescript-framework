@@ -18,7 +18,7 @@ export const axiosWrapper: axiosWrapper.Configurable & httpRequest.Facade = {
 
     return response.data as unknown;
   }
-};
+} as const;
 
 export namespace axiosWrapper {
   export interface Configurable {
@@ -43,4 +43,4 @@ export namespace axiosWrapper {
   export interface PartialConfiguration extends Partial<Configuration> {}
 }
 
-const moduleConfig: axiosWrapper.Configuration = { timeout: 30_000 };
+const moduleConfig: axiosWrapper.Configuration = { timeout: 30_000 } as const;

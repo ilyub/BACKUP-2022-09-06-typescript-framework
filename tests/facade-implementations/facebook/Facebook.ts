@@ -76,7 +76,7 @@ test("Facebook.accessToken: connected", async () => {
 
   const facebook = new Facebook(appId, "10.0");
 
-  await expect(facebook.accessToken()).resolves.toStrictEqual(appId);
+  await expect(facebook.accessToken()).resolves.toBe(appId);
 });
 
 test("Facebook.accessToken: loggedIn", async () => {
@@ -84,7 +84,7 @@ test("Facebook.accessToken: loggedIn", async () => {
 
   const facebook = new Facebook(appId, "10.0");
 
-  await expect(facebook.accessToken()).resolves.toStrictEqual(appId);
+  await expect(facebook.accessToken()).resolves.toBe(appId);
 });
 
 test("Facebook.accessToken: not_authorized", async () => {

@@ -22,7 +22,7 @@ export const dateFnsWrapper: Configurable & datetime.Facade = {
       isValid(parse(date, formatString, now))
     );
   }
-};
+} as const;
 
 export namespace dateFnsWrapper {
   export type Configuration = import("./core").Configuration;

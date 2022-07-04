@@ -12,7 +12,7 @@ export const moduleConfig: Configuration = {
     httpRequest: 10_000,
     navigation: 10_000
   }
-};
+} as const;
 
 export const promises = new Map<symbol, Promise<unknown>>();
 

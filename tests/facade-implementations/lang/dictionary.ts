@@ -170,9 +170,9 @@ test.each([
     ru: "5 дней"
   }
 ])("Dictionary.plural", ({ count, en, ru }) => {
-  expect(`${count} ${dictionary.plural(count).day}`).toStrictEqual(en);
+  expect(`${count} ${dictionary.plural(count).day}`).toBe(en);
   configure({ localeName: "ru-RU" });
-  expect(`${count} ${dictionary.plural(count).day}`).toStrictEqual(ru);
+  expect(`${count} ${dictionary.plural(count).day}`).toBe(ru);
 });
 
 test.each(["string", "String"])("Dictionary.with: FieldIsTooShort", field => {
@@ -182,9 +182,9 @@ test.each(["string", "String"])("Dictionary.with: FieldIsTooShort", field => {
 
   const sub = dictionary.with("field", field).with("min", 10);
 
-  expect(sub.FieldIsTooShort).toStrictEqual(en);
+  expect(sub.FieldIsTooShort).toBe(en);
   configure({ localeName: "ru-RU" });
-  expect(sub.FieldIsTooShort).toStrictEqual(ru);
+  expect(sub.FieldIsTooShort).toBe(ru);
 });
 
 test.each([
@@ -197,9 +197,9 @@ test.each([
 
   const sub = dictionary.with("field", field).with("field2", field2);
 
-  expect(sub.MustBeSameAs).toStrictEqual(en);
+  expect(sub.MustBeSameAs).toBe(en);
   configure({ localeName: "ru-RU" });
-  expect(sub.MustBeSameAs).toStrictEqual(ru);
+  expect(sub.MustBeSameAs).toBe(ru);
 });
 
 test.each(["string", "String"])("Dictionary.with: MustBeValidField", field => {
@@ -209,9 +209,9 @@ test.each(["string", "String"])("Dictionary.with: MustBeValidField", field => {
 
   const sub = dictionary.with("field", field);
 
-  expect(sub.MustBeValidField).toStrictEqual(en);
+  expect(sub.MustBeValidField).toBe(en);
   configure({ localeName: "ru-RU" });
-  expect(sub.MustBeValidField).toStrictEqual(ru);
+  expect(sub.MustBeValidField).toBe(ru);
 });
 
 test("configure, getConfiguration", () => {

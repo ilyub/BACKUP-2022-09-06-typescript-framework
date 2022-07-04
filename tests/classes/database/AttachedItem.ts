@@ -24,8 +24,8 @@ test.each<classes.database.AttachedItem.ExistingAttachedItemDoc>([
   const item = new AttachedItem(doc);
 
   expect(item.doc()).toStrictEqual(doc);
-  expect(item._id).toStrictEqual(doc._id);
-  expect(item._rev).toStrictEqual(doc._rev);
+  expect(item._id).toBe(doc._id);
+  expect(item._rev).toBe(doc._rev);
   expect(item.id).toBe(`${doc.parentDoc._id}:${doc._id}`);
   expect(item.parent.doc()).toStrictEqual(doc.parentDoc);
   expect(item.parent.doc()).toStrictEqual(doc.parentDoc);
