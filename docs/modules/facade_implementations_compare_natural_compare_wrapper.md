@@ -4,12 +4,27 @@
 
 ## Table of contents
 
-### Variables
+### Functions
 
 - [naturalCompareWrapper](facade_implementations_compare_natural_compare_wrapper.md#naturalcomparewrapper)
 
-## Variables
+## Functions
 
 ### naturalCompareWrapper
 
-• `Const` **naturalCompareWrapper**: `compare.Facade`
+▸ **naturalCompareWrapper**(`x`, `y`): `number`
+
+Compares values.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `x` | `unknown` | Value 1. |
+| `y` | `unknown` | Value 2. |
+
+#### Returns
+
+`number`
+
+Comparison result.

@@ -9,19 +9,3 @@
 - `IdMeta`
 
   ↳ **`PouchIdMeta`**
-
-## Table of contents
-
-### Properties
-
-- [\_id](facade_implementations_database_pouchdb_wrapper_core_types_pouchdb.PouchIdMeta.md#_id)
-
-## Properties
-
-### \_id
-
-• **\_id**: `string`
-
-#### Inherited from
-
-PouchDB.Core.IdMeta.\_id

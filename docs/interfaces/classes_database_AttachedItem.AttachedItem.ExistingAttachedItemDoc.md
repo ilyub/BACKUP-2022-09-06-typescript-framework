@@ -16,46 +16,12 @@
 
 ### Properties
 
-- [\_deleted](classes_database_AttachedItem.AttachedItem.ExistingAttachedItemDoc.md#_deleted)
-- [\_id](classes_database_AttachedItem.AttachedItem.ExistingAttachedItemDoc.md#_id)
-- [\_rev](classes_database_AttachedItem.AttachedItem.ExistingAttachedItemDoc.md#_rev)
 - [createdAt](classes_database_AttachedItem.AttachedItem.ExistingAttachedItemDoc.md#createdat)
 - [deletedAt](classes_database_AttachedItem.AttachedItem.ExistingAttachedItemDoc.md#deletedat)
-- [parentDoc](classes_database_AttachedItem.AttachedItem.ExistingAttachedItemDoc.md#parentdoc)
 - [softDeleted](classes_database_AttachedItem.AttachedItem.ExistingAttachedItemDoc.md#softdeleted)
 - [updatedAt](classes_database_AttachedItem.AttachedItem.ExistingAttachedItemDoc.md#updatedat)
 
 ## Properties
-
-### \_deleted
-
-• `Optional` `Readonly` **\_deleted**: ``true``
-
-#### Inherited from
-
-database.BaseExistingAttachedDocument.\_deleted
-
-___
-
-### \_id
-
-• `Readonly` **\_id**: `number`
-
-#### Inherited from
-
-database.BaseExistingAttachedDocument.\_id
-
-___
-
-### \_rev
-
-• `Readonly` **\_rev**: `number`
-
-#### Inherited from
-
-database.BaseExistingAttachedDocument.\_rev
-
-___
 
 ### createdAt
 
@@ -74,16 +40,6 @@ ___
 #### Inherited from
 
 [Content](classes_database_AttachedItem.AttachedItem.Content.md).[deletedAt](classes_database_AttachedItem.AttachedItem.Content.md#deletedat)
-
-___
-
-### parentDoc
-
-• `Readonly` **parentDoc**: `BaseExistingDocument`
-
-#### Inherited from
-
-database.BaseExistingAttachedDocument.parentDoc
 
 ___
 

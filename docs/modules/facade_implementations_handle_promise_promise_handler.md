@@ -8,12 +8,32 @@
 
 - [promiseHandler](facade_implementations_handle_promise_promise_handler.promiseHandler.md)
 
-### Variables
+### Functions
 
 - [promiseHandler](facade_implementations_handle_promise_promise_handler.md#promisehandler)
 
-## Variables
+## Functions
 
 ### promiseHandler
 
-• `Const` **promiseHandler**: [`Configurable`](../interfaces/facade_implementations_handle_promise_promise_handler_core.Configurable.md) & `handlePromise.Facade`
+▸ **promiseHandler**<`T`\>(`type`, `mixed`, `errorMessage?`): `void`
+
+Handles promise with progress reporting.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `type` | `undefined` \| `Type` | Type (determines expected duration for progress reporting). |
+| `mixed` | `AsyncPromise`<`T`, `nevers`\> | Promise or async function. |
+| `errorMessage?` | `string` | Error message (used to alert user on error). |
+
+#### Returns
+
+`void`

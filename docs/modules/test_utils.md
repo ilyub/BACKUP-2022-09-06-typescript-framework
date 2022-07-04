@@ -4,19 +4,31 @@
 
 ## Table of contents
 
-### Variables
+### Functions
 
 - [jestReset](test_utils.md#jestreset)
 - [jestSetup](test_utils.md#jestsetup)
 
-## Variables
+## Functions
 
 ### jestReset
 
-• `Const` **jestReset**: () => `void` & `Readonly`<{ `dictionary`: (`localeName`: `LocaleName`, `definitions`: [`DefinitionsByLocale`](facade_implementations_lang_dictionary.md#definitionsbylocale)) => `void`  }\>
+▸ **jestReset**(): `void`
+
+Jest reset.
+
+#### Returns
+
+`void`
 
 ___
 
 ### jestSetup
 
-• `Const` **jestSetup**: () => `void` & `Readonly`<{ `dictionary`: (`localeName`: `LocaleName`, `definitions`: [`DefinitionsByLocale`](facade_implementations_lang_dictionary.md#definitionsbylocale)) => `void`  }\>
+▸ **jestSetup**(): `void`
+
+Jest setup.
+
+#### Returns
+
+`void`

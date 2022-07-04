@@ -4,7 +4,9 @@
 
 [classes/database/AttachedItem](../modules/classes_database_AttachedItem.md).[AttachedItem](../modules/classes_database_AttachedItem.AttachedItem.md).OwnProps
 
-**`deprecated`**
+**`Deprecated`**
+
+ 
 
 ## Hierarchy
 

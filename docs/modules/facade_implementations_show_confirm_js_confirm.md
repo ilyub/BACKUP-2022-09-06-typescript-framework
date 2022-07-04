@@ -4,12 +4,26 @@
 
 ## Table of contents
 
-### Variables
+### Functions
 
 - [jsConfirm](facade_implementations_show_confirm_js_confirm.md#jsconfirm)
 
-## Variables
+## Functions
 
 ### jsConfirm
 
-• `Const` **jsConfirm**: `showConfirm.Facade`
+▸ **jsConfirm**(`message`, `success?`, `failure?`): `void`
+
+Shows confirmation dialog.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `message` | `string` | Message. |
+| `success?` | () => `void` | Success callback. |
+| `failure?` | () => `void` | Failure callback. |
+
+#### Returns
+
+`void`

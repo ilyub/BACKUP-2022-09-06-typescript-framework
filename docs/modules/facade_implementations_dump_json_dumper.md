@@ -14,12 +14,16 @@
 
 ▸ **jsonDumper**(`value`): `string`
 
+Dumps value to string.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | `unknown` | Value. |
 
 #### Returns
 
 `string`
+
+String.

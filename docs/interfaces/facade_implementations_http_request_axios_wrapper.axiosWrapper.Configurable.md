@@ -6,26 +6,30 @@
 
 ## Table of contents
 
-### Methods
+### Properties
 
 - [configure](facade_implementations_http_request_axios_wrapper.axiosWrapper.Configurable.md#configure)
 - [getConfiguration](facade_implementations_http_request_axios_wrapper.axiosWrapper.Configurable.md#getconfiguration)
 
-## Methods
+## Properties
 
 ### configure
 
-▸ `Readonly` **configure**(`config`): `void`
+• `Readonly` **configure**: (`config`: [`PartialConfiguration`](facade_implementations_http_request_axios_wrapper.axiosWrapper.PartialConfiguration.md)) => `void`
+
+#### Type declaration
+
+▸ (`config`): `void`
 
 Configures plugin.
 
-#### Parameters
+##### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `config` | [`PartialConfiguration`](facade_implementations_http_request_axios_wrapper.axiosWrapper.PartialConfiguration.md) | Plugin configuration. |
 
-#### Returns
+##### Returns
 
 `void`
 
@@ -33,11 +37,15 @@ ___
 
 ### getConfiguration
 
-▸ `Readonly` **getConfiguration**(): [`Configuration`](facade_implementations_http_request_axios_wrapper.axiosWrapper.Configuration.md)
+• `Readonly` **getConfiguration**: () => [`Configuration`](facade_implementations_http_request_axios_wrapper.axiosWrapper.Configuration.md)
+
+#### Type declaration
+
+▸ (): [`Configuration`](facade_implementations_http_request_axios_wrapper.axiosWrapper.Configuration.md)
 
 Returns plugin configuration.
 
-#### Returns
+##### Returns
 
 [`Configuration`](facade_implementations_http_request_axios_wrapper.axiosWrapper.Configuration.md)
 

@@ -8,12 +8,18 @@
 
 - [configurableTestDelay](facade_implementations_test_delay_configurable_test_delay.configurableTestDelay.md)
 
-### Variables
+### Functions
 
 - [configurableTestDelay](facade_implementations_test_delay_configurable_test_delay.md#configurabletestdelay)
 
-## Variables
+## Functions
 
 ### configurableTestDelay
 
-• `Const` **configurableTestDelay**: [`Configurable`](../interfaces/facade_implementations_test_delay_configurable_test_delay.configurableTestDelay.Configurable.md) & `facade.Facade`
+▸ **configurableTestDelay**(): `Promise`<`void`\>
+
+Test delay.
+
+#### Returns
+
+`Promise`<`void`\>

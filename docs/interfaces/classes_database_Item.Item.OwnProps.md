@@ -4,7 +4,9 @@
 
 [classes/database/Item](../modules/classes_database_Item.md).[Item](../modules/classes_database_Item.Item.md).OwnProps
 
-**`deprecated`**
+**`Deprecated`**
+
+ 
 
 ## Hierarchy
 

@@ -14,6 +14,10 @@
 
 ▸ **uuidWrapper**(): `string`
 
+Creates unique ID.
+
 #### Returns
 
 `string`
+
+Unique ID.

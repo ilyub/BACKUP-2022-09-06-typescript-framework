@@ -22,12 +22,12 @@
 ### Variables
 
 - [moduleConfig](facade_implementations_lang_dictionary_core.md#moduleconfig)
-- [pluralReduce](facade_implementations_lang_dictionary_core.md#pluralreduce)
 
 ### Functions
 
 - [configure](facade_implementations_lang_dictionary_core.md#configure)
 - [getConfiguration](facade_implementations_lang_dictionary_core.md#getconfiguration)
+- [pluralReduce](facade_implementations_lang_dictionary_core.md#pluralreduce)
 
 ## Type Aliases
 
@@ -46,12 +46,6 @@ ___
 ### moduleConfig
 
 • `Const` **moduleConfig**: [`Configuration`](../interfaces/facade_implementations_lang_dictionary_core.Configuration.md)
-
-___
-
-### pluralReduce
-
-• `Const` **pluralReduce**: [`PluralReduce`](../interfaces/facade_implementations_lang_dictionary_core.PluralReduce.md) & `Readonly`<[`PluralReduceInternational`](../interfaces/facade_implementations_lang_dictionary_core.PluralReduceInternational.md)\>
 
 ## Functions
 
@@ -84,3 +78,23 @@ Returns plugin configuration.
 [`Configuration`](../interfaces/facade_implementations_lang_dictionary_core.Configuration.md)
 
 Plugin configuration.
+
+___
+
+### pluralReduce
+
+▸ **pluralReduce**(`count`): `number`
+
+Reduces count for plural form.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `count` | `number` | Count. |
+
+#### Returns
+
+`number`
+
+Reduced count.

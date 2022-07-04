@@ -16,57 +16,12 @@
 
 ### Properties
 
-- [\_deleted](classes_database_Item.Item.ExistingItemDoc.md#_deleted)
-- [\_id](classes_database_Item.Item.ExistingItemDoc.md#_id)
-- [\_rev](classes_database_Item.Item.ExistingItemDoc.md#_rev)
-- [attachedDocs](classes_database_Item.Item.ExistingItemDoc.md#attacheddocs)
 - [createdAt](classes_database_Item.Item.ExistingItemDoc.md#createdat)
 - [deletedAt](classes_database_Item.Item.ExistingItemDoc.md#deletedat)
-- [lastAttachedDocs](classes_database_Item.Item.ExistingItemDoc.md#lastattacheddocs)
 - [softDeleted](classes_database_Item.Item.ExistingItemDoc.md#softdeleted)
 - [updatedAt](classes_database_Item.Item.ExistingItemDoc.md#updatedat)
 
 ## Properties
-
-### \_deleted
-
-• `Optional` `Readonly` **\_deleted**: ``true``
-
-#### Inherited from
-
-database.BaseExistingDocument.\_deleted
-
-___
-
-### \_id
-
-• `Readonly` **\_id**: `string`
-
-#### Inherited from
-
-database.BaseExistingDocument.\_id
-
-___
-
-### \_rev
-
-• `Readonly` **\_rev**: `string`
-
-#### Inherited from
-
-database.BaseExistingDocument.\_rev
-
-___
-
-### attachedDocs
-
-• `Optional` `Readonly` **attachedDocs**: `BaseStoredAttachedDocuments`
-
-#### Inherited from
-
-database.BaseExistingDocument.attachedDocs
-
-___
 
 ### createdAt
 
@@ -85,16 +40,6 @@ ___
 #### Inherited from
 
 [Content](classes_database_Item.Item.Content.md).[deletedAt](classes_database_Item.Item.Content.md#deletedat)
-
-___
-
-### lastAttachedDocs
-
-• `Optional` `Readonly` **lastAttachedDocs**: `numbers`
-
-#### Inherited from
-
-database.BaseExistingDocument.lastAttachedDocs
 
 ___
 

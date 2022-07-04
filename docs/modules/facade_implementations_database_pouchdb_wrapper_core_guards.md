@@ -35,15 +35,19 @@
 
 ▸ **isDocResponse**(`value`): value is DocResponse
 
+Checks if value type is T.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | `unknown` | Value. |
 
 #### Returns
 
 value is DocResponse
+
+_True_ if value type is T, _false_ otherwise.
 
 ___
 
@@ -51,15 +55,19 @@ ___
 
 ▸ **isDocResponses**(`value`): value is readonly DocResponse[]
 
+Checks if value type is T.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | `unknown` | Value. |
 
 #### Returns
 
 value is readonly DocResponse[]
+
+_True_ if value type is T, _false_ otherwise.
 
 ___
 
@@ -67,15 +75,19 @@ ___
 
 ▸ **isDocsResponse**(`value`): value is DocsResponse
 
+Checks if value type is T.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | `unknown` | Value. |
 
 #### Returns
 
 value is DocsResponse
+
+_True_ if value type is T, _false_ otherwise.
 
 ___
 
@@ -83,15 +95,19 @@ ___
 
 ▸ **isExistingAttachedDocument**(`value`): value is ExistingAttachedDocument
 
+Checks if value type is T.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | `unknown` | Value. |
 
 #### Returns
 
 value is ExistingAttachedDocument
+
+_True_ if value type is T, _false_ otherwise.
 
 ___
 
@@ -99,15 +115,19 @@ ___
 
 ▸ **isExistingDocument**(`value`): value is ExistingDocument
 
+Checks if value type is T.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | `unknown` | Value. |
 
 #### Returns
 
 value is ExistingDocument
+
+_True_ if value type is T, _false_ otherwise.
 
 ___
 
@@ -115,12 +135,16 @@ ___
 
 ▸ **isWrappablePouchError**(`value`): value is WrappablePouchError
 
+Checks if value type is T.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `value` | `unknown` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `value` | `unknown` | Value. |
 
 #### Returns
 
 value is WrappablePouchError
+
+_True_ if value type is T, _false_ otherwise.

@@ -32,16 +32,20 @@
 
 ▸ **datetimeToBe**(`got`, ...`args`): `Result`
 
+Expect function.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `got` | `unknown` |
-| `...args` | [expected: string] |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `got` | `unknown` | Got. |
+| `...args` | [expected: string] | Arguments. |
 
 #### Returns
 
 `Result`
+
+Result.
 
 ___
 
@@ -49,13 +53,17 @@ ___
 
 ▸ **progressToBe**(`got`, ...`args`): `Result`
 
+Expect function.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `got` | `unknown` |
-| `...args` | [expected: number] |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `got` | `unknown` | Got. |
+| `...args` | [expected: number] | Arguments. |
 
 #### Returns
 
 `Result`
+
+Result.

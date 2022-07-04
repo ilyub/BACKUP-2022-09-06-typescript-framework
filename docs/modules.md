@@ -61,6 +61,7 @@
 - [facade-implementations/lang](modules/facade_implementations_lang.md)
 - [facade-implementations/lang/dictionary](modules/facade_implementations_lang_dictionary.md)
 - [facade-implementations/lang/dictionary/Definition](modules/facade_implementations_lang_dictionary_Definition.md)
+- [facade-implementations/lang/dictionary/Definition.internal](modules/facade_implementations_lang_dictionary_Definition_internal.md)
 - [facade-implementations/lang/dictionary/Definitions](modules/facade_implementations_lang_dictionary_Definitions.md)
 - [facade-implementations/lang/dictionary/Dictionary](modules/facade_implementations_lang_dictionary_Dictionary.md)
 - [facade-implementations/lang/dictionary/core](modules/facade_implementations_lang_dictionary_core.md)

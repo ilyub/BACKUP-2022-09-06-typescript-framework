@@ -121,7 +121,7 @@ Returns word based on context, count, and replacements.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `owner` | [`Definitions`](facade_implementations_lang_dictionary_Definitions.Definitions.md) | Parent object. |
+| `owner` | [`Definitions`](../interfaces/facade_implementations_lang_dictionary_Definition_internal.Definitions.md) | Parent object. |
 | `context` | `undefined` \| ``"InXDays"`` | Context. |
 | `count` | `number` | Count for plural form. |
 | `replacements` | `ReadonlyMap`<`string`, `string`\> | Replacements. |

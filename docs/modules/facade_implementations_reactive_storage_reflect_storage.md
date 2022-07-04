@@ -4,12 +4,32 @@
 
 ## Table of contents
 
-### Variables
+### Functions
 
 - [reflectStorage](facade_implementations_reactive_storage_reflect_storage.md#reflectstorage)
 
-## Variables
+## Functions
 
 ### reflectStorage
 
-• `Const` **reflectStorage**: `reactiveStorage.Facade`
+▸ **reflectStorage**<`T`\>(`obj`): `T`
+
+Creates reactive object.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `object` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `obj` | `T` | Object. |
+
+#### Returns
+
+`T`
+
+Reactive object.

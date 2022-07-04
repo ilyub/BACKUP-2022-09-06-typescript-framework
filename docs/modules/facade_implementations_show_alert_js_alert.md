@@ -4,12 +4,24 @@
 
 ## Table of contents
 
-### Variables
+### Functions
 
 - [jsAlert](facade_implementations_show_alert_js_alert.md#jsalert)
 
-## Variables
+## Functions
 
 ### jsAlert
 
-• `Const` **jsAlert**: `showAlert.Facade`
+▸ **jsAlert**(`message`): `void`
+
+Shows alert.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `message` | `string` | Message. |
+
+#### Returns
+
+`void`
