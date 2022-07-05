@@ -65,13 +65,13 @@
     "upgrade": "npm run update-package-force & npm run npm:install"
   },
   "devDependencies": {
-    "@skylib/config": "^3.16.0",
-    "@skylib/eslint-plugin": "^0.1.36",
+    "@skylib/config": "^3.18.0",
+    "@skylib/eslint-plugin": "^0.1.38",
     "jest-mock-axios": "^4.6.1"
   },
   "peerDependencies": {
-    "@skylib/facades": "^4.7.0",
-    "@skylib/functions": "^3.2.0",
+    "@skylib/facades": "^4.7.1",
+    "@skylib/functions": "^3.3.0",
     "@skylib/lodash-commonjs-es": "^1.0.0",
     "@skylib/typescript-types": "^1.0.0",
     "@types/facebook-js-sdk": ">=3",
