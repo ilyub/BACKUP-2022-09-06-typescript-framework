@@ -26,7 +26,12 @@ test.each([
   { expected: "1950-07-15 14:30:30", unit: typedef<datetime.Unit>("month") },
   { expected: "1951-06-15 14:30:30", unit: typedef<datetime.Unit>("year") }
 ])("DateTime.add: 1", ({ expected, unit }) => {
-  expect(d().add(1, unit)).datetimeToBe(expected);
+  const d1 = d();
+
+  const d2 = d1.add(1, unit);
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe(expected);
 });
 
 test.each([
@@ -37,7 +42,12 @@ test.each([
   { expected: "1950-08-15 14:30:30", unit: typedef<datetime.Unit>("month") },
   { expected: "1952-06-15 14:30:30", unit: typedef<datetime.Unit>("year") }
 ])("DateTime.add: 2", ({ expected, unit }) => {
-  expect(d().add(2, unit)).datetimeToBe(expected);
+  const d1 = d();
+
+  const d2 = d1.add(2, unit);
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe(expected);
 });
 
 test("DateTime.clone", () => {
@@ -45,22 +55,8 @@ test("DateTime.clone", () => {
 
   const date2 = date1.clone();
 
-  {
-    expect(date1).datetimeToBe("1950-06-15 14:30:30");
-    expect(date2).datetimeToBe("1950-06-15 14:30:30");
-  }
-
-  {
-    date1.add(1, "minute");
-    expect(date1).datetimeToBe("1950-06-15 14:31:30");
-    expect(date2).datetimeToBe("1950-06-15 14:30:30");
-  }
-
-  {
-    date2.add(1, "hour");
-    expect(date1).datetimeToBe("1950-06-15 14:31:30");
-    expect(date2).datetimeToBe("1950-06-15 15:30:30");
-  }
+  expect(date1).datetimeToBe("1950-06-15 14:30:30");
+  expect(date2).datetimeToBe("1950-06-15 14:30:30");
 });
 
 test.each([
@@ -192,7 +188,12 @@ test.each([
   { day: 15, expected: "1950-06-15 14:30:30" },
   { day: 30, expected: "1950-06-30 14:30:30" }
 ])("DateTime.setDayOfMonth", ({ day, expected }) => {
-  expect(d().setDayOfMonth(day)).datetimeToBe(expected);
+  const d1 = d();
+
+  const d2 = d1.setDayOfMonth(day);
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe(expected);
 });
 
 test.each([
@@ -200,7 +201,12 @@ test.each([
   { day: 1, expected: "1950-06-12 14:30:30" },
   { day: 6, expected: "1950-06-17 14:30:30" }
 ])("DateTime.setDayOfWeek: 0", ({ day, expected }) => {
-  expect(d().setDayOfWeek(day, 0)).datetimeToBe(expected);
+  const d1 = d();
+
+  const d2 = d1.setDayOfWeek(day, 0);
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe(expected);
 });
 
 test.each([
@@ -208,7 +214,12 @@ test.each([
   { day: 1, expected: "1950-06-12 14:30:30" },
   { day: 6, expected: "1950-06-17 14:30:30" }
 ])("DateTime.setDayOfWeek: 1", ({ day, expected }) => {
-  expect(d().setDayOfWeek(day, 1)).datetimeToBe(expected);
+  const d1 = d();
+
+  const d2 = d1.setDayOfWeek(day, 1);
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe(expected);
 });
 
 test.each([
@@ -217,7 +228,13 @@ test.each([
   { day: 6, expected: "1950-06-17 14:30:30" }
 ])("DateTime.setDayOfWeekLocale", ({ day, expected }) => {
   dateFns.configure({ firstDayOfWeek: 0 });
-  expect(d().setDayOfWeekLocale(day)).datetimeToBe(expected);
+
+  const d1 = d();
+
+  const d2 = d1.setDayOfWeekLocale(day);
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe(expected);
 });
 
 test.each([
@@ -226,7 +243,13 @@ test.each([
   { day: 6, expected: "1950-06-17 14:30:30" }
 ])("DateTime.setDayOfWeekLocale", ({ day, expected }) => {
   dateFns.configure({ firstDayOfWeek: 1 });
-  expect(d().setDayOfWeekLocale(day)).datetimeToBe(expected);
+
+  const d1 = d();
+
+  const d2 = d1.setDayOfWeekLocale(day);
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe(expected);
 });
 
 test.each([
@@ -234,7 +257,12 @@ test.each([
   { expected: "1950-06-15 12:30:30", hours: 12 },
   { expected: "1950-06-15 23:30:30", hours: 23 }
 ])("DateTime.setHours", ({ expected, hours }) => {
-  expect(d().setHours(hours)).datetimeToBe(expected);
+  const d1 = d();
+
+  const d2 = d1.setHours(hours);
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe(expected);
 });
 
 test.each([
@@ -242,7 +270,12 @@ test.each([
   { expected: "1950-06-15 14:30:30", minutes: 30 },
   { expected: "1950-06-15 14:59:30", minutes: 59 }
 ])("DateTime.setMinutes", ({ expected, minutes }) => {
-  expect(d().setMinutes(minutes)).datetimeToBe(expected);
+  const d1 = d();
+
+  const d2 = d1.setMinutes(minutes);
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe(expected);
 });
 
 test.each([
@@ -250,23 +283,48 @@ test.each([
   { expected: "1950-06-15 14:30:30", month: 5 },
   { expected: "1950-12-15 14:30:30", month: 11 }
 ])("DateTime.setMonth", ({ expected, month }) => {
-  expect(d().setMonth(month)).datetimeToBe(expected);
+  const d1 = d();
+
+  const d2 = d1.setMonth(month);
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe(expected);
 });
 
 test("DateTime.setStartOfDay", () => {
-  expect(d().setStartOfDay()).datetimeToBe("1950-06-15 00:00");
+  const d1 = d();
+
+  const d2 = d1.setStartOfDay();
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe("1950-06-15 00:00");
 });
 
 test("DateTime.setStartOfHour", () => {
-  expect(d().setStartOfHour()).datetimeToBe("1950-06-15 14:00");
+  const d1 = d();
+
+  const d2 = d1.setStartOfHour();
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe("1950-06-15 14:00");
 });
 
 test("DateTime.setStartOfMinute", () => {
-  expect(d().setStartOfMinute()).datetimeToBe("1950-06-15 14:30");
+  const d1 = d();
+
+  const d2 = d1.setStartOfMinute();
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe("1950-06-15 14:30");
 });
 
 test("DateTime.setStartOfMonth", () => {
-  expect(d().setStartOfMonth()).datetimeToBe("1950-06-01 00:00");
+  const d1 = d();
+
+  const d2 = d1.setStartOfMonth();
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe("1950-06-01 00:00");
 });
 
 test("DateTime.setStartOfWeek", () => {
@@ -282,7 +340,12 @@ test("DateTime.setStartOfWeekLocale", () => {
 });
 
 test("DateTime.setStartOfYear", () => {
-  expect(d().setStartOfYear()).datetimeToBe("1950-01-01 00:00");
+  const d1 = d();
+
+  const d2 = d1.setStartOfYear();
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe("1950-01-01 00:00");
 });
 
 test.each([
@@ -290,7 +353,12 @@ test.each([
   { expected: "1952-06-15 14:30:30", year: 1952 },
   { expected: "1953-06-15 14:30:30", year: 1953 }
 ])("DateTime.setYear", ({ expected, year }) => {
-  expect(d().setYear(year)).datetimeToBe(expected);
+  const d1 = d();
+
+  const d2 = d1.setYear(year);
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe(expected);
 });
 
 test.each([
@@ -301,7 +369,12 @@ test.each([
   { expected: "1950-05-15 14:30:30", unit: typedef<datetime.Unit>("month") },
   { expected: "1949-06-15 14:30:30", unit: typedef<datetime.Unit>("year") }
 ])("DateTime.sub: 1", ({ expected, unit }) => {
-  expect(d().sub(1, unit)).datetimeToBe(expected);
+  const d1 = d();
+
+  const d2 = d1.sub(1, unit);
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe(expected);
 });
 
 test.each([
@@ -312,7 +385,12 @@ test.each([
   { expected: "1950-04-15 14:30:30", unit: typedef<datetime.Unit>("months") },
   { expected: "1948-06-15 14:30:30", unit: typedef<datetime.Unit>("years") }
 ])("DateTime.sub: 2", ({ expected, unit }) => {
-  expect(d().sub(2, unit)).datetimeToBe(expected);
+  const d1 = d();
+
+  const d2 = d1.sub(2, unit);
+
+  expect(d1).datetimeToBe("1950-06-15 14:30:30");
+  expect(d2).datetimeToBe(expected);
 });
 
 test.each(["1950-06-15 14:30", "1950-06-15 14:30:30"])(
@@ -367,50 +445,13 @@ test("create", () => {
 
   const date4 = dateFns.create(date1.toTime());
 
-  {
-    expect(date1).datetimeToBe("1950-06-15 14:30");
-    expect(date2).datetimeToBe("1950-06-15 14:30");
-    expect(date3).datetimeToBe("1950-06-15 14:30");
-    expect(date4).datetimeToBe("1950-06-15 14:30");
-  }
+  const error = "Unknown date format: invalid";
 
-  {
-    date1.add(1, "minute");
-    expect(date1).datetimeToBe("1950-06-15 14:31");
-    expect(date2).datetimeToBe("1950-06-15 14:30");
-    expect(date3).datetimeToBe("1950-06-15 14:30");
-    expect(date4).datetimeToBe("1950-06-15 14:30");
-  }
-
-  {
-    date2.add(1, "hour");
-    expect(date1).datetimeToBe("1950-06-15 14:31");
-    expect(date2).datetimeToBe("1950-06-15 15:30");
-    expect(date3).datetimeToBe("1950-06-15 14:30");
-    expect(date4).datetimeToBe("1950-06-15 14:30");
-  }
-
-  {
-    date3.add(1, "day");
-    expect(date1).datetimeToBe("1950-06-15 14:31");
-    expect(date2).datetimeToBe("1950-06-15 15:30");
-    expect(date3).datetimeToBe("1950-06-16 14:30");
-    expect(date4).datetimeToBe("1950-06-15 14:30");
-  }
-
-  {
-    date4.add(1, "month");
-    expect(date1).datetimeToBe("1950-06-15 14:31");
-    expect(date2).datetimeToBe("1950-06-15 15:30");
-    expect(date3).datetimeToBe("1950-06-16 14:30");
-    expect(date4).datetimeToBe("1950-07-15 14:30");
-  }
-
-  {
-    const error = "Unknown date format: invalid";
-
-    expect(() => dateFns.create("invalid")).toThrow(error);
-  }
+  expect(date1).datetimeToBe("1950-06-15 14:30");
+  expect(date2).datetimeToBe("1950-06-15 14:30");
+  expect(date3).datetimeToBe("1950-06-15 14:30");
+  expect(date4).datetimeToBe("1950-06-15 14:30");
+  expect(() => dateFns.create("invalid")).toThrow(error);
 });
 
 test("now", () => {

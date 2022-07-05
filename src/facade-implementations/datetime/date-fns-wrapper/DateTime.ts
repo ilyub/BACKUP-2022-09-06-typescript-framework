@@ -100,9 +100,7 @@ export class DateTime implements datetime.DateTime {
         duration.years = amount;
     }
 
-    this.value = add(this.value, duration);
-
-    return this;
+    return new DateTime(add(this.value, duration));
   }
 
   public clone(): datetime.DateTime {
@@ -166,94 +164,66 @@ export class DateTime implements datetime.DateTime {
   }
 
   public setDayOfMonth(day: number): datetime.DateTime {
-    this.value = setDate(this.value, day);
-
-    return this;
+    return new DateTime(setDate(this.value, day));
   }
 
   public setDayOfWeek(
     day: number,
     weekStartsOn: FirstDayOfWeek
   ): datetime.DateTime {
-    this.value = setDay(this.value, day, { weekStartsOn });
-
-    return this;
+    return new DateTime(setDay(this.value, day, { weekStartsOn }));
   }
 
   public setDayOfWeekLocale(day: number): datetime.DateTime {
     const weekStartsOn = moduleConfig.firstDayOfWeek;
 
-    this.value = setDay(this.value, day, { weekStartsOn });
-
-    return this;
+    return new DateTime(setDay(this.value, day, { weekStartsOn }));
   }
 
   public setHours(hours: number): datetime.DateTime {
-    this.value = setHours(this.value, hours);
-
-    return this;
+    return new DateTime(setHours(this.value, hours));
   }
 
   public setMinutes(minutes: number): datetime.DateTime {
-    this.value = setMinutes(this.value, minutes);
-
-    return this;
+    return new DateTime(setMinutes(this.value, minutes));
   }
 
   public setMonth(month: number): datetime.DateTime {
-    this.value = setMonth(this.value, month);
-
-    return this;
+    return new DateTime(setMonth(this.value, month));
   }
 
   public setStartOfDay(): datetime.DateTime {
-    this.value = startOfDay(this.value);
-
-    return this;
+    return new DateTime(startOfDay(this.value));
   }
 
   public setStartOfHour(): datetime.DateTime {
-    this.value = startOfHour(this.value);
-
-    return this;
+    return new DateTime(startOfHour(this.value));
   }
 
   public setStartOfMinute(): datetime.DateTime {
-    this.value = startOfMinute(this.value);
-
-    return this;
+    return new DateTime(startOfMinute(this.value));
   }
 
   public setStartOfMonth(): datetime.DateTime {
-    this.value = startOfMonth(this.value);
-
-    return this;
+    return new DateTime(startOfMonth(this.value));
   }
 
   public setStartOfWeek(weekStartsOn: FirstDayOfWeek): datetime.DateTime {
-    this.value = startOfWeek(this.value, { weekStartsOn });
-
-    return this;
+    return new DateTime(startOfWeek(this.value, { weekStartsOn }));
   }
 
   public setStartOfWeekLocale(): datetime.DateTime {
     const weekStartsOn = moduleConfig.firstDayOfWeek;
 
-    this.value = startOfWeek(this.value, { weekStartsOn });
-
-    return this;
+    return new DateTime(startOfWeek(this.value, { weekStartsOn }));
   }
 
   public setStartOfYear(): datetime.DateTime {
-    this.value = startOfYear(this.value);
-
-    return this;
+    return new DateTime(startOfYear(this.value));
   }
 
   public setYear(year: number): datetime.DateTime {
-    this.value = setYear(this.value, year);
-
-    return this;
+    return new DateTime(setYear(this.value, year));
   }
 
   public sub(amount: number, unit: datetime.Unit): datetime.DateTime {
@@ -295,9 +265,7 @@ export class DateTime implements datetime.DateTime {
         duration.years = amount;
     }
 
-    this.value = sub(this.value, duration);
-
-    return this;
+    return new DateTime(sub(this.value, duration));
   }
 
   public toDate(): Date {
@@ -322,6 +290,5 @@ export class DateTime implements datetime.DateTime {
     return getYear(this.value);
   }
 
-  // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-property -- Ok
-  protected value: Date;
+  protected readonly value: Date;
 }
