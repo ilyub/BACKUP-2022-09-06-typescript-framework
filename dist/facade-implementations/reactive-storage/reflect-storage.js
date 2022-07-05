@@ -1,8 +1,8 @@
 "use strict";
-/* disable @skylib/functions/no-restricted-syntax[no-reflect-get] */
+/* eslint-disable @skylib/no-restricted-syntax/no-reflect-get -- Ok */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reflectStorage = void 0;
-/* disable @skylib/functions/no-restricted-syntax[no-reflect-set] */
+/* eslint-disable @skylib/no-restricted-syntax/no-reflect-set -- Ok */
 const functions_1 = require("@skylib/functions");
 exports.reflectStorage = (0, functions_1.defineFn)((obj) => {
     if (functions_1.reflect.hasMetadata(MetadataKey, obj))

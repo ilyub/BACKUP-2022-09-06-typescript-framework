@@ -1,5 +1,5 @@
-/* disable @skylib/functions/no-restricted-syntax[no-reflect-get] */
-/* disable @skylib/functions/no-restricted-syntax[no-reflect-set] */
+/* eslint-disable @skylib/no-restricted-syntax/no-reflect-get -- Ok */
+/* eslint-disable @skylib/no-restricted-syntax/no-reflect-set -- Ok */
 import { as, defineFn, is, map, reflect, wrapProxyHandler } from "@skylib/functions";
 export const reflectStorage = defineFn((obj) => {
     if (reflect.hasMetadata(MetadataKey, obj))

@@ -18,7 +18,7 @@ class Database {
      * @param pouchConfig - PouchDB configuration.
      */
     constructor(name, options = {}, config = {}, pouchConfig = {}) {
-        // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
+        // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-property -- Ok
         Object.defineProperty(this, "changes", {
             enumerable: true,
             configurable: true,
@@ -59,7 +59,7 @@ class Database {
                 unsubscribe: functions_1.fn.noop
             })
         });
-        // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
+        // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-property -- Ok
         Object.defineProperty(this, "db", {
             enumerable: true,
             configurable: true,

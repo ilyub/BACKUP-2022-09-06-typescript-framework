@@ -350,40 +350,40 @@ function dateValue(date) {
     if (date.length === 1)
         date = [date[0], "+", 0, "minutes"];
     const [type, sign, value, unit] = date;
-    const result = facades_1.datetime.create();
+    let result = facades_1.datetime.create();
     switch (type) {
         case "endOfDay":
-            result.setStartOfDay().add(1, "day");
+            result = result.setStartOfDay().add(1, "day");
             break;
         case "endOfHour":
-            result.setStartOfHour().add(1, "hour");
+            result = result.setStartOfHour().add(1, "hour");
             break;
         case "endOfMonth":
-            result.setStartOfMonth().add(1, "month");
+            result = result.setStartOfMonth().add(1, "month");
             break;
         case "endOfWeek":
-            result.setStartOfWeekLocale().add(1, "week");
+            result = result.setStartOfWeekLocale().add(1, "week");
             break;
         case "now":
             break;
         case "startOfDay":
-            result.setStartOfDay();
+            result = result.setStartOfDay();
             break;
         case "startOfHour":
-            result.setStartOfHour();
+            result = result.setStartOfHour();
             break;
         case "startOfMonth":
-            result.setStartOfMonth();
+            result = result.setStartOfMonth();
             break;
         case "startOfWeek":
-            result.setStartOfWeekLocale();
+            result = result.setStartOfWeekLocale();
     }
     switch (sign) {
         case "-":
-            result.sub(value, unit);
+            result = result.sub(value, unit);
             break;
         case "+":
-            result.add(value, unit);
+            result = result.add(value, unit);
     }
     return result.toString();
 }

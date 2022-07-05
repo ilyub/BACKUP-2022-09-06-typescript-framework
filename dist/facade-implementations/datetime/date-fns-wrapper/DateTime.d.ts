@@ -41,6 +41,6 @@ export declare class DateTime implements datetime.DateTime {
     toTime(): number;
     toTimeSec(): number;
     year(): number;
-    protected value: Date;
+    protected readonly value: Date;
 }
 //# sourceMappingURL=DateTime.d.ts.map

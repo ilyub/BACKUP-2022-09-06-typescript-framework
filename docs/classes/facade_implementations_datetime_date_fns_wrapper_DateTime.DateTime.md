@@ -72,7 +72,7 @@ Creates class instance.
 
 ### value
 
-• `Protected` **value**: `Date`
+• `Protected` `Readonly` **value**: `Date`
 
 ## Methods
 
