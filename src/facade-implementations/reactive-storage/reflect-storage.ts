@@ -1,6 +1,6 @@
-/* disable @skylib/functions/no-restricted-syntax[no-reflect-get] */
+/* eslint-disable @skylib/no-restricted-syntax/no-reflect-get -- Ok */
 
-/* disable @skylib/functions/no-restricted-syntax[no-reflect-set] */
+/* eslint-disable @skylib/no-restricted-syntax/no-reflect-set -- Ok */
 
 import {
   as,

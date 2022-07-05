@@ -70,7 +70,7 @@ export abstract class AttachedItem<T extends Item = Item> {
     type Source = UndefinedStyle<AttachedItem.ExistingAttachedItemDoc>;
   }
 
-  // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
+  // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-property -- Ok
   protected _parent: T | undefined;
 
   protected readonly _parentDoc: database.BaseExistingDocument;
@@ -98,7 +98,7 @@ export namespace AttachedItem {
   export interface Content {
     readonly createdAt?: string;
     readonly deletedAt?: string;
-    // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
+    // eslint-disable-next-line @skylib/no-restricted-syntax/no-optional-true-type -- Ok
     readonly softDeleted?: true;
     readonly updatedAt?: string;
   }

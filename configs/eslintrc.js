@@ -1,13 +1,14 @@
 module.exports = {
   rules: {
-    "@skylib/framework/consistent-import": [
+    "@skylib/consistent-import/framework": [
       "warn",
       {
         sources: [
           {
             _id: "test-utils",
             altLocalNames: ["frameworkTestUtils"],
-            source: "@skylib/framework/{dist,es}/test-utils",
+            source: "@skylib/framework/src/test-utils",
+            sourcePattern: "@skylib/framework/{dist,es}/test-utils",
             type: "wildcard"
           }
         ]

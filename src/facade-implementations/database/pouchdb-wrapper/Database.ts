@@ -478,7 +478,7 @@ export class Database implements database.Database {
     this.refreshSubscription();
   }
 
-  // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
+  // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-property -- Ok
   protected changes: PouchChanges | undefined;
 
   protected readonly changesHandlers = new Map<
@@ -508,7 +508,7 @@ export class Database implements database.Database {
       unsubscribe: fn.noop
     });
 
-  // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
+  // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-property -- Ok
   protected db: PouchProxy | undefined;
 
   protected readonly name: string;

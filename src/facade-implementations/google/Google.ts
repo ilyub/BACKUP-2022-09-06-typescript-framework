@@ -36,7 +36,7 @@ export class Google implements google.Facade {
 
   protected readonly clientId: AsyncPromise<stringU> | stringU;
 
-  // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
+  // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-property -- Ok
   protected sdk: Promise<Google.Auth> | undefined;
 
   /**

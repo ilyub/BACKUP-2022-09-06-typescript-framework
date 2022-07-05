@@ -322,6 +322,6 @@ export class DateTime implements datetime.DateTime {
     return getYear(this.value);
   }
 
-  // eslint-disable-next-line @skylib/no-restricted-syntax -- Ok
+  // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-property -- Ok
   protected value: Date;
 }

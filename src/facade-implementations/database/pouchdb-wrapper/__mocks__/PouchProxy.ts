@@ -10,7 +10,7 @@ export class PouchProxy extends BasePouchDBProxy {
    * @param config - Database configuration.
    */
   public constructor(name: string, config: PouchDatabaseConfiguration) {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-var-requires, unicorn/prefer-module -- Ok
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Ok
     const plugin = require("pouchdb-adapter-memory");
 
     pouchdb.plugin(plugin);
