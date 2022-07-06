@@ -53,6 +53,7 @@ test.each([
 test("DateTime.clone", () => {
   const date1 = d();
 
+  // eslint-disable-next-line deprecation/deprecation -- Wait for @skylib/facades update
   const date2 = date1.clone();
 
   expect(date1).datetimeToBe("1950-06-15 14:30:30");

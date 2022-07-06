@@ -20,13 +20,12 @@ const getScript = jest
 globalThis.gapi = evaluate(() => {
   return {
     auth2: {
-      init: params => {
+      init: (params): gapi.auth2.GoogleAuth => {
         const clientId = params.client_id;
 
         const user = {
-          getAuthResponse: () => {
-            return { id_token: as.not.empty(clientId) };
-          }
+          getAuthResponse: (): gapi.auth2.AuthResponse =>
+            ({ id_token: as.not.empty(clientId) } as gapi.auth2.AuthResponse)
         } as gapi.auth2.GoogleUser;
 
         return {
@@ -61,7 +60,7 @@ globalThis.gapi = evaluate(() => {
                 }
               } as gapi.auth2.GoogleAuthBase);
           }
-        };
+        } as gapi.auth2.GoogleAuth;
       }
     },
     load: (apiName, callback) => {

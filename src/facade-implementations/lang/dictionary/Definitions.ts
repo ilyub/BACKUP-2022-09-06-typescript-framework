@@ -23,7 +23,6 @@ export class Definitions {
   public constructor(raw: RawLanguage) {
     validate(raw);
 
-    // eslint-disable-next-line @skylib/no-mutable-signature -- Ok
     const keys: WritableIndexedRecord = {};
 
     for (const key of o.keys(raw.words)) {

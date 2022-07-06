@@ -478,7 +478,7 @@ export class Database implements database.Database {
     this.refreshSubscription();
   }
 
-  // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-property -- Ok
+  // eslint-disable-next-line @skylib/custom/prefer-readonly-property -- Ok
   protected changes: PouchChanges | undefined;
 
   protected readonly changesHandlers = new Map<
@@ -508,7 +508,7 @@ export class Database implements database.Database {
       unsubscribe: fn.noop
     });
 
-  // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-property -- Ok
+  // eslint-disable-next-line @skylib/custom/prefer-readonly-property -- Ok
   protected db: PouchProxy | undefined;
 
   protected readonly name: string;
@@ -576,7 +576,7 @@ export class Database implements database.Database {
 
       assert.toBeTrue(response.ok, "Database request failed");
 
-      return result.map(item => {
+      return result.map((item): database.PutAttachedResponse => {
         return { ...item, parentRev: response.rev };
       });
     } catch (error) {

@@ -66,7 +66,7 @@ export namespace Item {
   export interface Content {
     readonly createdAt?: string;
     readonly deletedAt?: string;
-    // eslint-disable-next-line @skylib/no-restricted-syntax/no-optional-true-type -- Ok
+    // eslint-disable-next-line @skylib/custom/no-optional-true-type -- Ok
     readonly softDeleted?: true;
     readonly updatedAt?: string;
   }
