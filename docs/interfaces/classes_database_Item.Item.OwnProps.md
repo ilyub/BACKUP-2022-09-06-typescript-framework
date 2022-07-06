@@ -6,8 +6,6 @@
 
 **`Deprecated`**
 
- 
-
 ## Hierarchy
 
 - [`Content`](classes_database_Item.Item.Content.md)

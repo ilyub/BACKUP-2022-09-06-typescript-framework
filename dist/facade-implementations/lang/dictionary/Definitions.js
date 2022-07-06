@@ -35,7 +35,6 @@ class Definitions {
             value: void 0
         });
         validate(raw);
-        // eslint-disable-next-line @skylib/no-mutable-signature -- Ok
         const keys = {};
         for (const key of functions_1.o.keys(raw.words)) {
             keys[functions_1.s.lcFirst(key)] = functions_1.s.lcFirst(key);

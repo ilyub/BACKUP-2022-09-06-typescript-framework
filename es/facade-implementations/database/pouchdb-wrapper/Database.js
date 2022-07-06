@@ -15,7 +15,7 @@ export class Database {
      * @param pouchConfig - PouchDB configuration.
      */
     constructor(name, options = {}, config = {}, pouchConfig = {}) {
-        // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-property -- Ok
+        // eslint-disable-next-line @skylib/custom/prefer-readonly-property -- Ok
         Object.defineProperty(this, "changes", {
             enumerable: true,
             configurable: true,
@@ -56,7 +56,7 @@ export class Database {
                 unsubscribe: fn.noop
             })
         });
-        // eslint-disable-next-line @skylib/no-restricted-syntax/prefer-readonly-property -- Ok
+        // eslint-disable-next-line @skylib/custom/prefer-readonly-property -- Ok
         Object.defineProperty(this, "db", {
             enumerable: true,
             configurable: true,
@@ -369,7 +369,7 @@ export class Database {
             const response = await db.put(Object.assign(Object.assign({}, parentDoc), { attachedDocs,
                 lastAttachedDocs }));
             assert.toBeTrue(response.ok, "Database request failed");
-            return result.map(item => {
+            return result.map((item) => {
                 return Object.assign(Object.assign({}, item), { parentRev: response.rev });
             });
         }

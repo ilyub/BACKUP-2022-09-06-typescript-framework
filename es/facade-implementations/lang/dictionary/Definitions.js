@@ -32,7 +32,6 @@ export class Definitions {
             value: void 0
         });
         validate(raw);
-        // eslint-disable-next-line @skylib/no-mutable-signature -- Ok
         const keys = {};
         for (const key of o.keys(raw.words)) {
             keys[s.lcFirst(key)] = s.lcFirst(key);
