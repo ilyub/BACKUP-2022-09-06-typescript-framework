@@ -27,7 +27,7 @@ test("subscribe, unsubscribe", async () => {
       _id: id1,
       _rev: rev1,
       x: 1
-    };
+    } as const;
 
     await wait(1000);
     expect(handler1).mockCallsToBe([expected1]);
@@ -41,7 +41,7 @@ test("subscribe, unsubscribe", async () => {
       attachedDocs: [],
       lastAttachedDocs: [0],
       x: 1
-    };
+    } as const;
 
     await wait(1000);
     expect(handler1).mockCallsToBe([expected2]);
@@ -85,7 +85,7 @@ test("subscribeAttached, unsubscribeAttached", async () => {
         x: 1
       },
       y: 2
-    };
+    } as const;
 
     await wait(1000);
     expect(handler).mockCallsToBe([expected]);

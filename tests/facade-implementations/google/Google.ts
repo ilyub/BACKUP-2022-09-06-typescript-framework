@@ -130,7 +130,7 @@ test("Google.idToken: unknown_error", async () => {
 test("Google.loadSdk", async () => {
   const google = new Google(clientId);
 
-  const expected = ["https://apis.google.com/js/api:client.js"];
+  const expected = ["https://apis.google.com/js/api:client.js"] as const;
 
   expect(getScript).mockCallsToBe();
   await google.loadSdk();

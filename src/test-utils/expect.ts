@@ -3,6 +3,9 @@ import { progressReporter } from "@skylib/facades";
 import { assert } from "@skylib/functions";
 import $ from "jquery";
 import type * as testUtils from "@skylib/functions/dist/test-utils";
+// eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
+// fixme
+import type { Result } from "@skylib/functions/dist/test-utils/expect.internal";
 
 declare global {
   namespace jest {
@@ -28,7 +31,7 @@ declare global {
 export const datetimeToBe: testUtils.ExpectFromMatcher<"datetimeToBe"> = (
   got: unknown,
   expected: string
-) => {
+): Result => {
   assert.instanceOf(got, DateTime, "Expecting DateTime instance");
 
   return got.toTime() === new Date(expected).getTime()
@@ -46,7 +49,7 @@ export const datetimeToBe: testUtils.ExpectFromMatcher<"datetimeToBe"> = (
 export const progressToBe: testUtils.ExpectFromMatcher<"progressToBe"> = (
   got: unknown,
   expected: number
-) => {
+): Result => {
   assert.string(got, "Expecting string");
 
   const gotProgress = progressReporter.getProgress();

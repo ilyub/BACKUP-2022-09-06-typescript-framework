@@ -27,7 +27,7 @@ test("create: config.reindexThreshold", async () => {
       { d: "2001-02-15 11:00" },
       { d: "2001-02-15 13:00" },
       { d: "2001-02-18 12:00" }
-    ];
+    ] as const;
 
     await Promise.all([db1.bulkDocs(docs), db2.bulkDocs(docs)]);
 
@@ -103,7 +103,7 @@ test("create: options.caseSensitiveSorting", async () => {
       ],
       x: "CCC"
     }
-  ];
+  ] as const;
 
   await Promise.all([db1.bulkDocs(docs), db2.bulkDocs(docs)]);
 

@@ -1,11 +1,22 @@
+/* eslint-disable @skylib/custom/prefer-readonly-property -- Ok */
+
 import { implementations } from "@";
 
 const { reflectStorage } = implementations.reactiveStorage;
 
+interface TestObject {
+  x: number;
+  y: TestSubObject;
+}
+
+interface TestSubObject {
+  z: number;
+}
+
 test("reducer", () => {
   const callback = jest.fn();
 
-  const obj = reflectStorage(reflectStorage({ x: 0, y: { z: 0 } }));
+  const obj = reflectStorage(reflectStorage<TestObject>({ x: 0, y: { z: 0 } }));
 
   const observer = reflectStorage.watch(obj, callback, value => value.x);
 
@@ -37,7 +48,7 @@ test("reducer", () => {
 test("watch, unwatch", () => {
   const callback = jest.fn();
 
-  const obj = reflectStorage(reflectStorage({ x: 0, y: { z: 0 } }));
+  const obj = reflectStorage(reflectStorage<TestObject>({ x: 0, y: { z: 0 } }));
 
   const observer = reflectStorage.watch(obj, callback);
 

@@ -58,13 +58,13 @@ export class Database implements database.Database {
     config: Configuration = {},
     pouchConfig: PouchDatabaseConfiguration = {}
   ) {
-    const defaultOptions = {
+    const defaultOptions: Required<database.DatabaseOptions> = {
       caseSensitiveSorting: false,
       migrations: [],
       retries: 0
     };
 
-    const defaultConfig = { reindexThreshold: 1 };
+    const defaultConfig: Required<Configuration> = { reindexThreshold: 1 };
 
     this.name = name;
     this.options = { ...defaultOptions, ...options };
@@ -501,6 +501,7 @@ export class Database implements database.Database {
   protected readonly createReactiveStorage = <
     T
   >(): database.ReactiveResponse<T> =>
+    // eslint-disable-next-line @skylib/custom/no-complex-type-in-call-expression -- Wait for @skylib/config update
     reactiveStorage({
       loaded: false,
       loading: true,
@@ -576,9 +577,12 @@ export class Database implements database.Database {
 
       assert.toBeTrue(response.ok, "Database request failed");
 
-      return result.map((item): database.PutAttachedResponse => {
-        return { ...item, parentRev: response.rev };
-      });
+      return result.map(
+        (item): database.PutAttachedResponse => ({
+          ...item,
+          parentRev: response.rev
+        })
+      );
     } catch (error) {
       assert.instanceOf(error, PouchConflictError, assert.wrapError(error));
 

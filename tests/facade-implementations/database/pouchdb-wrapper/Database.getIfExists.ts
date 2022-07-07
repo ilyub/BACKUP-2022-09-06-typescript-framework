@@ -120,7 +120,7 @@ test("reactiveGetIfExists", async () => {
       _id: id,
       _rev: rev,
       x: 1
-    };
+    } as const;
 
     await wait(1000);
     expect(result.value).toStrictEqual(expected);
@@ -166,7 +166,7 @@ test("reactiveGetIfExistsAttached", async () => {
         x: 1
       },
       y: 2
-    };
+    } as const;
 
     await wait(1000);
     expect(result.value).toStrictEqual(expected);

@@ -41,4 +41,4 @@ export namespace configurableTestDelay {
 const moduleConfig: configurableTestDelay.Configuration = {
   enabled: false,
   timeout: 100
-} as const;
+};

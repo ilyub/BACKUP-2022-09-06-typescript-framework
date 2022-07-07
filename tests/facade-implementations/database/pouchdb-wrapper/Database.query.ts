@@ -8,6 +8,14 @@ const pouchdb = new implementations.database.PouchWrapper();
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
+interface StoredAttachedDocument extends database.BaseStoredAttachedDocument {
+  readonly [K: string]: unknown;
+}
+
+// eslint-disable-next-line no-warning-comments -- Wait for @skylib/facades update
+// fixme
+type StoredAttachedDocuments = readonly StoredAttachedDocument[];
+
 test("query: Unexpected value type", async () => {
   const db = pouchdb.create(uniqueId());
 
@@ -320,20 +328,20 @@ test("queryAttached", async () => {
   const docs = [
     { _id: id1, x: "a" },
     { _id: id2, x: "b" }
-  ];
+  ] as const;
 
   const attachedDocs = [
     { parentDoc: { _id: id1, _rev: uniqueId() }, y: "a" },
     { parentDoc: { _id: id1, _rev: uniqueId() }, y: "b" },
     { parentDoc: { _id: id2, _rev: uniqueId() }, y: "a" },
     { parentDoc: { _id: id2, _rev: uniqueId() }, y: "b" }
-  ];
+  ] as const;
 
-  const conds0 = {};
+  const conds0 = {} as const;
 
-  const condsX = { x: { eq: "a" } };
+  const condsX = { x: { eq: "a" } } as const;
 
-  const condsY = { y: { eq: "a" } };
+  const condsY = { y: { eq: "a" } } as const;
 
   await db.bulkDocs(docs);
   await db.bulkDocsAttached(attachedDocs);
@@ -355,43 +363,41 @@ test("queryAttached", async () => {
 test("queryAttached: options", async () => {
   const db = pouchdb.create(uniqueId());
 
-  await db.bulkDocs(
-    typedef([
-      {
-        attachedDocs: [
-          {
-            _id: 0,
-            _rev: 1,
-            x: 1,
-            y: "d"
-          },
-          {
-            _id: 1,
-            _rev: 1,
-            x: 2,
-            y: "c"
-          }
-        ]
-      },
-      {
-        attachedDocs: [
-          {
-            _id: 0,
-            _rev: 1,
-            x: 3,
-            y: "b"
-          },
-          {
-            _id: 1,
-            _rev: 1,
-            x: 4,
-            y: "a"
-          }
-        ]
-      },
-      { attachedDocs: [{ _id: 0, _rev: 1 }] }
-    ])
-  );
+  await db.bulkDocs([
+    {
+      attachedDocs: typedef<StoredAttachedDocuments>([
+        {
+          _id: 0,
+          _rev: 1,
+          x: 1,
+          y: "d"
+        },
+        {
+          _id: 1,
+          _rev: 1,
+          x: 2,
+          y: "c"
+        }
+      ])
+    },
+    {
+      attachedDocs: typedef<StoredAttachedDocuments>([
+        {
+          _id: 0,
+          _rev: 1,
+          x: 3,
+          y: "b"
+        },
+        {
+          _id: 1,
+          _rev: 1,
+          x: 4,
+          y: "a"
+        }
+      ])
+    },
+    { attachedDocs: typedef<StoredAttachedDocuments>([{ _id: 0, _rev: 1 }]) }
+  ]);
 
   await expect(
     Promise.all([
@@ -450,7 +456,7 @@ test("reactiveQuery", async () => {
         _rev: rev,
         type: "a"
       }
-    ];
+    ] as const;
 
     await wait(1000);
     expect(result.value).toStrictEqual(expected);
@@ -493,7 +499,7 @@ test("reactiveQueryAttached", async () => {
         },
         type: "a"
       }
-    ];
+    ] as const;
 
     await wait(1000);
     expect(result.value).toStrictEqual(expected);

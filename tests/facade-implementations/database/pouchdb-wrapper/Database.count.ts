@@ -23,7 +23,7 @@ test("count", async () => {
     { d: "2001-02-18 12:00" }
   ]);
 
-  const cond = { d: { dateGt: "2001-02-15 13:00" } };
+  const cond = { d: { dateGt: "2001-02-15 13:00" } } as const;
 
   await expect(db.count()).resolves.toBe(4);
   await expect(db.count(cond)).resolves.toBe(1);
@@ -39,23 +39,23 @@ test("countAttached", async () => {
   const docs = [
     { _id: id1, x: "a" },
     { _id: id2, x: "b" }
-  ];
+  ] as const;
 
   const attachedDocs = [
     { parentDoc: { _id: id1, _rev: uniqueId() }, y: "a" },
     { parentDoc: { _id: id1, _rev: uniqueId() }, y: "b" },
     { parentDoc: { _id: id2, _rev: uniqueId() }, y: "a" },
     { parentDoc: { _id: id2, _rev: uniqueId() }, y: "b" }
-  ];
+  ] as const;
 
   await db.bulkDocs(docs);
   await db.bulkDocsAttached(attachedDocs);
 
-  const conds0 = {};
+  const conds0 = {} as const;
 
-  const condsX = { x: { eq: "a" } };
+  const condsX = { x: { eq: "a" } } as const;
 
-  const condsY = { y: { eq: "a" } };
+  const condsY = { y: { eq: "a" } } as const;
 
   await expect(
     Promise.all([

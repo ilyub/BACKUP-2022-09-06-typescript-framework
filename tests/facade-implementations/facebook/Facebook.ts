@@ -108,7 +108,7 @@ test("Facebook.accessToken: unknown", async () => {
 test("Facebook.loadSdk", async () => {
   const facebook = new Facebook(appId, "10.0");
 
-  const expected = ["https://connect.facebook.net/en_US/sdk.js"];
+  const expected = ["https://connect.facebook.net/en_US/sdk.js"] as const;
 
   expect(getScript).mockCallsToBe();
   await facebook.loadSdk();

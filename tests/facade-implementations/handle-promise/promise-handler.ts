@@ -25,7 +25,7 @@ test("configure, getConfiguration", () => {
     destroyDb: 1001,
     httpRequest: 1001,
     navigation: 1001
-  };
+  } as const;
 
   const getConfiguration = promiseHandler.getConfiguration;
 

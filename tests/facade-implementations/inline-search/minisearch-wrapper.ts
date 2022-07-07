@@ -2,6 +2,14 @@ import { implementations } from "@";
 
 const minisearch = implementations.inlineSearch.minisearchWrapper;
 
+interface Item {
+  readonly description: string;
+  readonly id: string;
+  readonly name: string;
+}
+
+type Items = readonly Item[];
+
 test.each([
   { ids: ["a"], searchString: "n1" },
   { ids: ["a", "b"], searchString: "n2" },
@@ -13,7 +21,7 @@ test.each([
   { ids: ["b", "c"], searchString: "d4" },
   { ids: ["c"], searchString: "d5" }
 ])("engine.search", ({ ids, searchString }) => {
-  const items = [
+  const items: Items = [
     {
       description: "D1 d2 d3",
       id: "a",

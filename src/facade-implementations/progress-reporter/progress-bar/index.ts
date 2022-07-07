@@ -12,7 +12,7 @@ export const progressBar: Configurable & progressReporter.Facade = {
   getProgress: Process.getProgress,
   reset: Process.reset,
   spawn: (): Process => new Process()
-} as const;
+};
 
 export namespace progressBar {
   export type Configuration = import("./core").Configuration;

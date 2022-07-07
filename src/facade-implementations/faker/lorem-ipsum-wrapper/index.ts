@@ -85,7 +85,7 @@ export const loremIpsumWrapper: faker.Facade & loremIpsumWrapper.Configurable =
         units: "sentences"
       }),
     word: () => loremIpsum({ suffix: "\n", units: "words" })
-  } as const;
+  };
 
 export namespace loremIpsumWrapper {
   export interface Configurable {
@@ -118,4 +118,4 @@ const moduleConfig: loremIpsumWrapper.Configuration = {
   maxWords: 10,
   minSentences: 3,
   minWords: 5
-} as const;
+};

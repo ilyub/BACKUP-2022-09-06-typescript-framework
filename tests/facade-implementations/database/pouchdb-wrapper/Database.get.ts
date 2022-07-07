@@ -122,7 +122,7 @@ test("reactiveGet", async () => {
 
     const result = db.reactiveGet(id);
 
-    const expected1 = { _id: id, _rev: rev1 };
+    const expected1 = { _id: id, _rev: rev1 } as const;
 
     expect(result.loaded).toBeFalse();
     await handlePromise.runAll();
@@ -131,7 +131,7 @@ test("reactiveGet", async () => {
 
     const { rev: rev2 } = await db.put({ _id: id, _rev: rev1 });
 
-    const expected2 = { _id: id, _rev: rev2 };
+    const expected2 = { _id: id, _rev: rev2 } as const;
 
     await wait(1000);
     expect(result.value).toStrictEqual(expected2);
@@ -165,7 +165,7 @@ test("reactiveGet: PouchNotFoundError", async () => {
       new implementations.database.PouchWrapper.PouchNotFoundError(
         "Missing document"
       )
-    ];
+    ] as const;
 
     db.reactiveGet(id);
     await db.put(doc);
@@ -198,7 +198,7 @@ test("reactiveGetAttached", async () => {
         attachedDocs: [],
         lastAttachedDocs: [0]
       }
-    };
+    } as const;
 
     expect(result.loaded).toBeFalse();
     await handlePromise.runAll();
@@ -216,7 +216,7 @@ test("reactiveGetAttached", async () => {
         attachedDocs: [],
         lastAttachedDocs: [0]
       }
-    };
+    } as const;
 
     await wait(1000);
     expect(result.value).toStrictEqual(expected2);
@@ -251,7 +251,7 @@ test("reactiveGetAttached: PouchNotFoundError", async () => {
       new implementations.database.PouchWrapper.PouchNotFoundError(
         "Missing attached document"
       )
-    ];
+    ] as const;
 
     db.reactiveGetAttached(0, id);
     await db.putAttached(id, doc);

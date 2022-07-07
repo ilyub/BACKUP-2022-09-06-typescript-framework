@@ -55,7 +55,7 @@ test("put: attached", async () => {
     _id: id,
     _rev: rev2,
     attachedDocs: []
-  };
+  } as const;
 
   const expectedAttached = {
     _id: 0,
@@ -65,7 +65,7 @@ test("put: attached", async () => {
       _rev: rev2,
       attachedDocs: []
     }
-  };
+  } as const;
 
   await expect(db.get(id)).resolves.toStrictEqual(expected);
   await expect(db.getAttached(0, id)).resolves.toStrictEqual(expectedAttached);
@@ -156,7 +156,7 @@ test("putAttachedBulk", async () => {
       parentRev: rev2,
       rev: 1
     }
-  ];
+  ] as const;
 
   const expected1 = {
     _id: 0,
@@ -169,7 +169,7 @@ test("putAttachedBulk", async () => {
       x: 1
     },
     y: 1
-  };
+  } as const;
 
   const expected2 = {
     _id: 1,
@@ -182,7 +182,7 @@ test("putAttachedBulk", async () => {
       x: 1
     },
     y: 2
-  };
+  } as const;
 
   expect(responses).toStrictEqual(expectedResponses);
   expect(doc1).toStrictEqual(expected1);

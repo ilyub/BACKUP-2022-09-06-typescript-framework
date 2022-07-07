@@ -1,6 +1,7 @@
 import { implementations } from "@";
 import { evaluate, typedef } from "@skylib/functions";
 import type { faker } from "@skylib/facades";
+import type { Writable, unknowns } from "@skylib/functions";
 
 const loremIpsum = implementations.faker.loremIpsumWrapper;
 
@@ -72,7 +73,9 @@ test("number", () => {
 });
 
 test("oneOf", () => {
-  const arr = [true, 1, "abc"];
+  // eslint-disable-next-line no-warning-comments -- Postponed
+  // fixme
+  const arr: Writable<unknowns> = [true, 1, "abc"];
 
   expect(loremIpsum.oneOf(arr)).toBeOneOf(arr);
 });

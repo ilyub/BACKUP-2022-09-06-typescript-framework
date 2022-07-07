@@ -28,25 +28,25 @@ test("bulkDocs", async () => {
   const expectedResponses = [
     { id: id2, rev: rev2 },
     { id: id3, rev: rev3 }
-  ];
+  ] as const;
 
   const expected1 = {
     _id: id1,
     _rev: rev1,
     x: 1
-  };
+  } as const;
 
   const expected2 = {
     _id: id2,
     _rev: rev2,
     x: 2
-  };
+  } as const;
 
   const expected3 = {
     _id: id3,
     _rev: rev3,
     x: 3
-  };
+  } as const;
 
   expect(responses).toStrictEqual(expectedResponses);
   expect(doc1).toStrictEqual(expected1);
@@ -92,7 +92,7 @@ test("bulkDocsAttached", async () => {
       parentRev: rev2,
       rev: 1
     }
-  ];
+  ] as const;
 
   const expected1 = {
     _id: 0,
@@ -105,7 +105,7 @@ test("bulkDocsAttached", async () => {
       x: 1
     },
     y: 1
-  };
+  } as const;
 
   const expected2 = {
     _id: 0,
@@ -118,7 +118,7 @@ test("bulkDocsAttached", async () => {
       x: 2
     },
     y: 2
-  };
+  } as const;
 
   expect(responses).toStrictEqual(expectedResponses);
   expect(attachedDoc1).toStrictEqual(expected1);
