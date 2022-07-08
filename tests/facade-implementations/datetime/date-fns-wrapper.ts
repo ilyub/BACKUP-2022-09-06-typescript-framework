@@ -1,12 +1,12 @@
-import { implementations } from "@";
-import { typedef } from "@skylib/functions";
+/* eslint-disable deprecation/deprecation -- Wait for @skylib/facades update */
+
 import * as testUtils from "@skylib/functions/dist/test-utils";
-// eslint-disable-next-line import/no-duplicates -- Ok
-import enUS from "date-fns/locale/en-US";
-// eslint-disable-next-line import/no-duplicates -- Ok
-import ru from "date-fns/locale/ru";
-import type { datetime } from "@skylib/facades";
 import type { NumStr } from "@skylib/functions";
+import type { datetime } from "@skylib/facades";
+import enUS from "date-fns/locale/en-US";
+import { implementations } from "@";
+import ru from "date-fns/locale/ru";
+import { typedef } from "@skylib/functions";
 
 const dateFns = implementations.datetime.dateFnsWrapper;
 
@@ -53,7 +53,6 @@ test.each([
 test("DateTime.clone", () => {
   const date1 = d();
 
-  // eslint-disable-next-line deprecation/deprecation -- Wait for @skylib/facades update
   const date2 = date1.clone();
 
   expect(date1).datetimeToBe("1950-06-15 14:30:30");

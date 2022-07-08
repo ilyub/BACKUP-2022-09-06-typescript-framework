@@ -1,18 +1,4 @@
-import { PouchProxy } from "./PouchProxy";
-import {
-  PouchConflictError,
-  PouchNotFoundError,
-  PouchRetryError,
-  extractAttachedDoc,
-  extractDoc,
-  getMapReduce,
-  getMapReduceAttached,
-  isDocsResponse,
-  isExistingAttachedDocument,
-  isExistingDocument,
-  validatePutDocument
-} from "./core";
-import { database, handlePromise, reactiveStorage } from "@skylib/facades";
+import * as _ from "@skylib/lodash-commonjs-es";
 import {
   Accumulator,
   a,
@@ -25,8 +11,6 @@ import {
   o,
   programFlow
 } from "@skylib/functions";
-import * as _ from "@skylib/lodash-commonjs-es";
-import { collate } from "pouchdb-collate";
 import type {
   Configuration,
   MapReduce,
@@ -41,7 +25,23 @@ import type {
   ReactiveRequest,
   ReactiveRequestAttached
 } from "./core";
+import {
+  PouchConflictError,
+  PouchNotFoundError,
+  PouchRetryError,
+  extractAttachedDoc,
+  extractDoc,
+  getMapReduce,
+  getMapReduceAttached,
+  isDocsResponse,
+  isExistingAttachedDocument,
+  isExistingDocument,
+  validatePutDocument
+} from "./core";
 import type { Writable, numberU, numbers, unknowns } from "@skylib/functions";
+import { database, handlePromise, reactiveStorage } from "@skylib/facades";
+import { PouchProxy } from "./PouchProxy";
+import { collate } from "pouchdb-collate";
 
 export class Database implements database.Database {
   /**
@@ -501,7 +501,6 @@ export class Database implements database.Database {
   protected readonly createReactiveStorage = <
     T
   >(): database.ReactiveResponse<T> =>
-    // eslint-disable-next-line @skylib/custom/no-complex-type-in-call-expression -- Wait for @skylib/config update
     reactiveStorage({
       loaded: false,
       loading: true,

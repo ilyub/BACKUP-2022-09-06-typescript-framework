@@ -1,8 +1,8 @@
-import { implementations } from "@";
-import { PouchNotFoundError } from "@/facade-implementations/database/pouchdb-wrapper/core/errors";
+import * as testUtils from "@skylib/functions/dist/test-utils";
 import { database, handlePromise, uniqueId } from "@skylib/facades";
 import { fn, wait } from "@skylib/functions";
-import * as testUtils from "@skylib/functions/dist/test-utils";
+import { PouchNotFoundError } from "@/facade-implementations/database/pouchdb-wrapper/core/errors";
+import { implementations } from "@";
 
 const pouchdb = new implementations.database.PouchWrapper();
 

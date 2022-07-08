@@ -1,10 +1,10 @@
-import { Database } from "./Database";
+import type { Configuration, PouchDatabaseConfiguration } from "./core";
 import {
   PouchConflictError,
   PouchNotFoundError,
   PouchRetryError
 } from "./core";
-import type { Configuration, PouchDatabaseConfiguration } from "./core";
+import { Database } from "./Database";
 import type { database } from "@skylib/facades";
 
 export class PouchWrapper implements database.Facade {

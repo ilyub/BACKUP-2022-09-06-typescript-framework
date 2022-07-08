@@ -1,6 +1,6 @@
 import { PouchProxy } from "@/facade-implementations/database/pouchdb-wrapper/PouchProxy";
-import { uniqueId } from "@skylib/facades";
 import type { PouchPutDocuments } from "@/facade-implementations/database/pouchdb-wrapper/core/types";
+import { uniqueId } from "@skylib/facades";
 
 test("bulkDocs", async () => {
   const db = new PouchProxy(uniqueId(), {});

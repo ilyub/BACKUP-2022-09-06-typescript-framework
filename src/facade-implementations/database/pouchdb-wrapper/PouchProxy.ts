@@ -1,7 +1,3 @@
-import { handlePouchError, wrapPouchError } from "./core";
-import { testDelay } from "@skylib/facades";
-import { a } from "@skylib/functions";
-import pouchdb from "pouchdb";
 import type {
   Content,
   PouchChanges,
@@ -18,6 +14,10 @@ import type {
   PouchQueryResponse,
   PouchResponse
 } from "./core";
+import { handlePouchError, wrapPouchError } from "./core";
+import { a } from "@skylib/functions";
+import pouchdb from "pouchdb";
+import { testDelay } from "@skylib/facades";
 
 export class PouchProxy {
   /**

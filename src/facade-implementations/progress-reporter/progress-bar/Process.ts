@@ -1,9 +1,9 @@
-import { finalEasing, growProgress, moduleConfig } from "./core";
+import type { Writable, numberU } from "@skylib/functions";
 import { a, num, programFlow, set } from "@skylib/functions";
+import { finalEasing, growProgress, moduleConfig } from "./core";
 import $ from "jquery";
 import type { ProcessState } from "./core";
 import type { progressReporter } from "@skylib/facades";
-import type { Writable, numberU } from "@skylib/functions";
 
 export class Process implements progressReporter.Process {
   /**

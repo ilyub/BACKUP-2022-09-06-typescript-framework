@@ -1,6 +1,6 @@
+import { a } from "@skylib/functions";
 import { implementations } from "@";
 import { uniqueId } from "@skylib/facades";
-import { a } from "@skylib/functions";
 
 const pouchdb = new implementations.database.PouchWrapper();
 

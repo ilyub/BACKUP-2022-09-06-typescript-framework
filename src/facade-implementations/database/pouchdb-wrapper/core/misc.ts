@@ -1,7 +1,7 @@
 import { PouchConflictError, PouchNotFoundError } from "./errors";
-import { isWrappablePouchError } from "./guards";
 import { is, o } from "@skylib/functions";
 import type { database } from "@skylib/facades";
+import { isWrappablePouchError } from "./guards";
 
 /**
  * Extracts attached document.

@@ -1,6 +1,6 @@
 import { PouchProxy as BasePouchDBProxy } from "../PouchProxy";
-import pouchdb from "pouchdb";
 import type { PouchDatabaseConfiguration } from "../core";
+import pouchdb from "pouchdb";
 
 export class PouchProxy extends BasePouchDBProxy {
   /**

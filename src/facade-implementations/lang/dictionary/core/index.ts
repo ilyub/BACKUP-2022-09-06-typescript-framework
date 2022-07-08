@@ -1,6 +1,3 @@
-import { reactiveStorage } from "@skylib/facades";
-import { defineFn, o, onDemand } from "@skylib/functions";
-import type { lang } from "@skylib/facades";
 import type {
   LocaleName,
   NumStr,
@@ -8,6 +5,9 @@ import type {
   Rec,
   strings
 } from "@skylib/functions";
+import { defineFn, o, onDemand } from "@skylib/functions";
+import type { lang } from "@skylib/facades";
+import { reactiveStorage } from "@skylib/facades";
 
 export const moduleConfig = onDemand(() =>
   reactiveStorage<Configuration>({ localeName: "en-US" })

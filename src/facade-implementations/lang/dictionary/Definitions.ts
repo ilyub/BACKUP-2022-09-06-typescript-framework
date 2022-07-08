@@ -1,5 +1,3 @@
-import { Definition } from "./Definition";
-import { assert, is, o, s } from "@skylib/functions";
 import type {
   PluralReduce,
   RawDefinition,
@@ -7,8 +5,10 @@ import type {
   RawLanguage,
   WordInfo
 } from "./core";
-import type { lang } from "@skylib/facades";
 import type { Rec, WritableIndexedRecord, strings } from "@skylib/functions";
+import { assert, is, o, s } from "@skylib/functions";
+import { Definition } from "./Definition";
+import type { lang } from "@skylib/facades";
 
 export class Definitions {
   public readonly keys: Rec<lang.Transform, lang.Transform>;

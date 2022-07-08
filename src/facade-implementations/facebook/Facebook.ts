@@ -1,7 +1,7 @@
+import type { AsyncPromise, stringU } from "@skylib/functions";
 import { assert, evaluate, is } from "@skylib/functions";
 import $ from "jquery";
 import type { facebook } from "@skylib/facades";
-import type { AsyncPromise, stringU } from "@skylib/functions";
 
 export class Facebook implements facebook.Facade {
   /**

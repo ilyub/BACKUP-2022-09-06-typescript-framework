@@ -1,6 +1,6 @@
 import { Engine as BaseEngine, createImplementation } from "./core";
-import { a } from "@skylib/functions";
 import MiniSearch from "minisearch";
+import { a } from "@skylib/functions";
 import type { inlineSearch } from "@skylib/facades";
 
 export const minisearchWrapper: inlineSearch.Facade = createImplementation(

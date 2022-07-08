@@ -1,8 +1,10 @@
-import { implementations } from "@";
+/* eslint-disable github/no-inner-html -- Ok */
+
 import * as handleError from "@/facade-implementations/handle-promise/promise-handler/core/handle-error";
-import { evaluate, fn, wait } from "@skylib/functions";
 import * as testUtils from "@skylib/functions/dist/test-utils";
+import { evaluate, fn, wait } from "@skylib/functions";
 import type { booleanU } from "@skylib/functions";
+import { implementations } from "@";
 
 const alertFn = evaluate(() => {
   const result = jest.fn();
@@ -145,7 +147,6 @@ test("verbose: Async", async () => {
   expect.hasAssertions();
 
   await testUtils.run(async () => {
-    // eslint-disable-next-line github/no-inner-html -- Ok
     document.body.innerHTML = '<div id="progressBar">';
     promiseHandler("createDb", callback);
     await wait(1000);

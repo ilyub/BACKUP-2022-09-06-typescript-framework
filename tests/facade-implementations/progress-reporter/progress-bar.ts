@@ -1,13 +1,14 @@
+/* eslint-disable github/no-inner-html -- Ok */
+
+import * as testUtils from "@skylib/functions/dist/test-utils";
 import { implementations } from "@";
 import { wait } from "@skylib/functions";
-import * as testUtils from "@skylib/functions/dist/test-utils";
 
 const { progressBar } = implementations.progressReporter;
 
 testUtils.installFakeTimer();
 
 beforeEach(() => {
-  // eslint-disable-next-line github/no-inner-html -- Ok
   document.body.innerHTML = '<div id="progressBar">';
 });
 

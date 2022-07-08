@@ -1,10 +1,10 @@
-import { implementations } from "@";
-import { Database } from "@/facade-implementations/database/pouchdb-wrapper/Database";
-import { datetime, uniqueId } from "@skylib/facades";
-import { wait } from "@skylib/functions";
 import * as testUtils from "@skylib/functions/dist/test-utils";
+import { datetime, uniqueId } from "@skylib/facades";
+import { Database } from "@/facade-implementations/database/pouchdb-wrapper/Database";
 import type { database } from "@skylib/facades";
+import { implementations } from "@";
 import type { unknowns } from "@skylib/functions";
+import { wait } from "@skylib/functions";
 
 const pouchdb = new implementations.database.PouchWrapper();
 

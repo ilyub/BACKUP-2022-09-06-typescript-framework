@@ -1,7 +1,7 @@
-import { implementations } from "@";
 import { AssertionError, as, assert, evaluate } from "@skylib/functions";
-import $ from "jquery";
 import type { stringU, unknowns } from "@skylib/functions";
+import $ from "jquery";
+import { implementations } from "@";
 
 const { Facebook } = implementations.facebook;
 

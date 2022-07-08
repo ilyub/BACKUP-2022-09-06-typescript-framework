@@ -1,8 +1,8 @@
-import { handleError } from "./handle-error";
+import type { AsyncPromise, Rec } from "@skylib/functions";
 import { progressReporter, showAlert } from "@skylib/facades";
 import { evaluate } from "@skylib/functions";
 import type { handlePromise as facade } from "@skylib/facades";
-import type { AsyncPromise, Rec } from "@skylib/functions";
+import { handleError } from "./handle-error";
 
 export const moduleConfig: Configuration = {
   expectedDurations: {

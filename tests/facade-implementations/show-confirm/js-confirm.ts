@@ -1,5 +1,5 @@
-import { implementations } from "@";
 import { evaluate } from "@skylib/functions";
+import { implementations } from "@";
 
 const confirmFn = evaluate(() => {
   const result = jest.fn();

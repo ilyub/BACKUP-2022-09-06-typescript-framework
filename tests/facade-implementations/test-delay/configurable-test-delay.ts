@@ -1,5 +1,5 @@
-import { implementations } from "@";
 import * as testUtils from "@skylib/functions/dist/test-utils";
+import { implementations } from "@";
 
 const { configurableTestDelay } = implementations.testDelay;
 

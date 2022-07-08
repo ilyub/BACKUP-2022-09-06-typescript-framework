@@ -1,13 +1,13 @@
-import { implementations } from "@";
+import * as testUtils from "@skylib/functions/dist/test-utils";
 import {
   database,
   handlePromise,
   reactiveStorage,
   uniqueId
 } from "@skylib/facades";
-import { wait } from "@skylib/functions";
-import * as testUtils from "@skylib/functions/dist/test-utils";
 import type { Writable } from "@skylib/functions";
+import { implementations } from "@";
+import { wait } from "@skylib/functions";
 
 const pouchdb = new implementations.database.PouchWrapper();
 

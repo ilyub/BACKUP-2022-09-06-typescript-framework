@@ -1,11 +1,11 @@
-import { DateTime } from "../facade-implementations/datetime/date-fns-wrapper/DateTime";
-import { progressReporter } from "@skylib/facades";
-import { assert } from "@skylib/functions";
-import $ from "jquery";
 import type * as testUtils from "@skylib/functions/dist/test-utils";
+import $ from "jquery";
+import { DateTime } from "../facade-implementations/datetime/date-fns-wrapper/DateTime";
 // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
 // fixme
 import type { Result } from "@skylib/functions/dist/test-utils/expect.internal";
+import { assert } from "@skylib/functions";
+import { progressReporter } from "@skylib/facades";
 
 declare global {
   namespace jest {

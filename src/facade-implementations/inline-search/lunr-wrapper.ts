@@ -1,6 +1,6 @@
 import { Engine as BaseEngine, createImplementation } from "./core";
-import lunr from "lunr";
 import type { inlineSearch } from "@skylib/facades";
+import lunr from "lunr";
 
 export const lunrWrapper: inlineSearch.Facade = createImplementation(
   class Engine<T extends object> extends BaseEngine<T, Index> {

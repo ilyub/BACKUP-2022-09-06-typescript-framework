@@ -1,5 +1,3 @@
-import { formatStrings, moduleConfig } from "./core";
-import { is } from "@skylib/functions";
 import {
   add,
   format as formatDate,
@@ -31,9 +29,11 @@ import {
   startOfYear,
   sub
 } from "date-fns";
+import { formatStrings, moduleConfig } from "./core";
 import type { FirstDayOfWeek } from "./core";
-import type { datetime } from "@skylib/facades";
 import type { NumStr } from "@skylib/functions";
+import type { datetime } from "@skylib/facades";
+import { is } from "@skylib/functions";
 
 export class DateTime implements datetime.DateTime {
   /**

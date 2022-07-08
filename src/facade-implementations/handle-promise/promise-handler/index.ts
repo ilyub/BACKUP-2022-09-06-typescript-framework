@@ -1,8 +1,8 @@
-import { handle, moduleConfig, promises } from "./core";
 import { defineFn, o } from "@skylib/functions";
+import { handle, moduleConfig, promises } from "./core";
+import type { AsyncPromise } from "@skylib/functions";
 import type { Configurable } from "./core";
 import type { handlePromise } from "@skylib/facades";
-import type { AsyncPromise } from "@skylib/functions";
 
 export const promiseHandler: Configurable & handlePromise.Facade = defineFn(
   <T>(

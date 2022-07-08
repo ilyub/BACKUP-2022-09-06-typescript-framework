@@ -1,5 +1,3 @@
-import { implementations } from "..";
-import { matchers } from "./expect";
 import {
   compare,
   database,
@@ -19,8 +17,10 @@ import {
   uniqueId
 } from "@skylib/facades";
 import { defineFn, typedef } from "@skylib/functions";
-import enUS from "date-fns/locale/en-US";
 import type { LocaleName } from "@skylib/functions";
+import enUS from "date-fns/locale/en-US";
+import { implementations } from "..";
+import { matchers } from "./expect";
 
 export const jestReset = defineFn(
   /**

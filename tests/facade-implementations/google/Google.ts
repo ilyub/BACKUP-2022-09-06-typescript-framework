@@ -1,7 +1,13 @@
-import { implementations } from "@";
+/* eslint-disable @typescript-eslint/no-throw-literal -- Ok */
+
+/* eslint-disable etc/throw-error -- Ok */
+
+/* eslint-disable unicorn/no-thenable -- Ok */
+
 import { AssertionError, as, assert, evaluate } from "@skylib/functions";
-import $ from "jquery";
 import type { stringU, unknowns } from "@skylib/functions";
+import $ from "jquery";
+import { implementations } from "@";
 
 const { Google } = implementations.google;
 
@@ -29,7 +35,6 @@ globalThis.gapi = evaluate(() => {
         } as gapi.auth2.GoogleUser;
 
         return {
-          // eslint-disable-next-line unicorn/no-thenable -- Ok
           then: (
             onInit: (googleAuth: gapi.auth2.GoogleAuthBase) => void,
             onFailure: (reason: Reason) => void
@@ -45,7 +50,6 @@ globalThis.gapi = evaluate(() => {
 
                   switch (clientId) {
                     case "popup_closed_by_user":
-                      // eslint-disable-next-line @typescript-eslint/no-throw-literal, etc/throw-error -- Ok
                       throw {
                         details: "Popup closed by user",
                         error: "popup_closed_by_user"

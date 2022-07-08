@@ -1,14 +1,14 @@
-import { datetime, uniqueId } from "@skylib/facades";
-import { assert, cast, evaluate, is, json, num, o } from "@skylib/functions";
-import sha256 from "sha256";
 import type {
   Filter,
   MapReduce,
   RawQueryOptions,
   RawQueryOptionsAttached
 } from "./types";
-import type { database } from "@skylib/facades";
 import type { Writable, strings } from "@skylib/functions";
+import { assert, cast, evaluate, is, json, num, o } from "@skylib/functions";
+import { datetime, uniqueId } from "@skylib/facades";
+import type { database } from "@skylib/facades";
+import sha256 from "sha256";
 
 /**
  * Creates map/reduce function.

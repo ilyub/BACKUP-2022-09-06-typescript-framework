@@ -1,6 +1,6 @@
-import { o } from "@skylib/functions";
 import axios from "axios";
 import type { httpRequest } from "@skylib/facades";
+import { o } from "@skylib/functions";
 
 export const axiosWrapper: axiosWrapper.Configurable & httpRequest.Facade = {
   configure: (config: axiosWrapper.PartialConfiguration) => {

@@ -1,8 +1,8 @@
+import type { IndexedRecord, NumStr, strings } from "@skylib/functions";
+import type { RawDefinition, Rules, WordInfo } from "./core";
 import { a, as, assert, is, o, regexp } from "@skylib/functions";
 import type { Definitions } from "./Definition.internal";
-import type { RawDefinition, Rules, WordInfo } from "./core";
 import type { lang } from "@skylib/facades";
-import type { IndexedRecord, NumStr, strings } from "@skylib/functions";
 
 export class Definition {
   /**

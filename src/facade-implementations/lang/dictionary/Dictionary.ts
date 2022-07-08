@@ -1,4 +1,4 @@
-import { moduleConfig } from "./core";
+import type { LocaleName, NumStr, Rec } from "@skylib/functions";
 import {
   a,
   assert,
@@ -10,7 +10,7 @@ import {
 } from "@skylib/functions";
 import type { Definitions } from "./Definitions";
 import type { lang } from "@skylib/facades";
-import type { LocaleName, NumStr, Rec } from "@skylib/functions";
+import { moduleConfig } from "./core";
 
 export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
   /**

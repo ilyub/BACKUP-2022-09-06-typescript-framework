@@ -1,7 +1,9 @@
-import { implementations } from "@";
-import { database, datetime, handlePromise, uniqueId } from "@skylib/facades";
-import { a, typedef, wait } from "@skylib/functions";
+/* eslint-disable no-warning-comments -- Wait for @skylib/facades update */
+
 import * as testUtils from "@skylib/functions/dist/test-utils";
+import { a, typedef, wait } from "@skylib/functions";
+import { database, datetime, handlePromise, uniqueId } from "@skylib/facades";
+import { implementations } from "@";
 import type { unknowns } from "@skylib/functions";
 
 const pouchdb = new implementations.database.PouchWrapper();
@@ -12,7 +14,6 @@ interface StoredAttachedDocument extends database.BaseStoredAttachedDocument {
   readonly [K: string]: unknown;
 }
 
-// eslint-disable-next-line no-warning-comments -- Wait for @skylib/facades update
 // fixme
 type StoredAttachedDocuments = readonly StoredAttachedDocument[];
 

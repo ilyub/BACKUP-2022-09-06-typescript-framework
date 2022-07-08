@@ -1,7 +1,7 @@
-import { o } from "@skylib/functions";
+import type { UndefinedStyle, stringU } from "@skylib/functions";
 import type { Item } from "./Item";
 import type { database } from "@skylib/facades";
-import type { UndefinedStyle, stringU } from "@skylib/functions";
+import { o } from "@skylib/functions";
 
 export abstract class AttachedItem<T extends Item = Item> {
   public readonly _deleted: boolean;

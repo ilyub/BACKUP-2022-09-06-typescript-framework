@@ -1,7 +1,7 @@
+import type { Configurable } from "./core";
 import { Process } from "./Process";
 import { moduleConfig } from "./core";
 import { o } from "@skylib/functions";
-import type { Configurable } from "./core";
 import type { progressReporter } from "@skylib/facades";
 
 export const progressBar: Configurable & progressReporter.Facade = {

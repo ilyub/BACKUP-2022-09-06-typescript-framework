@@ -1,11 +1,11 @@
-import { implementations } from "@";
 import {
   PouchConflictError,
   PouchRetryError
 } from "@/facade-implementations/database/pouchdb-wrapper/core/errors";
-import { uniqueId } from "@skylib/facades";
 import { a } from "@skylib/functions";
 import type { database } from "@skylib/facades";
+import { implementations } from "@";
+import { uniqueId } from "@skylib/facades";
 
 const pouchdb = new implementations.database.PouchWrapper();
 

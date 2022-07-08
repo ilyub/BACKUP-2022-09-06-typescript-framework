@@ -1,10 +1,10 @@
-import { DateTime } from "./DateTime";
 import { formatStrings, moduleConfig } from "./core";
-import { o } from "@skylib/functions";
 import { isValid, parse } from "date-fns";
 import type { Configurable } from "./core";
-import type { datetime } from "@skylib/facades";
+import { DateTime } from "./DateTime";
 import type { NumStr } from "@skylib/functions";
+import type { datetime } from "@skylib/facades";
+import { o } from "@skylib/functions";
 
 export const dateFnsWrapper: Configurable & datetime.Facade = {
   configure: (config: dateFnsWrapper.PartialConfiguration) => {

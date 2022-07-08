@@ -1,7 +1,7 @@
+import * as testUtils from "@skylib/functions/dist/test-utils";
 import { implementations } from "@";
 import { uniqueId } from "@skylib/facades";
 import { wait } from "@skylib/functions";
-import * as testUtils from "@skylib/functions/dist/test-utils";
 
 const pouchdb = new implementations.database.PouchWrapper();
 

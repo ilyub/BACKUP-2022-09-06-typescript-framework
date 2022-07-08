@@ -1,7 +1,9 @@
-import { implementations } from "@";
+/* eslint-disable no-warning-comments -- Postponed */
+
+import type { Writable, unknowns } from "@skylib/functions";
 import { evaluate, typedef } from "@skylib/functions";
 import type { faker } from "@skylib/facades";
-import type { Writable, unknowns } from "@skylib/functions";
+import { implementations } from "@";
 
 const loremIpsum = implementations.faker.loremIpsumWrapper;
 
@@ -73,7 +75,6 @@ test("number", () => {
 });
 
 test("oneOf", () => {
-  // eslint-disable-next-line no-warning-comments -- Postponed
   // fixme
   const arr: Writable<unknowns> = [true, 1, "abc"];
 
