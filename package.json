@@ -64,7 +64,7 @@
     "upgrade": "npm run update-package-force && npm run npm:install"
   },
   "devDependencies": {
-    "@skylib/config": "^3.23.0",
+    "@skylib/config": "^3.25.0",
     "@skylib/eslint-plugin": "^0.1.42",
     "jest-mock-axios": "^4.6.1"
   },
