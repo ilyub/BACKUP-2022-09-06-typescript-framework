@@ -1,3 +1,5 @@
+/* eslint jest/max-expects: [warn, { max: 3 }] -- Ok */
+
 /* eslint-disable @typescript-eslint/no-throw-literal -- Ok */
 
 /* eslint-disable etc/throw-error -- Ok */
@@ -38,7 +40,7 @@ globalThis.gapi = evaluate(() => {
           then: (
             onInit: (googleAuth: gapi.auth2.GoogleAuthBase) => void,
             onFailure: (reason: Reason) => void
-          ): void => {
+          ) => {
             if (clientId === "init_error")
               onFailure({ details: "Init error", error: "init_error" });
             else

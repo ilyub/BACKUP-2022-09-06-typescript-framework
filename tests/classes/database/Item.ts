@@ -1,3 +1,5 @@
+/* eslint jest/max-expects: [warn, { max: 3 }] -- Ok */
+
 import { classes } from "@";
 import { uniqueId } from "@skylib/facades";
 

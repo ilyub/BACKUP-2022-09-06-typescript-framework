@@ -7,7 +7,7 @@ import type { datetime } from "@skylib/facades";
 import { o } from "@skylib/functions";
 
 export const dateFnsWrapper: Configurable & datetime.Facade = {
-  configure: (config: dateFnsWrapper.PartialConfiguration) => {
+  configure: config => {
     o.assign(moduleConfig, config);
   },
   create: (date?: Date | datetime.DateTime | NumStr) => new DateTime(date),
@@ -24,6 +24,7 @@ export const dateFnsWrapper: Configurable & datetime.Facade = {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- Ok
 export namespace dateFnsWrapper {
   export type Configuration = import("./core").Configuration;
 

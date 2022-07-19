@@ -1,8 +1,9 @@
 /* eslint-disable @skylib/custom/prefer-readonly-property -- Ok */
 
-import { implementations } from "@";
+/* eslint-disable @typescript-eslint/no-unsafe-return -- Ok */
 
-const { reflectStorage } = implementations.reactiveStorage;
+import { implementations } from "@";
+import type { reactiveStorage } from "@skylib/facades";
 
 interface TestObject {
   x: number;
@@ -13,66 +14,63 @@ interface TestSubObject {
   z: number;
 }
 
-test("reducer", () => {
+const { reflectStorage } = implementations.reactiveStorage;
+
+test.each([
+  {
+    expected: [[{ x: 1, y: { z: 0 } }]],
+    subtest: (obj: TestObject) => {
+      obj.x = 1;
+    }
+  },
+  {
+    expected: [[{ x: 1, y: { z: 0 } }]],
+    reducer: (obj: TestObject) => obj.x,
+    subtest: (obj: TestObject) => {
+      obj.x = 1;
+    }
+  },
+  {
+    expected: [[{ x: 0, y: { z: 1 } }]],
+    subtest: (obj: TestObject) => {
+      obj.y.z = 1;
+    }
+  },
+  {
+    expected: [],
+    reducer: (obj: TestObject) => obj.x,
+    subtest: (obj: TestObject) => {
+      obj.y.z = 1;
+    }
+  },
+  {
+    expected: [],
+    subtest: (obj: TestObject, observer: reactiveStorage.Observer) => {
+      reflectStorage.unwatch(obj, observer);
+      obj.x = 1;
+      obj.y.z = 1;
+    }
+  },
+  {
+    expected: new Error(
+      "'set' on proxy: trap returned falsish for property 'x'"
+    ),
+    expectedToThrow: true,
+    subtest: (obj: TestObject) => {
+      Object.freeze(obj);
+      obj.x = 3;
+    }
+  }
+])("watch, unwatch", ({ expected, expectedToThrow, reducer, subtest }) => {
   const callback = jest.fn();
 
   const obj = reflectStorage(reflectStorage<TestObject>({ x: 0, y: { z: 0 } }));
 
-  const observer = reflectStorage.watch(obj, callback, value => value.x);
+  const observer = reflectStorage.watch(obj, callback, reducer);
 
-  {
-    obj.x = 1;
-    expect(callback).mockCallsToBe([{ x: 1, y: { z: 0 } }]);
-  }
+  expect(() => {
+    subtest(obj, observer);
 
-  {
-    obj.y.z = 1;
-    expect(callback).mockCallsToBe();
-  }
-
-  {
-    reflectStorage.unwatch(obj, observer);
-    obj.x = 2;
-    obj.y.z = 2;
-    expect(callback).mockCallsToBe();
-  }
-
-  {
-    Object.freeze(obj);
-    expect(() => {
-      obj.x = 3;
-    }).toThrow("'set' on proxy: trap returned falsish for property 'x'");
-  }
-});
-
-test("watch, unwatch", () => {
-  const callback = jest.fn();
-
-  const obj = reflectStorage(reflectStorage<TestObject>({ x: 0, y: { z: 0 } }));
-
-  const observer = reflectStorage.watch(obj, callback);
-
-  {
-    obj.x = 1;
-    expect(callback).mockCallsToBe([{ x: 1, y: { z: 0 } }]);
-  }
-
-  {
-    obj.y.z = 1;
-    expect(callback).mockCallsToBe([{ x: 1, y: { z: 1 } }]);
-  }
-
-  {
-    reflectStorage.unwatch(obj, observer);
-    obj.x = 2;
-    obj.y.z = 2;
-    expect(callback).mockCallsToBe();
-  }
-
-  {
-    Object.freeze(obj);
-    expect(() => {
-      obj.x = 3;
-    }).toThrow("'set' on proxy: trap returned falsish for property 'x'");
-  }
+    return callback.mock.calls;
+  }).executionResultToBe(expected, expectedToThrow);
 });

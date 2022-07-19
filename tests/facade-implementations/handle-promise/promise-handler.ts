@@ -1,10 +1,24 @@
+/* eslint jest/max-expects: [warn, { max: 2 }] -- Ok */
+
+/* eslint-disable @skylib/consistent-import/project -- Ok */
+
 /* eslint-disable github/no-inner-html -- Ok */
 
 import * as handleError from "@/facade-implementations/handle-promise/promise-handler/core/handle-error";
 import * as testUtils from "@skylib/functions/dist/test-utils";
 import { evaluate, fn, wait } from "@skylib/functions";
-import type { booleanU } from "@skylib/functions";
+import { PromiseType } from "@skylib/facades";
 import { implementations } from "@";
+
+async function failure(): Promise<void> {
+  await wait(2000);
+
+  throw new Error("Sample error");
+}
+
+async function success(): Promise<void> {
+  await wait(2000);
+}
 
 const alertFn = evaluate(() => {
   const result = jest.fn();
@@ -14,26 +28,46 @@ const alertFn = evaluate(() => {
   return result;
 });
 
-const errorSpy = jest.spyOn(handleError, "handleError");
+const errorFn = jest.spyOn(handleError, "handleError");
 
 const { promiseHandler } = implementations.handlePromise;
 
 testUtils.installFakeTimer();
 
-test("configure, getConfiguration", () => {
-  const expectedDurations = {
-    createDb: 1001,
-    dbRequest: 1001,
-    destroyDb: 1001,
-    httpRequest: 1001,
-    navigation: 1001
-  } as const;
-
-  const getConfiguration = promiseHandler.getConfiguration;
-
-  expect(getConfiguration().expectedDurations.createDb).toBe(1000);
-  promiseHandler.configure({ expectedDurations });
-  expect(getConfiguration().expectedDurations.createDb).toBe(1001);
+test.each([
+  {
+    config: {},
+    expected: {
+      createDb: 1000,
+      dbRequest: 1000,
+      destroyDb: 1000,
+      httpRequest: 1000,
+      navigation: 1000
+    }
+  },
+  {
+    config: {
+      expectedDurations: {
+        createDb: 1001,
+        dbRequest: 1001,
+        destroyDb: 1001,
+        httpRequest: 1001,
+        navigation: 1001
+      }
+    },
+    expected: {
+      createDb: 1001,
+      dbRequest: 1001,
+      destroyDb: 1001,
+      httpRequest: 1001,
+      navigation: 1001
+    }
+  }
+])("configure, getConfiguration", ({ config, expected }) => {
+  promiseHandler.configure(config);
+  expect(promiseHandler.getConfiguration().expectedDurations).toStrictEqual(
+    expected
+  );
 });
 
 test("handleError", () => {
@@ -44,161 +78,95 @@ test("handleError", () => {
   }).toThrow(error);
 });
 
-test("runAll", async () => {
-  expect.hasAssertions();
-
-  await testUtils.run(async () => {
-    let done: booleanU;
-
-    promiseHandler.silent(wait(1000));
-    promiseHandler.runAll().then(fulfilled).catch(rejected);
-
-    {
-      expect(done).toBeUndefined();
-      await wait(1000);
-      expect(done).toBeTrue();
-    }
-
-    function fulfilled(): void {
-      done = true;
-    }
-
-    function rejected(): void {
-      done = false;
-    }
-  });
-});
-
-test("running", async () => {
-  expect.hasAssertions();
-
-  await testUtils.run(async () => {
-    {
-      expect(promiseHandler.running()).toBeFalse();
-      promiseHandler.silent(wait(1000));
-      expect(promiseHandler.running()).toBeTrue();
-    }
-
-    {
-      await wait(1000);
-      expect(promiseHandler.running()).toBeFalse();
-    }
-  });
-});
-
-test("silent: Async", async () => {
-  expect.hasAssertions();
-
-  await testUtils.run(async () => {
-    promiseHandler.silent(callback);
-    await wait(1000);
-    expect("#progressBar").progressToBe(0);
-    await wait(1000);
-    expect("#progressBar").progressToBe(0);
-
-    async function callback(): Promise<void> {
-      await wait(2000);
-    }
-  });
-});
-
-test("silent: Error", async () => {
-  expect.hasAssertions();
-
-  await testUtils.run(async () => {
-    const error = new Error("Sample error");
-
-    alertFn.mockImplementationOnce(fn.noop);
-    errorSpy.mockImplementationOnce(fn.noop);
-
-    {
-      promiseHandler.silent(fail);
-      expect(alertFn).mockCallsToBe();
-      expect(errorSpy).mockCallsToBe();
-    }
-
-    {
-      await wait(1000);
-      expect(alertFn).mockCallsToBe();
-      expect(errorSpy).mockCallsToBe([error]);
-    }
-
-    async function fail(): Promise<void> {
-      await wait(1000);
-
-      throw error;
-    }
-  });
-});
-
-test("silent: Promise", async () => {
-  expect.hasAssertions();
-
-  await testUtils.run(async () => {
-    promiseHandler.silent(wait(2000));
-    await wait(1000);
-    expect("#progressBar").progressToBe(0);
-    await wait(1000);
-    expect("#progressBar").progressToBe(0);
-  });
-});
-
-test("verbose: Async", async () => {
+test.each([
+  { expected: 0.593, timeout: 1000 },
+  { expected: 0, timeout: 2000 }
+])("promiseHandler", async ({ expected, timeout }) => {
   expect.hasAssertions();
 
   await testUtils.run(async () => {
     document.body.innerHTML = '<div id="progressBar">';
-    promiseHandler("createDb", callback);
-    await wait(1000);
-    expect("#progressBar").progressToBe(0.593);
-    await wait(1000);
-    expect("#progressBar").progressToBe(0);
-
-    async function callback(): Promise<void> {
-      await wait(2000);
-    }
+    promiseHandler(PromiseType.createDb, success);
+    await wait(timeout);
+    expect("#progressBar").progressToBe(expected);
   });
 });
 
-test("verbose: Error", async () => {
+test("promiseHandler.silent", async () => {
   expect.hasAssertions();
 
   await testUtils.run(async () => {
-    const error = new Error("Sample error");
-
-    const errorMessage = "Sample error message";
-
-    alertFn.mockImplementationOnce(fn.noop);
-    errorSpy.mockImplementationOnce(fn.noop);
-
-    {
-      promiseHandler("createDb", fail, errorMessage);
-      expect(alertFn).mockCallsToBe();
-      expect(errorSpy).mockCallsToBe();
-    }
-
-    {
-      await wait(2000);
-      expect(alertFn).mockCallsToBe([errorMessage]);
-      expect(errorSpy).mockCallsToBe([error]);
-    }
-
-    async function fail(): Promise<void> {
-      await wait(1000);
-
-      throw error;
-    }
+    promiseHandler.silent(success);
+    await wait(2000);
+    expect("#progressBar").progressToBe(0);
   });
 });
 
-test("verbose: Promise", async () => {
+test.each([
+  { expected: [], timeout: 1000 },
+  { expected: [[new Error("Sample error")]], timeout: 2000 }
+])("promiseHandler.silent: Error", async ({ expected, timeout }) => {
   expect.hasAssertions();
 
   await testUtils.run(async () => {
-    promiseHandler("createDb", wait(2000));
-    await wait(1000);
-    expect("#progressBar").progressToBe(0.593);
-    await wait(1000);
-    expect("#progressBar").progressToBe(0);
+    promiseHandler.silent(failure);
+    errorFn.mockImplementationOnce(fn.noop);
+    await wait(timeout);
+    expect(errorFn).mockCallsToBe(...expected);
+  });
+});
+
+test.each([
+  { expectedAlert: [], expectedError: [], timeout: 1000 },
+  {
+    expectedAlert: [["Sample error message"]],
+    expectedError: [[new Error("Sample error")]],
+    timeout: 2000
+  }
+])(
+  "promiseHandler: Error",
+  async ({ expectedAlert, expectedError, timeout }) => {
+    expect.hasAssertions();
+
+    await testUtils.run(async () => {
+      promiseHandler(PromiseType.createDb, failure, "Sample error message");
+      alertFn.mockImplementationOnce(fn.noop);
+      errorFn.mockImplementationOnce(fn.noop);
+      await wait(timeout);
+      expect(alertFn).mockCallsToBe(...expectedAlert);
+      expect(errorFn).mockCallsToBe(...expectedError);
+    });
+  }
+);
+
+test.each([
+  { expected: [], timeout: 1000 },
+  { expected: [[]], timeout: 2000 }
+])("runAll", async ({ expected, timeout }) => {
+  expect.hasAssertions();
+
+  await testUtils.run(async () => {
+    const fulfilled = jest.fn();
+
+    const rejected = jest.fn();
+
+    promiseHandler.silent(wait(2000));
+    promiseHandler.runAll().then(fulfilled).catch(rejected);
+    await wait(timeout);
+    expect(fulfilled).mockCallsToBe(...expected);
+    expect(rejected).mockCallsToBe();
+  });
+});
+
+test.each([
+  { expected: true, timeout: 1000 },
+  { expected: false, timeout: 2000 }
+])("running", async ({ expected, timeout }) => {
+  expect.hasAssertions();
+
+  await testUtils.run(async () => {
+    promiseHandler.silent(wait(2000));
+    await wait(timeout);
+    expect(promiseHandler.running()).toBe(expected);
   });
 });

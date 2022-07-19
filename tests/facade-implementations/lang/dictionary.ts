@@ -1,4 +1,9 @@
+/* eslint jest/max-expects: [warn, { max: 5 }] -- Ok */
+
+import type { LocaleName } from "@skylib/functions";
 import { implementations } from "@";
+import type { lang } from "@skylib/facades";
+import { typedef } from "@skylib/functions";
 
 const { Definitions, Dictionary, configure, getConfiguration, pluralReduce } =
   implementations.lang.dictionary;
@@ -44,16 +49,8 @@ const dictionary = Dictionary.create({
       Day: [
         "кто-что-он",
         {
-          "кого-чего-его": {
-            1: "Дня",
-            2: "Дней",
-            5: "Дней"
-          },
-          "кто-что-он": {
-            1: "День",
-            2: "Дня",
-            5: "Дней"
-          }
+          "кого-чего-его": { 1: "Дня", 2: "Дней", 5: "Дней" },
+          "кто-что-он": { 1: "День", 2: "Дня", 5: "Дней" }
         },
         { InXDays: "кого-чего-его" }
       ],
@@ -78,16 +75,8 @@ const dictionary = Dictionary.create({
       String: [
         "кто-что-она",
         {
-          "кого-что-ее": {
-            1: "Строку",
-            2: "Строки",
-            5: "Строк"
-          },
-          "кто-что-она": {
-            1: "Строка",
-            2: "Строки",
-            5: "Строк"
-          }
+          "кого-что-ее": { 1: "Строку", 2: "Строки", 5: "Строк" },
+          "кто-что-она": { 1: "Строка", 2: "Строки", 5: "Строк" }
         }
       ]
     }
@@ -103,142 +92,147 @@ test("Dictionary.context", () => {
   expect(dictionary.context("InXDays").context("InXDays").day).toBe("дня");
 });
 
-test("Dictionary.get", () => {
-  expect(dictionary.get("MustBeValidString")).toBe("Must be valid String");
-  expect(dictionary.get("mustBeValidString")).toBe("must be valid String");
-  expect(dictionary.get("MUSTBEVALIDSTRING")).toBe("MUST BE VALID STRING");
-  expect(dictionary.get("mustbevalidstring")).toBe("must be valid string");
+test.each([
+  {
+    expectedEn: "Must be valid String",
+    expectedRu: "Введите корректную Строку",
+    key: typedef<lang.Key>("MustBeValidString")
+  },
+  {
+    expectedEn: "must be valid String",
+    expectedRu: "введите корректную Строку",
+    key: typedef<lang.Key>("mustBeValidString")
+  },
+  {
+    expectedEn: "MUST BE VALID STRING",
+    expectedRu: "ВВЕДИТЕ КОРРЕКТНУЮ СТРОКУ",
+    key: typedef<lang.Key>("MUSTBEVALIDSTRING")
+  },
+  {
+    expectedEn: "must be valid string",
+    expectedRu: "введите корректную строку",
+    key: typedef<lang.Key>("mustbevalidstring")
+  },
+  {
+    expectedEn: "Unknown",
+    expectedRu: "Unknown",
+    key: typedef<lang.Key>("plain:Unknown")
+  }
+])("Dictionary.get", ({ expectedEn, expectedRu, key }) => {
+  expect(dictionary.get(key)).toBe(expectedEn);
   configure({ localeName: "ru-RU" });
-  expect(dictionary.get("MustBeValidString")).toBe("Введите корректную Строку");
-  expect(dictionary.get("mustBeValidString")).toBe("введите корректную Строку");
-  expect(dictionary.get("MUSTBEVALIDSTRING")).toBe("ВВЕДИТЕ КОРРЕКТНУЮ СТРОКУ");
-  expect(dictionary.get("mustbevalidstring")).toBe("введите корректную строку");
-  expect(dictionary.get("plain:Unknown")).toBe("Unknown");
-});
-
-test("Dictionary.getIfExists", () => {
-  expect(dictionary.getIfExists("Day")).toBe("Day");
-  configure({ localeName: "ru-RU" });
-  expect(dictionary.getIfExists("Day")).toBe("День");
-  expect(dictionary.getIfExists("plain:Unknown")).toBe("Unknown");
-  expect(dictionary.getIfExists("Unknown")).toBe("Unknown");
-});
-
-test("Dictionary.has", () => {
-  expect(dictionary.has("MustBeValidString")).toBeTrue();
-  expect(dictionary.has("mustBeValidString")).toBeTrue();
-  expect(dictionary.has("MUSTBEVALIDSTRING")).toBeTrue();
-  expect(dictionary.has("mustbevalidstring")).toBeTrue();
-  configure({ localeName: "ru-RU" });
-  expect(dictionary.has("MustBeValidString")).toBeTrue();
-  expect(dictionary.has("mustBeValidString")).toBeTrue();
-  expect(dictionary.has("MUSTBEVALIDSTRING")).toBeTrue();
-  expect(dictionary.has("mustbevalidstring")).toBeTrue();
-  expect(dictionary.has("plain:Unknown")).toBeTrue();
-  expect(dictionary.has("Unknown")).toBeFalse();
-});
-
-test("Dictionary.plain", () => {
-  expect(dictionary.plain("str1")).toStartWith("plain:str1");
-  expect(dictionary.plain("str2")).toStartWith("plain:str2");
+  expect(dictionary.get(key)).toBe(expectedRu);
 });
 
 test.each([
-  {
-    count: 1,
-    en: "1 day",
-    ru: "1 день"
-  },
-  {
-    count: 2,
-    en: "2 days",
-    ru: "2 дня"
-  },
-  {
-    count: 3,
-    en: "3 days",
-    ru: "3 дня"
-  },
-  {
-    count: 4,
-    en: "4 days",
-    ru: "4 дня"
-  },
-  {
-    count: 5,
-    en: "5 days",
-    ru: "5 дней"
-  }
-])("Dictionary.plural", ({ count, en, ru }) => {
-  expect(`${count} ${dictionary.plural(count).day}`).toBe(en);
+  { expectedEn: "Day", expectedRu: "День", key: "Day" },
+  { expectedEn: "Unknown", expectedRu: "Unknown", key: "plain:Unknown" },
+  { expectedEn: "Unknown", expectedRu: "Unknown", key: "Unknown" }
+])("Dictionary.getIfExists", ({ expectedEn, expectedRu, key }) => {
+  expect(dictionary.getIfExists(key)).toBe(expectedEn);
   configure({ localeName: "ru-RU" });
-  expect(`${count} ${dictionary.plural(count).day}`).toBe(ru);
+  expect(dictionary.getIfExists(key)).toBe(expectedRu);
+});
+
+test.each([
+  { expected: true, key: "MustBeValidString" },
+  { expected: true, key: "mustBeValidString" },
+  { expected: true, key: "MUSTBEVALIDSTRING" },
+  { expected: true, key: "mustbevalidstring" },
+  { expected: true, key: "plain:Unknown" },
+  { expected: false, key: "Unknown" }
+])("Dictionary.has", ({ expected, key }) => {
+  expect(dictionary.has(key)).toBe(expected);
+  configure({ localeName: "ru-RU" });
+  expect(dictionary.has(key)).toBe(expected);
+});
+
+test.each(["str1", "str2"])("Dictionary.plain", str => {
+  expect(dictionary.plain(str)).toStartWith(`plain:${str}`);
+});
+
+test.each([
+  { count: 1, expectedEn: "1 day", expectedRu: "1 день" },
+  { count: 2, expectedEn: "2 days", expectedRu: "2 дня" },
+  { count: 3, expectedEn: "3 days", expectedRu: "3 дня" },
+  { count: 4, expectedEn: "4 days", expectedRu: "4 дня" },
+  { count: 5, expectedEn: "5 days", expectedRu: "5 дней" }
+])("Dictionary.plural", ({ count, expectedEn, expectedRu }) => {
+  expect(`${count} ${dictionary.plural(count).day}`).toBe(expectedEn);
+  configure({ localeName: "ru-RU" });
+  expect(`${count} ${dictionary.plural(count).day}`).toBe(expectedRu);
 });
 
 test.each(["string", "String"])("Dictionary.with: FieldIsTooShort", field => {
-  const en = "String must have at least 10 characters";
-
-  const ru = "Строка должна содержать не менее 10 символов";
-
   const sub = dictionary.with("field", field).with("min", 10);
 
-  expect(sub.FieldIsTooShort).toBe(en);
+  const expectedEn = "String must have at least 10 characters";
+
+  const expectedRu = "Строка должна содержать не менее 10 символов";
+
+  expect(sub.FieldIsTooShort).toBe(expectedEn);
   configure({ localeName: "ru-RU" });
-  expect(sub.FieldIsTooShort).toBe(ru);
+  expect(sub.FieldIsTooShort).toBe(expectedRu);
 });
 
 test.each([
   { field: "confirm", field2: "password" },
   { field: "Confirm", field2: "Password" }
 ])("Dictionary.with: MustBeSameAs", ({ field, field2 }) => {
-  const en = "Must be same as password";
-
-  const ru = "Подтверждение пароля должно совпадать с паролем";
-
   const sub = dictionary.with("field", field).with("field2", field2);
 
-  expect(sub.MustBeSameAs).toBe(en);
+  const expectedEn = "Must be same as password";
+
+  const expectedRu = "Подтверждение пароля должно совпадать с паролем";
+
+  expect(sub.MustBeSameAs).toBe(expectedEn);
   configure({ localeName: "ru-RU" });
-  expect(sub.MustBeSameAs).toBe(ru);
+  expect(sub.MustBeSameAs).toBe(expectedRu);
 });
 
 test.each(["string", "String"])("Dictionary.with: MustBeValidField", field => {
-  const en = "Must be valid string";
-
-  const ru = "Введите корректную строку";
-
   const sub = dictionary.with("field", field);
 
-  expect(sub.MustBeValidField).toBe(en);
+  const expectedEn = "Must be valid string";
+
+  const expectedRu = "Введите корректную строку";
+
+  expect(sub.MustBeValidField).toBe(expectedEn);
   configure({ localeName: "ru-RU" });
-  expect(sub.MustBeValidField).toBe(ru);
+  expect(sub.MustBeValidField).toBe(expectedRu);
 });
 
-test("configure, getConfiguration", () => {
-  expect(getConfiguration().localeName).toBe("en-US");
-  configure({ localeName: "ru-RU" });
-  expect(getConfiguration().localeName).toBe("ru-RU");
+test.each([
+  { config: {}, expected: "en-US" },
+  { config: { localeName: typedef<LocaleName>("ru-RU") }, expected: "ru-RU" }
+])("configure, getConfiguration", ({ config, expected }) => {
+  configure(config);
+  expect(getConfiguration().localeName).toBe(expected);
 });
 
-test("pluralReduce", () => {
-  expect(pluralReduce(0)).toBe(2);
-  expect(pluralReduce(1)).toBe(1);
-  expect(pluralReduce(2)).toBe(2);
-  expect(pluralReduce(3)).toBe(2);
+test.each([
+  { count: 0, expected: 2 },
+  { count: 1, expected: 1 },
+  { count: 2, expected: 2 },
+  { count: 3, expected: 2 }
+])("pluralReduce", ({ count, expected }) => {
+  expect(pluralReduce(count)).toBe(expected);
 });
 
-test("pluralReduce.ru", () => {
-  expect(pluralReduce.ru(0)).toBe(5);
-  expect(pluralReduce.ru(1)).toBe(1);
-  expect(pluralReduce.ru(2)).toBe(2);
-  expect(pluralReduce.ru(3)).toBe(2);
-  expect(pluralReduce.ru(4)).toBe(2);
-  expect(pluralReduce.ru(5)).toBe(5);
-  expect(pluralReduce.ru(10)).toBe(5);
-  expect(pluralReduce.ru(20)).toBe(5);
-  expect(pluralReduce.ru(21)).toBe(1);
-  expect(pluralReduce.ru(22)).toBe(2);
-  expect(pluralReduce.ru(23)).toBe(2);
-  expect(pluralReduce.ru(24)).toBe(2);
-  expect(pluralReduce.ru(25)).toBe(5);
+test.each([
+  { count: 0, expected: 5 },
+  { count: 1, expected: 1 },
+  { count: 2, expected: 2 },
+  { count: 3, expected: 2 },
+  { count: 4, expected: 2 },
+  { count: 5, expected: 5 },
+  { count: 10, expected: 5 },
+  { count: 20, expected: 5 },
+  { count: 21, expected: 1 },
+  { count: 22, expected: 2 },
+  { count: 23, expected: 2 },
+  { count: 24, expected: 2 },
+  { count: 25, expected: 5 }
+])("pluralReduce.ru", ({ count, expected }) => {
+  expect(pluralReduce.ru(count)).toBe(expected);
 });

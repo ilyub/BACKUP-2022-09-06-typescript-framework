@@ -1,5 +1,7 @@
+/* eslint jest/max-expects: [warn, { max: 6 }] -- Ok */
+
 import * as testUtils from "@skylib/functions/dist/test-utils";
-import { datetime, uniqueId } from "@skylib/facades";
+import { RelativeDate, datetime, uniqueId } from "@skylib/facades";
 import { Database } from "@/facade-implementations/database/pouchdb-wrapper/Database";
 import type { database } from "@skylib/facades";
 import { implementations } from "@";
@@ -33,8 +35,8 @@ test("create: config.reindexThreshold", async () => {
 
     await expect(
       Promise.all([
-        unsettled(db1, { d: { dateGt: ["now"] } }),
-        unsettled(db2, { d: { dateGt: ["now"] } })
+        unsettled(db1, { d: { dateGt: [RelativeDate.now] } }),
+        unsettled(db2, { d: { dateGt: [RelativeDate.now] } })
       ])
     ).resolves.toStrictEqual([3, 3]);
 
@@ -42,8 +44,8 @@ test("create: config.reindexThreshold", async () => {
 
     await expect(
       Promise.all([
-        unsettled(db1, { d: { dateGt: ["now"] } }),
-        unsettled(db2, { d: { dateGt: ["now"] } })
+        unsettled(db1, { d: { dateGt: [RelativeDate.now] } }),
+        unsettled(db2, { d: { dateGt: [RelativeDate.now] } })
       ])
     ).resolves.toStrictEqual([2, 3]);
 
@@ -51,8 +53,8 @@ test("create: config.reindexThreshold", async () => {
 
     await expect(
       Promise.all([
-        unsettled(db1, { d: { dateGt: ["now"] } }),
-        unsettled(db2, { d: { dateGt: ["now"] } })
+        unsettled(db1, { d: { dateGt: [RelativeDate.now] } }),
+        unsettled(db2, { d: { dateGt: [RelativeDate.now] } })
       ])
     ).resolves.toStrictEqual([1, 1]);
 
@@ -73,36 +75,9 @@ test("create: options.caseSensitiveSorting", async () => {
   const db2 = pouchdb.create(uniqueId(), { caseSensitiveSorting: true });
 
   const docs = [
-    {
-      attachedDocs: [
-        {
-          _id: 0,
-          _rev: 1,
-          y: "eee"
-        }
-      ],
-      x: "bbb"
-    },
-    {
-      attachedDocs: [
-        {
-          _id: 0,
-          _rev: 1,
-          y: "DDD"
-        }
-      ],
-      x: "AAA"
-    },
-    {
-      attachedDocs: [
-        {
-          _id: 0,
-          _rev: 1,
-          y: "FFF"
-        }
-      ],
-      x: "CCC"
-    }
+    { attachedDocs: [{ _id: 0, _rev: 1, y: "eee" }], x: "bbb" },
+    { attachedDocs: [{ _id: 0, _rev: 1, y: "DDD" }], x: "AAA" },
+    { attachedDocs: [{ _id: 0, _rev: 1, y: "FFF" }], x: "CCC" }
   ] as const;
 
   await Promise.all([db1.bulkDocs(docs), db2.bulkDocs(docs)]);
@@ -166,17 +141,12 @@ test("create: options.migrations", async () => {
       ]
     });
 
-    {
-      await wait(1000);
-      expect(callback1).mockCallsToBe();
-      expect(callback2).mockCallsToBe();
-    }
-
-    {
-      await expect(db2.exists(id)).resolves.toBeTrue();
-      expect(callback1).mockCallsToBe();
-      expect(callback2).mockCallsToBe([db2]);
-    }
+    await wait(1000);
+    expect(callback1).mockCallsToBe();
+    expect(callback2).mockCallsToBe();
+    await expect(db2.exists(id)).resolves.toBeTrue();
+    expect(callback1).mockCallsToBe();
+    expect(callback2).mockCallsToBe([db2]);
   });
 });
 
@@ -205,9 +175,9 @@ test("create: options.retries = 0", async () => {
 
     await expect(
       Promise.all([
-        unsettled({ d: { dateEq: ["now"] } }),
-        unsettled({ d: { dateEq: ["now"] } }),
-        unsettled({ d: { dateEq: ["now"] } })
+        unsettled({ d: { dateEq: [RelativeDate.now] } }),
+        unsettled({ d: { dateEq: [RelativeDate.now] } }),
+        unsettled({ d: { dateEq: [RelativeDate.now] } })
       ])
     ).resolves.toStrictEqual([3, 3, 3]);
 
@@ -215,9 +185,9 @@ test("create: options.retries = 0", async () => {
 
     await expect(
       Promise.all([
-        unsettled({ d: { dateEq: ["now"] } }),
-        unsettled({ d: { dateEq: ["now"] } }),
-        unsettled({ d: { dateEq: ["now"] } })
+        unsettled({ d: { dateEq: [RelativeDate.now] } }),
+        unsettled({ d: { dateEq: [RelativeDate.now] } }),
+        unsettled({ d: { dateEq: [RelativeDate.now] } })
       ])
     ).rejects.toStrictEqual(new PouchRetryError("Failed after 0 retries"));
 
@@ -256,9 +226,9 @@ test("create: options.retries = 1", async () => {
 
     await expect(
       Promise.all([
-        unsettled({ d: { dateEq: ["now"] } }),
-        unsettled({ d: { dateEq: ["now"] } }),
-        unsettled({ d: { dateEq: ["now"] } })
+        unsettled({ d: { dateEq: [RelativeDate.now] } }),
+        unsettled({ d: { dateEq: [RelativeDate.now] } }),
+        unsettled({ d: { dateEq: [RelativeDate.now] } })
       ])
     ).resolves.toStrictEqual([3, 3, 3]);
 
@@ -266,9 +236,9 @@ test("create: options.retries = 1", async () => {
 
     await expect(
       Promise.all([
-        unsettled({ d: { dateEq: ["now"] } }),
-        unsettled({ d: { dateEq: ["now"] } }),
-        unsettled({ d: { dateEq: ["now"] } })
+        unsettled({ d: { dateEq: [RelativeDate.now] } }),
+        unsettled({ d: { dateEq: [RelativeDate.now] } }),
+        unsettled({ d: { dateEq: [RelativeDate.now] } })
       ])
     ).resolves.toStrictEqual([2, 2, 2]);
 

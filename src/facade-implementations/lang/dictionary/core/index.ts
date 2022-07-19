@@ -3,6 +3,7 @@ import type {
   NumStr,
   PartialRecord,
   Rec,
+  Writable,
   strings
 } from "@skylib/functions";
 import { defineFn, o, onDemand } from "@skylib/functions";
@@ -10,7 +11,7 @@ import type { lang } from "@skylib/facades";
 import { reactiveStorage } from "@skylib/facades";
 
 export const moduleConfig = onDemand(() =>
-  reactiveStorage<Configuration>({ localeName: "en-US" })
+  reactiveStorage<Writable<Configuration>>({ localeName: "en-US" })
 );
 
 export const pluralReduce = defineFn<PluralReduce, PluralReduceInternational>(
@@ -20,7 +21,7 @@ export const pluralReduce = defineFn<PluralReduce, PluralReduceInternational>(
    * @param count - Count.
    * @returns Reduced count.
    */
-  (count: number) => {
+  (count: number): number => {
     count = Math.abs(count);
 
     return Math.abs(count) === 1 ? 1 : 2;
@@ -32,7 +33,7 @@ export const pluralReduce = defineFn<PluralReduce, PluralReduceInternational>(
      * @param count - Count.
      * @returns Reduced count.
      */
-    ru: (count: number) => {
+    ru: (count: number): number => {
       count = Math.abs(count);
 
       if (count >= 10 && count <= 19) return 5;

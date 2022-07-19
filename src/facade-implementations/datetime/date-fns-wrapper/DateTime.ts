@@ -32,6 +32,7 @@ import {
 import { formatStrings, moduleConfig } from "./core";
 import type { FirstDayOfWeek } from "./core";
 import type { NumStr } from "@skylib/functions";
+import { TimeUnit } from "@skylib/facades";
 import type { datetime } from "@skylib/facades";
 import { is } from "@skylib/functions";
 
@@ -61,50 +62,46 @@ export class DateTime implements datetime.DateTime {
     }
   }
 
-  public add(amount: number, unit: datetime.Unit): datetime.DateTime {
+  public add(amount: number, unit: TimeUnit): datetime.DateTime {
     const duration: Duration = {};
 
     switch (unit) {
-      case "minute":
-      case "minutes":
+      case TimeUnit.minute:
+      case TimeUnit.minutes:
         duration.minutes = amount;
 
         break;
 
-      case "hour":
-      case "hours":
+      case TimeUnit.hour:
+      case TimeUnit.hours:
         duration.hours = amount;
 
         break;
 
-      case "day":
-      case "days":
+      case TimeUnit.day:
+      case TimeUnit.days:
         duration.days = amount;
 
         break;
 
-      case "week":
-      case "weeks":
+      case TimeUnit.week:
+      case TimeUnit.weeks:
         duration.weeks = amount;
 
         break;
 
-      case "month":
-      case "months":
+      case TimeUnit.month:
+      case TimeUnit.months:
         duration.months = amount;
 
         break;
 
-      case "year":
-      case "years":
+      case TimeUnit.year:
+      case TimeUnit.years:
         duration.years = amount;
     }
 
     return new DateTime(add(this.value, duration));
-  }
-
-  public clone(): datetime.DateTime {
-    return new DateTime(this);
   }
 
   public dayOfMonth(): number {
@@ -226,42 +223,42 @@ export class DateTime implements datetime.DateTime {
     return new DateTime(setYear(this.value, year));
   }
 
-  public sub(amount: number, unit: datetime.Unit): datetime.DateTime {
+  public sub(amount: number, unit: TimeUnit): datetime.DateTime {
     const duration: Duration = {};
 
     switch (unit) {
-      case "minute":
-      case "minutes":
+      case TimeUnit.minute:
+      case TimeUnit.minutes:
         duration.minutes = amount;
 
         break;
 
-      case "hour":
-      case "hours":
+      case TimeUnit.hour:
+      case TimeUnit.hours:
         duration.hours = amount;
 
         break;
 
-      case "day":
-      case "days":
+      case TimeUnit.day:
+      case TimeUnit.days:
         duration.days = amount;
 
         break;
 
-      case "week":
-      case "weeks":
+      case TimeUnit.week:
+      case TimeUnit.weeks:
         duration.weeks = amount;
 
         break;
 
-      case "month":
-      case "months":
+      case TimeUnit.month:
+      case TimeUnit.months:
         duration.months = amount;
 
         break;
 
-      case "year":
-      case "years":
+      case TimeUnit.year:
+      case TimeUnit.years:
         duration.years = amount;
     }
 

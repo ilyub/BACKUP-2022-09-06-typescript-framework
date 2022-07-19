@@ -1,3 +1,5 @@
+/* eslint jest/max-expects: [warn, { max: 12 }] -- Ok */
+
 import * as testUtils from "@skylib/functions/dist/test-utils";
 import { database, handlePromise, uniqueId } from "@skylib/facades";
 import { fn, wait } from "@skylib/functions";
@@ -15,11 +17,7 @@ test("get", async () => {
 
   const { rev } = await db.put({ _id: id, x: 1 });
 
-  await expect(db.get(id)).resolves.toStrictEqual({
-    _id: id,
-    _rev: rev,
-    x: 1
-  });
+  await expect(db.get(id)).resolves.toStrictEqual({ _id: id, _rev: rev, x: 1 });
 });
 
 test("get: attachedDocs", async () => {
@@ -40,24 +38,19 @@ test("get: attachedDocs", async () => {
   });
 });
 
-test("get: deleted", async () => {
+test.each([
+  fn.noop,
+  async (id: string, db: database.Database) => {
+    await db.put({ _deleted: true, _id: id });
+  }
+])("get: missing", async subtest => {
   const db = pouchdb.create(uniqueId());
 
   const id = uniqueId();
 
   const error = new PouchNotFoundError("missing");
 
-  await db.put({ _deleted: true, _id: id });
-  await expect(db.get(id)).rejects.toStrictEqual(error);
-});
-
-test("get: missing", async () => {
-  const db = pouchdb.create(uniqueId());
-
-  const id = uniqueId();
-
-  const error = new PouchNotFoundError("missing");
-
+  await subtest(id, db);
   await expect(db.get(id)).rejects.toStrictEqual(error);
 });
 
@@ -84,30 +77,28 @@ test("getAttached", async () => {
   });
 });
 
-test("getAttached: deleted", async () => {
+test.each([
+  { error: new PouchNotFoundError("missing"), subtest: fn.noop },
+  {
+    error: new PouchNotFoundError("Missing attached document"),
+    subtest: async (id: string, db: database.Database) => {
+      await db.put({ _id: id });
+    }
+  },
+  {
+    error: new PouchNotFoundError("Missing attached document"),
+    subtest: async (id: string, db: database.Database) => {
+      await db.put({ _id: id });
+      await db.putAttached(id, { _deleted: true });
+    }
+  }
+])("getAttached: missing", async ({ error, subtest }) => {
   const db = pouchdb.create(uniqueId());
 
   const id = uniqueId();
 
-  const error = new PouchNotFoundError("Missing attached document");
-
-  await db.put({ _id: id });
-  await db.putAttached(id, { _deleted: true });
+  await subtest(id, db);
   await expect(db.getAttached(0, id)).rejects.toStrictEqual(error);
-});
-
-test("getAttached: missing", async () => {
-  const db = pouchdb.create(uniqueId());
-
-  const id = uniqueId();
-
-  const error1 = new PouchNotFoundError("missing");
-
-  const error2 = new PouchNotFoundError("Missing attached document");
-
-  await expect(db.getAttached(0, id)).rejects.toStrictEqual(error1);
-  await db.put({ _id: id });
-  await expect(db.getAttached(0, id)).rejects.toStrictEqual(error2);
 });
 
 test("reactiveGet", async () => {
@@ -125,24 +116,33 @@ test("reactiveGet", async () => {
     const expected1 = { _id: id, _rev: rev1 } as const;
 
     expect(result.loaded).toBeFalse();
+    expect(result.loading).toBeTrue();
+    expect(result.value).toBeUndefined();
     await handlePromise.runAll();
     expect(result.loaded).toBeTrue();
+    expect(result.loading).toBeFalse();
     expect(result.value).toStrictEqual(expected1);
 
     const { rev: rev2 } = await db.put({ _id: id, _rev: rev1 });
 
     const expected2 = { _id: id, _rev: rev2 } as const;
 
-    await wait(1000);
-    expect(result.value).toStrictEqual(expected2);
-    result.unsubscribe();
-    await db.put({ _id: id, _rev: rev2 });
-    await wait(1000);
-    expect(result.value).toStrictEqual(expected2);
+    {
+      await wait(1000);
+      expect(result.value).toStrictEqual(expected2);
+    }
+
+    {
+      result.unsubscribe();
+      await db.put({ _id: id, _rev: rev2 });
+      expect(result.loading).toBeFalse();
+      await wait(1000);
+      expect(result.value).toStrictEqual(expected2);
+    }
   });
 });
 
-test("reactiveGet: PouchNotFoundError", async () => {
+test("reactiveGet: missing", async () => {
   expect.hasAssertions();
 
   await testUtils.run(async () => {
@@ -152,15 +152,11 @@ test("reactiveGet: PouchNotFoundError", async () => {
 
     const { rev } = await db.put({ _id: id });
 
-    const doc: database.PutDocument = {
-      _deleted: true,
-      _id: id,
-      _rev: rev
-    };
+    const doc: database.PutDocument = { _deleted: true, _id: id, _rev: rev };
 
-    const errorSpy = jest.spyOn(console, "error");
+    const errorFn = jest.spyOn(console, "error");
 
-    const args = [
+    const expected = [
       'Error in .on("change", function):',
       new implementations.database.PouchWrapper.PouchNotFoundError(
         "Missing document"
@@ -169,9 +165,9 @@ test("reactiveGet: PouchNotFoundError", async () => {
 
     db.reactiveGet(id);
     await db.put(doc);
-    errorSpy.mockImplementationOnce(fn.noop);
+    errorFn.mockImplementationOnce(fn.noop);
     await wait(1000);
-    expect(errorSpy).mockCallsToBe(args);
+    expect(errorFn).mockCallsToBe(expected);
   });
 });
 
@@ -201,8 +197,11 @@ test("reactiveGetAttached", async () => {
     } as const;
 
     expect(result.loaded).toBeFalse();
+    expect(result.loading).toBeTrue();
+    expect(result.value).toBeUndefined();
     await handlePromise.runAll();
     expect(result.loaded).toBeTrue();
+    expect(result.loading).toBeFalse();
     expect(result.value).toStrictEqual(expected1);
 
     const { parentRev: rev2 } = await db.putAttached(id, { _id: 0, _rev: 1 });
@@ -218,16 +217,22 @@ test("reactiveGetAttached", async () => {
       }
     } as const;
 
-    await wait(1000);
-    expect(result.value).toStrictEqual(expected2);
-    result.unsubscribe();
-    await db.putAttached(id, { _id: 0, _rev: 2 });
-    await wait(1000);
-    expect(result.value).toStrictEqual(expected2);
+    {
+      await wait(1000);
+      expect(result.value).toStrictEqual(expected2);
+    }
+
+    {
+      result.unsubscribe();
+      await db.putAttached(id, { _id: 0, _rev: 2 });
+      expect(result.loading).toBeFalse();
+      await wait(1000);
+      expect(result.value).toStrictEqual(expected2);
+    }
   });
 });
 
-test("reactiveGetAttached: PouchNotFoundError", async () => {
+test("reactiveGetAttached: missing", async () => {
   expect.hasAssertions();
 
   await testUtils.run(async () => {
@@ -244,9 +249,9 @@ test("reactiveGetAttached: PouchNotFoundError", async () => {
       _rev: 1
     };
 
-    const errorSpy = jest.spyOn(console, "error");
+    const errorFn = jest.spyOn(console, "error");
 
-    const args = [
+    const expected = [
       'Error in .on("change", function):',
       new implementations.database.PouchWrapper.PouchNotFoundError(
         "Missing attached document"
@@ -255,8 +260,8 @@ test("reactiveGetAttached: PouchNotFoundError", async () => {
 
     db.reactiveGetAttached(0, id);
     await db.putAttached(id, doc);
-    errorSpy.mockImplementationOnce(fn.noop);
+    errorFn.mockImplementationOnce(fn.noop);
     await wait(1000);
-    expect(errorSpy).mockCallsToBe(args);
+    expect(errorFn).mockCallsToBe(expected);
   });
 });

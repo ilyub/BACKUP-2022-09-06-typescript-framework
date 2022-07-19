@@ -1,12 +1,10 @@
+/* eslint jest/max-expects: [warn, { max: 6 }] -- Ok */
+
 import { classes } from "@";
 import { uniqueId } from "@skylib/facades";
 
 test.each<classes.database.AttachedItem.ExistingAttachedItemDoc>([
-  {
-    _id: 0,
-    _rev: 1,
-    parentDoc: { _id: uniqueId(), _rev: uniqueId() }
-  },
+  { _id: 0, _rev: 1, parentDoc: { _id: uniqueId(), _rev: uniqueId() } },
   {
     _deleted: true,
     _id: 0,

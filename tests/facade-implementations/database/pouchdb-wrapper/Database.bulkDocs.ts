@@ -1,3 +1,5 @@
+/* eslint jest/max-expects: [warn, { max: 4 }] -- Ok */
+
 import { a } from "@skylib/functions";
 import { implementations } from "@";
 import { uniqueId } from "@skylib/facades";
@@ -30,23 +32,11 @@ test("bulkDocs", async () => {
     { id: id3, rev: rev3 }
   ] as const;
 
-  const expected1 = {
-    _id: id1,
-    _rev: rev1,
-    x: 1
-  } as const;
+  const expected1 = { _id: id1, _rev: rev1, x: 1 } as const;
 
-  const expected2 = {
-    _id: id2,
-    _rev: rev2,
-    x: 2
-  } as const;
+  const expected2 = { _id: id2, _rev: rev2, x: 2 } as const;
 
-  const expected3 = {
-    _id: id3,
-    _rev: rev3,
-    x: 3
-  } as const;
+  const expected3 = { _id: id3, _rev: rev3, x: 3 } as const;
 
   expect(responses).toStrictEqual(expectedResponses);
   expect(doc1).toStrictEqual(expected1);

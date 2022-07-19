@@ -1,5 +1,4 @@
 import * as functionsTestUtils from "@skylib/functions/dist/test-utils";
-// eslint-disable-next-line @skylib/disallow-import/no-internal-modules -- Wait for @skylib/config update
 import * as testUtils from "./src/test-utils";
 import { evaluate } from "@skylib/functions";
 import { implementations } from "./src";

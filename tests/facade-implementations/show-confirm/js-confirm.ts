@@ -1,3 +1,5 @@
+/* eslint jest/max-expects: [warn, { max: 4 }] -- Ok */
+
 import { evaluate } from "@skylib/functions";
 import { implementations } from "@";
 

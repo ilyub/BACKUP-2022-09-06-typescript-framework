@@ -1,21 +1,21 @@
-/* eslint-disable no-warning-comments -- Wait for @skylib/facades update */
+/* eslint jest/max-expects: [warn, { max: 9 }] -- Ok */
 
 import * as testUtils from "@skylib/functions/dist/test-utils";
+import {
+  RelativeDate,
+  TimeUnit,
+  database,
+  datetime,
+  handlePromise,
+  uniqueId
+} from "@skylib/facades";
 import { a, typedef, wait } from "@skylib/functions";
-import { database, datetime, handlePromise, uniqueId } from "@skylib/facades";
 import { implementations } from "@";
 import type { unknowns } from "@skylib/functions";
 
 const pouchdb = new implementations.database.PouchWrapper();
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
-
-interface StoredAttachedDocument extends database.BaseStoredAttachedDocument {
-  readonly [K: string]: unknown;
-}
-
-// fixme
-type StoredAttachedDocuments = readonly StoredAttachedDocument[];
 
 test("query: Unexpected value type", async () => {
   const db = pouchdb.create(uniqueId());
@@ -25,7 +25,32 @@ test("query: Unexpected value type", async () => {
   await expect(db.query({ x: { eq: null } })).rejects.toStrictEqual(error);
 });
 
-test("query: boolean", async () => {
+test("query: conditions", async () => {
+  const db = pouchdb.create(uniqueId());
+
+  await db.bulkDocs([
+    { x: 1, y: "a" },
+    { x: 2, y: "b" },
+    { x: 3, y: "c" }
+  ]);
+
+  await expect(
+    Promise.all([
+      query({ x: { gt: 1 }, y: { lt: "c" } }),
+      query([{ x: { gt: 1 } }, { x: { lt: 3 } }]),
+      query([{ x: { gt: 1 } }, { x: { gt: 2 } }]),
+      query([{ x: { gt: 2 } }, { x: { gt: 1 } }])
+    ])
+  ).resolves.toStrictEqual([[2], [2], [3], [3]]);
+
+  async function query(conditions: database.Conditions): Promise<unknowns> {
+    const result = await db.query(conditions);
+
+    return a.sort(result.map(doc => doc["x"]));
+  }
+});
+
+test("query: conditions: boolean", async () => {
   const db = pouchdb.create(uniqueId());
 
   await db.bulkDocs([{ x: true }, { x: false }, {}]);
@@ -55,127 +80,7 @@ test("query: boolean", async () => {
   }
 });
 
-test("query: conditions", async () => {
-  const db = pouchdb.create(uniqueId());
-
-  await db.bulkDocs([
-    { x: 1, y: "a" },
-    { x: 2, y: "b" },
-    { x: 3, y: "c" }
-  ]);
-
-  await expect(
-    Promise.all([
-      query({ x: { gt: 1 }, y: { lt: "c" } }),
-      query([{ x: { gt: 1 } }, { x: { lt: 3 } }]),
-      query([{ x: { gt: 1 } }, { x: { gt: 2 } }]),
-      query([{ x: { gt: 2 } }, { x: { gt: 1 } }])
-    ])
-  ).resolves.toStrictEqual([[2], [2], [3], [3]]);
-
-  async function query(conditions: database.Conditions): Promise<unknowns> {
-    const result = await db.query(conditions);
-
-    return a.sort(result.map(doc => doc["x"]));
-  }
-});
-
-test("query: datetime + condition type", async () => {
-  expect.hasAssertions();
-
-  await testUtils.run(async () => {
-    testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:30").toDate());
-
-    const db = pouchdb.create(uniqueId());
-
-    await db.bulkDocs([
-      { d: "2001-02-15 12:30" },
-      { d: "2001-02-16 00:00" },
-      { d: "2001-02-15 13:00" },
-      { d: "2001-03-01 00:00" },
-      { d: "2001-02-18 00:00" },
-      { d: "2001-02-15 00:00" },
-      { d: "2001-02-15 12:00" },
-      { d: "2001-02-01 00:00" },
-      { d: "2001-02-11 00:00" }
-    ]);
-
-    await expect(
-      Promise.all([
-        query({ d: { dateEq: ["now"] } }),
-        query({ d: { dateEq: ["endOfDay"] } }),
-        query({ d: { dateEq: ["endOfHour"] } }),
-        query({ d: { dateEq: ["endOfMonth"] } }),
-        query({ d: { dateEq: ["endOfWeek"] } }),
-        query({ d: { dateEq: ["startOfDay"] } }),
-        query({ d: { dateEq: ["startOfHour"] } }),
-        query({ d: { dateEq: ["startOfMonth"] } }),
-        query({ d: { dateEq: ["startOfWeek"] } })
-      ])
-    ).resolves.toStrictEqual([
-      ["2001-02-15 12:30"],
-      ["2001-02-16 00:00"],
-      ["2001-02-15 13:00"],
-      ["2001-03-01 00:00"],
-      ["2001-02-18 00:00"],
-      ["2001-02-15 00:00"],
-      ["2001-02-15 12:00"],
-      ["2001-02-01 00:00"],
-      ["2001-02-11 00:00"]
-    ]);
-
-    async function query(conditions: database.Conditions): Promise<unknowns> {
-      const result = await db.query(conditions);
-
-      return a.sort(result.map(doc => doc["d"]));
-    }
-  });
-});
-
-test("query: datetime + condition unit", async () => {
-  expect.hasAssertions();
-
-  await testUtils.run(async () => {
-    testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:30").toDate());
-
-    const db = pouchdb.create(uniqueId());
-
-    await db.bulkDocs([
-      { d: "2001-02-15 12:31" },
-      { d: "2001-02-15 12:28" },
-      { d: "2001-02-15 13:30" },
-      { d: "2001-02-15 10:30" },
-      { d: "2001-02-16 12:30" },
-      { d: "2001-02-13 12:30" }
-    ]);
-
-    await expect(
-      Promise.all([
-        query({ d: { dateEq: ["now", "+", 1, "minute"] } }),
-        query({ d: { dateEq: ["now", "-", 2, "minutes"] } }),
-        query({ d: { dateEq: ["now", "+", 1, "hour"] } }),
-        query({ d: { dateEq: ["now", "-", 2, "hours"] } }),
-        query({ d: { dateEq: ["now", "+", 1, "day"] } }),
-        query({ d: { dateEq: ["now", "-", 2, "days"] } })
-      ])
-    ).resolves.toStrictEqual([
-      ["2001-02-15 12:31"],
-      ["2001-02-15 12:28"],
-      ["2001-02-15 13:30"],
-      ["2001-02-15 10:30"],
-      ["2001-02-16 12:30"],
-      ["2001-02-13 12:30"]
-    ]);
-
-    async function query(conditions: database.Conditions): Promise<unknowns> {
-      const result = await db.query(conditions);
-
-      return a.sort(result.map(doc => doc["d"]));
-    }
-  });
-});
-
-test("query: datetime + operator", async () => {
+test("query: conditions: datetime", async () => {
   const db = pouchdb.create(uniqueId());
 
   await db.bulkDocs([
@@ -209,7 +114,102 @@ test("query: datetime + operator", async () => {
   }
 });
 
-test("query: number", async () => {
+test("query: conditions: datetime RelativeDate", async () => {
+  expect.hasAssertions();
+
+  await testUtils.run(async () => {
+    testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:30").toDate());
+
+    const db = pouchdb.create(uniqueId());
+
+    await db.bulkDocs([
+      { d: "2001-02-15 12:30" },
+      { d: "2001-02-16 00:00" },
+      { d: "2001-02-15 13:00" },
+      { d: "2001-03-01 00:00" },
+      { d: "2001-02-18 00:00" },
+      { d: "2001-02-15 00:00" },
+      { d: "2001-02-15 12:00" },
+      { d: "2001-02-01 00:00" },
+      { d: "2001-02-11 00:00" }
+    ]);
+
+    await expect(
+      Promise.all([
+        query({ d: { dateEq: [RelativeDate.now] } }),
+        query({ d: { dateEq: [RelativeDate.endOfDay] } }),
+        query({ d: { dateEq: [RelativeDate.endOfHour] } }),
+        query({ d: { dateEq: [RelativeDate.endOfMonth] } }),
+        query({ d: { dateEq: [RelativeDate.endOfWeek] } }),
+        query({ d: { dateEq: [RelativeDate.startOfDay] } }),
+        query({ d: { dateEq: [RelativeDate.startOfHour] } }),
+        query({ d: { dateEq: [RelativeDate.startOfMonth] } }),
+        query({ d: { dateEq: [RelativeDate.startOfWeek] } })
+      ])
+    ).resolves.toStrictEqual([
+      ["2001-02-15 12:30"],
+      ["2001-02-16 00:00"],
+      ["2001-02-15 13:00"],
+      ["2001-03-01 00:00"],
+      ["2001-02-18 00:00"],
+      ["2001-02-15 00:00"],
+      ["2001-02-15 12:00"],
+      ["2001-02-01 00:00"],
+      ["2001-02-11 00:00"]
+    ]);
+
+    async function query(conditions: database.Conditions): Promise<unknowns> {
+      const result = await db.query(conditions);
+
+      return a.sort(result.map(doc => doc["d"]));
+    }
+  });
+});
+
+test("query: conditions: datetime TimeUnit", async () => {
+  expect.hasAssertions();
+
+  await testUtils.run(async () => {
+    testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:30").toDate());
+
+    const db = pouchdb.create(uniqueId());
+
+    await db.bulkDocs([
+      { d: "2001-02-15 12:31" },
+      { d: "2001-02-15 12:28" },
+      { d: "2001-02-15 13:30" },
+      { d: "2001-02-15 10:30" },
+      { d: "2001-02-16 12:30" },
+      { d: "2001-02-13 12:30" }
+    ]);
+
+    await expect(
+      Promise.all([
+        query({ d: { dateEq: [RelativeDate.now, "+", 1, TimeUnit.minute] } }),
+        query({ d: { dateEq: [RelativeDate.now, "-", 2, TimeUnit.minutes] } }),
+        query({ d: { dateEq: [RelativeDate.now, "+", 1, TimeUnit.hour] } }),
+        query({ d: { dateEq: [RelativeDate.now, "-", 2, TimeUnit.hours] } }),
+        query({ d: { dateEq: [RelativeDate.now, "+", 1, TimeUnit.day] } }),
+        query({ d: { dateEq: [RelativeDate.now, "-", 2, TimeUnit.days] } })
+      ])
+    ).resolves.toStrictEqual([
+      ["2001-02-15 12:31"],
+      ["2001-02-15 12:28"],
+      ["2001-02-15 13:30"],
+      ["2001-02-15 10:30"],
+      ["2001-02-16 12:30"],
+      ["2001-02-13 12:30"]
+    ]);
+
+    async function query(conditions: database.Conditions): Promise<unknowns> {
+      const result = await db.query(conditions);
+
+      return a.sort(result.map(doc => doc["d"]));
+    }
+  });
+});
+
+test("query: conditions: number", async () => {
   const db = pouchdb.create(uniqueId());
 
   await db.bulkDocs([{ x: 1 }, { x: 2 }, { x: 3 }, {}]);
@@ -243,49 +243,7 @@ test("query: number", async () => {
   }
 });
 
-test("query: options", async () => {
-  const db = pouchdb.create(uniqueId());
-
-  await db.bulkDocs([
-    { x: 1, y: "d" },
-    { x: 2, y: "c" },
-    { x: 3, y: "b" },
-    { x: 4, y: "a" },
-    {}
-  ]);
-
-  await expect(
-    Promise.all([
-      query({ limit: 2, sortBy: "x" }),
-      query({
-        limit: 2,
-        skip: 1,
-        sortBy: "x"
-      }),
-      query({ skip: 1, sortBy: "x" }),
-      query({ sortBy: "x" }),
-      query({ sortBy: "y" }),
-      query({ descending: true, sortBy: "x" }),
-      query({ descending: true, sortBy: "y" })
-    ])
-  ).resolves.toStrictEqual([
-    [1, 2],
-    [2, 3],
-    [2, 3, 4, undefined],
-    [1, 2, 3, 4, undefined],
-    [4, 3, 2, 1, undefined],
-    [4, 3, 2, 1, undefined],
-    [1, 2, 3, 4, undefined]
-  ]);
-
-  async function query(options: database.QueryOptions): Promise<unknowns> {
-    const result = await db.query({}, options);
-
-    return result.map(doc => doc["x"]);
-  }
-});
-
-test("query: string", async () => {
+test("query: conditions: string", async () => {
   const db = pouchdb.create(uniqueId());
 
   await db.bulkDocs([{ x: "a" }, { x: "b" }, { x: "c" }, {}]);
@@ -319,6 +277,44 @@ test("query: string", async () => {
   }
 });
 
+test("query: options", async () => {
+  const db = pouchdb.create(uniqueId());
+
+  await db.bulkDocs([
+    { x: 1, y: "d" },
+    { x: 2, y: "c" },
+    { x: 3, y: "b" },
+    { x: 4, y: "a" },
+    {}
+  ]);
+
+  await expect(
+    Promise.all([
+      query({ limit: 2, sortBy: "x" }),
+      query({ limit: 2, skip: 1, sortBy: "x" }),
+      query({ skip: 1, sortBy: "x" }),
+      query({ sortBy: "x" }),
+      query({ sortBy: "y" }),
+      query({ descending: true, sortBy: "x" }),
+      query({ descending: true, sortBy: "y" })
+    ])
+  ).resolves.toStrictEqual([
+    [1, 2],
+    [2, 3],
+    [2, 3, 4, undefined],
+    [1, 2, 3, 4, undefined],
+    [4, 3, 2, 1, undefined],
+    [4, 3, 2, 1, undefined],
+    [1, 2, 3, 4, undefined]
+  ]);
+
+  async function query(options: database.QueryOptions): Promise<unknowns> {
+    const result = await db.query({}, options);
+
+    return result.map(doc => doc["x"]);
+  }
+});
+
 test("queryAttached", async () => {
   const db = pouchdb.create(uniqueId());
 
@@ -338,18 +334,28 @@ test("queryAttached", async () => {
     { parentDoc: { _id: id2, _rev: uniqueId() }, y: "b" }
   ] as const;
 
-  const conds0 = {} as const;
-
-  const condsX = { x: { eq: "a" } } as const;
-
-  const condsY = { y: { eq: "a" } } as const;
-
   await db.bulkDocs(docs);
   await db.bulkDocsAttached(attachedDocs);
-  await expect(query()).resolves.toStrictEqual(["a", "a", "b", "b"]);
-  await expect(query(conds0, condsX)).resolves.toStrictEqual(["a", "b"]);
-  await expect(query(condsY, conds0)).resolves.toStrictEqual(["a", "a"]);
-  await expect(query(condsY, condsX)).resolves.toStrictEqual(["a"]);
+
+  const conds = { y: { eq: "a" } } as const;
+
+  const parentConds = { x: { eq: "a" } } as const;
+
+  const expected = [
+    ["a", "a", "b", "b"],
+    ["a", "b"],
+    ["a", "a"],
+    ["a"]
+  ] as const;
+
+  await expect(
+    Promise.all([
+      query(),
+      query({}, parentConds),
+      query(conds, {}),
+      query(conds, parentConds)
+    ])
+  ).resolves.toStrictEqual(expected);
 
   async function query(
     conditions?: database.Conditions,
@@ -366,7 +372,7 @@ test("queryAttached: options", async () => {
 
   await db.bulkDocs([
     {
-      attachedDocs: typedef<StoredAttachedDocuments>([
+      attachedDocs: typedef<database.StoredAttachedDocuments>([
         {
           _id: 0,
           _rev: 1,
@@ -382,7 +388,7 @@ test("queryAttached: options", async () => {
       ])
     },
     {
-      attachedDocs: typedef<StoredAttachedDocuments>([
+      attachedDocs: typedef<database.StoredAttachedDocuments>([
         {
           _id: 0,
           _rev: 1,
@@ -397,17 +403,17 @@ test("queryAttached: options", async () => {
         }
       ])
     },
-    { attachedDocs: typedef<StoredAttachedDocuments>([{ _id: 0, _rev: 1 }]) }
+    {
+      attachedDocs: typedef<database.StoredAttachedDocuments>([
+        { _id: 0, _rev: 1 }
+      ])
+    }
   ]);
 
   await expect(
     Promise.all([
       query({ limit: 2, sortBy: "x" }),
-      query({
-        limit: 2,
-        skip: 1,
-        sortBy: "x"
-      }),
+      query({ limit: 2, skip: 1, sortBy: "x" }),
       query({ skip: 1, sortBy: "x" }),
       query({ sortBy: "x" }),
       query({ sortBy: "y" }),
@@ -445,19 +451,16 @@ test("reactiveQuery", async () => {
     const result = db.reactiveQuery(config);
 
     expect(result.loaded).toBeFalse();
+    expect(result.loading).toBeTrue();
+    expect(result.value).toBeUndefined();
     await handlePromise.runAll();
     expect(result.loaded).toBeTrue();
+    expect(result.loading).toBeFalse();
     expect(result.value).toStrictEqual([]);
 
     const { id, rev } = await db.put({ type: "a" });
 
-    const expected = [
-      {
-        _id: id,
-        _rev: rev,
-        type: "a"
-      }
-    ] as const;
+    const expected = [{ _id: id, _rev: rev, type: "a" }] as const;
 
     await wait(1000);
     expect(result.value).toStrictEqual(expected);
@@ -470,10 +473,6 @@ test("reactiveQueryAttached", async () => {
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
-    const id = uniqueId();
-
-    await db.put({ _id: id });
-
     const config: database.ReactiveConfigAttached = {
       conditions: { type: { eq: "a" } },
       update: doc => doc["type"] === "a"
@@ -482,9 +481,16 @@ test("reactiveQueryAttached", async () => {
     const result = db.reactiveQueryAttached(config);
 
     expect(result.loaded).toBeFalse();
+    expect(result.loading).toBeTrue();
+    expect(result.value).toBeUndefined();
     await handlePromise.runAll();
     expect(result.loaded).toBeTrue();
+    expect(result.loading).toBeFalse();
     expect(result.value).toStrictEqual([]);
+
+    const id = uniqueId();
+
+    await db.put({ _id: id });
 
     const { parentRev: rev } = await db.putAttached(id, { type: "a" });
 

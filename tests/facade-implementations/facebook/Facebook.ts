@@ -1,3 +1,5 @@
+/* eslint jest/max-expects: [warn, { max: 3 }] -- Ok */
+
 import { AssertionError, as, assert, evaluate } from "@skylib/functions";
 import type { stringU, unknowns } from "@skylib/functions";
 import $ from "jquery";

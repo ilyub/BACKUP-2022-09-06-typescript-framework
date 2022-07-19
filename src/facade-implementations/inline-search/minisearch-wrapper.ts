@@ -1,6 +1,6 @@
 import { Engine as BaseEngine, createImplementation } from "./core";
+import { ReadonlySet, a } from "@skylib/functions";
 import MiniSearch from "minisearch";
-import { a } from "@skylib/functions";
 import type { inlineSearch } from "@skylib/facades";
 
 export const minisearchWrapper: inlineSearch.Facade = createImplementation(
@@ -21,7 +21,7 @@ export const minisearchWrapper: inlineSearch.Facade = createImplementation(
     }
 
     public search(query: string): readonly T[] {
-      const ids = new Set(
+      const ids = new ReadonlySet(
         this.index.search(query).map(result => result.id as unknown)
       );
 

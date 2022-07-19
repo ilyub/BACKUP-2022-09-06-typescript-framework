@@ -1,6 +1,7 @@
 import * as _ from "@skylib/lodash-commonjs-es";
+import { TimeUnit, datetime } from "@skylib/facades";
 import { a, evaluate, is, num, o } from "@skylib/functions";
-import { datetime } from "@skylib/facades";
+import type { Writable } from "@skylib/functions";
 import type { faker } from "@skylib/facades";
 import { loremIpsum } from "lorem-ipsum";
 
@@ -8,42 +9,43 @@ export const loremIpsumWrapper: faker.Facade & loremIpsumWrapper.Configurable =
   {
     boolean: (trueWeight = 0.5, falseWeight = 0.5) =>
       Math.random() < trueWeight / (trueWeight + falseWeight),
-    configure: (config: loremIpsumWrapper.PartialConfiguration) => {
+    configure: config => {
       o.assign(moduleConfig, config);
     },
-    date: (
-      from: faker.TimeInterval | string,
-      to: faker.TimeInterval | string,
-      step = 1,
-      unit: faker.TimeUnit = "minute"
-    ) => {
+    date: (from, to, step = 1, unit = TimeUnit.minute) => {
       const from2 = is.string(from)
         ? datetime.create(from).toTime()
-        : datetime
-            .create()
-            .add(...from)
-            .toTime();
+        : datetime.create().add(from[0], from[1]).toTime();
 
       const to2 = is.string(to)
         ? datetime.create(to).toTime()
-        : datetime
-            .create()
-            .add(...to)
-            .toTime();
+        : datetime.create().add(to[0], to[1]).toTime();
 
       const step2 = evaluate(() => {
         switch (unit) {
-          case "day":
-          case "days":
+          case TimeUnit.day:
+          case TimeUnit.days:
             return step * 24 * 3600 * 1000;
 
-          case "hour":
-          case "hours":
+          case TimeUnit.hour:
+          case TimeUnit.hours:
             return step * 3600 * 1000;
 
-          case "minute":
-          case "minutes":
+          case TimeUnit.minute:
+          case TimeUnit.minutes:
             return step * 60 * 1000;
+
+          case TimeUnit.month:
+          case TimeUnit.months:
+            return step * 30 * 24 * 3600 * 1000;
+
+          case TimeUnit.week:
+          case TimeUnit.weeks:
+            return step * 7 * 24 * 3600 * 1000;
+
+          case TimeUnit.year:
+          case TimeUnit.years:
+            return step * 365 * 24 * 3600 * 1000;
         }
       });
 
@@ -87,6 +89,7 @@ export const loremIpsumWrapper: faker.Facade & loremIpsumWrapper.Configurable =
     word: () => loremIpsum({ suffix: "\n", units: "words" })
   };
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- Ok
 export namespace loremIpsumWrapper {
   export interface Configurable {
     /**
@@ -113,7 +116,7 @@ export namespace loremIpsumWrapper {
   export interface PartialConfiguration extends Partial<Configuration> {}
 }
 
-const moduleConfig: loremIpsumWrapper.Configuration = {
+const moduleConfig: Writable<loremIpsumWrapper.Configuration> = {
   maxSentences: 5,
   maxWords: 10,
   minSentences: 3,

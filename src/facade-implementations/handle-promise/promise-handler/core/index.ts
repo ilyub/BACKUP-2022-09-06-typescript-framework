@@ -1,10 +1,10 @@
-import type { AsyncPromise, Rec } from "@skylib/functions";
+import type { Rec, Writable, types } from "@skylib/functions";
 import { progressReporter, showAlert } from "@skylib/facades";
+import type { PromiseType } from "@skylib/facades";
 import { evaluate } from "@skylib/functions";
-import type { handlePromise as facade } from "@skylib/facades";
 import { handleError } from "./handle-error";
 
-export const moduleConfig: Configuration = {
+export const moduleConfig: Writable<Configuration> = {
   expectedDurations: {
     createDb: 10_000,
     dbRequest: 10_000,
@@ -32,7 +32,7 @@ export interface Configurable {
 }
 
 export interface Configuration {
-  readonly expectedDurations: Rec<facade.Type, number>;
+  readonly expectedDurations: Rec<PromiseType, number>;
 }
 
 export interface PartialConfiguration extends Partial<Configuration> {}
@@ -45,8 +45,8 @@ export interface PartialConfiguration extends Partial<Configuration> {}
  * @param errorMessage - Error message (used to alert user on error).
  */
 export function handle<T>(
-  mixed: AsyncPromise<T>,
-  type: facade.Type | undefined,
+  mixed: types.fn.AsyncPromise<T>,
+  type: PromiseType | undefined,
   errorMessage: string
 ): void {
   const id = Symbol("promise-id");

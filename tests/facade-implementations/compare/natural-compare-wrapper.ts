@@ -2,16 +2,20 @@ import { implementations } from "@";
 
 const compare = implementations.compare.naturalCompareWrapper;
 
-test("implementation", () => {
-  expect(compare(2, 1)).toBe(1);
-  expect(compare(1, 2)).toBe(-1);
-  expect(compare(1, 1)).toBe(0);
+test.each([
+  { expected: 1, x: 2, y: 1 },
+  { expected: -1, x: 1, y: 2 },
+  { expected: 0, x: 1, y: 1 }
+])("implementation", ({ expected, x, y }) => {
+  expect(compare(x, y)).toBe(expected);
 });
 
-test("implementation.strings", () => {
-  expect(compare.strings("b", "a")).toBe(1);
-  expect(compare.strings("a", "b")).toBe(-1);
-  expect(compare.strings("a", "a")).toBe(0);
-  expect(compare.strings("10", "2")).toBe(1);
-  expect(compare.strings("2", "10")).toBe(-1);
+test.each([
+  { expected: 1, x: "b", y: "a" },
+  { expected: -1, x: "a", y: "b" },
+  { expected: 0, x: "a", y: "a" },
+  { expected: 1, x: "10", y: "2" },
+  { expected: -1, x: "2", y: "10" }
+])("implementation.strings", ({ expected, x, y }) => {
+  expect(compare.strings(x, y)).toBe(expected);
 });

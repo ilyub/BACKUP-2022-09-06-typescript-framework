@@ -1,16 +1,12 @@
-/* eslint-disable deprecation/deprecation -- Wait for @skylib/facades update */
+/* eslint jest/max-expects: [warn, { max: 2 }] -- Ok */
 
 import * as testUtils from "@skylib/functions/dist/test-utils";
 import type { NumStr } from "@skylib/functions";
+import { TimeUnit } from "@skylib/facades";
 import type { datetime } from "@skylib/facades";
 import enUS from "date-fns/locale/en-US";
 import { implementations } from "@";
 import ru from "date-fns/locale/ru";
-import { typedef } from "@skylib/functions";
-
-const dateFns = implementations.datetime.dateFnsWrapper;
-
-testUtils.installFakeTimer();
 
 function d(
   date: Date | datetime.DateTime | NumStr = "1950-06-15 14:30:30"
@@ -18,13 +14,17 @@ function d(
   return dateFns.create(date);
 }
 
+const dateFns = implementations.datetime.dateFnsWrapper;
+
+testUtils.installFakeTimer();
+
 test.each([
-  { expected: "1950-06-15 14:31:30", unit: typedef<datetime.Unit>("minute") },
-  { expected: "1950-06-15 15:30:30", unit: typedef<datetime.Unit>("hour") },
-  { expected: "1950-06-16 14:30:30", unit: typedef<datetime.Unit>("day") },
-  { expected: "1950-06-22 14:30:30", unit: typedef<datetime.Unit>("week") },
-  { expected: "1950-07-15 14:30:30", unit: typedef<datetime.Unit>("month") },
-  { expected: "1951-06-15 14:30:30", unit: typedef<datetime.Unit>("year") }
+  { expected: "1950-06-15 14:31:30", unit: TimeUnit.minute },
+  { expected: "1950-06-15 15:30:30", unit: TimeUnit.hour },
+  { expected: "1950-06-16 14:30:30", unit: TimeUnit.day },
+  { expected: "1950-06-22 14:30:30", unit: TimeUnit.week },
+  { expected: "1950-07-15 14:30:30", unit: TimeUnit.month },
+  { expected: "1951-06-15 14:30:30", unit: TimeUnit.year }
 ])("DateTime.add: 1", ({ expected, unit }) => {
   const d1 = d();
 
@@ -35,12 +35,12 @@ test.each([
 });
 
 test.each([
-  { expected: "1950-06-15 14:32:30", unit: typedef<datetime.Unit>("minute") },
-  { expected: "1950-06-15 16:30:30", unit: typedef<datetime.Unit>("hour") },
-  { expected: "1950-06-17 14:30:30", unit: typedef<datetime.Unit>("day") },
-  { expected: "1950-06-29 14:30:30", unit: typedef<datetime.Unit>("week") },
-  { expected: "1950-08-15 14:30:30", unit: typedef<datetime.Unit>("month") },
-  { expected: "1952-06-15 14:30:30", unit: typedef<datetime.Unit>("year") }
+  { expected: "1950-06-15 14:32:30", unit: TimeUnit.minute },
+  { expected: "1950-06-15 16:30:30", unit: TimeUnit.hour },
+  { expected: "1950-06-17 14:30:30", unit: TimeUnit.day },
+  { expected: "1950-06-29 14:30:30", unit: TimeUnit.week },
+  { expected: "1950-08-15 14:30:30", unit: TimeUnit.month },
+  { expected: "1952-06-15 14:30:30", unit: TimeUnit.year }
 ])("DateTime.add: 2", ({ expected, unit }) => {
   const d1 = d();
 
@@ -48,15 +48,6 @@ test.each([
 
   expect(d1).datetimeToBe("1950-06-15 14:30:30");
   expect(d2).datetimeToBe(expected);
-});
-
-test("DateTime.clone", () => {
-  const date1 = d();
-
-  const date2 = date1.clone();
-
-  expect(date1).datetimeToBe("1950-06-15 14:30:30");
-  expect(date2).datetimeToBe("1950-06-15 14:30:30");
 });
 
 test.each([
@@ -68,13 +59,11 @@ test.each([
 });
 
 test.each([
-  { date: "1950-06-11 14:30", expected: 0 },
-  { date: "1950-06-12 14:30", expected: 1 },
-  { date: "1950-06-17 14:30", expected: 6 }
-])("DateTime.dayOfWeek", ({ date, expected }) => {
-  dateFns.configure({ firstDayOfWeek: 0 });
-  expect(d(date).dayOfWeek()).toBe(expected);
-  dateFns.configure({ firstDayOfWeek: 1 });
+  { date: "1950-06-11 14:30", expected: 0, firstDayOfWeek: 0 as const },
+  { date: "1950-06-12 14:30", expected: 1, firstDayOfWeek: 1 as const },
+  { date: "1950-06-17 14:30", expected: 6, firstDayOfWeek: 1 as const }
+])("DateTime.dayOfWeek", ({ date, expected, firstDayOfWeek }) => {
+  dateFns.configure({ firstDayOfWeek });
   expect(d(date).dayOfWeek()).toBe(expected);
 });
 
@@ -327,16 +316,19 @@ test("DateTime.setStartOfMonth", () => {
   expect(d2).datetimeToBe("1950-06-01 00:00");
 });
 
-test("DateTime.setStartOfWeek", () => {
-  expect(d().setStartOfWeek(0)).datetimeToBe("1950-06-11 00:00");
-  expect(d().setStartOfWeek(1)).datetimeToBe("1950-06-12 00:00");
+test.each([
+  { expected: "1950-06-11 00:00", weekStartsOn: 0 as const },
+  { expected: "1950-06-12 00:00", weekStartsOn: 1 as const }
+])("DateTime.setStartOfWeek", ({ expected, weekStartsOn }) => {
+  expect(d().setStartOfWeek(weekStartsOn)).datetimeToBe(expected);
 });
 
-test("DateTime.setStartOfWeekLocale", () => {
-  dateFns.configure({ firstDayOfWeek: 0 });
-  expect(d().setStartOfWeekLocale()).datetimeToBe("1950-06-11 00:00");
-  dateFns.configure({ firstDayOfWeek: 1 });
-  expect(d().setStartOfWeekLocale()).datetimeToBe("1950-06-12 00:00");
+test.each([
+  { expected: "1950-06-11 00:00", firstDayOfWeek: 0 as const },
+  { expected: "1950-06-12 00:00", firstDayOfWeek: 1 as const }
+])("DateTime.setStartOfWeekLocale", ({ expected, firstDayOfWeek }) => {
+  dateFns.configure({ firstDayOfWeek });
+  expect(d().setStartOfWeekLocale()).datetimeToBe(expected);
 });
 
 test("DateTime.setStartOfYear", () => {
@@ -362,12 +354,12 @@ test.each([
 });
 
 test.each([
-  { expected: "1950-06-15 14:29:30", unit: typedef<datetime.Unit>("minute") },
-  { expected: "1950-06-15 13:30:30", unit: typedef<datetime.Unit>("hour") },
-  { expected: "1950-06-14 14:30:30", unit: typedef<datetime.Unit>("day") },
-  { expected: "1950-06-08 14:30:30", unit: typedef<datetime.Unit>("week") },
-  { expected: "1950-05-15 14:30:30", unit: typedef<datetime.Unit>("month") },
-  { expected: "1949-06-15 14:30:30", unit: typedef<datetime.Unit>("year") }
+  { expected: "1950-06-15 14:29:30", unit: TimeUnit.minute },
+  { expected: "1950-06-15 13:30:30", unit: TimeUnit.hour },
+  { expected: "1950-06-14 14:30:30", unit: TimeUnit.day },
+  { expected: "1950-06-08 14:30:30", unit: TimeUnit.week },
+  { expected: "1950-05-15 14:30:30", unit: TimeUnit.month },
+  { expected: "1949-06-15 14:30:30", unit: TimeUnit.year }
 ])("DateTime.sub: 1", ({ expected, unit }) => {
   const d1 = d();
 
@@ -378,12 +370,12 @@ test.each([
 });
 
 test.each([
-  { expected: "1950-06-15 14:28:30", unit: typedef<datetime.Unit>("minutes") },
-  { expected: "1950-06-15 12:30:30", unit: typedef<datetime.Unit>("hours") },
-  { expected: "1950-06-13 14:30:30", unit: typedef<datetime.Unit>("days") },
-  { expected: "1950-06-01 14:30:30", unit: typedef<datetime.Unit>("weeks") },
-  { expected: "1950-04-15 14:30:30", unit: typedef<datetime.Unit>("months") },
-  { expected: "1948-06-15 14:30:30", unit: typedef<datetime.Unit>("years") }
+  { expected: "1950-06-15 14:28:30", unit: TimeUnit.minutes },
+  { expected: "1950-06-15 12:30:30", unit: TimeUnit.hours },
+  { expected: "1950-06-13 14:30:30", unit: TimeUnit.days },
+  { expected: "1950-06-01 14:30:30", unit: TimeUnit.weeks },
+  { expected: "1950-04-15 14:30:30", unit: TimeUnit.months },
+  { expected: "1948-06-15 14:30:30", unit: TimeUnit.years }
 ])("DateTime.sub: 2", ({ expected, unit }) => {
   const d1 = d();
 
@@ -400,15 +392,13 @@ test.each(["1950-06-15 14:30", "1950-06-15 14:30:30"])(
   }
 );
 
-test.each(["1950-06-15 14:30", "1950-06-15 14:30:30"])(
-  "DateTime.toString",
-  date => {
-    dateFns.configure({ pm: true });
-    expect(d(date).toString()).toBe(date);
-    dateFns.configure({ pm: false });
-    expect(d(date).toString()).toBe(date);
-  }
-);
+test.each([
+  { date: "1950-06-15 14:30", pm: true },
+  { date: "1950-06-15 14:30:30", pm: false }
+])("DateTime.toString", ({ date, pm }) => {
+  dateFns.configure({ pm });
+  expect(d(date).toString()).toBe(date);
+});
 
 test("DateTime.toTime", () => {
   const date = new Date();
@@ -430,28 +420,29 @@ test.each([
   expect(d(date).year()).toBe(expected);
 });
 
-test("configure, getConfiguration", () => {
-  expect(dateFns.getConfiguration().firstDayOfWeek).toBe(0);
-  dateFns.configure({ firstDayOfWeek: 1 });
-  expect(dateFns.getConfiguration().firstDayOfWeek).toBe(1);
+test.each([
+  { config: {}, expected: 0 },
+  { config: { firstDayOfWeek: 1 as const }, expected: 1 }
+])("configure, getConfiguration", ({ config, expected }) => {
+  dateFns.configure(config);
+  expect(dateFns.getConfiguration().firstDayOfWeek).toBe(expected);
 });
 
-test("create", () => {
-  const date1 = dateFns.create("1950-06-15 14:30");
-
-  const date2 = dateFns.create(date1);
-
-  const date3 = dateFns.create(date1.toDate());
-
-  const date4 = dateFns.create(date1.toTime());
-
-  const error = "Unknown date format: invalid";
-
-  expect(date1).datetimeToBe("1950-06-15 14:30");
-  expect(date2).datetimeToBe("1950-06-15 14:30");
-  expect(date3).datetimeToBe("1950-06-15 14:30");
-  expect(date4).datetimeToBe("1950-06-15 14:30");
-  expect(() => dateFns.create("invalid")).toThrow(error);
+test.each([
+  { date: d(), expected: "1950-06-15 14:30:30" },
+  { date: d().toDate(), expected: "1950-06-15 14:30:30" },
+  { date: d().toString(), expected: "1950-06-15 14:30:30" },
+  { date: d().toTime(), expected: "1950-06-15 14:30:30" },
+  {
+    date: "invalid",
+    expected: new Error("Unknown date format: invalid"),
+    expectedToThrow: true
+  }
+])("create", ({ date, expected, expectedToThrow }) => {
+  expect(() => dateFns.create(date).toString()).executionResultToBe(
+    expected,
+    expectedToThrow
+  );
 });
 
 test("now", () => {

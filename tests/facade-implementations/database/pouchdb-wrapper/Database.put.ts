@@ -1,3 +1,5 @@
+/* eslint jest/max-expects: [warn, { max: 7 }] -- Ok */
+
 import {
   PouchConflictError,
   PouchRetryError
@@ -12,19 +14,18 @@ const pouchdb = new implementations.database.PouchWrapper();
 test("put", async () => {
   const db = pouchdb.create(uniqueId());
 
-  const response1 = await db.put({});
+  const { id, rev: rev1 } = await db.put({});
 
-  expect(response1).toContainAllKeys(["id", "rev"]);
-  expect(response1.rev).toStartWith("1-");
+  expect(rev1).toStartWith("1-");
 
-  const response2 = await db.put({ _id: response1.id, _rev: response1.rev });
+  const doc: database.PutDocument = { _id: id, _rev: rev1 };
 
-  expect(response2).toContainAllKeys(["id", "rev"]);
-  expect(response2.rev).toStartWith("2-");
+  const { rev: rev2 } = await db.put(doc);
 
   const error = new PouchConflictError("Document update conflict");
 
-  await expect(db.put({ _id: response2.id })).rejects.toStrictEqual(error);
+  expect(rev2).toStartWith("2-");
+  await expect(db.put(doc)).rejects.toStrictEqual(error);
 });
 
 test("put: Invalid attached document", async () => {
@@ -37,34 +38,33 @@ test("put: Invalid attached document", async () => {
   await expect(db.put(doc)).rejects.toStrictEqual(error);
 });
 
-test("put: attached", async () => {
+test.each([
+  async (doc: database.PutDocument, db: database.Database) => await db.put(doc),
+  async (doc: database.PutDocument, db: database.Database) => {
+    const { id, rev } = await db.put(doc);
+
+    const doc2 = await db.get(id);
+
+    return await db.put({ ...doc2, _rev: rev });
+  }
+])("put: attached", async subtest => {
   const db = pouchdb.create(uniqueId());
 
   const id = uniqueId();
 
-  const { rev: rev1 } = await db.put({
+  const doc: database.PutDocument = {
     _id: id,
     attachedDocs: [{ _id: 0, _rev: 1 }]
-  });
+  };
 
-  const doc = await db.get(id);
+  const { rev } = await subtest(doc, db);
 
-  const { rev: rev2 } = await db.put({ ...doc, _rev: rev1 });
-
-  const expected = {
-    _id: id,
-    _rev: rev2,
-    attachedDocs: []
-  } as const;
+  const expected = { _id: id, _rev: rev, attachedDocs: [] } as const;
 
   const expectedAttached = {
     _id: 0,
     _rev: 1,
-    parentDoc: {
-      _id: id,
-      _rev: rev2,
-      attachedDocs: []
-    }
+    parentDoc: { _id: id, _rev: rev, attachedDocs: [] }
   } as const;
 
   await expect(db.get(id)).resolves.toStrictEqual(expected);
@@ -76,11 +76,9 @@ test("put: null", async () => {
 
   const { id, rev } = await db.put({ x: null });
 
-  await expect(db.get(id)).resolves.toStrictEqual({
-    _id: id,
-    _rev: rev,
-    x: null
-  });
+  const expected = { _id: id, _rev: rev, x: null } as const;
+
+  await expect(db.get(id)).resolves.toStrictEqual(expected);
 });
 
 test.each(["_attachments", "_conflicts", "filters", "views"])(
@@ -99,7 +97,9 @@ test("put: undefined", async () => {
 
   const { id, rev } = await db.put({ x: undefined });
 
-  await expect(db.get(id)).resolves.toStrictEqual({ _id: id, _rev: rev });
+  const expected = { _id: id, _rev: rev } as const;
+
+  await expect(db.get(id)).resolves.toStrictEqual(expected);
 });
 
 test("putAttached", async () => {
@@ -115,15 +115,16 @@ test("putAttached", async () => {
   expect(response1.id).toBe(0);
   expect(response1.rev).toBe(1);
 
-  const response2 = await db.putAttached(id, { _id: 0, _rev: 1 });
+  const doc: database.PutAttachedDocument = { _id: 0, _rev: 1 };
+
+  const response2 = await db.putAttached(id, doc);
+
+  const error = new PouchConflictError("Document update conflict");
 
   expect(response2).toContainAllKeys(["id", "parentId", "parentRev", "rev"]);
   expect(response2.id).toBe(0);
   expect(response2.rev).toBe(2);
-
-  const error = new PouchConflictError("Document update conflict");
-
-  await expect(db.putAttached(id, { _id: 0 })).rejects.toStrictEqual(error);
+  await expect(db.putAttached(id, doc)).rejects.toStrictEqual(error);
 });
 
 test("putAttachedBulk", async () => {
@@ -138,25 +139,6 @@ test("putAttachedBulk", async () => {
   const { parentId: id1, parentRev: rev1 } = a.first(responses);
 
   const { parentId: id2, parentRev: rev2 } = a.second(responses);
-
-  const doc1 = await db.getAttached(0, id1);
-
-  const doc2 = await db.getAttached(1, id2);
-
-  const expectedResponses = [
-    {
-      id: 0,
-      parentId: id1,
-      parentRev: rev1,
-      rev: 1
-    },
-    {
-      id: 1,
-      parentId: id2,
-      parentRev: rev2,
-      rev: 1
-    }
-  ] as const;
 
   const expected1 = {
     _id: 0,
@@ -184,9 +166,8 @@ test("putAttachedBulk", async () => {
     y: 2
   } as const;
 
-  expect(responses).toStrictEqual(expectedResponses);
-  expect(doc1).toStrictEqual(expected1);
-  expect(doc2).toStrictEqual(expected2);
+  await expect(db.getAttached(0, id1)).resolves.toStrictEqual(expected1);
+  await expect(db.getAttached(1, id2)).resolves.toStrictEqual(expected2);
 });
 
 test("putAttachedBulk: PouchRetryError", async () => {

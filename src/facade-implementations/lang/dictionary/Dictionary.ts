@@ -1,5 +1,6 @@
 import type { LocaleName, NumStr, Rec } from "@skylib/functions";
 import {
+  ProxyHandlerAction,
   a,
   assert,
   cast,
@@ -27,7 +28,7 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
     count?: number
   ): lang.Facade => new Dictionary(definitions, context, count).facade;
 
-  public readonly keys: Rec<lang.Transform, lang.Transform>;
+  public readonly keys: Rec<lang.Transforms, lang.Transforms>;
 
   // eslint-disable-next-line @skylib/require-jsdoc -- Ok
   public readonly plain = (str: string): lang.Plain => `plain:${str}`;
@@ -133,13 +134,17 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
     count = 1
   ) {
     const facade = evaluate(() => {
-      const handler = wrapProxyHandler<Dictionary>("Dictionary", "doDefault", {
-        get: (target, key) => {
-          assert.string(key, "Expecting string key");
+      const handler = wrapProxyHandler<Dictionary>(
+        "Dictionary",
+        ProxyHandlerAction.doDefault,
+        {
+          get: (target, key) => {
+            assert.string(key, "Expecting string key");
 
-          return target.has(key) ? target.get(key) : o.get(target, key);
+            return target.has(key) ? target.get(key) : o.get(target, key);
+          }
         }
-      });
+      );
 
       return new Proxy(this, handler) as unknown as lang.Facade;
     });

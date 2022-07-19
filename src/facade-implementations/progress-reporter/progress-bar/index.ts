@@ -5,7 +5,7 @@ import { o } from "@skylib/functions";
 import type { progressReporter } from "@skylib/facades";
 
 export const progressBar: Configurable & progressReporter.Facade = {
-  configure: (config: progressBar.PartialConfiguration): void => {
+  configure: config => {
     o.assign(moduleConfig, config);
   },
   getConfiguration: (): progressBar.Configuration => moduleConfig,
@@ -14,6 +14,7 @@ export const progressBar: Configurable & progressReporter.Facade = {
   spawn: (): Process => new Process()
 };
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- Ok
 export namespace progressBar {
   export type Configuration = import("./core").Configuration;
 

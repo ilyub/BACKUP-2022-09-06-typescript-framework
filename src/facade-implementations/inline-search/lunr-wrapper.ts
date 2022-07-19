@@ -1,4 +1,5 @@
 import { Engine as BaseEngine, createImplementation } from "./core";
+import { ReadonlySet } from "@skylib/functions";
 import type { inlineSearch } from "@skylib/facades";
 import lunr from "lunr";
 
@@ -20,7 +21,7 @@ export const lunrWrapper: inlineSearch.Facade = createImplementation(
     }
 
     public search(query: string): readonly T[] {
-      const ids = new Set(
+      const ids = new ReadonlySet(
         this.index.search(query).map(result => result.ref as unknown)
       );
 

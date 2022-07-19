@@ -1,4 +1,4 @@
-import type { UndefinedStyle, stringU } from "@skylib/functions";
+import type { stringU, types } from "@skylib/functions";
 import type { Item } from "./Item";
 import type { database } from "@skylib/facades";
 import { o } from "@skylib/functions";
@@ -67,7 +67,8 @@ export abstract class AttachedItem<T extends Item = Item> {
       updatedAt: this.updatedAt
     });
 
-    type Source = UndefinedStyle<AttachedItem.ExistingAttachedItemDoc>;
+    type Source =
+      types.object.style.Undefined<AttachedItem.ExistingAttachedItemDoc>;
   }
 
   // eslint-disable-next-line @skylib/custom/prefer-readonly-property -- Ok

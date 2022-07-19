@@ -1,4 +1,7 @@
+/* eslint jest/max-expects: [warn, { max: 7 }] -- Ok */
+
 import { as } from "@skylib/functions";
+import type { database } from "@skylib/facades";
 import { implementations } from "@";
 import { uniqueId } from "@skylib/facades";
 
@@ -7,23 +10,16 @@ const pouchdb = new implementations.database.PouchWrapper();
 test("putIfNotExists", async () => {
   const db = pouchdb.create(uniqueId());
 
-  const response1 = as.not.empty(await db.putIfNotExists({}));
+  const { id, rev: rev1 } = as.not.empty(await db.putIfNotExists({}));
 
-  expect(response1).toContainAllKeys(["id", "rev"]);
-  expect(response1.rev).toStartWith("1-");
+  expect(rev1).toStartWith("1-");
 
-  const response2 = as.not.empty(
-    await db.putIfNotExists({ _id: response1.id, _rev: response1.rev })
-  );
+  const doc: database.PutDocument = { _id: id, _rev: rev1 };
 
-  expect(response2).toContainAllKeys(["id", "rev"]);
-  expect(response2.rev).toStartWith("2-");
+  const { rev: rev2 } = as.not.empty(await db.putIfNotExists(doc));
 
-  {
-    await expect(
-      db.putIfNotExists({ _id: response2.id })
-    ).resolves.toBeUndefined();
-  }
+  expect(rev2).toStartWith("2-");
+  await expect(db.putIfNotExists(doc)).resolves.toBeUndefined();
 });
 
 test("putIfNotExistsAttached", async () => {
@@ -39,17 +35,12 @@ test("putIfNotExistsAttached", async () => {
   expect(response1.id).toBe(0);
   expect(response1.rev).toBe(1);
 
-  const response2 = as.not.empty(
-    await db.putIfNotExistsAttached(id, { _id: 0, _rev: 1 })
-  );
+  const doc: database.PutAttachedDocument = { _id: 0, _rev: 1 };
+
+  const response2 = as.not.empty(await db.putIfNotExistsAttached(id, doc));
 
   expect(response2).toContainAllKeys(["id", "parentId", "parentRev", "rev"]);
   expect(response2.id).toBe(0);
   expect(response2.rev).toBe(2);
-
-  {
-    await expect(
-      db.putIfNotExistsAttached(id, { _id: 0 })
-    ).resolves.toBeUndefined();
-  }
+  await expect(db.putIfNotExistsAttached(id, doc)).resolves.toBeUndefined();
 });

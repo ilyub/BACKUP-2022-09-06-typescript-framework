@@ -1,6 +1,6 @@
 import type { Writable } from "@skylib/functions";
 
-export const moduleConfig: Configuration = {
+export const moduleConfig: Writable<Configuration> = {
   activeClass: "progress-bar-active",
   enabled: true,
   finalEasing: true,
@@ -10,6 +10,14 @@ export const moduleConfig: Configuration = {
   selector: "#progressBar",
   updateInterval: 100
 };
+
+export enum State {
+  auto = "auto",
+  done = "done",
+  // eslint-disable-next-line @typescript-eslint/no-shadow -- Ok
+  finalEasing = "finalEasing",
+  manual = "manual"
+}
 
 export interface Configurable {
   /**
@@ -47,8 +55,6 @@ export interface ProcessState {
   readonly weight: number;
 }
 
-export type State = "auto" | "done" | "finalEasing" | "manual";
-
 /**
  * Performs final easing.
  *
@@ -65,11 +71,11 @@ export function finalEasing(mutableState: Writable<ProcessState>): void {
     mutableState.progress += delta;
 
     if (mutableState.progress > 1) {
-      mutableState.state = "done";
+      mutableState.state = State.done;
       mutableState.progress = 1;
     }
   } else {
-    mutableState.state = "done";
+    mutableState.state = State.done;
     mutableState.progress = 1;
   }
 }

@@ -1,6 +1,6 @@
+import { ReadonlySet, a, num, programFlow, set } from "@skylib/functions";
+import { State, finalEasing, growProgress, moduleConfig } from "./core";
 import type { Writable, numberU } from "@skylib/functions";
-import { a, num, programFlow, set } from "@skylib/functions";
-import { finalEasing, growProgress, moduleConfig } from "./core";
 import $ from "jquery";
 import type { ProcessState } from "./core";
 import type { progressReporter } from "@skylib/facades";
@@ -19,7 +19,7 @@ export class Process implements progressReporter.Process {
    */
   public static readonly reset = (): void => {
     if (processes.size > 0) {
-      processes = new Set();
+      processes = new ReadonlySet();
       progress = 0;
       programFlow.clearTimeout(timeout);
       $(moduleConfig.selector)
@@ -37,7 +37,7 @@ export class Process implements progressReporter.Process {
   }
 
   public done(): this {
-    this.state.state = "finalEasing";
+    this.state.state = State.finalEasing;
     this.state.lastUpdate = Date.now();
     Process.update();
 
@@ -45,7 +45,7 @@ export class Process implements progressReporter.Process {
   }
 
   public setAuto(expectedDuration: number): this {
-    this.state.state = "auto";
+    this.state.state = State.auto;
     this.state.expectedDuration = expectedDuration;
     this.state.lastUpdate = Date.now();
     Process.update();
@@ -54,7 +54,7 @@ export class Process implements progressReporter.Process {
   }
 
   public setProgress(value: number): this {
-    this.state.state = "manual";
+    this.state.state = State.manual;
     this.state.progress = value;
     Process.update();
 
@@ -110,7 +110,7 @@ export class Process implements progressReporter.Process {
     expectedDuration: 0,
     lastUpdate: Date.now(),
     progress: 0,
-    state: "manual",
+    state: State.manual,
     weight: 1
   };
 
@@ -134,7 +134,7 @@ export class Process implements progressReporter.Process {
   }
 }
 
-let processes: ReadonlySet<Process> = new Set();
+let processes = new ReadonlySet<Process>();
 
 let progress = 0;
 

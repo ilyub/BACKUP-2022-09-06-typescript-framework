@@ -1,100 +1,94 @@
 import * as testUtils from "@skylib/functions/dist/test-utils";
+import { fn, wait } from "@skylib/functions";
+import type { database } from "@skylib/facades";
 import { implementations } from "@";
 import { uniqueId } from "@skylib/facades";
-import { wait } from "@skylib/functions";
+import type { unknowns } from "@skylib/functions";
+
+type arrays = readonly unknowns[];
 
 const pouchdb = new implementations.database.PouchWrapper();
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
-test("subscribe, unsubscribe", async () => {
+test.each([
+  {
+    expected: (id: string, rev: string): arrays => [
+      [{ _id: id, _rev: rev, x: 1 }]
+    ],
+    subtest: fn.noop
+  },
+  {
+    expected: (): arrays => [],
+    subtest: (subscription: database.SubscriptionId, db: database.Database) => {
+      db.unsubscribe(subscription);
+    }
+  }
+])("subscribe, unsubscribe", async ({ expected, subtest }) => {
   expect.hasAssertions();
 
   await testUtils.run(async () => {
     const db = pouchdb.create(uniqueId());
 
-    const handler1 = jest.fn();
+    const handler = jest.fn();
 
-    const handler2 = jest.fn();
+    subtest(db.subscribe(handler), db);
 
-    const subscription1 = db.subscribe(handler1);
-
-    const subscription2 = db.subscribe(handler2);
-
-    const { id: id1, rev: rev1 } = await db.put({ x: 1 });
-
-    const expected1 = {
-      _id: id1,
-      _rev: rev1,
-      x: 1
-    } as const;
+    const { id, rev } = await db.put({ x: 1 });
 
     await wait(1000);
-    expect(handler1).mockCallsToBe([expected1]);
-    expect(handler2).mockCallsToBe([expected1]);
-
-    const { parentId: id2, parentRev: rev2 } = await db.putAttached(id1, {});
-
-    const expected2 = {
-      _id: id2,
-      _rev: rev2,
-      attachedDocs: [],
-      lastAttachedDocs: [0],
-      x: 1
-    } as const;
-
-    await wait(1000);
-    expect(handler1).mockCallsToBe([expected2]);
-    expect(handler2).mockCallsToBe([expected2]);
-
-    {
-      db.unsubscribe(subscription1);
-      db.unsubscribe(subscription2);
-      await db.put({});
-      await wait(1000);
-      expect(handler1).mockCallsToBe();
-      expect(handler2).mockCallsToBe();
-    }
+    expect(handler).mockCallsToBe(...expected(id, rev));
+    db.subscribe(fn.noop);
   });
 });
 
-test("subscribeAttached, unsubscribeAttached", async () => {
+test.each([
+  {
+    expected: (id: string, rev: string): arrays => [
+      [
+        {
+          _id: 0,
+          _rev: 1,
+          parentDoc: {
+            _id: id,
+            _rev: rev,
+            attachedDocs: [],
+            lastAttachedDocs: [0],
+            x: 1
+          },
+          y: 2
+        }
+      ]
+    ],
+    subtest: fn.noop
+  },
+  {
+    expected: (): arrays => [],
+    subtest: (
+      subscription: database.AttachedSubscriptionId,
+      db: database.Database
+    ) => {
+      db.unsubscribeAttached(subscription);
+    }
+  }
+])("subscribeAttached, unsubscribeAttached", async ({ expected, subtest }) => {
   expect.hasAssertions();
 
   await testUtils.run(async () => {
     const db = pouchdb.create(uniqueId());
+
+    const handler = jest.fn();
+
+    subtest(db.subscribeAttached(handler), db);
 
     const id = uniqueId();
 
     await db.put({ _id: id, x: 1 });
 
-    const handler = jest.fn();
-
-    const subscription = db.subscribeAttached(handler);
-
     const { parentRev: rev } = await db.putAttached(id, { y: 2 });
 
-    const expected = {
-      _id: 0,
-      _rev: 1,
-      parentDoc: {
-        _id: id,
-        _rev: rev,
-        attachedDocs: [],
-        lastAttachedDocs: [0],
-        x: 1
-      },
-      y: 2
-    } as const;
-
     await wait(1000);
-    expect(handler).mockCallsToBe([expected]);
-
-    {
-      db.unsubscribeAttached(subscription);
-      await db.putAttached(id, { y: 2 });
-      await wait(1000);
-      expect(handler).mockCallsToBe();
-    }
+    expect(handler).mockCallsToBe(...expected(id, rev));
+    db.subscribeAttached(fn.noop);
   });
 });

@@ -1,5 +1,14 @@
+/* eslint jest/max-expects: [warn, { max: 7 }] -- Ok */
+
 import * as testUtils from "@skylib/functions/dist/test-utils";
-import { database, datetime, handlePromise, uniqueId } from "@skylib/facades";
+import {
+  RelativeDate,
+  TimeUnit,
+  database,
+  datetime,
+  handlePromise,
+  uniqueId
+} from "@skylib/facades";
 import { implementations } from "@";
 import { wait } from "@skylib/functions";
 
@@ -18,7 +27,7 @@ test("reactiveUnsettled", async () => {
     await db.put({ d: "2001-02-13 10:30" });
 
     const config: database.ReactiveConfig = {
-      conditions: { d: { dateGt: ["now"] } },
+      conditions: { d: { dateGt: [RelativeDate.now] } },
       updateInterval: 3600 * 1000
     };
 
@@ -26,8 +35,11 @@ test("reactiveUnsettled", async () => {
 
     {
       expect(result.loaded).toBeFalse();
+      expect(result.loading).toBeTrue();
+      expect(result.value).toBeUndefined();
       await handlePromise.runAll();
       expect(result.loaded).toBeTrue();
+      expect(result.loading).toBeFalse();
       expect(result.value).toBe(1);
     }
 
@@ -53,7 +65,7 @@ test("reactiveUnsettledAttached", async () => {
     await db.putAttached(id, { d: "2001-02-13 10:30" });
 
     const config: database.ReactiveConfigAttached = {
-      conditions: { d: { dateGt: ["now"] } },
+      conditions: { d: { dateGt: [RelativeDate.now] } },
       updateInterval: 3600 * 1000
     };
 
@@ -61,8 +73,11 @@ test("reactiveUnsettledAttached", async () => {
 
     {
       expect(result.loaded).toBeFalse();
+      expect(result.loading).toBeTrue();
+      expect(result.value).toBeUndefined();
       await handlePromise.runAll();
       expect(result.loaded).toBeTrue();
+      expect(result.loading).toBeFalse();
       expect(result.value).toBe(1);
     }
 
@@ -92,10 +107,10 @@ test("unsettled", async () => {
     await expect(
       Promise.all([
         unsettled(),
-        unsettled({ d: { dateEq: ["now", "+", 1, "day"] } }),
-        unsettled({ d: { dateNeq: ["now", "+", 1, "day"] } }),
-        unsettled({ d: { dateGt: ["now", "+", 1, "day"] } }),
-        unsettled({ d: { dateLt: ["now", "+", 1, "day"] } })
+        unsettled({ d: { dateEq: [RelativeDate.now, "+", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateNeq: [RelativeDate.now, "+", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateGt: [RelativeDate.now, "+", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateLt: [RelativeDate.now, "+", 1, TimeUnit.day] } })
       ])
     ).resolves.toStrictEqual([0, 3, 3, 3, 3]);
 
@@ -104,10 +119,10 @@ test("unsettled", async () => {
     await expect(
       Promise.all([
         unsettled(),
-        unsettled({ d: { dateEq: ["now", "+", 1, "day"] } }),
-        unsettled({ d: { dateNeq: ["now", "+", 1, "day"] } }),
-        unsettled({ d: { dateGt: ["now", "+", 1, "day"] } }),
-        unsettled({ d: { dateLt: ["now", "+", 1, "day"] } })
+        unsettled({ d: { dateEq: [RelativeDate.now, "+", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateNeq: [RelativeDate.now, "+", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateGt: [RelativeDate.now, "+", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateLt: [RelativeDate.now, "+", 1, TimeUnit.day] } })
       ])
     ).resolves.toStrictEqual([0, 2, 2, 2, 2]);
 
@@ -116,10 +131,10 @@ test("unsettled", async () => {
     await expect(
       Promise.all([
         unsettled(),
-        unsettled({ d: { dateEq: ["now", "+", 1, "day"] } }),
-        unsettled({ d: { dateNeq: ["now", "+", 1, "day"] } }),
-        unsettled({ d: { dateGt: ["now", "+", 1, "day"] } }),
-        unsettled({ d: { dateLt: ["now", "+", 1, "day"] } })
+        unsettled({ d: { dateEq: [RelativeDate.now, "+", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateNeq: [RelativeDate.now, "+", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateGt: [RelativeDate.now, "+", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateLt: [RelativeDate.now, "+", 1, TimeUnit.day] } })
       ])
     ).resolves.toStrictEqual([0, 1, 1, 1, 1]);
 
@@ -157,10 +172,10 @@ test("unsettledAttached", async () => {
     await expect(
       Promise.all([
         unsettled(),
-        unsettled({ d: { dateEq: ["now", "-", 1, "day"] } }),
-        unsettled({ d: { dateNeq: ["now", "-", 1, "day"] } }),
-        unsettled({ d: { dateGt: ["now", "-", 1, "day"] } }),
-        unsettled({ d: { dateLt: ["now", "-", 1, "day"] } })
+        unsettled({ d: { dateEq: [RelativeDate.now, "-", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateNeq: [RelativeDate.now, "-", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateGt: [RelativeDate.now, "-", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateLt: [RelativeDate.now, "-", 1, TimeUnit.day] } })
       ])
     ).resolves.toStrictEqual([0, 3, 3, 3, 3]);
 
@@ -169,10 +184,10 @@ test("unsettledAttached", async () => {
     await expect(
       Promise.all([
         unsettled(),
-        unsettled({ d: { dateEq: ["now", "-", 1, "day"] } }),
-        unsettled({ d: { dateNeq: ["now", "-", 1, "day"] } }),
-        unsettled({ d: { dateGt: ["now", "-", 1, "day"] } }),
-        unsettled({ d: { dateLt: ["now", "-", 1, "day"] } })
+        unsettled({ d: { dateEq: [RelativeDate.now, "-", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateNeq: [RelativeDate.now, "-", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateGt: [RelativeDate.now, "-", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateLt: [RelativeDate.now, "-", 1, TimeUnit.day] } })
       ])
     ).resolves.toStrictEqual([0, 2, 2, 2, 2]);
 
@@ -181,10 +196,10 @@ test("unsettledAttached", async () => {
     await expect(
       Promise.all([
         unsettled(),
-        unsettled({ d: { dateEq: ["now", "-", 1, "day"] } }),
-        unsettled({ d: { dateNeq: ["now", "-", 1, "day"] } }),
-        unsettled({ d: { dateGt: ["now", "-", 1, "day"] } }),
-        unsettled({ d: { dateLt: ["now", "-", 1, "day"] } })
+        unsettled({ d: { dateEq: [RelativeDate.now, "-", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateNeq: [RelativeDate.now, "-", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateGt: [RelativeDate.now, "-", 1, TimeUnit.day] } }),
+        unsettled({ d: { dateLt: [RelativeDate.now, "-", 1, TimeUnit.day] } })
       ])
     ).resolves.toStrictEqual([0, 1, 1, 1, 1]);
 
@@ -242,10 +257,22 @@ test("unsettledAttached: Combined", async () => {
 
     await expect(
       Promise.all([
-        unsettled({ d: { dateGt: ["now"] } }, { d: { dateGt: ["now"] } }),
-        unsettled({ d: { dateGt: ["now"] } }, { d: { dateLt: ["now"] } }),
-        unsettled({ d: { dateLt: ["now"] } }, { d: { dateGt: ["now"] } }),
-        unsettled({ d: { dateLt: ["now"] } }, { d: { dateLt: ["now"] } })
+        unsettled(
+          { d: { dateGt: [RelativeDate.now] } },
+          { d: { dateGt: [RelativeDate.now] } }
+        ),
+        unsettled(
+          { d: { dateGt: [RelativeDate.now] } },
+          { d: { dateLt: [RelativeDate.now] } }
+        ),
+        unsettled(
+          { d: { dateLt: [RelativeDate.now] } },
+          { d: { dateGt: [RelativeDate.now] } }
+        ),
+        unsettled(
+          { d: { dateLt: [RelativeDate.now] } },
+          { d: { dateLt: [RelativeDate.now] } }
+        )
       ])
     ).resolves.toStrictEqual([9, 12, 12, 15]);
 
@@ -253,10 +280,22 @@ test("unsettledAttached: Combined", async () => {
 
     await expect(
       Promise.all([
-        unsettled({ d: { dateGt: ["now"] } }, { d: { dateGt: ["now"] } }),
-        unsettled({ d: { dateGt: ["now"] } }, { d: { dateLt: ["now"] } }),
-        unsettled({ d: { dateLt: ["now"] } }, { d: { dateGt: ["now"] } }),
-        unsettled({ d: { dateLt: ["now"] } }, { d: { dateLt: ["now"] } })
+        unsettled(
+          { d: { dateGt: [RelativeDate.now] } },
+          { d: { dateGt: [RelativeDate.now] } }
+        ),
+        unsettled(
+          { d: { dateGt: [RelativeDate.now] } },
+          { d: { dateLt: [RelativeDate.now] } }
+        ),
+        unsettled(
+          { d: { dateLt: [RelativeDate.now] } },
+          { d: { dateGt: [RelativeDate.now] } }
+        ),
+        unsettled(
+          { d: { dateLt: [RelativeDate.now] } },
+          { d: { dateLt: [RelativeDate.now] } }
+        )
       ])
     ).resolves.toStrictEqual([4, 8, 8, 12]);
 
@@ -264,10 +303,22 @@ test("unsettledAttached: Combined", async () => {
 
     await expect(
       Promise.all([
-        unsettled({ d: { dateGt: ["now"] } }, { d: { dateGt: ["now"] } }),
-        unsettled({ d: { dateGt: ["now"] } }, { d: { dateLt: ["now"] } }),
-        unsettled({ d: { dateLt: ["now"] } }, { d: { dateGt: ["now"] } }),
-        unsettled({ d: { dateLt: ["now"] } }, { d: { dateLt: ["now"] } })
+        unsettled(
+          { d: { dateGt: [RelativeDate.now] } },
+          { d: { dateGt: [RelativeDate.now] } }
+        ),
+        unsettled(
+          { d: { dateGt: [RelativeDate.now] } },
+          { d: { dateLt: [RelativeDate.now] } }
+        ),
+        unsettled(
+          { d: { dateLt: [RelativeDate.now] } },
+          { d: { dateGt: [RelativeDate.now] } }
+        ),
+        unsettled(
+          { d: { dateLt: [RelativeDate.now] } },
+          { d: { dateLt: [RelativeDate.now] } }
+        )
       ])
     ).resolves.toStrictEqual([1, 4, 4, 7]);
 

@@ -9,11 +9,7 @@ export const isDocResponse = is.object.factory<DocResponse>(
 export const isDocResponses = is.factory(is.array.of, isDocResponse);
 
 export const isDocsResponse = is.object.factory<DocsResponse>(
-  {
-    count: is.number,
-    docs: isDocResponses,
-    settled: is.boolean
-  },
+  { count: is.number, docs: isDocResponses, settled: is.boolean },
   {}
 );
 
@@ -41,11 +37,7 @@ export const isExistingDocument = evaluate(() => {
 
 export const isExistingAttachedDocument =
   is.object.factory<database.ExistingAttachedDocument>(
-    {
-      _id: is.number,
-      _rev: is.number,
-      parentDoc: isExistingDocument
-    },
+    { _id: is.number, _rev: is.number, parentDoc: isExistingDocument },
     { _deleted: is.true }
   );
 

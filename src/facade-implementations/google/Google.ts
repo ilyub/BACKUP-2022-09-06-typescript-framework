@@ -1,5 +1,5 @@
-import type { AsyncPromise, stringU } from "@skylib/functions";
 import { assert, evaluate, is } from "@skylib/functions";
+import type { stringU, types } from "@skylib/functions";
 import $ from "jquery";
 import type { google } from "@skylib/facades";
 
@@ -9,7 +9,7 @@ export class Google implements google.Facade {
    *
    * @param clientId - Client ID.
    */
-  public constructor(clientId: AsyncPromise<stringU> | stringU) {
+  public constructor(clientId: stringU | types.fn.AsyncPromise<stringU>) {
     this.clientId = clientId;
   }
 
@@ -22,11 +22,11 @@ export class Google implements google.Facade {
         : await sdk.signIn();
 
       return user.getAuthResponse().id_token;
-    } catch (error) {
-      if (is.indexedObject(error) && error["error"] === "popup_closed_by_user")
+    } catch (e) {
+      if (is.indexedObject(e) && e["error"] === "popup_closed_by_user")
         return undefined;
 
-      throw error;
+      throw e;
     }
   }
 
@@ -34,7 +34,7 @@ export class Google implements google.Facade {
     await this._loadSdk();
   }
 
-  protected readonly clientId: AsyncPromise<stringU> | stringU;
+  protected readonly clientId: stringU | types.fn.AsyncPromise<stringU>;
 
   // eslint-disable-next-line @skylib/custom/prefer-readonly-property -- Ok
   protected sdk: Promise<Google.Auth> | undefined;
@@ -66,8 +66,8 @@ export class Google implements google.Facade {
                 googleAuth => {
                   resolve(googleAuth);
                 },
-                error => {
-                  reject(new Error(`Error ${error.error}: ${error.details}`));
+                e => {
+                  reject(new Error(`Error ${e.error}: ${e.details}`));
                 }
               );
             });

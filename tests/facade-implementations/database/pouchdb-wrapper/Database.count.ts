@@ -1,3 +1,5 @@
+/* eslint jest/max-expects: [warn, { max: 13 }] -- Ok */
+
 import * as testUtils from "@skylib/functions/dist/test-utils";
 import {
   database,
@@ -23,10 +25,11 @@ test("count", async () => {
     { d: "2001-02-18 12:00" }
   ]);
 
-  const cond = { d: { dateGt: "2001-02-15 13:00" } } as const;
+  const conds = { d: { dateGt: "2001-02-15 13:00" } } as const;
 
-  await expect(db.count()).resolves.toBe(4);
-  await expect(db.count(cond)).resolves.toBe(1);
+  await expect(
+    Promise.all([db.count(), db.count(conds)])
+  ).resolves.toStrictEqual([4, 1]);
 });
 
 test("countAttached", async () => {
@@ -51,20 +54,20 @@ test("countAttached", async () => {
   await db.bulkDocs(docs);
   await db.bulkDocsAttached(attachedDocs);
 
-  const conds0 = {} as const;
+  const conds = { y: { eq: "a" } } as const;
 
-  const condsX = { x: { eq: "a" } } as const;
+  const parentConds = { x: { eq: "a" } } as const;
 
-  const condsY = { y: { eq: "a" } } as const;
+  const expected = [4, 2, 2, 1] as const;
 
   await expect(
     Promise.all([
       db.countAttached(),
-      db.countAttached(conds0, condsX),
-      db.countAttached(condsY, conds0),
-      db.countAttached(condsY, condsX)
+      db.countAttached({}, parentConds),
+      db.countAttached(conds, {}),
+      db.countAttached(conds, parentConds)
     ])
-  ).resolves.toStrictEqual([4, 2, 2, 1]);
+  ).resolves.toStrictEqual(expected);
 });
 
 test("reactiveCount", async () => {
@@ -82,8 +85,11 @@ test("reactiveCount", async () => {
 
     {
       expect(result.loaded).toBeFalse();
+      expect(result.loading).toBeTrue();
+      expect(result.value).toBeUndefined();
       await handlePromise.runAll();
       expect(result.loaded).toBeTrue();
+      expect(result.loading).toBeFalse();
       expect(result.value).toBe(0);
     }
 
@@ -105,6 +111,7 @@ test("reactiveCount", async () => {
       result.unsubscribe();
       config.conditions = { type: { eq: "a" } };
       expect(result.loading).toBeFalse();
+      await wait(1000);
     }
   });
 });
@@ -128,13 +135,16 @@ test("reactiveCountAttached", async () => {
 
     {
       expect(result.loaded).toBeFalse();
+      expect(result.loading).toBeTrue();
+      expect(result.value).toBeUndefined();
       await handlePromise.runAll();
       expect(result.loaded).toBeTrue();
+      expect(result.loading).toBeFalse();
+      expect(result.value).toBe(0);
     }
 
     {
       await db.putAttached(id, { type: "a" });
-      expect(result.value).toBe(0);
       await wait(1000);
       expect(result.value).toBe(1);
     }
@@ -151,6 +161,7 @@ test("reactiveCountAttached", async () => {
       result.unsubscribe();
       config.conditions = { type: { eq: "a" } };
       expect(result.loading).toBeFalse();
+      await wait(1000);
     }
   });
 });

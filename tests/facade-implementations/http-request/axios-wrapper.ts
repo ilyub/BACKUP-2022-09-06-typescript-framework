@@ -5,10 +5,12 @@ const axios = implementations.httpRequest.axiosWrapper;
 
 beforeEach(jestMockAxios.reset);
 
-test("configure, getConfiguration", () => {
-  expect(axios.getConfiguration().timeout).toBe(1000);
-  axios.configure({ timeout: 1001 });
-  expect(axios.getConfiguration().timeout).toBe(1001);
+test.each([
+  { config: {}, expected: 1000 },
+  { config: { timeout: 1001 }, expected: 1001 }
+])("configure, getConfiguration", ({ config, expected }) => {
+  axios.configure(config);
+  expect(axios.getConfiguration().timeout).toBe(expected);
 });
 
 test("send", async () => {

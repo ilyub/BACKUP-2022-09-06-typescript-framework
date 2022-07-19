@@ -1,13 +1,15 @@
+import { HttpMethod } from "@skylib/facades";
+import type { Writable } from "@skylib/functions";
 import axios from "axios";
 import type { httpRequest } from "@skylib/facades";
 import { o } from "@skylib/functions";
 
 export const axiosWrapper: axiosWrapper.Configurable & httpRequest.Facade = {
-  configure: (config: axiosWrapper.PartialConfiguration) => {
+  configure: config => {
     o.assign(moduleConfig, config);
   },
   getConfiguration: () => moduleConfig,
-  send: async (url: string, method = "get", data = {}, headers = {}) => {
+  send: async (url, method = HttpMethod.get, data = {}, headers = {}) => {
     const response = await axios({
       data,
       headers,
@@ -20,6 +22,7 @@ export const axiosWrapper: axiosWrapper.Configurable & httpRequest.Facade = {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- Ok
 export namespace axiosWrapper {
   export interface Configurable {
     /**
@@ -43,4 +46,4 @@ export namespace axiosWrapper {
   export interface PartialConfiguration extends Partial<Configuration> {}
 }
 
-const moduleConfig: axiosWrapper.Configuration = { timeout: 30_000 };
+const moduleConfig: Writable<axiosWrapper.Configuration> = { timeout: 30_000 };

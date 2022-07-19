@@ -3,6 +3,8 @@
 /* eslint-disable @skylib/custom/functions/no-reflect-set -- Ok */
 
 import {
+  ProxyHandlerAction,
+  ReadonlyMap,
   as,
   defineFn,
   is,
@@ -28,10 +30,13 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
 
     const result = new Proxy(
       obj,
-      wrapProxyHandler("reflectStorage", "doDefault", { get, set })
+      wrapProxyHandler("reflectStorage", ProxyHandlerAction.doDefault, {
+        get,
+        set
+      })
     );
 
-    reflect.defineMetadata(MetadataKey, new Map(), result);
+    reflect.defineMetadata(MetadataKey, new ReadonlyMap(), result);
 
     return result;
 
@@ -44,7 +49,10 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
       return is.object(value)
         ? new Proxy(
             value,
-            wrapProxyHandler("reflectStorage", "doDefault", { get, set })
+            wrapProxyHandler("reflectStorage", ProxyHandlerAction.doDefault, {
+              get,
+              set
+            })
           )
         : value;
     }
@@ -90,7 +98,7 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
       handler: reactiveStorage.Handler<T>,
       reducer?: reactiveStorage.Reducer<T>
     ): reactiveStorage.Observer => {
-      const symbol = Symbol("reflect-storage-callback");
+      const symbol = Symbol("reflect-storage__callback");
 
       const callbacks = reflect.getMetadata(MetadataKey, obj, isCallbacks);
 
@@ -119,11 +127,11 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
           obj
         );
 
-      return { _type: "ReactiveStorageObserver", symbol };
+      return { resourceType: "reactive-storage__observer", symbol };
     }
   }
 );
 
-const MetadataKey = Symbol("reflect-storage-callbacks");
+const MetadataKey = Symbol("reflect-storage__callbacks");
 
 const isCallbacks = is.factory(is.map.of, is.symbol, is.callable);

@@ -1,4 +1,5 @@
 import { defineFn, o, wait } from "@skylib/functions";
+import type { Writable } from "@skylib/functions";
 import type { testDelay as facade } from "@skylib/facades";
 
 export const configurableTestDelay: configurableTestDelay.Configurable &
@@ -7,13 +8,14 @@ export const configurableTestDelay: configurableTestDelay.Configurable &
     if (moduleConfig.enabled) await wait(moduleConfig.timeout);
   },
   {
-    configure: (config: Partial<configurableTestDelay.Configuration>) => {
+    configure: config => {
       o.assign(moduleConfig, config);
     },
     getConfiguration: () => moduleConfig
   }
 );
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- Ok
 export namespace configurableTestDelay {
   export interface Configurable {
     /**
@@ -38,7 +40,7 @@ export namespace configurableTestDelay {
   export interface PartialConfiguration extends Partial<Configuration> {}
 }
 
-const moduleConfig: configurableTestDelay.Configuration = {
+const moduleConfig: Writable<configurableTestDelay.Configuration> = {
   enabled: false,
   timeout: 100
 };

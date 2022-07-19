@@ -5,18 +5,21 @@ const { configurableTestDelay } = implementations.testDelay;
 
 testUtils.installFakeTimer();
 
-test("configure, getConfiguration", () => {
-  expect(configurableTestDelay.getConfiguration().timeout).toBe(1000);
-  configurableTestDelay.configure({ timeout: 1001 });
-  expect(configurableTestDelay.getConfiguration().timeout).toBe(1001);
+test.each([
+  { config: {}, expected: 1000 },
+  { config: { timeout: 1001 }, expected: 1001 }
+])("configure, getConfiguration", ({ config, expected }) => {
+  configurableTestDelay.configure(config);
+  expect(configurableTestDelay.getConfiguration().timeout).toBe(expected);
 });
 
-test("testDelay", async () => {
+test.each([
+  { enabled: false, expected: 0 },
+  { enabled: true, expected: 1000 }
+])("testDelay", async ({ enabled, expected }) => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
-    await expect(configurableTestDelay).executionTimeToBe(0);
-    configurableTestDelay.configure({ enabled: true });
-    await expect(configurableTestDelay).executionTimeToBe(1000);
+    configurableTestDelay.configure({ enabled });
+    await expect(configurableTestDelay).executionTimeToBe(expected);
   });
 });

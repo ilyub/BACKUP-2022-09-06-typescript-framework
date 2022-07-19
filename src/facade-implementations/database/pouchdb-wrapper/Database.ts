@@ -123,11 +123,7 @@ export class Database implements database.Database {
   ): Promise<number> {
     const response = await this.rawQuery(
       {},
-      {
-        conditions,
-        count: true,
-        parentConditions
-      }
+      { conditions, count: true, parentConditions }
     );
 
     return response.count;
@@ -176,8 +172,8 @@ export class Database implements database.Database {
   ): Promise<database.ExistingDocument | undefined> {
     try {
       return await this.get(id);
-    } catch (error) {
-      assert.instanceOf(error, PouchNotFoundError, assert.wrapError(error));
+    } catch (e) {
+      assert.instanceOf(e, PouchNotFoundError, assert.wrapError(e));
 
       return undefined;
     }
@@ -189,8 +185,8 @@ export class Database implements database.Database {
   ): Promise<database.ExistingAttachedDocument | undefined> {
     try {
       return await this.getAttached(id, parentId);
-    } catch (error) {
-      assert.instanceOf(error, PouchNotFoundError, assert.wrapError(error));
+    } catch (e) {
+      assert.instanceOf(e, PouchNotFoundError, assert.wrapError(e));
 
       return undefined;
     }
@@ -254,8 +250,8 @@ export class Database implements database.Database {
   ): Promise<database.PutResponse | undefined> {
     try {
       return await this.put(doc);
-    } catch (error) {
-      assert.instanceOf(error, PouchConflictError, assert.wrapError(error));
+    } catch (e) {
+      assert.instanceOf(e, PouchConflictError, assert.wrapError(e));
 
       return undefined;
     }
@@ -267,8 +263,8 @@ export class Database implements database.Database {
   ): Promise<database.PutAttachedResponse | undefined> {
     try {
       return await this.putAttached(parentId, doc);
-    } catch (error) {
-      assert.instanceOf(error, PouchConflictError, assert.wrapError(error));
+    } catch (e) {
+      assert.instanceOf(e, PouchConflictError, assert.wrapError(e));
 
       return undefined;
     }
@@ -504,6 +500,8 @@ export class Database implements database.Database {
     reactiveStorage({
       loaded: false,
       loading: true,
+      // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
+      // fixme
       refresh: fn.noop,
       unsubscribe: fn.noop
     });
@@ -538,7 +536,7 @@ export class Database implements database.Database {
 
     const lastAttachedDocs: Writable<numbers> = [];
 
-    const result: Array<Omit<database.PutAttachedResponse, "parentRev">> = [];
+    const result: Writable<RawPutAttachedResponses> = [];
 
     for (const doc of docs) {
       const { _id, _rev, parentDoc: omitParentDoc, ...content } = doc;
@@ -552,19 +550,9 @@ export class Database implements database.Database {
 
       const rev = is.not.empty(_rev) ? _rev + 1 : 1;
 
-      attachedDocs[id] = {
-        ...content,
-        _id: id,
-        _rev: rev
-      };
-
+      attachedDocs[id] = { ...content, _id: id, _rev: rev };
       lastAttachedDocs.push(id);
-
-      result.push({
-        id,
-        parentId,
-        rev
-      });
+      result.push({ id, parentId, rev });
     }
 
     try {
@@ -582,11 +570,15 @@ export class Database implements database.Database {
           parentRev: response.rev
         })
       );
-    } catch (error) {
-      assert.instanceOf(error, PouchConflictError, assert.wrapError(error));
+    } catch (e) {
+      assert.instanceOf(e, PouchConflictError, assert.wrapError(e));
 
       return undefined;
     }
+
+    type RawPutAttachedResponses = ReadonlyArray<
+      Omit<database.PutAttachedResponse, "parentRev">
+    >;
   }
 
   /**
@@ -685,8 +677,8 @@ export class Database implements database.Database {
       await db.put({ ...doc, views: { default: mapReduce.mapReduce } });
 
       return true;
-    } catch (error) {
-      assert.instanceOf(error, PouchConflictError, assert.wrapError(error));
+    } catch (e) {
+      assert.instanceOf(e, PouchConflictError, assert.wrapError(e));
 
       return false;
     }
@@ -705,8 +697,8 @@ export class Database implements database.Database {
         _id: `_design/${mapReduce.id}`,
         views: { default: mapReduce.mapReduce }
       });
-    } catch (error) {
-      assert.instanceOf(error, PouchConflictError, assert.wrapError(error));
+    } catch (e) {
+      assert.instanceOf(e, PouchConflictError, assert.wrapError(e));
     }
   }
 
@@ -729,12 +721,11 @@ export class Database implements database.Database {
    * Applies migrations.
    */
   protected async migrate(): Promise<void> {
-    if (this.options.migrations.length > 0) {
-      let migrations = await evaluate<database.PutDocument>(async () => {
-        const result = await this.getIfExists("migrations");
-
-        return result ?? { _id: "migrations" };
-      });
+    if (this.options.migrations.length) {
+      let migrations = await evaluate(
+        async (): Promise<database.PutDocument> =>
+          (await this.getIfExists("migrations")) ?? { _id: "migrations" }
+      );
 
       for (const migration of this.options.migrations)
         if (migrations[migration.id] === true) {
@@ -747,11 +738,7 @@ export class Database implements database.Database {
           // eslint-disable-next-line no-await-in-loop -- Ok
           const { id, rev } = await this.put(migrations);
 
-          migrations = {
-            ...migrations,
-            _id: id,
-            _rev: rev
-          };
+          migrations = { ...migrations, _id: id, _rev: rev };
         }
     }
   }
@@ -782,8 +769,8 @@ export class Database implements database.Database {
 
     try {
       return await this._rawQuery(mapReduce, options, queryOptions);
-    } catch (error) {
-      assert.instanceOf(error, PouchNotFoundError, assert.wrapError(error));
+    } catch (e) {
+      assert.instanceOf(e, PouchNotFoundError, assert.wrapError(e));
       await this.createDesignDocument(mapReduce);
 
       return await this._rawQuery(mapReduce, options, queryOptions);
@@ -1108,11 +1095,7 @@ export class Database implements database.Database {
                   handler(attachedDoc);
               }
           },
-          {
-            include_docs: true,
-            live: true,
-            since: "now"
-          }
+          { include_docs: true, live: true, since: "now" }
         );
     else if (this.changes) {
       this.changes.cancel();

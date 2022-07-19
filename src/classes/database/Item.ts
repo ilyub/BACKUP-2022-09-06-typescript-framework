@@ -1,4 +1,4 @@
-import type { UndefinedStyle, numbers, stringU } from "@skylib/functions";
+import type { numbers, stringU, types } from "@skylib/functions";
 import type { database } from "@skylib/facades";
 import { o } from "@skylib/functions";
 
@@ -52,7 +52,7 @@ export class Item {
       updatedAt: this.updatedAt
     });
 
-    type Source = UndefinedStyle<Item.ExistingItemDoc>;
+    type Source = types.object.style.Undefined<Item.ExistingItemDoc>;
   }
 
   protected readonly attachedDocs:

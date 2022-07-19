@@ -1,5 +1,5 @@
-import type { AsyncPromise, stringU } from "@skylib/functions";
 import { assert, evaluate, is } from "@skylib/functions";
+import type { stringU, types } from "@skylib/functions";
 import $ from "jquery";
 import type { facebook } from "@skylib/facades";
 
@@ -10,7 +10,10 @@ export class Facebook implements facebook.Facade {
    * @param appId - App ID.
    * @param version - Version.
    */
-  public constructor(appId: AsyncPromise<stringU> | stringU, version: string) {
+  public constructor(
+    appId: stringU | types.fn.AsyncPromise<stringU>,
+    version: string
+  ) {
     this.appId = appId;
     this.version = version;
   }
@@ -63,7 +66,7 @@ export class Facebook implements facebook.Facade {
     await this.sdk;
   }
 
-  protected readonly appId: AsyncPromise<stringU> | stringU;
+  protected readonly appId: stringU | types.fn.AsyncPromise<stringU>;
 
   // eslint-disable-next-line @skylib/custom/prefer-readonly-property -- Ok
   protected sdk: Promise<void> | undefined;

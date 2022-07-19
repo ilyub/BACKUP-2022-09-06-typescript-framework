@@ -1,10 +1,7 @@
-import type * as testUtils from "@skylib/functions/dist/test-utils";
+import * as testUtils from "@skylib/functions/dist/test-utils";
+import { ReadonlySet, assert } from "@skylib/functions";
 import $ from "jquery";
 import { DateTime } from "../facade-implementations/datetime/date-fns-wrapper/DateTime";
-// eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
-// fixme
-import type { Result } from "@skylib/functions/dist/test-utils/expect.internal";
-import { assert } from "@skylib/functions";
 import { progressReporter } from "@skylib/facades";
 
 declare global {
@@ -31,51 +28,48 @@ declare global {
 export const datetimeToBe: testUtils.ExpectFromMatcher<"datetimeToBe"> = (
   got: unknown,
   expected: string
-): Result => {
+): testUtils.ExpectResult => {
   assert.instanceOf(got, DateTime, "Expecting DateTime instance");
 
-  return got.toTime() === new Date(expected).getTime()
-    ? {
-        message: (): string => `Expected date not to be "${expected}"`,
-        pass: true
-      }
-    : {
-        message: (): string =>
-          `Expected date ("${got.toString()}") to be "${expected}"`,
-        pass: false
-      };
+  const gotTime = got.toTime();
+
+  const expectedTime = new Date(expected).getTime();
+
+  return testUtils.buildEqualsResult(
+    gotTime === expectedTime,
+    "Unexpected date",
+    gotTime,
+    expectedTime
+  );
 };
 
 export const progressToBe: testUtils.ExpectFromMatcher<"progressToBe"> = (
   got: unknown,
   expected: number
-): Result => {
+): testUtils.ExpectResult => {
   assert.string(got, "Expecting string");
 
   const gotProgress = progressReporter.getProgress();
 
-  const classOptions =
+  const classAttrs =
     gotProgress === 0
-      ? new Set([undefined, ""])
-      : new Set(["progress-bar-active"]);
+      ? new ReadonlySet([undefined, ""])
+      : new ReadonlySet(["progress-bar-active"]);
 
-  const styleOptions =
+  const styleAttrs =
     gotProgress === 0
-      ? new Set([undefined, ""])
-      : new Set([`width: ${100 * progressReporter.getProgress()}%;`]);
+      ? new ReadonlySet([undefined, ""])
+      : new ReadonlySet([`width: ${100 * gotProgress}%;`]);
 
-  return gotProgress === expected &&
-    classOptions.has($(got).attr("class")) &&
-    styleOptions.has($(got).attr("style"))
-    ? {
-        message: (): string => `Expected progress not to be ${expected}`,
-        pass: true
-      }
-    : {
-        message: (): string =>
-          `Expected progress (${gotProgress}) to be ${expected}`,
-        pass: false
-      };
+  assert.toBeTrue(classAttrs.has($(got).attr("class")), "Unexpected class");
+  assert.toBeTrue(styleAttrs.has($(got).attr("style")), "Unexpected style");
+
+  return testUtils.buildEqualsResult(
+    gotProgress === expected,
+    "Unexpected progress",
+    gotProgress,
+    expected
+  );
 };
 
 export const matchers = { datetimeToBe, progressToBe } as const;

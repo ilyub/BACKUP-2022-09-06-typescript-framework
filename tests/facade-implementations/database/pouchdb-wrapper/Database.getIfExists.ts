@@ -1,8 +1,10 @@
+/* eslint jest/max-expects: [warn, { max: 13 }] -- Ok */
+
 import * as testUtils from "@skylib/functions/dist/test-utils";
+import { fn, wait } from "@skylib/functions";
 import { handlePromise, uniqueId } from "@skylib/facades";
 import type { database } from "@skylib/facades";
 import { implementations } from "@";
-import { wait } from "@skylib/functions";
 
 const pouchdb = new implementations.database.PouchWrapper();
 
@@ -40,20 +42,17 @@ test("getIfExists: attachedDocs", async () => {
   });
 });
 
-test("getIfExists: deleted", async () => {
+test.each([
+  fn.noop,
+  async (id: string, db: database.Database) => {
+    await db.put({ _deleted: true, _id: id });
+  }
+])("getIfExists: missing", async subtest => {
   const db = pouchdb.create(uniqueId());
 
   const id = uniqueId();
 
-  await db.put({ _deleted: true, _id: id });
-  await expect(db.getIfExists(id)).resolves.toBeUndefined();
-});
-
-test("getIfExists: missing", async () => {
-  const db = pouchdb.create(uniqueId());
-
-  const id = uniqueId();
-
+  await subtest(id, db);
   await expect(db.getIfExists(id)).resolves.toBeUndefined();
 });
 
@@ -80,23 +79,21 @@ test("getIfExistsAttached", async () => {
   });
 });
 
-test("getIfExistsAttached: deleted", async () => {
+test.each([
+  fn.noop,
+  async (id: string, db: database.Database) => {
+    await db.put({ _id: id });
+  },
+  async (id: string, db: database.Database) => {
+    await db.put({ _id: id });
+    await db.putAttached(id, { _deleted: true });
+  }
+])("getIfExistsAttached: missing", async subtest => {
   const db = pouchdb.create(uniqueId());
 
   const id = uniqueId();
 
-  await db.put({ _id: id });
-  await db.putAttached(id, { _deleted: true });
-  await expect(db.getIfExistsAttached(0, id)).resolves.toBeUndefined();
-});
-
-test("getIfExistsAttached: missing", async () => {
-  const db = pouchdb.create(uniqueId());
-
-  const id = uniqueId();
-
-  await expect(db.getIfExistsAttached(0, id)).resolves.toBeUndefined();
-  await db.put({ _id: id });
+  await subtest(id, db);
   await expect(db.getIfExistsAttached(0, id)).resolves.toBeUndefined();
 });
 
@@ -111,29 +108,26 @@ test("reactiveGetIfExists", async () => {
     const result = db.reactiveGetIfExists(id);
 
     expect(result.loaded).toBeFalse();
+    expect(result.loading).toBeTrue();
     await handlePromise.runAll();
+    expect(result.loaded).toBeTrue();
+    expect(result.loading).toBeFalse();
     expect(result.value).toBeUndefined();
 
     const { rev } = await db.put({ _id: id, x: 1 });
 
-    const expected = {
-      _id: id,
-      _rev: rev,
-      x: 1
-    } as const;
+    const expected = { _id: id, _rev: rev, x: 1 } as const;
 
-    await wait(1000);
-    expect(result.value).toStrictEqual(expected);
+    {
+      await wait(1000);
+      expect(result.value).toStrictEqual(expected);
+    }
 
-    const doc: database.PutDocument = {
-      _deleted: true,
-      _id: id,
-      _rev: rev
-    };
-
-    await db.put(doc);
-    await wait(1000);
-    expect(result.value).toBeUndefined();
+    {
+      await db.put({ _deleted: true, _id: id, _rev: rev });
+      await wait(1000);
+      expect(result.value).toBeUndefined();
+    }
   });
 });
 
@@ -150,7 +144,10 @@ test("reactiveGetIfExistsAttached", async () => {
     const result = db.reactiveGetIfExistsAttached(0, id);
 
     expect(result.loaded).toBeFalse();
+    expect(result.loading).toBeTrue();
     await handlePromise.runAll();
+    expect(result.loaded).toBeTrue();
+    expect(result.loading).toBeFalse();
     expect(result.value).toBeUndefined();
 
     const { parentRev: rev } = await db.putAttached(id, { y: 2 });
@@ -168,17 +165,15 @@ test("reactiveGetIfExistsAttached", async () => {
       y: 2
     } as const;
 
-    await wait(1000);
-    expect(result.value).toStrictEqual(expected);
+    {
+      await wait(1000);
+      expect(result.value).toStrictEqual(expected);
+    }
 
-    const doc: database.PutAttachedDocument = {
-      _deleted: true,
-      _id: 0,
-      _rev: 1
-    };
-
-    await db.putAttached(id, doc);
-    await wait(1000);
-    expect(result.value).toBeUndefined();
+    {
+      await db.putAttached(id, { _deleted: true, _id: 0, _rev: 1 });
+      await wait(1000);
+      expect(result.value).toBeUndefined();
+    }
   });
 });
