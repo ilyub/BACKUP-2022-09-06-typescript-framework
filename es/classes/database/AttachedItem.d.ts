@@ -1,6 +1,6 @@
+import type { stringU } from "@skylib/functions";
 import type { Item } from "./Item";
 import type { database } from "@skylib/facades";
-import type { stringU } from "@skylib/functions";
 export declare abstract class AttachedItem<T extends Item = Item> {
     readonly _deleted: boolean;
     readonly _id: number;

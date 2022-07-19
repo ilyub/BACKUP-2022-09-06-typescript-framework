@@ -1,5 +1,5 @@
+import { ProxyHandlerAction, a, assert, cast, evaluate, o, s, wrapProxyHandler } from "@skylib/functions";
 import { moduleConfig } from "./core";
-import { a, assert, cast, evaluate, o, s, wrapProxyHandler } from "@skylib/functions";
 export class Dictionary {
     /**
      * Creates class instance.
@@ -53,7 +53,7 @@ export class Dictionary {
             value: new Map()
         });
         const facade = evaluate(() => {
-            const handler = wrapProxyHandler("Dictionary", "doDefault", {
+            const handler = wrapProxyHandler("Dictionary", ProxyHandlerAction.doDefault, {
                 get: (target, key) => {
                     assert.string(key, "Expecting string key");
                     return target.has(key) ? target.get(key) : o.get(target, key);

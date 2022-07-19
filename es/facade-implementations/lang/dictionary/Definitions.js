@@ -1,5 +1,5 @@
+import { ReadonlyMap, assert, is, o, s } from "@skylib/functions";
 import { Definition } from "./Definition";
-import { assert, is, o, s } from "@skylib/functions";
 export class Definitions {
     /**
      * Creates class instance.
@@ -32,17 +32,34 @@ export class Definitions {
             value: void 0
         });
         validate(raw);
-        const keys = {};
-        for (const key of o.keys(raw.words)) {
-            keys[s.lcFirst(key)] = s.lcFirst(key);
-            keys[s.ucFirst(key)] = s.ucFirst(key);
-            keys[key.toLowerCase()] = key.toLowerCase();
-            keys[key.toUpperCase()] = key.toUpperCase();
-        }
+        const keys = o.fromEntries(o.keys(raw.words).flatMap(key => [
+            [s.lcFirst(key), s.lcFirst(key)],
+            [s.ucFirst(key), s.ucFirst(key)],
+            [key.toLowerCase(), key.toLowerCase()],
+            [key.toUpperCase(), key.toUpperCase()]
+        ]));
+        const words = new ReadonlyMap(o.entries(raw.words).flatMap(([key, value]) => [
+            [
+                s.lcFirst(key),
+                new Definition(map(value, x => s.lcFirst(x)), s.lcFirst(key))
+            ],
+            [
+                s.ucFirst(key),
+                new Definition(map(value, x => s.ucFirst(x)), s.ucFirst(key))
+            ],
+            [
+                key.toLowerCase(),
+                new Definition(map(value, x => x.toLowerCase()), key.toLowerCase())
+            ],
+            [
+                key.toUpperCase(),
+                new Definition(map(value, x => x.toUpperCase()), key.toUpperCase())
+            ]
+        ]));
         this.keys = keys;
         this.pluralReduce = raw.pluralReduce;
-        this.wordForms = new Map(o.entries(raw.wordForms));
-        this.words = getWords(raw);
+        this.wordForms = new ReadonlyMap(o.entries(raw.wordForms));
+        this.words = words;
     }
     /**
      * Returns word based on context, count, and replacements.
@@ -71,22 +88,6 @@ export class Definitions {
     has(key) {
         return this.words.has(key);
     }
-}
-/**
- * Returns words.
- *
- * @param raw - Language definition.
- * @returns Words.
- */
-function getWords(raw) {
-    const result = new Map();
-    for (const [key, value] of o.entries(raw.words)) {
-        result.set(s.lcFirst(key), new Definition(map(value, x => s.lcFirst(x)), s.lcFirst(key)));
-        result.set(s.ucFirst(key), new Definition(map(value, x => s.ucFirst(x)), s.ucFirst(key)));
-        result.set(key.toLowerCase(), new Definition(map(value, x => x.toLowerCase()), key.toLowerCase()));
-        result.set(key.toUpperCase(), new Definition(map(value, x => x.toUpperCase()), key.toUpperCase()));
-    }
-    return result;
 }
 /**
  * Applies callback to raw definition.

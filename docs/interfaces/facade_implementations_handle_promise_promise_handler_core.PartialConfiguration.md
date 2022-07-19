@@ -20,7 +20,7 @@
 
 ### expectedDurations
 
-• `Optional` `Readonly` **expectedDurations**: `Rec`<`Type`, `number`\>
+• `Optional` `Readonly` **expectedDurations**: `Rec`<`PromiseType`, `number`\>
 
 #### Inherited from
 

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getConfiguration = exports.configure = exports.pluralReduce = exports.moduleConfig = void 0;
-const facades_1 = require("@skylib/facades");
 const functions_1 = require("@skylib/functions");
+const facades_1 = require("@skylib/facades");
 exports.moduleConfig = (0, functions_1.onDemand)(() => (0, facades_1.reactiveStorage)({ localeName: "en-US" }));
 exports.pluralReduce = (0, functions_1.defineFn)(
 /**

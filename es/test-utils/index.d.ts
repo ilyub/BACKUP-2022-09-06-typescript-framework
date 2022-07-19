@@ -1,6 +1,6 @@
-import { implementations } from "..";
 import { lang } from "@skylib/facades";
 import type { LocaleName } from "@skylib/functions";
+import { implementations } from "..";
 export declare const jestReset: (() => void) & Readonly<{
     /**
      * Jest reset.

@@ -79,7 +79,7 @@ ___
 
 ### keys
 
-• `Readonly` **keys**: `Rec`<`Transform`<`Word`\>, `Transform`<`Word`\>\>
+• `Readonly` **keys**: `Rec`<`Transforms`<`Word`\>, `Transforms`<`Word`\>\>
 
 #### Implementation of
 

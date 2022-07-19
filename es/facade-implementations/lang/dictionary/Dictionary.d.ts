@@ -1,6 +1,6 @@
+import type { LocaleName, NumStr, Rec } from "@skylib/functions";
 import type { Definitions } from "./Definitions";
 import type { lang } from "@skylib/facades";
-import type { LocaleName, NumStr, Rec } from "@skylib/functions";
 export declare class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
     /**
      * Creates dictionary.
@@ -11,7 +11,7 @@ export declare class Dictionary implements lang.Dictionary<lang.Word, lang.Conte
      * @returns Dictionary.
      */
     static readonly create: (definitions: Rec<LocaleName, Definitions>, context?: lang.Context, count?: number) => lang.Facade;
-    readonly keys: Rec<lang.Transform, lang.Transform>;
+    readonly keys: Rec<lang.Transforms, lang.Transforms>;
     readonly plain: (str: string) => lang.Plain;
     context(context: lang.Context): lang.Facade;
     get(key: lang.Key): string;

@@ -2,11 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Database = void 0;
 const tslib_1 = require("tslib");
-const PouchProxy_1 = require("./PouchProxy");
+const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
+const functions_1 = require("@skylib/functions");
 const core_1 = require("./core");
 const facades_1 = require("@skylib/facades");
-const functions_1 = require("@skylib/functions");
-const _ = tslib_1.__importStar(require("@skylib/lodash-commonjs-es"));
+const PouchProxy_1 = require("./PouchProxy");
 const pouchdb_collate_1 = require("pouchdb-collate");
 class Database {
     /**
@@ -55,6 +55,8 @@ class Database {
             value: () => (0, facades_1.reactiveStorage)({
                 loaded: false,
                 loading: true,
+                // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
+                // fixme
                 refresh: functions_1.fn.noop,
                 unsubscribe: functions_1.fn.noop
             })
@@ -121,11 +123,7 @@ class Database {
         return response.count;
     }
     async countAttached(conditions = {}, parentConditions = {}) {
-        const response = await this.rawQuery({}, {
-            conditions,
-            count: true,
-            parentConditions
-        });
+        const response = await this.rawQuery({}, { conditions, count: true, parentConditions });
         return response.count;
     }
     async exists(id) {
@@ -152,8 +150,8 @@ class Database {
         try {
             return await this.get(id);
         }
-        catch (error) {
-            functions_1.assert.instanceOf(error, core_1.PouchNotFoundError, functions_1.assert.wrapError(error));
+        catch (e) {
+            functions_1.assert.instanceOf(e, core_1.PouchNotFoundError, functions_1.assert.wrapError(e));
             return undefined;
         }
     }
@@ -161,8 +159,8 @@ class Database {
         try {
             return await this.getAttached(id, parentId);
         }
-        catch (error) {
-            functions_1.assert.instanceOf(error, core_1.PouchNotFoundError, functions_1.assert.wrapError(error));
+        catch (e) {
+            functions_1.assert.instanceOf(e, core_1.PouchNotFoundError, functions_1.assert.wrapError(e));
             return undefined;
         }
     }
@@ -204,8 +202,8 @@ class Database {
         try {
             return await this.put(doc);
         }
-        catch (error) {
-            functions_1.assert.instanceOf(error, core_1.PouchConflictError, functions_1.assert.wrapError(error));
+        catch (e) {
+            functions_1.assert.instanceOf(e, core_1.PouchConflictError, functions_1.assert.wrapError(e));
             return undefined;
         }
     }
@@ -213,8 +211,8 @@ class Database {
         try {
             return await this.putAttached(parentId, doc);
         }
-        catch (error) {
-            functions_1.assert.instanceOf(error, core_1.PouchConflictError, functions_1.assert.wrapError(error));
+        catch (e) {
+            functions_1.assert.instanceOf(e, core_1.PouchConflictError, functions_1.assert.wrapError(e));
             return undefined;
         }
     }
@@ -362,22 +360,16 @@ class Database {
             const rev = functions_1.is.not.empty(_rev) ? _rev + 1 : 1;
             attachedDocs[id] = Object.assign(Object.assign({}, content), { _id: id, _rev: rev });
             lastAttachedDocs.push(id);
-            result.push({
-                id,
-                parentId,
-                rev
-            });
+            result.push({ id, parentId, rev });
         }
         try {
             const response = await db.put(Object.assign(Object.assign({}, parentDoc), { attachedDocs,
                 lastAttachedDocs }));
             functions_1.assert.toBeTrue(response.ok, "Database request failed");
-            return result.map((item) => {
-                return Object.assign(Object.assign({}, item), { parentRev: response.rev });
-            });
+            return result.map((item) => (Object.assign(Object.assign({}, item), { parentRev: response.rev })));
         }
-        catch (error) {
-            functions_1.assert.instanceOf(error, core_1.PouchConflictError, functions_1.assert.wrapError(error));
+        catch (e) {
+            functions_1.assert.instanceOf(e, core_1.PouchConflictError, functions_1.assert.wrapError(e));
             return undefined;
         }
     }
@@ -451,8 +443,8 @@ class Database {
             await db.put(Object.assign(Object.assign({}, doc), { views: { default: mapReduce.mapReduce } }));
             return true;
         }
-        catch (error) {
-            functions_1.assert.instanceOf(error, core_1.PouchConflictError, functions_1.assert.wrapError(error));
+        catch (e) {
+            functions_1.assert.instanceOf(e, core_1.PouchConflictError, functions_1.assert.wrapError(e));
             return false;
         }
     }
@@ -469,8 +461,8 @@ class Database {
                 views: { default: mapReduce.mapReduce }
             });
         }
-        catch (error) {
-            functions_1.assert.instanceOf(error, core_1.PouchConflictError, functions_1.assert.wrapError(error));
+        catch (e) {
+            functions_1.assert.instanceOf(e, core_1.PouchConflictError, functions_1.assert.wrapError(e));
         }
     }
     /**
@@ -490,11 +482,8 @@ class Database {
      * Applies migrations.
      */
     async migrate() {
-        if (this.options.migrations.length > 0) {
-            let migrations = await (0, functions_1.evaluate)(async () => {
-                const result = await this.getIfExists("migrations");
-                return result !== null && result !== void 0 ? result : { _id: "migrations" };
-            });
+        if (this.options.migrations.length) {
+            let migrations = await (0, functions_1.evaluate)(async () => { var _a; return (_a = (await this.getIfExists("migrations"))) !== null && _a !== void 0 ? _a : { _id: "migrations" }; });
             for (const migration of this.options.migrations)
                 if (migrations[migration.id] === true) {
                     // Already applied
@@ -523,8 +512,8 @@ class Database {
         try {
             return await this._rawQuery(mapReduce, options, queryOptions);
         }
-        catch (error) {
-            functions_1.assert.instanceOf(error, core_1.PouchNotFoundError, functions_1.assert.wrapError(error));
+        catch (e) {
+            functions_1.assert.instanceOf(e, core_1.PouchNotFoundError, functions_1.assert.wrapError(e));
             await this.createDesignDocument(mapReduce);
             return await this._rawQuery(mapReduce, options, queryOptions);
         }
@@ -751,11 +740,7 @@ class Database {
                             for (const handler of this.changesHandlersAttached.values())
                                 handler(attachedDoc);
                         }
-                }, {
-                    include_docs: true,
-                    live: true,
-                    since: "now"
-                });
+                }, { include_docs: true, live: true, since: "now" });
         else if (this.changes) {
             this.changes.cancel();
             this.changes = undefined;

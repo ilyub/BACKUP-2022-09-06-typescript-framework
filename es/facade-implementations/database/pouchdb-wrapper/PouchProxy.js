@@ -1,7 +1,7 @@
 import { handlePouchError, wrapPouchError } from "./core";
-import { testDelay } from "@skylib/facades";
 import { a } from "@skylib/functions";
 import pouchdb from "pouchdb";
+import { testDelay } from "@skylib/facades";
 export class PouchProxy {
     /**
      * Creates class instance.
@@ -29,8 +29,8 @@ export class PouchProxy {
         try {
             return await this.db.bulkDocs(a.clone(docs));
         }
-        catch (error) {
-            throw wrapPouchError(error);
+        catch (e) {
+            throw wrapPouchError(e);
         }
     }
     /**
@@ -54,8 +54,8 @@ export class PouchProxy {
         try {
             await this.db.destroy();
         }
-        catch (error) {
-            throw wrapPouchError(error);
+        catch (e) {
+            throw wrapPouchError(e);
         }
     }
     /**
@@ -69,8 +69,8 @@ export class PouchProxy {
         try {
             return await this.db.get(id);
         }
-        catch (error) {
-            throw wrapPouchError(error);
+        catch (e) {
+            throw wrapPouchError(e);
         }
     }
     /**
@@ -92,8 +92,8 @@ export class PouchProxy {
         try {
             return await this.db.post(doc);
         }
-        catch (error) {
-            throw wrapPouchError(error);
+        catch (e) {
+            throw wrapPouchError(e);
         }
     }
     /**
@@ -107,8 +107,8 @@ export class PouchProxy {
         try {
             return await this.db.put(doc);
         }
-        catch (error) {
-            throw wrapPouchError(error);
+        catch (e) {
+            throw wrapPouchError(e);
         }
     }
     /**
@@ -123,8 +123,8 @@ export class PouchProxy {
         try {
             return await this.db.query(mapReduce, options);
         }
-        catch (error) {
-            throw wrapPouchError(error);
+        catch (e) {
+            throw wrapPouchError(e);
         }
     }
 }

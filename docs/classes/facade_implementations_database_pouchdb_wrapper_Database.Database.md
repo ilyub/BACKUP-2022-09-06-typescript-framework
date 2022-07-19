@@ -110,13 +110,13 @@ ___
 
 ### changesHandlers
 
-• `Protected` `Readonly` **changesHandlers**: `Map`<\`subscription-id-${string}\`, `ChangesHandler`\>
+• `Protected` `Readonly` **changesHandlers**: `Map`<\`usid-${string}\`, `ChangesHandler`\>
 
 ___
 
 ### changesHandlersAttached
 
-• `Protected` `Readonly` **changesHandlersAttached**: `Map`<\`attached-subscription-id-${string}\`, `AttachedChangesHandler`\>
+• `Protected` `Readonly` **changesHandlersAttached**: `Map`<\`uasid-${string}\`, `AttachedChangesHandler`\>
 
 ___
 
@@ -1175,7 +1175,7 @@ ___
 
 ### subscribe
 
-▸ **subscribe**(`handler`): \`subscription-id-${string}\`
+▸ **subscribe**(`handler`): \`usid-${string}\`
 
 #### Parameters
 
@@ -1185,7 +1185,7 @@ ___
 
 #### Returns
 
-\`subscription-id-${string}\`
+\`usid-${string}\`
 
 #### Implementation of
 
@@ -1195,7 +1195,7 @@ ___
 
 ### subscribeAttached
 
-▸ **subscribeAttached**(`handler`): \`attached-subscription-id-${string}\`
+▸ **subscribeAttached**(`handler`): \`uasid-${string}\`
 
 #### Parameters
 
@@ -1205,7 +1205,7 @@ ___
 
 #### Returns
 
-\`attached-subscription-id-${string}\`
+\`uasid-${string}\`
 
 #### Implementation of
 
@@ -1264,7 +1264,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `id` | \`subscription-id-${string}\` |
+| `id` | \`usid-${string}\` |
 
 #### Returns
 
@@ -1284,7 +1284,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `id` | \`attached-subscription-id-${string}\` |
+| `id` | \`uasid-${string}\` |
 
 #### Returns
 

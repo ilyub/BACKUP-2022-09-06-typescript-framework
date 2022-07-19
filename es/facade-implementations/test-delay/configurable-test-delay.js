@@ -3,7 +3,7 @@ export const configurableTestDelay = defineFn(async () => {
     if (moduleConfig.enabled)
         await wait(moduleConfig.timeout);
 }, {
-    configure: (config) => {
+    configure: config => {
         o.assign(moduleConfig, config);
     },
     getConfiguration: () => moduleConfig

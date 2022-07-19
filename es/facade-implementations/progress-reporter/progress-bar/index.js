@@ -2,7 +2,7 @@ import { Process } from "./Process";
 import { moduleConfig } from "./core";
 import { o } from "@skylib/functions";
 export const progressBar = {
-    configure: (config) => {
+    configure: config => {
         o.assign(moduleConfig, config);
     },
     getConfiguration: () => moduleConfig,

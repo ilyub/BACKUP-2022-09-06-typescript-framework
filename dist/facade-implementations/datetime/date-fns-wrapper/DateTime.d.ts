@@ -1,6 +1,7 @@
 import type { FirstDayOfWeek } from "./core";
-import type { datetime } from "@skylib/facades";
 import type { NumStr } from "@skylib/functions";
+import { TimeUnit } from "@skylib/facades";
+import type { datetime } from "@skylib/facades";
 export declare class DateTime implements datetime.DateTime {
     /**
      * Creates class instance.
@@ -8,8 +9,7 @@ export declare class DateTime implements datetime.DateTime {
      * @param date - Date.
      */
     constructor(date?: Date | datetime.DateTime | NumStr);
-    add(amount: number, unit: datetime.Unit): datetime.DateTime;
-    clone(): datetime.DateTime;
+    add(amount: number, unit: TimeUnit): datetime.DateTime;
     dayOfMonth(): number;
     dayOfWeek(): number;
     format(format: string): string;
@@ -35,7 +35,7 @@ export declare class DateTime implements datetime.DateTime {
     setStartOfWeekLocale(): datetime.DateTime;
     setStartOfYear(): datetime.DateTime;
     setYear(year: number): datetime.DateTime;
-    sub(amount: number, unit: datetime.Unit): datetime.DateTime;
+    sub(amount: number, unit: TimeUnit): datetime.DateTime;
     toDate(): Date;
     toString(): string;
     toTime(): number;

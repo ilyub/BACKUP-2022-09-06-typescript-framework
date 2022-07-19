@@ -13,7 +13,7 @@ export declare class PouchProxy {
      * @param docs - Documents.
      * @returns Responses.
      */
-    bulkDocs(docs: PouchPutDocuments): Promise<Array<PouchError | PouchResponse>>;
+    bulkDocs(docs: PouchPutDocuments): Promise<ReadonlyArray<PouchError | PouchResponse>>;
     /**
      * Subscribes to changes.
      *

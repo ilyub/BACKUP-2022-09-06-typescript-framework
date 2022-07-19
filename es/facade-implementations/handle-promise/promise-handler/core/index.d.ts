@@ -1,6 +1,6 @@
-import type { handlePromise as facade } from "@skylib/facades";
-import type { AsyncPromise, Rec } from "@skylib/functions";
-export declare const moduleConfig: Configuration;
+import type { Rec, Writable, types } from "@skylib/functions";
+import type { PromiseType } from "@skylib/facades";
+export declare const moduleConfig: Writable<Configuration>;
 export declare const promises: Map<symbol, Promise<unknown>>;
 export interface Configurable {
     /**
@@ -17,7 +17,7 @@ export interface Configurable {
     readonly getConfiguration: () => Configuration;
 }
 export interface Configuration {
-    readonly expectedDurations: Rec<facade.Type, number>;
+    readonly expectedDurations: Rec<PromiseType, number>;
 }
 export interface PartialConfiguration extends Partial<Configuration> {
 }
@@ -28,5 +28,5 @@ export interface PartialConfiguration extends Partial<Configuration> {
  * @param type - Type (determines expected duration for progress reporting).
  * @param errorMessage - Error message (used to alert user on error).
  */
-export declare function handle<T>(mixed: AsyncPromise<T>, type: facade.Type | undefined, errorMessage: string): void;
+export declare function handle<T>(mixed: types.fn.AsyncPromise<T>, type: PromiseType | undefined, errorMessage: string): void;
 //# sourceMappingURL=index.d.ts.map

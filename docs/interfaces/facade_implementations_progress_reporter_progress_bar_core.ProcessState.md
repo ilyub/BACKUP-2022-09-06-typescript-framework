@@ -36,7 +36,7 @@ ___
 
 ### state
 
-• `Readonly` **state**: [`State`](../modules/facade_implementations_progress_reporter_progress_bar_core.md#state)
+• `Readonly` **state**: [`State`](../enums/facade_implementations_progress_reporter_progress_bar_core.State.md)
 
 ___
 

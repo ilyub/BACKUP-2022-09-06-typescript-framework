@@ -1,36 +1,39 @@
-import { datetime } from "@skylib/facades";
-import { a, evaluate, is, num, o } from "@skylib/functions";
 import * as _ from "@skylib/lodash-commonjs-es";
+import { TimeUnit, datetime } from "@skylib/facades";
+import { a, evaluate, is, num, o } from "@skylib/functions";
 import { loremIpsum } from "lorem-ipsum";
 export const loremIpsumWrapper = {
     boolean: (trueWeight = 0.5, falseWeight = 0.5) => Math.random() < trueWeight / (trueWeight + falseWeight),
-    configure: (config) => {
+    configure: config => {
         o.assign(moduleConfig, config);
     },
-    date: (from, to, step = 1, unit = "minute") => {
+    date: (from, to, step = 1, unit = TimeUnit.minute) => {
         const from2 = is.string(from)
             ? datetime.create(from).toTime()
-            : datetime
-                .create()
-                .add(...from)
-                .toTime();
+            : datetime.create().add(from[0], from[1]).toTime();
         const to2 = is.string(to)
             ? datetime.create(to).toTime()
-            : datetime
-                .create()
-                .add(...to)
-                .toTime();
+            : datetime.create().add(to[0], to[1]).toTime();
         const step2 = evaluate(() => {
             switch (unit) {
-                case "day":
-                case "days":
+                case TimeUnit.day:
+                case TimeUnit.days:
                     return step * 24 * 3600 * 1000;
-                case "hour":
-                case "hours":
+                case TimeUnit.hour:
+                case TimeUnit.hours:
                     return step * 3600 * 1000;
-                case "minute":
-                case "minutes":
+                case TimeUnit.minute:
+                case TimeUnit.minutes:
                     return step * 60 * 1000;
+                case TimeUnit.month:
+                case TimeUnit.months:
+                    return step * 30 * 24 * 3600 * 1000;
+                case TimeUnit.week:
+                case TimeUnit.weeks:
+                    return step * 7 * 24 * 3600 * 1000;
+                case TimeUnit.year:
+                case TimeUnit.years:
+                    return step * 365 * 24 * 3600 * 1000;
             }
         });
         const time = num.floor.step(_.random(from2, to2), step2);

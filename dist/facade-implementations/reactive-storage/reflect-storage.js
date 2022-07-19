@@ -7,13 +7,19 @@ const functions_1 = require("@skylib/functions");
 exports.reflectStorage = (0, functions_1.defineFn)((obj) => {
     if (functions_1.reflect.hasMetadata(MetadataKey, obj))
         return obj;
-    const result = new Proxy(obj, (0, functions_1.wrapProxyHandler)("reflectStorage", "doDefault", { get, set }));
-    functions_1.reflect.defineMetadata(MetadataKey, new Map(), result);
+    const result = new Proxy(obj, (0, functions_1.wrapProxyHandler)("reflectStorage", functions_1.ProxyHandlerAction.doDefault, {
+        get,
+        set
+    }));
+    functions_1.reflect.defineMetadata(MetadataKey, new functions_1.ReadonlyMap(), result);
     return result;
     function get(target, key) {
         const value = functions_1.reflect.get(target, key);
         return functions_1.is.object(value)
-            ? new Proxy(value, (0, functions_1.wrapProxyHandler)("reflectStorage", "doDefault", { get, set }))
+            ? new Proxy(value, (0, functions_1.wrapProxyHandler)("reflectStorage", functions_1.ProxyHandlerAction.doDefault, {
+                get,
+                set
+            }))
             : value;
     }
     function set(target, key, value) {
@@ -37,7 +43,7 @@ exports.reflectStorage = (0, functions_1.defineFn)((obj) => {
         functions_1.reflect.defineMetadata(MetadataKey, functions_1.map.delete(callbacks, functions_1.as.not.empty(observer.symbol)), obj);
     },
     watch: (obj, handler, reducer) => {
-        const symbol = Symbol("reflect-storage-callback");
+        const symbol = Symbol("reflect-storage__callback");
         const callbacks = functions_1.reflect.getMetadata(MetadataKey, obj, isCallbacks);
         if (reducer) {
             let reduced = reducer(obj);
@@ -55,9 +61,9 @@ exports.reflectStorage = (0, functions_1.defineFn)((obj) => {
             functions_1.reflect.defineMetadata(MetadataKey, functions_1.map.set(callbacks, symbol, () => {
                 handler(obj);
             }), obj);
-        return { _type: "ReactiveStorageObserver", symbol };
+        return { resourceType: "reactive-storage__observer", symbol };
     }
 });
-const MetadataKey = Symbol("reflect-storage-callbacks");
+const MetadataKey = Symbol("reflect-storage__callbacks");
 const isCallbacks = functions_1.is.factory(functions_1.is.map.of, functions_1.is.symbol, functions_1.is.callable);
 //# sourceMappingURL=reflect-storage.js.map

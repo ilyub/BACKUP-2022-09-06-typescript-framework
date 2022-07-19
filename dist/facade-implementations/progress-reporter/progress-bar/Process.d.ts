@@ -1,6 +1,6 @@
+import type { Writable } from "@skylib/functions";
 import type { ProcessState } from "./core";
 import type { progressReporter } from "@skylib/facades";
-import type { Writable } from "@skylib/functions";
 export declare class Process implements progressReporter.Process {
     /**
      * Returns progress.

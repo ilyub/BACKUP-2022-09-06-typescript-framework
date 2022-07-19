@@ -1,7 +1,7 @@
-import type { strings } from "@skylib/functions";
+import type { Writable, strings } from "@skylib/functions";
 import type { Locale } from "date-fns";
 export declare const formatStrings: strings;
-export declare const moduleConfig: Configuration;
+export declare const moduleConfig: Writable<Configuration>;
 export interface Configurable {
     /**
      * Configures plugin.

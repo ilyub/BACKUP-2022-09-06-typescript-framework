@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.wrapPouchError = exports.validatePutDocument = exports.handlePouchError = exports.extractDoc = exports.extractAttachedDoc = void 0;
 const tslib_1 = require("tslib");
 const errors_1 = require("./errors");
-const guards_1 = require("./guards");
 const functions_1 = require("@skylib/functions");
+const guards_1 = require("./guards");
 /**
  * Extracts attached document.
  *

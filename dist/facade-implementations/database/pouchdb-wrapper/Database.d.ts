@@ -1,7 +1,7 @@
-import { PouchProxy } from "./PouchProxy";
-import { database } from "@skylib/facades";
 import type { Configuration, MapReduce, PouchChanges, PouchDatabase, PouchDatabaseConfiguration, RawQueryOptions, RawQueryOptionsAttached, RawQueryResponse, ReactiveHandler, ReactiveHandlerAttached, ReactiveRequest, ReactiveRequestAttached } from "./core";
 import type { Writable } from "@skylib/functions";
+import { database } from "@skylib/facades";
+import { PouchProxy } from "./PouchProxy";
 export declare class Database implements database.Database {
     /**
      * Creates class instance.
@@ -55,8 +55,8 @@ export declare class Database implements database.Database {
     unsubscribe(id: database.SubscriptionId): void;
     unsubscribeAttached(id: database.AttachedSubscriptionId): void;
     protected changes: PouchChanges | undefined;
-    protected readonly changesHandlers: Map<`subscription-id-${string}`, database.ChangesHandler>;
-    protected readonly changesHandlersAttached: Map<`attached-subscription-id-${string}`, database.AttachedChangesHandler>;
+    protected readonly changesHandlers: Map<`usid-${string}`, database.ChangesHandler>;
+    protected readonly changesHandlersAttached: Map<`uasid-${string}`, database.AttachedChangesHandler>;
     protected readonly config: Required<Configuration>;
     /**
      * Creates reactive storage.

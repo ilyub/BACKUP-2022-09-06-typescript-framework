@@ -34,10 +34,10 @@ class Google {
                 : await sdk.signIn();
             return user.getAuthResponse().id_token;
         }
-        catch (error) {
-            if (functions_1.is.indexedObject(error) && error["error"] === "popup_closed_by_user")
+        catch (e) {
+            if (functions_1.is.indexedObject(e) && e["error"] === "popup_closed_by_user")
                 return undefined;
-            throw error;
+            throw e;
         }
     }
     async loadSdk() {
@@ -61,8 +61,8 @@ class Google {
                     gapi.load("auth2", () => {
                         gapi.auth2.init({ client_id: clientId }).then(googleAuth => {
                             resolve(googleAuth);
-                        }, error => {
-                            reject(new Error(`Error ${error.error}: ${error.details}`));
+                        }, e => {
+                            reject(new Error(`Error ${e.error}: ${e.details}`));
                         });
                     });
                 });

@@ -1,5 +1,5 @@
-import { Database } from "./Database";
 import { PouchConflictError, PouchNotFoundError, PouchRetryError } from "./core";
+import { Database } from "./Database";
 export class PouchWrapper {
     /**
      * Creates class instance.

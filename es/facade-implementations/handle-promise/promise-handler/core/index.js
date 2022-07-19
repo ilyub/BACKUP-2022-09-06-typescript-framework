@@ -1,6 +1,6 @@
-import { handleError } from "./handle-error";
 import { progressReporter, showAlert } from "@skylib/facades";
 import { evaluate } from "@skylib/functions";
+import { handleError } from "./handle-error";
 export const moduleConfig = {
     expectedDurations: {
         createDb: 10000,

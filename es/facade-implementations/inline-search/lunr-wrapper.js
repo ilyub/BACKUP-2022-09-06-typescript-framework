@@ -1,4 +1,5 @@
 import { Engine as BaseEngine, createImplementation } from "./core";
+import { ReadonlySet } from "@skylib/functions";
 import lunr from "lunr";
 export const lunrWrapper = createImplementation(class Engine extends BaseEngine {
     /**
@@ -12,7 +13,7 @@ export const lunrWrapper = createImplementation(class Engine extends BaseEngine 
         super(idField, fields, items, buildIndex);
     }
     search(query) {
-        const ids = new Set(this.index.search(query).map(result => result.ref));
+        const ids = new ReadonlySet(this.index.search(query).map(result => result.ref));
         return this.items.filter(item => ids.has(item[this.idField]));
     }
 });

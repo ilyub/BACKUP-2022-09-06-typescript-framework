@@ -5,7 +5,7 @@ const Process_1 = require("./Process");
 const core_1 = require("./core");
 const functions_1 = require("@skylib/functions");
 exports.progressBar = {
-    configure: (config) => {
+    configure: config => {
         functions_1.o.assign(core_1.moduleConfig, config);
     },
     getConfiguration: () => core_1.moduleConfig,

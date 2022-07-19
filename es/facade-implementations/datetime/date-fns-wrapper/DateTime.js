@@ -1,6 +1,7 @@
-import { formatStrings, moduleConfig } from "./core";
-import { is } from "@skylib/functions";
 import { add, format as formatDate, getDate, getDay, getHours, getMinutes, getMonth, getSeconds, getYear, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameYear, isValid, parse, setDate, setDay, setHours, setMinutes, setMonth, setYear, startOfDay, startOfHour, startOfMinute, startOfMonth, startOfWeek, startOfYear, sub } from "date-fns";
+import { formatStrings, moduleConfig } from "./core";
+import { TimeUnit } from "@skylib/facades";
+import { is } from "@skylib/functions";
 export class DateTime {
     /**
      * Creates class instance.
@@ -37,34 +38,31 @@ export class DateTime {
     add(amount, unit) {
         const duration = {};
         switch (unit) {
-            case "minute":
-            case "minutes":
+            case TimeUnit.minute:
+            case TimeUnit.minutes:
                 duration.minutes = amount;
                 break;
-            case "hour":
-            case "hours":
+            case TimeUnit.hour:
+            case TimeUnit.hours:
                 duration.hours = amount;
                 break;
-            case "day":
-            case "days":
+            case TimeUnit.day:
+            case TimeUnit.days:
                 duration.days = amount;
                 break;
-            case "week":
-            case "weeks":
+            case TimeUnit.week:
+            case TimeUnit.weeks:
                 duration.weeks = amount;
                 break;
-            case "month":
-            case "months":
+            case TimeUnit.month:
+            case TimeUnit.months:
                 duration.months = amount;
                 break;
-            case "year":
-            case "years":
+            case TimeUnit.year:
+            case TimeUnit.years:
                 duration.years = amount;
         }
         return new DateTime(add(this.value, duration));
-    }
-    clone() {
-        return new DateTime(this);
     }
     dayOfMonth() {
         return getDate(this.value);
@@ -157,28 +155,28 @@ export class DateTime {
     sub(amount, unit) {
         const duration = {};
         switch (unit) {
-            case "minute":
-            case "minutes":
+            case TimeUnit.minute:
+            case TimeUnit.minutes:
                 duration.minutes = amount;
                 break;
-            case "hour":
-            case "hours":
+            case TimeUnit.hour:
+            case TimeUnit.hours:
                 duration.hours = amount;
                 break;
-            case "day":
-            case "days":
+            case TimeUnit.day:
+            case TimeUnit.days:
                 duration.days = amount;
                 break;
-            case "week":
-            case "weeks":
+            case TimeUnit.week:
+            case TimeUnit.weeks:
                 duration.weeks = amount;
                 break;
-            case "month":
-            case "months":
+            case TimeUnit.month:
+            case TimeUnit.months:
                 duration.months = amount;
                 break;
-            case "year":
-            case "years":
+            case TimeUnit.year:
+            case TimeUnit.years:
                 duration.years = amount;
         }
         return new DateTime(sub(this.value, duration));

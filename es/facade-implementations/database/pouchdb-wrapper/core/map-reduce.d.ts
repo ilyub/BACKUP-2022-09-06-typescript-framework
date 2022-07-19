@@ -1,5 +1,9 @@
 import type { MapReduce, RawQueryOptions, RawQueryOptionsAttached } from "./types";
 import type { database } from "@skylib/facades";
+export declare enum DocType {
+    attached = "attached",
+    doc = "doc"
+}
 /**
  * Creates map/reduce function.
  *

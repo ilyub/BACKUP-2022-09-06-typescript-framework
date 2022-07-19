@@ -4,16 +4,16 @@
 
 ## Table of contents
 
+### Enumerations
+
+- [State](../enums/facade_implementations_progress_reporter_progress_bar_core.State.md)
+
 ### Interfaces
 
 - [Configurable](../interfaces/facade_implementations_progress_reporter_progress_bar_core.Configurable.md)
 - [Configuration](../interfaces/facade_implementations_progress_reporter_progress_bar_core.Configuration.md)
 - [PartialConfiguration](../interfaces/facade_implementations_progress_reporter_progress_bar_core.PartialConfiguration.md)
 - [ProcessState](../interfaces/facade_implementations_progress_reporter_progress_bar_core.ProcessState.md)
-
-### Type Aliases
-
-- [State](facade_implementations_progress_reporter_progress_bar_core.md#state)
 
 ### Variables
 
@@ -24,17 +24,11 @@
 - [finalEasing](facade_implementations_progress_reporter_progress_bar_core.md#finaleasing)
 - [growProgress](facade_implementations_progress_reporter_progress_bar_core.md#growprogress)
 
-## Type Aliases
-
-### State
-
-Ƭ **State**: ``"auto"`` \| ``"done"`` \| ``"finalEasing"`` \| ``"manual"``
-
 ## Variables
 
 ### moduleConfig
 
-• `Const` **moduleConfig**: [`Configuration`](../interfaces/facade_implementations_progress_reporter_progress_bar_core.Configuration.md)
+• `Const` **moduleConfig**: `Writable`<[`Configuration`](../interfaces/facade_implementations_progress_reporter_progress_bar_core.Configuration.md)\>
 
 ## Functions
 

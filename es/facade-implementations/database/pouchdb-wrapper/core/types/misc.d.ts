@@ -1,5 +1,5 @@
-import type { database } from "@skylib/facades";
 import type { Writable, unknowns } from "@skylib/functions";
+import type { database } from "@skylib/facades";
 export interface Configuration {
     readonly reindexThreshold?: number;
 }

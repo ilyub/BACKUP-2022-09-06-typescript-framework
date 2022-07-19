@@ -1,9 +1,9 @@
-import { DateTime } from "./DateTime";
 import { formatStrings, moduleConfig } from "./core";
-import { o } from "@skylib/functions";
 import { isValid, parse } from "date-fns";
+import { DateTime } from "./DateTime";
+import { o } from "@skylib/functions";
 export const dateFnsWrapper = {
-    configure: (config) => {
+    configure: config => {
         o.assign(moduleConfig, config);
     },
     create: (date) => new DateTime(date),

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Definitions = void 0;
-const Definition_1 = require("./Definition");
 const functions_1 = require("@skylib/functions");
+const Definition_1 = require("./Definition");
 class Definitions {
     /**
      * Creates class instance.
@@ -35,17 +35,34 @@ class Definitions {
             value: void 0
         });
         validate(raw);
-        const keys = {};
-        for (const key of functions_1.o.keys(raw.words)) {
-            keys[functions_1.s.lcFirst(key)] = functions_1.s.lcFirst(key);
-            keys[functions_1.s.ucFirst(key)] = functions_1.s.ucFirst(key);
-            keys[key.toLowerCase()] = key.toLowerCase();
-            keys[key.toUpperCase()] = key.toUpperCase();
-        }
+        const keys = functions_1.o.fromEntries(functions_1.o.keys(raw.words).flatMap(key => [
+            [functions_1.s.lcFirst(key), functions_1.s.lcFirst(key)],
+            [functions_1.s.ucFirst(key), functions_1.s.ucFirst(key)],
+            [key.toLowerCase(), key.toLowerCase()],
+            [key.toUpperCase(), key.toUpperCase()]
+        ]));
+        const words = new functions_1.ReadonlyMap(functions_1.o.entries(raw.words).flatMap(([key, value]) => [
+            [
+                functions_1.s.lcFirst(key),
+                new Definition_1.Definition(map(value, x => functions_1.s.lcFirst(x)), functions_1.s.lcFirst(key))
+            ],
+            [
+                functions_1.s.ucFirst(key),
+                new Definition_1.Definition(map(value, x => functions_1.s.ucFirst(x)), functions_1.s.ucFirst(key))
+            ],
+            [
+                key.toLowerCase(),
+                new Definition_1.Definition(map(value, x => x.toLowerCase()), key.toLowerCase())
+            ],
+            [
+                key.toUpperCase(),
+                new Definition_1.Definition(map(value, x => x.toUpperCase()), key.toUpperCase())
+            ]
+        ]));
         this.keys = keys;
         this.pluralReduce = raw.pluralReduce;
-        this.wordForms = new Map(functions_1.o.entries(raw.wordForms));
-        this.words = getWords(raw);
+        this.wordForms = new functions_1.ReadonlyMap(functions_1.o.entries(raw.wordForms));
+        this.words = words;
     }
     /**
      * Returns word based on context, count, and replacements.
@@ -76,22 +93,6 @@ class Definitions {
     }
 }
 exports.Definitions = Definitions;
-/**
- * Returns words.
- *
- * @param raw - Language definition.
- * @returns Words.
- */
-function getWords(raw) {
-    const result = new Map();
-    for (const [key, value] of functions_1.o.entries(raw.words)) {
-        result.set(functions_1.s.lcFirst(key), new Definition_1.Definition(map(value, x => functions_1.s.lcFirst(x)), functions_1.s.lcFirst(key)));
-        result.set(functions_1.s.ucFirst(key), new Definition_1.Definition(map(value, x => functions_1.s.ucFirst(x)), functions_1.s.ucFirst(key)));
-        result.set(key.toLowerCase(), new Definition_1.Definition(map(value, x => x.toLowerCase()), key.toLowerCase()));
-        result.set(key.toUpperCase(), new Definition_1.Definition(map(value, x => x.toUpperCase()), key.toUpperCase()));
-    }
-    return result;
-}
 /**
  * Applies callback to raw definition.
  *

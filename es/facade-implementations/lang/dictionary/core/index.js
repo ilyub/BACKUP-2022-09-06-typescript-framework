@@ -1,5 +1,5 @@
-import { reactiveStorage } from "@skylib/facades";
 import { defineFn, o, onDemand } from "@skylib/functions";
+import { reactiveStorage } from "@skylib/facades";
 export const moduleConfig = onDemand(() => reactiveStorage({ localeName: "en-US" }));
 export const pluralReduce = defineFn(
 /**

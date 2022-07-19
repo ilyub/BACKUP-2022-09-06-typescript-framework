@@ -1,7 +1,7 @@
-import type { Definitions } from "./Definition.internal";
-import type { RawDefinition, Rules, WordInfo } from "./core";
-import type { lang } from "@skylib/facades";
 import type { IndexedRecord, NumStr, strings } from "@skylib/functions";
+import type { RawDefinition, Rules, WordInfo } from "./core";
+import type { Definitions } from "./Definition.internal";
+import type { lang } from "@skylib/facades";
 export declare class Definition {
     /**
      * Creates class instance.

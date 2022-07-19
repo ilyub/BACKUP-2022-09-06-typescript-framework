@@ -56,7 +56,7 @@ Creates class instance.
 
 ### bulkDocs
 
-▸ **bulkDocs**(`docs`): `Promise`<([`PouchError`](../interfaces/facade_implementations_database_pouchdb_wrapper_core_types_pouchdb.PouchError.md) \| [`PouchResponse`](../interfaces/facade_implementations_database_pouchdb_wrapper_core_types_pouchdb.PouchResponse.md))[]\>
+▸ **bulkDocs**(`docs`): `Promise`<readonly ([`PouchError`](../interfaces/facade_implementations_database_pouchdb_wrapper_core_types_pouchdb.PouchError.md) \| [`PouchResponse`](../interfaces/facade_implementations_database_pouchdb_wrapper_core_types_pouchdb.PouchResponse.md))[]\>
 
 Creates, updates or deletes multiple documents.
 
@@ -68,7 +68,7 @@ Creates, updates or deletes multiple documents.
 
 #### Returns
 
-`Promise`<([`PouchError`](../interfaces/facade_implementations_database_pouchdb_wrapper_core_types_pouchdb.PouchError.md) \| [`PouchResponse`](../interfaces/facade_implementations_database_pouchdb_wrapper_core_types_pouchdb.PouchResponse.md))[]\>
+`Promise`<readonly ([`PouchError`](../interfaces/facade_implementations_database_pouchdb_wrapper_core_types_pouchdb.PouchError.md) \| [`PouchResponse`](../interfaces/facade_implementations_database_pouchdb_wrapper_core_types_pouchdb.PouchResponse.md))[]\>
 
 Responses.
 

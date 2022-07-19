@@ -30,7 +30,7 @@
 
 ### datetimeToBe
 
-▸ **datetimeToBe**(`got`, ...`args`): `Result`
+▸ **datetimeToBe**(`got`, ...`args`): `ExpectResult`
 
 Expect function.
 
@@ -43,7 +43,7 @@ Expect function.
 
 #### Returns
 
-`Result`
+`ExpectResult`
 
 Result.
 
@@ -51,7 +51,7 @@ ___
 
 ### progressToBe
 
-▸ **progressToBe**(`got`, ...`args`): `Result`
+▸ **progressToBe**(`got`, ...`args`): `ExpectResult`
 
 Expect function.
 
@@ -64,6 +64,6 @@ Expect function.
 
 #### Returns
 
-`Result`
+`ExpectResult`
 
 Result.

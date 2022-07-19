@@ -1,7 +1,7 @@
 import { __rest } from "tslib";
 import { PouchConflictError, PouchNotFoundError } from "./errors";
-import { isWrappablePouchError } from "./guards";
 import { is, o } from "@skylib/functions";
+import { isWrappablePouchError } from "./guards";
 /**
  * Extracts attached document.
  *

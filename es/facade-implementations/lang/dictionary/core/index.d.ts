@@ -1,6 +1,6 @@
+import type { LocaleName, NumStr, PartialRecord, Rec, Writable, strings } from "@skylib/functions";
 import type { lang } from "@skylib/facades";
-import type { LocaleName, NumStr, PartialRecord, Rec, strings } from "@skylib/functions";
-export declare const moduleConfig: Configuration;
+export declare const moduleConfig: Writable<Configuration>;
 export declare const pluralReduce: PluralReduce & Readonly<PluralReduceInternational>;
 export interface Configuration {
     readonly localeName: LocaleName;

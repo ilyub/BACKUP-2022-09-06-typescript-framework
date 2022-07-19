@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.growProgress = exports.finalEasing = exports.moduleConfig = void 0;
+exports.growProgress = exports.finalEasing = exports.State = exports.moduleConfig = void 0;
 exports.moduleConfig = {
     activeClass: "progress-bar-active",
     enabled: true,
@@ -11,6 +11,14 @@ exports.moduleConfig = {
     selector: "#progressBar",
     updateInterval: 100
 };
+var State;
+(function (State) {
+    State["auto"] = "auto";
+    State["done"] = "done";
+    // eslint-disable-next-line @typescript-eslint/no-shadow -- Ok
+    State["finalEasing"] = "finalEasing";
+    State["manual"] = "manual";
+})(State = exports.State || (exports.State = {}));
 /**
  * Performs final easing.
  *
@@ -23,12 +31,12 @@ function finalEasing(mutableState) {
         mutableState.lastUpdate = now;
         mutableState.progress += delta;
         if (mutableState.progress > 1) {
-            mutableState.state = "done";
+            mutableState.state = State.done;
             mutableState.progress = 1;
         }
     }
     else {
-        mutableState.state = "done";
+        mutableState.state = State.done;
         mutableState.progress = 1;
     }
 }

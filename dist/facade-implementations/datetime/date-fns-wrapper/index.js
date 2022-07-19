@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dateFnsWrapper = void 0;
-const DateTime_1 = require("./DateTime");
 const core_1 = require("./core");
-const functions_1 = require("@skylib/functions");
 const date_fns_1 = require("date-fns");
+const DateTime_1 = require("./DateTime");
+const functions_1 = require("@skylib/functions");
 exports.dateFnsWrapper = {
-    configure: (config) => {
+    configure: config => {
         functions_1.o.assign(core_1.moduleConfig, config);
     },
     create: (date) => new DateTime_1.DateTime(date),

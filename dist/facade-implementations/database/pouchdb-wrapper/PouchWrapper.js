@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PouchWrapper = void 0;
-const Database_1 = require("./Database");
 const core_1 = require("./core");
+const Database_1 = require("./Database");
 class PouchWrapper {
     /**
      * Creates class instance.

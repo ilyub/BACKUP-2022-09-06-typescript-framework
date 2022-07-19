@@ -10,6 +10,7 @@
 - [Content](facade_implementations_database_pouchdb_wrapper_core.md#content)
 - [DocResponse](facade_implementations_database_pouchdb_wrapper_core.md#docresponse)
 - [DocResponses](facade_implementations_database_pouchdb_wrapper_core.md#docresponses)
+- [DocType](facade_implementations_database_pouchdb_wrapper_core.md#doctype)
 - [DocsResponse](facade_implementations_database_pouchdb_wrapper_core.md#docsresponse)
 - [Filter](facade_implementations_database_pouchdb_wrapper_core.md#filter)
 - [MapReduce](facade_implementations_database_pouchdb_wrapper_core.md#mapreduce)
@@ -75,6 +76,12 @@ ___
 ### DocResponses
 
 Re-exports [DocResponses](facade_implementations_database_pouchdb_wrapper_core_guards.md#docresponses)
+
+___
+
+### DocType
+
+Re-exports [DocType](../enums/facade_implementations_database_pouchdb_wrapper_core_map_reduce.DocType.md)
 
 ___
 

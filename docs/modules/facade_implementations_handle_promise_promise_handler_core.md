@@ -23,7 +23,7 @@
 
 ### moduleConfig
 
-• `Const` **moduleConfig**: [`Configuration`](../interfaces/facade_implementations_handle_promise_promise_handler_core.Configuration.md)
+• `Const` **moduleConfig**: `Writable`<[`Configuration`](../interfaces/facade_implementations_handle_promise_promise_handler_core.Configuration.md)\>
 
 ___
 
@@ -50,7 +50,7 @@ Handles promise.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `mixed` | `AsyncPromise`<`T`, `nevers`\> | Promise or async function. |
-| `type` | `undefined` \| `Type` | Type (determines expected duration for progress reporting). |
+| `type` | `undefined` \| `PromiseType` | Type (determines expected duration for progress reporting). |
 | `errorMessage` | `string` | Error message (used to alert user on error). |
 
 #### Returns

@@ -2,11 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.jestSetup = exports.jestReset = void 0;
 const tslib_1 = require("tslib");
-const __1 = require("..");
-const expect_1 = require("./expect");
 const facades_1 = require("@skylib/facades");
 const functions_1 = require("@skylib/functions");
 const en_US_1 = tslib_1.__importDefault(require("date-fns/locale/en-US"));
+const __1 = require("..");
+const expect_1 = require("./expect");
 exports.jestReset = (0, functions_1.defineFn)(
 /**
  * Jest reset.
@@ -54,10 +54,10 @@ exports.jestReset = (0, functions_1.defineFn)(
             pm: true
         }));
         loremIpsumWrapper.configure((0, functions_1.typedef)({
-            maxSentences: 5,
-            maxWords: 10,
-            minSentences: 3,
-            minWords: 5
+            maxSentences: 2,
+            maxWords: 3,
+            minSentences: 2,
+            minWords: 3
         }));
         promiseHandler.configure((0, functions_1.typedef)({
             expectedDurations: {

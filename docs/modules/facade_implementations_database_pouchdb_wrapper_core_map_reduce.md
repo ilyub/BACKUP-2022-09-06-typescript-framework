@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Enumerations
+
+- [DocType](../enums/facade_implementations_database_pouchdb_wrapper_core_map_reduce.DocType.md)
+
 ### Functions
 
 - [getMapReduce](facade_implementations_database_pouchdb_wrapper_core_map_reduce.md#getmapreduce)

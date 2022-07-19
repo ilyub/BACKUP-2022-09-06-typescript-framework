@@ -17,7 +17,7 @@ exports.minisearchWrapper = (0, core_1.createImplementation)(class Engine extend
         super(idField, fields, items, buildIndex);
     }
     search(query) {
-        const ids = new Set(this.index.search(query).map(result => result.id));
+        const ids = new functions_1.ReadonlySet(this.index.search(query).map(result => result.id));
         return this.items.filter(item => ids.has(item[this.idField]));
     }
 });

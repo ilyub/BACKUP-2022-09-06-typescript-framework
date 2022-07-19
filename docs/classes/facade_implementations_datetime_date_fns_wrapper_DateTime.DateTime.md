@@ -21,7 +21,6 @@
 ### Methods
 
 - [add](facade_implementations_datetime_date_fns_wrapper_DateTime.DateTime.md#add)
-- [clone](facade_implementations_datetime_date_fns_wrapper_DateTime.DateTime.md#clone)
 - [dayOfMonth](facade_implementations_datetime_date_fns_wrapper_DateTime.DateTime.md#dayofmonth)
 - [dayOfWeek](facade_implementations_datetime_date_fns_wrapper_DateTime.DateTime.md#dayofweek)
 - [format](facade_implementations_datetime_date_fns_wrapper_DateTime.DateTime.md#format)
@@ -85,7 +84,7 @@ Creates class instance.
 | Name | Type |
 | :------ | :------ |
 | `amount` | `number` |
-| `unit` | `Unit` |
+| `unit` | `TimeUnit` |
 
 #### Returns
 
@@ -94,20 +93,6 @@ Creates class instance.
 #### Implementation of
 
 datetime.DateTime.add
-
-___
-
-### clone
-
-▸ **clone**(): `DateTime`
-
-#### Returns
-
-`DateTime`
-
-#### Implementation of
-
-datetime.DateTime.clone
 
 ___
 
@@ -555,7 +540,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `amount` | `number` |
-| `unit` | `Unit` |
+| `unit` | `TimeUnit` |
 
 #### Returns
 

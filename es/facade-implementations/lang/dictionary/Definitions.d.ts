@@ -1,9 +1,9 @@
-import { Definition } from "./Definition";
-import type { PluralReduce, RawLanguage, WordInfo } from "./core";
-import type { lang } from "@skylib/facades";
 import type { Rec, strings } from "@skylib/functions";
+import type { PluralReduce, RawLanguage, WordInfo } from "./core";
+import { Definition } from "./Definition";
+import type { lang } from "@skylib/facades";
 export declare class Definitions {
-    readonly keys: Rec<lang.Transform, lang.Transform>;
+    readonly keys: Rec<lang.Transforms, lang.Transforms>;
     readonly pluralReduce: PluralReduce;
     /**
      * Creates class instance.

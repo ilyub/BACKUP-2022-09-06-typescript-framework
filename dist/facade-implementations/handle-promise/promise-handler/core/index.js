@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handle = exports.promises = exports.moduleConfig = void 0;
-const handle_error_1 = require("./handle-error");
 const facades_1 = require("@skylib/facades");
 const functions_1 = require("@skylib/functions");
+const handle_error_1 = require("./handle-error");
 exports.moduleConfig = {
     expectedDurations: {
         createDb: 10000,

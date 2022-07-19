@@ -1,5 +1,5 @@
-import { finalEasing, growProgress, moduleConfig } from "./core";
-import { a, num, programFlow, set } from "@skylib/functions";
+import { ReadonlySet, a, num, programFlow, set } from "@skylib/functions";
+import { State, finalEasing, growProgress, moduleConfig } from "./core";
 import $ from "jquery";
 export class Process {
     /**
@@ -20,7 +20,7 @@ export class Process {
                 expectedDuration: 0,
                 lastUpdate: Date.now(),
                 progress: 0,
-                state: "manual",
+                state: State.manual,
                 weight: 1
             }
         });
@@ -28,20 +28,20 @@ export class Process {
         Process.update();
     }
     done() {
-        this.state.state = "finalEasing";
+        this.state.state = State.finalEasing;
         this.state.lastUpdate = Date.now();
         Process.update();
         return this;
     }
     setAuto(expectedDuration) {
-        this.state.state = "auto";
+        this.state.state = State.auto;
         this.state.expectedDuration = expectedDuration;
         this.state.lastUpdate = Date.now();
         Process.update();
         return this;
     }
     setProgress(value) {
-        this.state.state = "manual";
+        this.state.state = State.manual;
         this.state.progress = value;
         Process.update();
         return this;
@@ -86,7 +86,7 @@ Object.defineProperty(Process, "reset", {
     writable: true,
     value: () => {
         if (processes.size > 0) {
-            processes = new Set();
+            processes = new ReadonlySet();
             progress = 0;
             programFlow.clearTimeout(timeout);
             $(moduleConfig.selector)
@@ -129,7 +129,7 @@ Object.defineProperty(Process, "update", {
             Process.reset();
     }
 });
-let processes = new Set();
+let processes = new ReadonlySet();
 let progress = 0;
 let timeout;
 //# sourceMappingURL=Process.js.map

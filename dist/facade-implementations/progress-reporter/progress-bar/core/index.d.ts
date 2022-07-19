@@ -1,5 +1,11 @@
 import type { Writable } from "@skylib/functions";
-export declare const moduleConfig: Configuration;
+export declare const moduleConfig: Writable<Configuration>;
+export declare enum State {
+    auto = "auto",
+    done = "done",
+    finalEasing = "finalEasing",
+    manual = "manual"
+}
 export interface Configurable {
     /**
      * Configures plugin.
@@ -33,7 +39,6 @@ export interface ProcessState {
     readonly state: State;
     readonly weight: number;
 }
-export declare type State = "auto" | "done" | "finalEasing" | "manual";
 /**
  * Performs final easing.
  *

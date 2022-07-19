@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Dictionary = void 0;
-const core_1 = require("./core");
 const functions_1 = require("@skylib/functions");
+const core_1 = require("./core");
 class Dictionary {
     /**
      * Creates class instance.
@@ -56,7 +56,7 @@ class Dictionary {
             value: new Map()
         });
         const facade = (0, functions_1.evaluate)(() => {
-            const handler = (0, functions_1.wrapProxyHandler)("Dictionary", "doDefault", {
+            const handler = (0, functions_1.wrapProxyHandler)("Dictionary", functions_1.ProxyHandlerAction.doDefault, {
                 get: (target, key) => {
                     functions_1.assert.string(key, "Expecting string key");
                     return target.has(key) ? target.get(key) : functions_1.o.get(target, key);

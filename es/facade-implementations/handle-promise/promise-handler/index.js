@@ -1,9 +1,9 @@
-import { handle, moduleConfig, promises } from "./core";
 import { defineFn, o } from "@skylib/functions";
+import { handle, moduleConfig, promises } from "./core";
 export const promiseHandler = defineFn((type, mixed, errorMessage = "") => {
     handle(mixed, type, errorMessage);
 }, {
-    configure: (config) => {
+    configure: config => {
         o.assign(moduleConfig, config);
     },
     getConfiguration: () => moduleConfig,

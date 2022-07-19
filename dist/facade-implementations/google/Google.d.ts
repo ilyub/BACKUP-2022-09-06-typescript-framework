@@ -1,16 +1,16 @@
 /// <reference types="gapi.auth2" />
+import type { stringU, types } from "@skylib/functions";
 import type { google } from "@skylib/facades";
-import type { AsyncPromise, stringU } from "@skylib/functions";
 export declare class Google implements google.Facade {
     /**
      * Creates class instance.
      *
      * @param clientId - Client ID.
      */
-    constructor(clientId: AsyncPromise<stringU> | stringU);
+    constructor(clientId: stringU | types.fn.AsyncPromise<stringU>);
     idToken(): Promise<stringU>;
     loadSdk(): Promise<void>;
-    protected readonly clientId: AsyncPromise<stringU> | stringU;
+    protected readonly clientId: stringU | types.fn.AsyncPromise<stringU>;
     protected sdk: Promise<Google.Auth> | undefined;
     /**
      * Loads SDK.

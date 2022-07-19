@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.moduleConfig = exports.formatStrings = void 0;
 const tslib_1 = require("tslib");
-const facades_1 = require("@skylib/facades");
-const functions_1 = require("@skylib/functions");
 const en_US_1 = tslib_1.__importDefault(require("date-fns/locale/en-US"));
+const functions_1 = require("@skylib/functions");
+const facades_1 = require("@skylib/facades");
 exports.formatStrings = [
     "yyyy-M-d h:m:s a",
     "yyyy-M-d H:m:s",

@@ -1,5 +1,5 @@
-import { PouchConflictError, PouchNotFoundError, PouchRetryError } from "./core";
 import type { Configuration, PouchDatabaseConfiguration } from "./core";
+import { PouchConflictError, PouchNotFoundError, PouchRetryError } from "./core";
 import type { database } from "@skylib/facades";
 export declare class PouchWrapper implements database.Facade {
     static readonly PouchConflictError: typeof PouchConflictError;

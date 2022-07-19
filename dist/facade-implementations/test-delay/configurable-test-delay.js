@@ -6,7 +6,7 @@ exports.configurableTestDelay = (0, functions_1.defineFn)(async () => {
     if (moduleConfig.enabled)
         await (0, functions_1.wait)(moduleConfig.timeout);
 }, {
-    configure: (config) => {
+    configure: config => {
         functions_1.o.assign(moduleConfig, config);
     },
     getConfiguration: () => moduleConfig

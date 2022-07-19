@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Process = void 0;
 const tslib_1 = require("tslib");
-const core_1 = require("./core");
 const functions_1 = require("@skylib/functions");
+const core_1 = require("./core");
 const jquery_1 = tslib_1.__importDefault(require("jquery"));
 class Process {
     /**
@@ -24,7 +24,7 @@ class Process {
                 expectedDuration: 0,
                 lastUpdate: Date.now(),
                 progress: 0,
-                state: "manual",
+                state: core_1.State.manual,
                 weight: 1
             }
         });
@@ -32,20 +32,20 @@ class Process {
         Process.update();
     }
     done() {
-        this.state.state = "finalEasing";
+        this.state.state = core_1.State.finalEasing;
         this.state.lastUpdate = Date.now();
         Process.update();
         return this;
     }
     setAuto(expectedDuration) {
-        this.state.state = "auto";
+        this.state.state = core_1.State.auto;
         this.state.expectedDuration = expectedDuration;
         this.state.lastUpdate = Date.now();
         Process.update();
         return this;
     }
     setProgress(value) {
-        this.state.state = "manual";
+        this.state.state = core_1.State.manual;
         this.state.progress = value;
         Process.update();
         return this;
@@ -91,7 +91,7 @@ Object.defineProperty(Process, "reset", {
     writable: true,
     value: () => {
         if (processes.size > 0) {
-            processes = new Set();
+            processes = new functions_1.ReadonlySet();
             progress = 0;
             functions_1.programFlow.clearTimeout(timeout);
             (0, jquery_1.default)(core_1.moduleConfig.selector)
@@ -134,7 +134,7 @@ Object.defineProperty(Process, "update", {
             Process.reset();
     }
 });
-let processes = new Set();
+let processes = new functions_1.ReadonlySet();
 let progress = 0;
 let timeout;
 //# sourceMappingURL=Process.js.map

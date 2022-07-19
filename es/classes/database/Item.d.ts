@@ -1,5 +1,5 @@
-import type { database } from "@skylib/facades";
 import type { numbers, stringU } from "@skylib/functions";
+import type { database } from "@skylib/facades";
 export declare class Item {
     readonly _deleted: boolean;
     readonly _id: string;

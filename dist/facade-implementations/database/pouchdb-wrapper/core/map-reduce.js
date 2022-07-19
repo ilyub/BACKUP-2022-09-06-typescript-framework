@@ -1,10 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMapReduceAttached = exports.getMapReduce = void 0;
+exports.getMapReduceAttached = exports.getMapReduce = exports.DocType = void 0;
 const tslib_1 = require("tslib");
 const facades_1 = require("@skylib/facades");
 const functions_1 = require("@skylib/functions");
 const sha256_1 = tslib_1.__importDefault(require("sha256"));
+var DocType;
+(function (DocType) {
+    DocType["attached"] = "attached";
+    DocType["doc"] = "doc";
+})(DocType = exports.DocType || (exports.DocType = {}));
 /**
  * Creates map/reduce function.
  *
@@ -15,7 +20,7 @@ const sha256_1 = tslib_1.__importDefault(require("sha256"));
  */
 function getMapReduce(options, queryOptions, caseSensitiveSorting) {
     var _a, _b;
-    const conds = condsToStr("doc", queryOptions.conditions);
+    const conds = condsToStr(DocType.doc, queryOptions.conditions);
     const sortBy = options.sortBy;
     const descending = (_a = options.descending) !== null && _a !== void 0 ? _a : false;
     const group1 = descending ? 4 : 1;
@@ -114,8 +119,8 @@ exports.getMapReduce = getMapReduce;
  */
 function getMapReduceAttached(options, queryOptions, caseSensitiveSorting) {
     var _a, _b;
-    const conds = condsToStr("attached", queryOptions.conditions);
-    const parentConds = condsToStr("doc", queryOptions.parentConditions);
+    const conds = condsToStr(DocType.attached, queryOptions.conditions);
+    const parentConds = condsToStr(DocType.doc, queryOptions.parentConditions);
     const sortBy = options.sortBy;
     const descending = (_a = options.descending) !== null && _a !== void 0 ? _a : false;
     const group1 = descending ? 4 : 1;
@@ -348,21 +353,21 @@ function dateValue(date) {
     if (functions_1.is.string(date))
         return date;
     if (date.length === 1)
-        date = [date[0], "+", 0, "minutes"];
+        date = [date[0], "+", 0, facades_1.TimeUnit.minutes];
     const [type, sign, value, unit] = date;
     let result = facades_1.datetime.create();
     switch (type) {
         case "endOfDay":
-            result = result.setStartOfDay().add(1, "day");
+            result = result.setStartOfDay().add(1, facades_1.TimeUnit.day);
             break;
         case "endOfHour":
-            result = result.setStartOfHour().add(1, "hour");
+            result = result.setStartOfHour().add(1, facades_1.TimeUnit.hour);
             break;
         case "endOfMonth":
-            result = result.setStartOfMonth().add(1, "month");
+            result = result.setStartOfMonth().add(1, facades_1.TimeUnit.month);
             break;
         case "endOfWeek":
-            result = result.setStartOfWeekLocale().add(1, "week");
+            result = result.setStartOfWeekLocale().add(1, facades_1.TimeUnit.week);
             break;
         case "now":
             break;

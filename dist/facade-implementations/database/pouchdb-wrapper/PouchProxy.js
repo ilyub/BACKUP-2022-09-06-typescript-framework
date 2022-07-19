@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PouchProxy = void 0;
 const tslib_1 = require("tslib");
 const core_1 = require("./core");
-const facades_1 = require("@skylib/facades");
 const functions_1 = require("@skylib/functions");
 const pouchdb_1 = tslib_1.__importDefault(require("pouchdb"));
+const facades_1 = require("@skylib/facades");
 class PouchProxy {
     /**
      * Creates class instance.
@@ -33,8 +33,8 @@ class PouchProxy {
         try {
             return await this.db.bulkDocs(functions_1.a.clone(docs));
         }
-        catch (error) {
-            throw (0, core_1.wrapPouchError)(error);
+        catch (e) {
+            throw (0, core_1.wrapPouchError)(e);
         }
     }
     /**
@@ -58,8 +58,8 @@ class PouchProxy {
         try {
             await this.db.destroy();
         }
-        catch (error) {
-            throw (0, core_1.wrapPouchError)(error);
+        catch (e) {
+            throw (0, core_1.wrapPouchError)(e);
         }
     }
     /**
@@ -73,8 +73,8 @@ class PouchProxy {
         try {
             return await this.db.get(id);
         }
-        catch (error) {
-            throw (0, core_1.wrapPouchError)(error);
+        catch (e) {
+            throw (0, core_1.wrapPouchError)(e);
         }
     }
     /**
@@ -96,8 +96,8 @@ class PouchProxy {
         try {
             return await this.db.post(doc);
         }
-        catch (error) {
-            throw (0, core_1.wrapPouchError)(error);
+        catch (e) {
+            throw (0, core_1.wrapPouchError)(e);
         }
     }
     /**
@@ -111,8 +111,8 @@ class PouchProxy {
         try {
             return await this.db.put(doc);
         }
-        catch (error) {
-            throw (0, core_1.wrapPouchError)(error);
+        catch (e) {
+            throw (0, core_1.wrapPouchError)(e);
         }
     }
     /**
@@ -127,8 +127,8 @@ class PouchProxy {
         try {
             return await this.db.query(mapReduce, options);
         }
-        catch (error) {
-            throw (0, core_1.wrapPouchError)(error);
+        catch (e) {
+            throw (0, core_1.wrapPouchError)(e);
         }
     }
 }

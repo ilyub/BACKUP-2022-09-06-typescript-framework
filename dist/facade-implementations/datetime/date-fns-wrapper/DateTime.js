@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DateTime = void 0;
-const core_1 = require("./core");
-const functions_1 = require("@skylib/functions");
 const date_fns_1 = require("date-fns");
+const core_1 = require("./core");
+const facades_1 = require("@skylib/facades");
+const functions_1 = require("@skylib/functions");
 class DateTime {
     /**
      * Creates class instance.
@@ -40,34 +41,31 @@ class DateTime {
     add(amount, unit) {
         const duration = {};
         switch (unit) {
-            case "minute":
-            case "minutes":
+            case facades_1.TimeUnit.minute:
+            case facades_1.TimeUnit.minutes:
                 duration.minutes = amount;
                 break;
-            case "hour":
-            case "hours":
+            case facades_1.TimeUnit.hour:
+            case facades_1.TimeUnit.hours:
                 duration.hours = amount;
                 break;
-            case "day":
-            case "days":
+            case facades_1.TimeUnit.day:
+            case facades_1.TimeUnit.days:
                 duration.days = amount;
                 break;
-            case "week":
-            case "weeks":
+            case facades_1.TimeUnit.week:
+            case facades_1.TimeUnit.weeks:
                 duration.weeks = amount;
                 break;
-            case "month":
-            case "months":
+            case facades_1.TimeUnit.month:
+            case facades_1.TimeUnit.months:
                 duration.months = amount;
                 break;
-            case "year":
-            case "years":
+            case facades_1.TimeUnit.year:
+            case facades_1.TimeUnit.years:
                 duration.years = amount;
         }
         return new DateTime((0, date_fns_1.add)(this.value, duration));
-    }
-    clone() {
-        return new DateTime(this);
     }
     dayOfMonth() {
         return (0, date_fns_1.getDate)(this.value);
@@ -160,28 +158,28 @@ class DateTime {
     sub(amount, unit) {
         const duration = {};
         switch (unit) {
-            case "minute":
-            case "minutes":
+            case facades_1.TimeUnit.minute:
+            case facades_1.TimeUnit.minutes:
                 duration.minutes = amount;
                 break;
-            case "hour":
-            case "hours":
+            case facades_1.TimeUnit.hour:
+            case facades_1.TimeUnit.hours:
                 duration.hours = amount;
                 break;
-            case "day":
-            case "days":
+            case facades_1.TimeUnit.day:
+            case facades_1.TimeUnit.days:
                 duration.days = amount;
                 break;
-            case "week":
-            case "weeks":
+            case facades_1.TimeUnit.week:
+            case facades_1.TimeUnit.weeks:
                 duration.weeks = amount;
                 break;
-            case "month":
-            case "months":
+            case facades_1.TimeUnit.month:
+            case facades_1.TimeUnit.months:
                 duration.months = amount;
                 break;
-            case "year":
-            case "years":
+            case facades_1.TimeUnit.year:
+            case facades_1.TimeUnit.years:
                 duration.years = amount;
         }
         return new DateTime((0, date_fns_1.sub)(this.value, duration));

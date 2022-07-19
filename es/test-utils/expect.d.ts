@@ -1,4 +1,4 @@
-import type * as testUtils from "@skylib/functions/dist/test-utils";
+import * as testUtils from "@skylib/functions/dist/test-utils";
 declare global {
     namespace jest {
         interface Matchers<R> {

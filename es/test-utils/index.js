@@ -1,8 +1,8 @@
-import { implementations } from "..";
-import { matchers } from "./expect";
 import { compare, database, datetime, facebook, faker, google, handlePromise, httpRequest, inlineSearch, lang, progressReporter, reactiveStorage, showAlert, showConfirm, testDelay, uniqueId } from "@skylib/facades";
 import { defineFn, typedef } from "@skylib/functions";
 import enUS from "date-fns/locale/en-US";
+import { implementations } from "..";
+import { matchers } from "./expect";
 export const jestReset = defineFn(
 /**
  * Jest reset.
@@ -50,10 +50,10 @@ export const jestReset = defineFn(
             pm: true
         }));
         loremIpsumWrapper.configure(typedef({
-            maxSentences: 5,
-            maxWords: 10,
-            minSentences: 3,
-            minWords: 5
+            maxSentences: 2,
+            maxWords: 3,
+            minSentences: 2,
+            minWords: 3
         }));
         promiseHandler.configure(typedef({
             expectedDurations: {

@@ -35,4 +35,4 @@ ___
 
 ### moduleConfig
 
-• `Const` **moduleConfig**: [`Configuration`](../interfaces/facade_implementations_datetime_date_fns_wrapper_core.Configuration.md)
+• `Const` **moduleConfig**: `Writable`<[`Configuration`](../interfaces/facade_implementations_datetime_date_fns_wrapper_core.Configuration.md)\>

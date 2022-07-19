@@ -14,4 +14,4 @@
 
 ### expectedDurations
 
-• `Readonly` **expectedDurations**: `Rec`<`Type`, `number`\>
+• `Readonly` **expectedDurations**: `Rec`<`PromiseType`, `number`\>

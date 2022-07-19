@@ -8,6 +8,14 @@ export const moduleConfig = {
     selector: "#progressBar",
     updateInterval: 100
 };
+export var State;
+(function (State) {
+    State["auto"] = "auto";
+    State["done"] = "done";
+    // eslint-disable-next-line @typescript-eslint/no-shadow -- Ok
+    State["finalEasing"] = "finalEasing";
+    State["manual"] = "manual";
+})(State || (State = {}));
 /**
  * Performs final easing.
  *
@@ -20,12 +28,12 @@ export function finalEasing(mutableState) {
         mutableState.lastUpdate = now;
         mutableState.progress += delta;
         if (mutableState.progress > 1) {
-            mutableState.state = "done";
+            mutableState.state = State.done;
             mutableState.progress = 1;
         }
     }
     else {
-        mutableState.state = "done";
+        mutableState.state = State.done;
         mutableState.progress = 1;
     }
 }
