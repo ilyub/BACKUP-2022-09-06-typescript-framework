@@ -304,11 +304,9 @@ function condsToStr(source: DocType, conditions: database.Conditions): Conds {
       if ("isSet" in field)
         toEmit.push(field.isSet ? `(${notEmpty})` : `(${empty})`);
 
-      if ("eq" in field)
-        toEmit.push(`(${notEmpty} && ${dest} === ${escapeJs(field.eq)})`);
+      if ("eq" in field) toEmit.push(`(${dest} === ${escapeJs(field.eq)})`);
 
-      if ("neq" in field)
-        toEmit.push(`(${notEmpty} && ${dest} !== ${escapeJs(field.neq)})`);
+      if ("neq" in field) toEmit.push(`(${dest} !== ${escapeJs(field.neq)})`);
 
       if ("gt" in field)
         toEmit.push(`(${notEmpty} && ${dest} > ${escapeJs(field.gt)})`);

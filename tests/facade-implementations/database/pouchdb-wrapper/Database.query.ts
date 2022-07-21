@@ -17,12 +17,13 @@ const pouchdb = new implementations.database.PouchWrapper();
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
-test("query: Unexpected value type", async () => {
+test.each([
+  { error: new Error("Unexpected value type: object"), value: null },
+  { error: new Error("Unexpected value type: undefined"), value: undefined }
+])("query: Unexpected value type", async ({ error, value }) => {
   const db = pouchdb.create(uniqueId());
 
-  const error = new Error("Unexpected value type: object");
-
-  await expect(db.query({ x: { eq: null } })).rejects.toStrictEqual(error);
+  await expect(db.query({ x: { eq: value } })).rejects.toStrictEqual(error);
 });
 
 test("query: conditions", async () => {
@@ -69,8 +70,8 @@ test("query: conditions: boolean", async () => {
     [undefined],
     [true],
     [false],
-    [false],
-    [true]
+    [false, undefined],
+    [true, undefined]
   ]);
 
   async function query(conditions: database.Conditions): Promise<unknowns> {
@@ -229,7 +230,7 @@ test("query: conditions: number", async () => {
     [1, 2, 3],
     [undefined],
     [2],
-    [1, 3],
+    [1, 3, undefined],
     [3],
     [2, 3],
     [1],
@@ -263,7 +264,7 @@ test("query: conditions: string", async () => {
     ["a", "b", "c"],
     [undefined],
     ["b"],
-    ["a", "c"],
+    ["a", "c", undefined],
     ["c"],
     ["b", "c"],
     ["a"],
