@@ -1,1 +1,1 @@
-module.exports = ["@skylib/consistent-import/framework"];
+module.exports = [];
