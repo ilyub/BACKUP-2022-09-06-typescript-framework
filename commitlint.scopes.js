@@ -1,4 +1,4 @@
 module.exports = {
-  dirs: ["./configs", "./src", "./tests"],
-  scopes: ["configs"]
+  dirs: ["./src", "./tests"],
+  scopes: []
 };
