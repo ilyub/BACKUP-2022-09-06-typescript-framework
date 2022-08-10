@@ -14,6 +14,7 @@ export const moduleConfig: Writable<Configuration> = {
   }
 };
 
+// eslint-disable-next-line @skylib/functions/prefer-ReadonlyMap -- Ok
 export const promises = new Map<symbol, Promise<unknown>>();
 
 export interface Configurable {

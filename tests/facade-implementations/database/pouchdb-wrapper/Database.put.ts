@@ -1,13 +1,12 @@
 /* eslint jest/max-expects: [warn, { max: 7 }] -- Ok */
 
-import {
-  PouchConflictError,
-  PouchRetryError
-} from "@/facade-implementations/database/pouchdb-wrapper/core/errors";
 import { a } from "@skylib/functions";
 import type { database } from "@skylib/facades";
 import { implementations } from "@";
 import { uniqueId } from "@skylib/facades";
+
+const { PouchConflictError, PouchRetryError } =
+  implementations.database.PouchWrapper;
 
 const pouchdb = new implementations.database.PouchWrapper();
 

@@ -72,7 +72,6 @@ test("countAttached", async () => {
 
 test("reactiveCount", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -118,7 +117,6 @@ test("reactiveCount", async () => {
 
 test("reactiveCountAttached", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     const config = reactiveStorage<Writable<database.ReactiveConfigAttached>>({
       conditions: { type: { eq: "a" } },

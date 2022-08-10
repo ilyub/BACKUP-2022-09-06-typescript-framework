@@ -14,6 +14,9 @@ export const lunrWrapper: inlineSearch.Facade = createImplementation(
      */
     public constructor(
       idField: string & keyof T,
+      // eslint-disable-next-line no-warning-comments -- Wait for @skylib/facades update
+      // fixme
+      // eslint-disable-next-line @skylib/typescript/prefer-array-type-alias -- Ok
       fields: ReadonlyArray<string & keyof T>,
       items: readonly T[]
     ) {
@@ -32,6 +35,9 @@ export const lunrWrapper: inlineSearch.Facade = createImplementation(
 
 const buildIndex = <T extends object>(
   idField: string & keyof T,
+  // eslint-disable-next-line no-warning-comments -- Wait for @skylib/facades update
+  // fixme
+  // eslint-disable-next-line @skylib/typescript/prefer-array-type-alias -- Ok
   fields: ReadonlyArray<string & keyof T>,
   items: readonly T[]
 ): Index =>

@@ -36,7 +36,6 @@ test("existsAttached", async () => {
 
 test("reactiveExists", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -64,7 +63,6 @@ test("reactiveExists", async () => {
 
 test("reactiveExistsAttached", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 

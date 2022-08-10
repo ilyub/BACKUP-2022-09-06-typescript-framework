@@ -1,4 +1,5 @@
 import type {
+  IndexedRecord,
   LocaleName,
   NumStr,
   PartialRecord,
@@ -10,8 +11,8 @@ import { defineFn, o, onDemand } from "@skylib/functions";
 import type { lang } from "@skylib/facades";
 import { reactiveStorage } from "@skylib/facades";
 
-export const moduleConfig = onDemand(() =>
-  reactiveStorage<Writable<Configuration>>({ localeName: "en-US" })
+export const moduleConfig = onDemand(
+  (): Writable<Configuration> => reactiveStorage({ localeName: "en-US" })
 );
 
 export const pluralReduce = defineFn<PluralReduce, PluralReduceInternational>(
@@ -74,9 +75,9 @@ export interface PluralReduceInternational {
 export type RawDefinition =
   | RawDefinitions
   | string
-  // eslint-disable-next-line @skylib/no-multi-type-tuples -- Ok
+  // eslint-disable-next-line @skylib/typescript/no-multi-type-tuples -- Ok
   | readonly [NumStr, RawDefinitions, PartialRecord<lang.Context, NumStr>]
-  // eslint-disable-next-line @skylib/no-multi-type-tuples -- Ok
+  // eslint-disable-next-line @skylib/typescript/no-multi-type-tuples -- Ok
   | readonly [NumStr, RawDefinitions];
 
 export interface RawDefinitions {
@@ -85,7 +86,7 @@ export interface RawDefinitions {
 
 export interface RawLanguage {
   readonly pluralReduce: PluralReduce;
-  readonly wordForms: Rec<string, strings>;
+  readonly wordForms: IndexedRecord<strings>;
   readonly words: Rec<lang.Word, RawDefinition>;
 }
 

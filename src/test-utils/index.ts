@@ -18,7 +18,7 @@ import {
 } from "@skylib/facades";
 import { defineFn, typedef } from "@skylib/functions";
 import type { LocaleName } from "@skylib/functions";
-import enUS from "date-fns/locale/en-US";
+import enUs from "date-fns/locale/en-US";
 import { implementations } from "..";
 import { matchers } from "./expect";
 
@@ -83,11 +83,10 @@ export const jestReset = defineFn(
       dateFnsWrapper.configure(
         typedef<implementations.datetime.dateFnsWrapper.Configuration>({
           firstDayOfWeek: 0,
-          locale: enUS,
+          locale: enUs,
           pm: true
         })
       );
-
       loremIpsumWrapper.configure(
         typedef<implementations.faker.loremIpsumWrapper.Configuration>({
           maxSentences: 2,
@@ -96,7 +95,6 @@ export const jestReset = defineFn(
           minWords: 3
         })
       );
-
       promiseHandler.configure(
         typedef<implementations.handlePromise.promiseHandler.Configuration>({
           expectedDurations: {
@@ -108,13 +106,11 @@ export const jestReset = defineFn(
           }
         })
       );
-
       axiosWrapper.configure(
         typedef<implementations.httpRequest.axiosWrapper.Configuration>({
           timeout: 1000
         })
       );
-
       progressBar.configure(
         typedef<implementations.progressReporter.progressBar.Configuration>({
           activeClass: "progress-bar-active",
@@ -127,7 +123,6 @@ export const jestReset = defineFn(
           updateInterval: 100
         })
       );
-
       configurableTestDelay.configure(
         typedef<implementations.testDelay.configurableTestDelay.Configuration>({
           enabled: false,

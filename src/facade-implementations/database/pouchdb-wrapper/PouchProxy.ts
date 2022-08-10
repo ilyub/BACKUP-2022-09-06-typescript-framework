@@ -38,6 +38,7 @@ export class PouchProxy {
    */
   public async bulkDocs(
     docs: PouchPutDocuments
+    // eslint-disable-next-line @skylib/typescript/prefer-array-type-alias -- Ok
   ): Promise<ReadonlyArray<PouchError | PouchResponse>> {
     await testDelay();
 

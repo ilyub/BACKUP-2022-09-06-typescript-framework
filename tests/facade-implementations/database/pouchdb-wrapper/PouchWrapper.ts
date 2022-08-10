@@ -1,4 +1,6 @@
 /* eslint jest/max-expects: [warn, { max: 6 }] -- Ok */
+/* eslint-disable @skylib/no-at-sign-internal-import -- Ok */
+/* eslint-disable @skylib/no-internal-modules -- Ok */
 
 import * as testUtils from "@skylib/functions/dist/test-utils";
 import { RelativeDate, datetime, uniqueId } from "@skylib/facades";
@@ -16,7 +18,6 @@ testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
 test("create: config.reindexThreshold", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:00").toDate());
 
@@ -32,25 +33,20 @@ test("create: config.reindexThreshold", async () => {
     ] as const;
 
     await Promise.all([db1.bulkDocs(docs), db2.bulkDocs(docs)]);
-
     await expect(
       Promise.all([
         unsettled(db1, { d: { dateGt: [RelativeDate.now] } }),
         unsettled(db2, { d: { dateGt: [RelativeDate.now] } })
       ])
     ).resolves.toStrictEqual([3, 3]);
-
     await wait(49.5 * 3600 * 1000);
-
     await expect(
       Promise.all([
         unsettled(db1, { d: { dateGt: [RelativeDate.now] } }),
         unsettled(db2, { d: { dateGt: [RelativeDate.now] } })
       ])
     ).resolves.toStrictEqual([2, 3]);
-
     await wait(2 * 3600 * 1000);
-
     await expect(
       Promise.all([
         unsettled(db1, { d: { dateGt: [RelativeDate.now] } }),
@@ -81,7 +77,6 @@ test("create: options.caseSensitiveSorting", async () => {
   ] as const;
 
   await Promise.all([db1.bulkDocs(docs), db2.bulkDocs(docs)]);
-
   await expect(
     Promise.all([
       query(db1),
@@ -111,7 +106,6 @@ test("create: options.caseSensitiveSorting", async () => {
 
 test("create: options.migrations", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     const name = uniqueId();
 
@@ -152,7 +146,6 @@ test("create: options.migrations", async () => {
 
 test("create: options.retries = 0", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:00").toDate());
 
@@ -161,18 +154,15 @@ test("create: options.retries = 0", async () => {
     const id = uniqueId();
 
     await db.put({ _id: id });
-
     await expect(
       Promise.all([db.putAttached(id, {}), db.putAttached(id, {})])
     ).rejects.toStrictEqual(new PouchRetryError("Failed after 0 retries"));
-
     await db.bulkDocs([
       { d: "2001-02-12 12:00" },
       { d: "2001-02-15 11:00" },
       { d: "2001-02-15 13:00" },
       { d: "2001-02-18 12:00" }
     ]);
-
     await expect(
       Promise.all([
         unsettled({ d: { dateEq: [RelativeDate.now] } }),
@@ -180,9 +170,7 @@ test("create: options.retries = 0", async () => {
         unsettled({ d: { dateEq: [RelativeDate.now] } })
       ])
     ).resolves.toStrictEqual([3, 3, 3]);
-
     await wait(49.5 * 3600 * 1000);
-
     await expect(
       Promise.all([
         unsettled({ d: { dateEq: [RelativeDate.now] } }),
@@ -203,7 +191,6 @@ test("create: options.retries = 0", async () => {
 
 test("create: options.retries = 1", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:00").toDate());
 
@@ -212,18 +199,15 @@ test("create: options.retries = 1", async () => {
     const id = uniqueId();
 
     await db.put({ _id: id });
-
     await expect(
       Promise.all([db.putAttached(id, {}), db.putAttached(id, {})])
     ).resolves.toBeInstanceOf(Array);
-
     await db.bulkDocs([
       { d: "2001-02-12 12:00" },
       { d: "2001-02-15 11:00" },
       { d: "2001-02-15 13:00" },
       { d: "2001-02-18 12:00" }
     ]);
-
     await expect(
       Promise.all([
         unsettled({ d: { dateEq: [RelativeDate.now] } }),
@@ -231,9 +215,7 @@ test("create: options.retries = 1", async () => {
         unsettled({ d: { dateEq: [RelativeDate.now] } })
       ])
     ).resolves.toStrictEqual([3, 3, 3]);
-
     await wait(49.5 * 3600 * 1000);
-
     await expect(
       Promise.all([
         unsettled({ d: { dateEq: [RelativeDate.now] } }),

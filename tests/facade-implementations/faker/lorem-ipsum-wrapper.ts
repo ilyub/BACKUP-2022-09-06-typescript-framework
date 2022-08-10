@@ -1,5 +1,4 @@
 /* eslint jest/max-expects: [warn, { max: 2 }] -- Ok */
-
 /* eslint-disable no-warning-comments -- Postponed */
 
 import type { Writable, unknowns } from "@skylib/functions";

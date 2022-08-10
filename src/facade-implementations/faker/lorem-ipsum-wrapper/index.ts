@@ -53,7 +53,7 @@ export const loremIpsumWrapper: faker.Facade & loremIpsumWrapper.Configurable =
 
       return datetime.create(time).toString();
     },
-    getConfiguration: () => moduleConfig,
+    getConfiguration: (): loremIpsumWrapper.Configuration => moduleConfig,
     number: (from: number, to: number, step = 1) =>
       num.floor.step(_.random(from, to), step),
     oneOf: <T>(values: readonly T[]) =>

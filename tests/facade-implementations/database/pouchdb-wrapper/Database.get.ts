@@ -3,8 +3,9 @@
 import * as testUtils from "@skylib/functions/dist/test-utils";
 import { database, handlePromise, uniqueId } from "@skylib/facades";
 import { fn, wait } from "@skylib/functions";
-import { PouchNotFoundError } from "@/facade-implementations/database/pouchdb-wrapper/core/errors";
 import { implementations } from "@";
+
+const { PouchNotFoundError } = implementations.database.PouchWrapper;
 
 const pouchdb = new implementations.database.PouchWrapper();
 
@@ -103,7 +104,6 @@ test.each([
 
 test("reactiveGet", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     const db = pouchdb.create(uniqueId());
 
@@ -144,7 +144,6 @@ test("reactiveGet", async () => {
 
 test("reactiveGet: missing", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     const db = pouchdb.create(uniqueId());
 
@@ -173,7 +172,6 @@ test("reactiveGet: missing", async () => {
 
 test("reactiveGetAttached", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -234,7 +232,6 @@ test("reactiveGetAttached", async () => {
 
 test("reactiveGetAttached: missing", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 

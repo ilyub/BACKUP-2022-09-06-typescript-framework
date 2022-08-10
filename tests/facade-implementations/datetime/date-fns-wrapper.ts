@@ -4,19 +4,19 @@ import * as testUtils from "@skylib/functions/dist/test-utils";
 import type { NumStr } from "@skylib/functions";
 import { TimeUnit } from "@skylib/facades";
 import type { datetime } from "@skylib/facades";
-import enUS from "date-fns/locale/en-US";
+import enUs from "date-fns/locale/en-US";
 import { implementations } from "@";
 import ru from "date-fns/locale/ru";
+
+const dateFns = implementations.datetime.dateFnsWrapper;
+
+testUtils.installFakeTimer();
 
 function d(
   date: Date | datetime.DateTime | NumStr = "1950-06-15 14:30:30"
 ): datetime.DateTime {
   return dateFns.create(date);
 }
-
-const dateFns = implementations.datetime.dateFnsWrapper;
-
-testUtils.installFakeTimer();
 
 test.each([
   { expected: "1950-06-15 14:31:30", unit: TimeUnit.minute },
@@ -76,7 +76,7 @@ test.each([
   { expected: "14:30", format: "HH:mm" },
   { expected: "14:30", format: "H:mm" }
 ])("DateTime.format: English", ({ expected, format }) => {
-  dateFns.configure({ locale: enUS, pm: true });
+  dateFns.configure({ locale: enUs, pm: true });
   expect(d().format(format)).toBe(expected);
 });
 

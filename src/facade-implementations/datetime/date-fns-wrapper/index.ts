@@ -11,7 +11,7 @@ export const dateFnsWrapper: Configurable & datetime.Facade = {
     o.assign(moduleConfig, config);
   },
   create: (date?: Date | datetime.DateTime | NumStr) => new DateTime(date),
-  getConfiguration: () => moduleConfig,
+  getConfiguration: (): dateFnsWrapper.Configuration => moduleConfig,
   now: () => new DateTime().toString(),
   time: () => Date.now(),
   timeSec: () => Date.now() / 1000,

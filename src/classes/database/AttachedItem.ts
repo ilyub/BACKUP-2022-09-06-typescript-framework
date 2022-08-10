@@ -20,6 +20,8 @@ export abstract class AttachedItem<T extends Item = Item> {
 
   /**
    * Unique combined ID.
+   *
+   * @returns Combined ID.
    */
   public get id(): string {
     return `${this._parentDoc._id}:${this._id}`;
@@ -27,6 +29,8 @@ export abstract class AttachedItem<T extends Item = Item> {
 
   /**
    * Parent item.
+   *
+   * @returns Parent.
    */
   public get parent(): T {
     this._parent = this._parent ?? this.getParent();
@@ -71,7 +75,7 @@ export abstract class AttachedItem<T extends Item = Item> {
       types.object.style.Undefined<AttachedItem.ExistingAttachedItemDoc>;
   }
 
-  // eslint-disable-next-line @skylib/custom/prefer-readonly-property -- Ok
+  // eslint-disable-next-line @skylib/typescript/prefer-readonly-property -- Ok
   protected _parent: T | undefined;
 
   protected readonly _parentDoc: database.BaseExistingDocument;
@@ -99,7 +103,7 @@ export namespace AttachedItem {
   export interface Content {
     readonly createdAt?: string;
     readonly deletedAt?: string;
-    // eslint-disable-next-line @skylib/custom/no-optional-true-type -- Ok
+    // eslint-disable-next-line @skylib/typescript/no-true-type -- Ok
     readonly softDeleted?: true;
     readonly updatedAt?: string;
   }

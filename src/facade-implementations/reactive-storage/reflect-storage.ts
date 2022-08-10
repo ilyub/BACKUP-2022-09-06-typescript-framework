@@ -1,7 +1,3 @@
-/* eslint-disable @skylib/custom/functions/no-reflect-get -- Ok */
-
-/* eslint-disable @skylib/custom/functions/no-reflect-set -- Ok */
-
 import {
   ProxyHandlerAction,
   ReadonlyMap,
@@ -44,6 +40,7 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
       target: O,
       key: PropertyKey
     ): unknown {
+      // eslint-disable-next-line @skylib/functions/reflect/no-get -- Ok
       const value = reflect.get(target, key);
 
       return is.object(value)
@@ -62,8 +59,10 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
       key: PropertyKey,
       value: unknown
     ): boolean {
+      // eslint-disable-next-line @skylib/functions/reflect/no-get -- Ok
       const oldValue = reflect.get(target, key);
 
+      // eslint-disable-next-line @skylib/functions/reflect/no-set -- Ok
       if (reflect.set(target, key, value)) {
         if (value === oldValue) {
           // Not modified

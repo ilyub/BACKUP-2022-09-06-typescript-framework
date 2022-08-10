@@ -14,12 +14,14 @@ export const isDocsResponse = is.object.factory<DocsResponse>(
 );
 
 export const isExistingDocument = evaluate(() => {
+  // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
   const isBaseStoredAttachedDocument =
     is.object.factory<database.BaseStoredAttachedDocument>(
       { _id: is.number, _rev: is.number },
       { _deleted: is.true, parentDoc: is.never }
     );
 
+  // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
   const isBaseStoredAttachedDocuments = is.factory(
     is.array.of,
     isBaseStoredAttachedDocument

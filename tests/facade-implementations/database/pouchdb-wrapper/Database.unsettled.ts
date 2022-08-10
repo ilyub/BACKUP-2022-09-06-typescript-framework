@@ -18,7 +18,6 @@ testUtils.installFakeTimer({ shouldAdvanceTime: true });
 
 test("reactiveUnsettled", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:00").toDate());
 
@@ -53,7 +52,6 @@ test("reactiveUnsettled", async () => {
 
 test("reactiveUnsettledAttached", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:00").toDate());
 
@@ -91,7 +89,6 @@ test("reactiveUnsettledAttached", async () => {
 
 test("unsettled", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     testUtils.clock.setSystemTime(datetime.create("2001-02-14 12:00").toDate());
 
@@ -103,7 +100,6 @@ test("unsettled", async () => {
       { d: "2001-02-15 13:00" },
       { d: "2001-02-18 12:00" }
     ]);
-
     await expect(
       Promise.all([
         unsettled(),
@@ -113,9 +109,7 @@ test("unsettled", async () => {
         unsettled({ d: { dateLt: [RelativeDate.now, "+", 1, TimeUnit.day] } })
       ])
     ).resolves.toStrictEqual([0, 3, 3, 3, 3]);
-
     await wait(49.5 * 3600 * 1000);
-
     await expect(
       Promise.all([
         unsettled(),
@@ -125,9 +119,7 @@ test("unsettled", async () => {
         unsettled({ d: { dateLt: [RelativeDate.now, "+", 1, TimeUnit.day] } })
       ])
     ).resolves.toStrictEqual([0, 2, 2, 2, 2]);
-
     await wait(2 * 3600 * 1000);
-
     await expect(
       Promise.all([
         unsettled(),
@@ -150,7 +142,6 @@ test("unsettled", async () => {
 
 test("unsettledAttached", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     testUtils.clock.setSystemTime(datetime.create("2001-02-16 12:00").toDate());
 
@@ -161,14 +152,12 @@ test("unsettledAttached", async () => {
     const id2 = uniqueId();
 
     await db.bulkDocs([{ _id: id1 }, { _id: id2 }]);
-
     await db.bulkDocsAttached([
       { d: "2001-02-12 12:00", parentDoc: { _id: id1, _rev: uniqueId() } },
       { d: "2001-02-15 11:00", parentDoc: { _id: id1, _rev: uniqueId() } },
       { d: "2001-02-15 13:00", parentDoc: { _id: id2, _rev: uniqueId() } },
       { d: "2001-02-18 12:00", parentDoc: { _id: id2, _rev: uniqueId() } }
     ]);
-
     await expect(
       Promise.all([
         unsettled(),
@@ -178,9 +167,7 @@ test("unsettledAttached", async () => {
         unsettled({ d: { dateLt: [RelativeDate.now, "-", 1, TimeUnit.day] } })
       ])
     ).resolves.toStrictEqual([0, 3, 3, 3, 3]);
-
     await wait(49.5 * 3600 * 1000);
-
     await expect(
       Promise.all([
         unsettled(),
@@ -190,9 +177,7 @@ test("unsettledAttached", async () => {
         unsettled({ d: { dateLt: [RelativeDate.now, "-", 1, TimeUnit.day] } })
       ])
     ).resolves.toStrictEqual([0, 2, 2, 2, 2]);
-
     await wait(2 * 3600 * 1000);
-
     await expect(
       Promise.all([
         unsettled(),
@@ -215,9 +200,7 @@ test("unsettledAttached", async () => {
 
 test("unsettledAttached: Combined", async () => {
   expect.hasAssertions();
-
   testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:00").toDate());
-
   await testUtils.run(async () => {
     const db = pouchdb.create(uniqueId());
 
@@ -235,7 +218,6 @@ test("unsettledAttached: Combined", async () => {
       { _id: id3, d: "2001-02-15 13:00" },
       { _id: id4, d: "2001-02-18 12:00" }
     ]);
-
     await db.bulkDocsAttached([
       { d: "2001-02-12 12:00", parentDoc: { _id: id1, _rev: uniqueId() } },
       { d: "2001-02-15 11:00", parentDoc: { _id: id1, _rev: uniqueId() } },
@@ -254,7 +236,6 @@ test("unsettledAttached: Combined", async () => {
       { d: "2001-02-15 13:00", parentDoc: { _id: id4, _rev: uniqueId() } },
       { d: "2001-02-18 12:00", parentDoc: { _id: id4, _rev: uniqueId() } }
     ]);
-
     await expect(
       Promise.all([
         unsettled(
@@ -275,9 +256,7 @@ test("unsettledAttached: Combined", async () => {
         )
       ])
     ).resolves.toStrictEqual([9, 12, 12, 15]);
-
     await wait(49.5 * 3600 * 1000);
-
     await expect(
       Promise.all([
         unsettled(
@@ -298,9 +277,7 @@ test("unsettledAttached: Combined", async () => {
         )
       ])
     ).resolves.toStrictEqual([4, 8, 8, 12]);
-
     await wait(2 * 3600 * 1000);
-
     await expect(
       Promise.all([
         unsettled(

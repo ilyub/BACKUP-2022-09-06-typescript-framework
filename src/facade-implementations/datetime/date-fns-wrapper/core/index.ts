@@ -1,6 +1,6 @@
 import type { Writable, strings } from "@skylib/functions";
 import type { Locale } from "date-fns";
-import enUS from "date-fns/locale/en-US";
+import enUs from "date-fns/locale/en-US";
 import { onDemand } from "@skylib/functions";
 import { reactiveStorage } from "@skylib/facades";
 
@@ -12,12 +12,9 @@ export const formatStrings: strings = [
   "yyyy-M-d"
 ];
 
-export const moduleConfig = onDemand(() =>
-  reactiveStorage<Writable<Configuration>>({
-    firstDayOfWeek: 0,
-    locale: enUS,
-    pm: true
-  })
+export const moduleConfig = onDemand(
+  (): Writable<Configuration> =>
+    reactiveStorage({ firstDayOfWeek: 0, locale: enUs, pm: true })
 );
 
 export interface Configurable {

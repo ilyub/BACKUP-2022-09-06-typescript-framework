@@ -1,9 +1,6 @@
 /* eslint jest/max-expects: [warn, { max: 3 }] -- Ok */
-
 /* eslint-disable @typescript-eslint/no-throw-literal -- Ok */
-
 /* eslint-disable etc/throw-error -- Ok */
-
 /* eslint-disable unicorn/no-thenable -- Ok */
 
 import { AssertionError, as, assert, evaluate } from "@skylib/functions";

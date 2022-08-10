@@ -1,5 +1,7 @@
 import { implementations } from "@";
 
+const lunr = implementations.inlineSearch.lunrWrapper;
+
 interface Item {
   readonly description: string;
   readonly id: string;
@@ -7,8 +9,6 @@ interface Item {
 }
 
 type Items = readonly Item[];
-
-const lunr = implementations.inlineSearch.lunrWrapper;
 
 test.each([
   { ids: ["a"], searchString: "n1" },

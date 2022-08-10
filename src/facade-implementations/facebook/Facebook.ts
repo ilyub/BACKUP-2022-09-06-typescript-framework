@@ -54,7 +54,6 @@ export class Facebook implements facebook.Facade {
           : await this.appId;
 
         assert.not.empty(appId, "Missing Facebook app ID");
-
         FB.init({
           appId,
           autoLogAppEvents: true,
@@ -62,13 +61,12 @@ export class Facebook implements facebook.Facade {
           xfbml: true
         });
       });
-
     await this.sdk;
   }
 
   protected readonly appId: stringU | types.fn.AsyncPromise<stringU>;
 
-  // eslint-disable-next-line @skylib/custom/prefer-readonly-property -- Ok
+  // eslint-disable-next-line @skylib/typescript/prefer-readonly-property -- Ok
   protected sdk: Promise<void> | undefined;
 
   protected readonly version: string;

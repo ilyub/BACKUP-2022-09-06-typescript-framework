@@ -16,7 +16,7 @@ export const promiseHandler: Configurable & handlePromise.Facade = defineFn(
     configure: config => {
       o.assign(moduleConfig, config);
     },
-    getConfiguration: () => moduleConfig,
+    getConfiguration: (): promiseHandler.Configuration => moduleConfig,
     runAll: async () => {
       await Promise.all(promises.values());
     },

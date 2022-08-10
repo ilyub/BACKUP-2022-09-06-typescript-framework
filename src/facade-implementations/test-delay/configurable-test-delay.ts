@@ -11,7 +11,7 @@ export const configurableTestDelay: configurableTestDelay.Configurable &
     configure: config => {
       o.assign(moduleConfig, config);
     },
-    getConfiguration: () => moduleConfig
+    getConfiguration: (): configurableTestDelay.Configuration => moduleConfig
   }
 );
 

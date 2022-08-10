@@ -34,6 +34,7 @@ export class Definitions {
 
     const words = new ReadonlyMap(
       o.entries(raw.words).flatMap(
+        // eslint-disable-next-line @skylib/typescript/prefer-array-type-alias -- Ok
         ([key, value]): ReadonlyArray<Entry<string, Definition>> => [
           [
             s.lcFirst(key),
@@ -160,7 +161,10 @@ function mapDefinitions(
   definitions: RawDefinitions,
   callback: Callback
 ): RawDefinitions {
-  return o.map(definitions, definition => map(definition, callback));
+  return o.map(
+    definitions,
+    (definition): RawDefinition => map(definition, callback)
+  );
 }
 
 /**

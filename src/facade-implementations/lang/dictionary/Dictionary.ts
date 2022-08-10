@@ -30,9 +30,6 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
 
   public readonly keys: Rec<lang.Transforms, lang.Transforms>;
 
-  // eslint-disable-next-line @skylib/require-jsdoc -- Ok
-  public readonly plain = (str: string): lang.Plain => `plain:${str}`;
-
   public context(context: lang.Context): lang.Facade {
     if (context === this._context) return this.facade;
 
@@ -73,6 +70,9 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
 
     return definitions.has(key);
   }
+
+  // eslint-disable-next-line @skylib/require-jsdoc -- Ok
+  public readonly plain = (str: string): lang.Plain => `plain:${str}`;
 
   public plural(count: number): lang.Facade {
     count = this.pluralReduce(count);
@@ -119,6 +119,7 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
 
   protected readonly facade: lang.Facade;
 
+  // eslint-disable-next-line @skylib/functions/prefer-ReadonlyMap -- Ok
   protected readonly subs = new Map<NumStr, lang.Facade>();
 
   /**
@@ -133,7 +134,7 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
     context?: lang.Context,
     count = 1
   ) {
-    const facade = evaluate(() => {
+    const facade = evaluate((): lang.Facade => {
       const handler = wrapProxyHandler<Dictionary>(
         "Dictionary",
         ProxyHandlerAction.doDefault,
@@ -169,4 +170,5 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
   }
 }
 
+// eslint-disable-next-line @skylib/functions/prefer-ReadonlyMap -- Ok
 const replacements = new Map<string, string>();

@@ -1,7 +1,7 @@
 /* eslint jest/max-expects: [warn, { max: 2 }] -- Ok */
-
-/* eslint-disable @skylib/consistent-import/project -- Ok */
-
+/* eslint-disable @skylib/consistent-import -- Ok */
+/* eslint-disable @skylib/no-at-sign-internal-import -- Ok */
+/* eslint-disable @skylib/no-internal-modules -- Ok */
 /* eslint-disable github/no-inner-html -- Ok */
 
 import * as handleError from "@/facade-implementations/handle-promise/promise-handler/core/handle-error";
@@ -9,16 +9,6 @@ import * as testUtils from "@skylib/functions/dist/test-utils";
 import { evaluate, fn, wait } from "@skylib/functions";
 import { PromiseType } from "@skylib/facades";
 import { implementations } from "@";
-
-async function failure(): Promise<void> {
-  await wait(2000);
-
-  throw new Error("Sample error");
-}
-
-async function success(): Promise<void> {
-  await wait(2000);
-}
 
 const alertFn = evaluate(() => {
   const result = jest.fn();
@@ -33,6 +23,16 @@ const errorFn = jest.spyOn(handleError, "handleError");
 const { promiseHandler } = implementations.handlePromise;
 
 testUtils.installFakeTimer();
+
+async function failure(): Promise<void> {
+  await wait(2000);
+
+  throw new Error("Sample error");
+}
+
+async function success(): Promise<void> {
+  await wait(2000);
+}
 
 test.each([
   {
@@ -83,36 +83,11 @@ test.each([
   { expected: 0, timeout: 2000 }
 ])("promiseHandler", async ({ expected, timeout }) => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     document.body.innerHTML = '<div id="progressBar">';
     promiseHandler(PromiseType.createDb, success);
     await wait(timeout);
     expect("#progressBar").progressToBe(expected);
-  });
-});
-
-test("promiseHandler.silent", async () => {
-  expect.hasAssertions();
-
-  await testUtils.run(async () => {
-    promiseHandler.silent(success);
-    await wait(2000);
-    expect("#progressBar").progressToBe(0);
-  });
-});
-
-test.each([
-  { expected: [], timeout: 1000 },
-  { expected: [[new Error("Sample error")]], timeout: 2000 }
-])("promiseHandler.silent: Error", async ({ expected, timeout }) => {
-  expect.hasAssertions();
-
-  await testUtils.run(async () => {
-    promiseHandler.silent(failure);
-    errorFn.mockImplementationOnce(fn.noop);
-    await wait(timeout);
-    expect(errorFn).mockCallsToBe(...expected);
   });
 });
 
@@ -127,7 +102,6 @@ test.each([
   "promiseHandler: Error",
   async ({ expectedAlert, expectedError, timeout }) => {
     expect.hasAssertions();
-
     await testUtils.run(async () => {
       promiseHandler(PromiseType.createDb, failure, "Sample error message");
       alertFn.mockImplementationOnce(fn.noop);
@@ -139,12 +113,33 @@ test.each([
   }
 );
 
+test("promiseHandler.silent", async () => {
+  expect.hasAssertions();
+  await testUtils.run(async () => {
+    promiseHandler.silent(success);
+    await wait(2000);
+    expect("#progressBar").progressToBe(0);
+  });
+});
+
+test.each([
+  { expected: [], timeout: 1000 },
+  { expected: [[new Error("Sample error")]], timeout: 2000 }
+])("promiseHandler.silent: Error", async ({ expected, timeout }) => {
+  expect.hasAssertions();
+  await testUtils.run(async () => {
+    promiseHandler.silent(failure);
+    errorFn.mockImplementationOnce(fn.noop);
+    await wait(timeout);
+    expect(errorFn).mockCallsToBe(...expected);
+  });
+});
+
 test.each([
   { expected: [], timeout: 1000 },
   { expected: [[]], timeout: 2000 }
 ])("runAll", async ({ expected, timeout }) => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     const fulfilled = jest.fn();
 
@@ -163,7 +158,6 @@ test.each([
   { expected: false, timeout: 2000 }
 ])("running", async ({ expected, timeout }) => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     promiseHandler.silent(wait(2000));
     await wait(timeout);

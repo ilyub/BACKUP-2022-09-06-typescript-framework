@@ -99,7 +99,6 @@ test.each([
 
 test("reactiveGetIfExists", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     const db = pouchdb.create(uniqueId());
 
@@ -133,7 +132,6 @@ test("reactiveGetIfExists", async () => {
 
 test("reactiveGetIfExistsAttached", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     const db = pouchdb.create(uniqueId());
 

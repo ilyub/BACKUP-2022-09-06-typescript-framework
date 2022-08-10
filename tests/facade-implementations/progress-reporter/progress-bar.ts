@@ -7,7 +7,6 @@ import { wait } from "@skylib/functions";
 const { progressBar } = implementations.progressReporter;
 
 testUtils.installFakeTimer();
-
 beforeEach(() => {
   document.body.innerHTML = '<div id="progressBar">';
 });
@@ -17,7 +16,6 @@ test.each([
   { expected: 0, timeout: 2000 }
 ])("Process.done: finalEasing", async ({ expected, timeout }) => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     progressBar.configure({ finalEasing: true, finalEasingSpeed: 3000 });
     progressBar.spawn().setProgress(0.5).done();
@@ -31,7 +29,6 @@ test.each([
   { expected: 0.5, timeout: 2000 }
 ])("Process.done: latency", async ({ expected, timeout }) => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     progressBar.configure({ latency: 1500 });
     progressBar.spawn().setProgress(0.5);
@@ -46,7 +43,6 @@ test.each([
   { expected: 0.85, timeout: 2000 }
 ])("Process.setAuto", async ({ expected, timeout }) => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     progressBar.spawn().setAuto(1000);
     await wait(timeout);

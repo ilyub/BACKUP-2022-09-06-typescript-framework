@@ -1,3 +1,6 @@
+/* eslint-disable @skylib/no-at-sign-internal-import -- Ok */
+/* eslint-disable @skylib/no-internal-modules -- Ok */
+
 import { PouchProxy } from "@/facade-implementations/database/pouchdb-wrapper/PouchProxy";
 import type { PouchPutDocuments } from "@/facade-implementations/database/pouchdb-wrapper/core/types";
 import { uniqueId } from "@skylib/facades";

@@ -5,11 +5,11 @@ import { implementations } from "@";
 import { uniqueId } from "@skylib/facades";
 import type { unknowns } from "@skylib/functions";
 
-type arrays = readonly unknowns[];
-
 const pouchdb = new implementations.database.PouchWrapper();
 
 testUtils.installFakeTimer({ shouldAdvanceTime: true });
+
+type arrays = readonly unknowns[];
 
 test.each([
   {
@@ -26,7 +26,6 @@ test.each([
   }
 ])("subscribe, unsubscribe", async ({ expected, subtest }) => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     const db = pouchdb.create(uniqueId());
 
@@ -73,7 +72,6 @@ test.each([
   }
 ])("subscribeAttached, unsubscribeAttached", async ({ expected, subtest }) => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     const db = pouchdb.create(uniqueId());
 

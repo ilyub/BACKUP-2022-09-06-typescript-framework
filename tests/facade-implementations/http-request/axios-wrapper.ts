@@ -26,6 +26,5 @@ test("send", async () => {
       statusText: "OK"
     }
   );
-
   await expect(promise).resolves.toBe("sample-data");
 });

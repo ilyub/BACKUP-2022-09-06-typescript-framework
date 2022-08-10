@@ -77,14 +77,16 @@ export class Database implements database.Database {
   ): Promise<database.PutResponses> {
     for (const doc of docs) validatePutDocument(doc);
 
-    docs = docs.map(doc => o.omit(doc, "lastAttachedDocs"));
+    docs = docs.map(
+      (doc): database.PutDocument => o.omit(doc, "lastAttachedDocs")
+    );
 
     const db = await this.getDb();
 
     const responses = await db.bulkDocs(docs);
 
     return responses
-      .map(response =>
+      .map((response): database.PutResponse | undefined =>
         "ok" in response && response.ok
           ? _.pick(response, ["id", "rev"])
           : undefined
@@ -474,14 +476,16 @@ export class Database implements database.Database {
     this.refreshSubscription();
   }
 
-  // eslint-disable-next-line @skylib/custom/prefer-readonly-property -- Ok
+  // eslint-disable-next-line @skylib/typescript/prefer-readonly-property -- Ok
   protected changes: PouchChanges | undefined;
 
+  // eslint-disable-next-line @skylib/functions/prefer-ReadonlyMap -- Ok
   protected readonly changesHandlers = new Map<
     database.SubscriptionId,
     database.ChangesHandler
   >();
 
+  // eslint-disable-next-line @skylib/functions/prefer-ReadonlyMap -- Ok
   protected readonly changesHandlersAttached = new Map<
     database.AttachedSubscriptionId,
     database.AttachedChangesHandler
@@ -489,24 +493,7 @@ export class Database implements database.Database {
 
   protected readonly config: Required<Configuration>;
 
-  /**
-   * Creates reactive storage.
-   *
-   * @returns Reactive storage.
-   */
-  protected readonly createReactiveStorage = <
-    T
-  >(): database.ReactiveResponse<T> =>
-    reactiveStorage({
-      loaded: false,
-      loading: true,
-      // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
-      // fixme
-      refresh: fn.noop,
-      unsubscribe: fn.noop
-    });
-
-  // eslint-disable-next-line @skylib/custom/prefer-readonly-property -- Ok
+  // eslint-disable-next-line @skylib/typescript/prefer-readonly-property -- Ok
   protected db: PouchProxy | undefined;
 
   protected readonly name: string;
@@ -643,8 +630,10 @@ export class Database implements database.Database {
                 .flatMap(group => group.docs)
                 .filter(item => mapReduce.output(item.doc));
 
+              // eslint-disable-next-line @skylib/functions/array/prefer-sort -- Ok
               items.sort((item1, item2) => collate(item1.key, item2.key));
 
+              // eslint-disable-next-line @skylib/functions/array/prefer-reverse -- Ok
               if (descending) items.reverse();
 
               return items.slice(skip, skip + limit).map(doc => doc.doc);
@@ -667,6 +656,7 @@ export class Database implements database.Database {
    * Rebuilds index.
    *
    * @param mapReduce - Map/reduce function.
+   * @returns _True_ on success, _false_ on failure.
    */
   protected async _rebuildIndex(mapReduce: MapReduce): Promise<boolean> {
     const db = await this.getDb();
@@ -701,6 +691,23 @@ export class Database implements database.Database {
       assert.instanceOf(e, PouchConflictError, assert.wrapError(e));
     }
   }
+
+  /**
+   * Creates reactive storage.
+   *
+   * @returns Reactive storage.
+   */
+  protected readonly createReactiveStorage = <
+    T
+  >(): database.ReactiveResponse<T> =>
+    reactiveStorage({
+      loaded: false,
+      loading: true,
+      // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
+      // fixme
+      refresh: fn.noop,
+      unsubscribe: fn.noop
+    });
 
   /**
    * Returns PouchProxy instance.
@@ -915,7 +922,6 @@ export class Database implements database.Database {
     mutableResult: Writable<database.ReactiveResponse<T>>
   ): Promise<database.ReactiveResponseLoaded<T>> {
     config = reactiveStorage(config);
-
     o.assign(mutableResult, {
       loaded: true,
       loading: false,
@@ -991,7 +997,6 @@ export class Database implements database.Database {
     mutableResult: Writable<database.ReactiveResponse<T>>
   ): Promise<database.ReactiveResponseLoaded<T>> {
     config = reactiveStorage(config);
-
     o.assign(mutableResult, {
       loaded: true,
       loading: false,

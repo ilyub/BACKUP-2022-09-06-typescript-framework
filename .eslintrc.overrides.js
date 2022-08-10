@@ -1,10 +1,16 @@
 module.exports = {
-  extends: require.resolve("@skylib/config/src/eslintrc.allow-type-assertions"),
+  extends: [
+    "plugin:@skylib/functions",
+    "plugin:@skylib/facades",
+    "plugin:@skylib/framework",
+    "./node_modules/@skylib/config/src/eslintrc/options/allow-type-assertions"
+  ],
   overrides: [
     {
       files:
         "./{src,tests}/facade-implementations/{google,handle-promise,facebook}/**",
-      extends: require.resolve("@skylib/config/src/eslintrc.allow-promises")
+      extends:
+        "./node_modules/@skylib/config/src/eslintrc/options/allow-promises"
     }
   ]
 };

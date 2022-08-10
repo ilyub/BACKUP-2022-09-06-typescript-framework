@@ -17,18 +17,6 @@ const { jsConfirm } = implementations.showConfirm;
 
 const successFn = jest.fn();
 
-test("jsConfirm.async: Failure", async () => {
-  confirmFn.mockImplementationOnce(() => false);
-  await expect(jsConfirm.async("Sample message")).resolves.toBeFalse();
-  expect(confirmFn).mockCallsToBe(["Sample message"]);
-});
-
-test("jsConfirm.async: Success", async () => {
-  confirmFn.mockImplementationOnce(() => true);
-  await expect(jsConfirm.async("Sample message")).resolves.toBeTrue();
-  expect(confirmFn).mockCallsToBe(["Sample message"]);
-});
-
 test("jsConfirm: Failure", () => {
   {
     confirmFn.mockImplementationOnce(() => false);
@@ -59,4 +47,16 @@ test("jsConfirm: Success", () => {
     expect(failureFn).mockCallsToBe();
     expect(successFn).mockCallsToBe([]);
   }
+});
+
+test("jsConfirm.async: Failure", async () => {
+  confirmFn.mockImplementationOnce(() => false);
+  await expect(jsConfirm.async("Sample message")).resolves.toBeFalse();
+  expect(confirmFn).mockCallsToBe(["Sample message"]);
+});
+
+test("jsConfirm.async: Success", async () => {
+  confirmFn.mockImplementationOnce(() => true);
+  await expect(jsConfirm.async("Sample message")).resolves.toBeTrue();
+  expect(confirmFn).mockCallsToBe(["Sample message"]);
 });

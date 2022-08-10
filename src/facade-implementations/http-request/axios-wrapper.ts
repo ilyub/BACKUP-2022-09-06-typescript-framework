@@ -8,7 +8,7 @@ export const axiosWrapper: axiosWrapper.Configurable & httpRequest.Facade = {
   configure: config => {
     o.assign(moduleConfig, config);
   },
-  getConfiguration: () => moduleConfig,
+  getConfiguration: (): axiosWrapper.Configuration => moduleConfig,
   send: async (url, method = HttpMethod.get, data = {}, headers = {}) => {
     const response = await axios({
       data,

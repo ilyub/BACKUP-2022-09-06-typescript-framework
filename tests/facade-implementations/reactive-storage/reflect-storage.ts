@@ -1,9 +1,10 @@
-/* eslint-disable @skylib/custom/prefer-readonly-property -- Ok */
-
+/* eslint-disable @skylib/typescript/prefer-readonly-property -- Ok */
 /* eslint-disable @typescript-eslint/no-unsafe-return -- Ok */
 
 import { implementations } from "@";
 import type { reactiveStorage } from "@skylib/facades";
+
+const { reflectStorage } = implementations.reactiveStorage;
 
 interface TestObject {
   x: number;
@@ -13,8 +14,6 @@ interface TestObject {
 interface TestSubObject {
   z: number;
 }
-
-const { reflectStorage } = implementations.reactiveStorage;
 
 test.each([
   {

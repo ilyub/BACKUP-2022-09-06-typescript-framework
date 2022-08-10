@@ -34,7 +34,6 @@ test("query: conditions", async () => {
     { x: 2, y: "b" },
     { x: 3, y: "c" }
   ]);
-
   await expect(
     Promise.all([
       query({ x: { gt: 1 }, y: { lt: "c" } }),
@@ -55,7 +54,6 @@ test("query: conditions: boolean", async () => {
   const db = pouchdb.create(uniqueId());
 
   await db.bulkDocs([{ x: true }, { x: false }, {}]);
-
   await expect(
     Promise.all([
       query({ x: { isSet: true } }),
@@ -89,7 +87,6 @@ test("query: conditions: datetime", async () => {
     { d: "2001-02-15 12:30" },
     { d: "2001-02-15 13:30" }
   ]);
-
   await expect(
     Promise.all([
       query({ d: { dateEq: "2001-02-15 12:30" } }),
@@ -117,7 +114,6 @@ test("query: conditions: datetime", async () => {
 
 test("query: conditions: datetime RelativeDate", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:30").toDate());
 
@@ -134,7 +130,6 @@ test("query: conditions: datetime RelativeDate", async () => {
       { d: "2001-02-01 00:00" },
       { d: "2001-02-11 00:00" }
     ]);
-
     await expect(
       Promise.all([
         query({ d: { dateEq: [RelativeDate.now] } }),
@@ -169,7 +164,6 @@ test("query: conditions: datetime RelativeDate", async () => {
 
 test("query: conditions: datetime TimeUnit", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     testUtils.clock.setSystemTime(datetime.create("2001-02-15 12:30").toDate());
 
@@ -183,7 +177,6 @@ test("query: conditions: datetime TimeUnit", async () => {
       { d: "2001-02-16 12:30" },
       { d: "2001-02-13 12:30" }
     ]);
-
     await expect(
       Promise.all([
         query({ d: { dateEq: [RelativeDate.now, "+", 1, TimeUnit.minute] } }),
@@ -214,7 +207,6 @@ test("query: conditions: number", async () => {
   const db = pouchdb.create(uniqueId());
 
   await db.bulkDocs([{ x: 1 }, { x: 2 }, { x: 3 }, {}]);
-
   await expect(
     Promise.all([
       query({ x: { isSet: true } }),
@@ -248,7 +240,6 @@ test("query: conditions: string", async () => {
   const db = pouchdb.create(uniqueId());
 
   await db.bulkDocs([{ x: "a" }, { x: "b" }, { x: "c" }, {}]);
-
   await expect(
     Promise.all([
       query({ x: { isSet: true } }),
@@ -288,7 +279,6 @@ test("query: options", async () => {
     { x: 4, y: "a" },
     {}
   ]);
-
   await expect(
     Promise.all([
       query({ limit: 2, sortBy: "x" }),
@@ -410,7 +400,6 @@ test("queryAttached: options", async () => {
       ])
     }
   ]);
-
   await expect(
     Promise.all([
       query({ limit: 2, sortBy: "x" }),
@@ -440,7 +429,6 @@ test("queryAttached: options", async () => {
 
 test("reactiveQuery", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 
@@ -470,7 +458,6 @@ test("reactiveQuery", async () => {
 
 test("reactiveQueryAttached", async () => {
   expect.hasAssertions();
-
   await testUtils.run(async () => {
     const db = database.create(uniqueId());
 

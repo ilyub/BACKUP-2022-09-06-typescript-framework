@@ -14,6 +14,9 @@ export abstract class Engine<T extends object, I>
    */
   public constructor(
     idField: string & keyof T,
+    // eslint-disable-next-line no-warning-comments -- Wait for @skylib/facades update
+    // fixme
+    // eslint-disable-next-line @skylib/typescript/prefer-array-type-alias -- Ok
     fields: ReadonlyArray<string & keyof T>,
     items: readonly T[],
     buildIndex: BuildIndex<T, I>
