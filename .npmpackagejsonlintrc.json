@@ -1,6 +1,6 @@
 {
   "extends": [
-    "@skylib/config/src/package-json-lint.json",
-    "@skylib/config/src/package-json-lint.public.json"
+    "@skylib/config/package-json-lint/recommended.json",
+    "@skylib/config/package-json-lint/public.json"
   ]
 }

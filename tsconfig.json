@@ -28,7 +28,7 @@
     "lcov-report",
     "node_modules"
   ],
-  "extends": "@skylib/config/src/tsconfig-strict",
+  "extends": "@skylib/config/tsconfig/strict",
   "include": [
     "*.js",
     "*.ts",

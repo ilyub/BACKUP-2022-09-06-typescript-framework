@@ -1,1 +1,1 @@
-module.exports = { extends: ["@skylib/config/src/commitlint.config"] };
+module.exports = { extends: ["@skylib/config/commitlint/next"] };
