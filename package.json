@@ -23,8 +23,8 @@
   "files": [
     "/dist",
     "/es",
-    "!dist/dev",
-    "!es/dev"
+    "!/dist/dev",
+    "!/es/dev"
   ],
   "scripts": {
     "add-tags": "php node_modules/@skylib/config/bin/add-tags.php",
