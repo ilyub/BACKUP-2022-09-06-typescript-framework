@@ -201,7 +201,7 @@ test("create: options.retries = 1", async () => {
     await db.put({ _id: id });
     await expect(
       Promise.all([db.putAttached(id, {}), db.putAttached(id, {})])
-    ).resolves.toBeInstanceOf(Array);
+    ).resolves.toBeArray();
     await db.bulkDocs([
       { d: "2001-02-12 12:00" },
       { d: "2001-02-15 11:00" },

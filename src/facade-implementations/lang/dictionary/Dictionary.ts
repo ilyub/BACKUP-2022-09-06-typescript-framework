@@ -6,6 +6,7 @@ import {
   cast,
   evaluate,
   o,
+  reflect,
   s,
   wrapProxyHandler
 } from "@skylib/functions";
@@ -142,7 +143,7 @@ export class Dictionary implements lang.Dictionary<lang.Word, lang.Context> {
           get: (target, key) => {
             assert.string(key, "Expecting string key");
 
-            return target.has(key) ? target.get(key) : o.get(target, key);
+            return target.has(key) ? target.get(key) : reflect.get(target, key);
           }
         }
       );

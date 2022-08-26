@@ -132,6 +132,7 @@ export class DateTime implements datetime.DateTime {
     return getHours(this.value);
   }
 
+  // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
   public isSameDayOfMonth(date: datetime.DateTime): boolean {
     return isSameDay(this.value, date.toDate());
   }
@@ -171,6 +172,7 @@ export class DateTime implements datetime.DateTime {
     return new DateTime(setDay(this.value, day, { weekStartsOn }));
   }
 
+  // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
   public setDayOfWeekLocale(day: number): datetime.DateTime {
     const weekStartsOn = moduleConfig.firstDayOfWeek;
 
@@ -209,6 +211,7 @@ export class DateTime implements datetime.DateTime {
     return new DateTime(startOfWeek(this.value, { weekStartsOn }));
   }
 
+  // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
   public setStartOfWeekLocale(): datetime.DateTime {
     const weekStartsOn = moduleConfig.firstDayOfWeek;
 

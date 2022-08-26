@@ -38,11 +38,23 @@ import {
   isExistingDocument,
   validatePutDocument
 } from "./core";
-import type { Writable, numberU, numbers, unknowns } from "@skylib/functions";
+import type {
+  Writable,
+  numberU,
+  numbers,
+  types,
+  unknowns
+} from "@skylib/functions";
 import { database, handlePromise, reactiveStorage } from "@skylib/facades";
 import { PouchProxy } from "./PouchProxy";
 import { collate } from "pouchdb-collate";
 
+// eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
+// fixme
+// eslint-disable-next-line @skylib/class-only-export -- Wait for @skylib/functions update
+export const asyncNoop = _.noop.bind(_) as types.fn.Async<void>;
+
+// eslint-disable-next-line @skylib/class-only-export -- Wait for @skylib/functions update
 export class Database implements database.Database {
   /**
    * Creates class instance.
@@ -259,6 +271,7 @@ export class Database implements database.Database {
     }
   }
 
+  // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
   public async putIfNotExistsAttached(
     parentId: string,
     doc: database.PutAttachedDocument
@@ -365,6 +378,7 @@ export class Database implements database.Database {
     );
   }
 
+  // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
   public reactiveGetIfExistsAttached(
     id: number,
     parentId: string
@@ -703,9 +717,7 @@ export class Database implements database.Database {
     reactiveStorage({
       loaded: false,
       loading: true,
-      // eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
-      // fixme
-      refresh: fn.noop,
+      refresh: asyncNoop,
       unsubscribe: fn.noop
     });
 
@@ -864,6 +876,7 @@ export class Database implements database.Database {
    * @param mutableResult - Reactive result.
    * @returns Reactive response.
    */
+  // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
   protected async reactiveFactoryGetAttachedAsync<T>(
     request: Promise<T>,
     handler: ReactiveHandlerAttached<T>,
@@ -991,6 +1004,7 @@ export class Database implements database.Database {
    * @param mutableResult - Reactive result.
    * @returns Reactive response.
    */
+  // eslint-disable-next-line @skylib/max-identifier-blocks -- Ok
   protected async reactiveFactoryQueryAttachedAsync<T>(
     request: ReactiveRequestAttached<T>,
     config: database.ReactiveConfigAttached,

@@ -1,8 +1,5 @@
 module.exports = {
   extends: [
-    "plugin:@skylib/functions",
-    "plugin:@skylib/facades",
-    "plugin:@skylib/framework",
     "./node_modules/@skylib/config/eslint/options/allow-type-assertions"
   ],
   overrides: [

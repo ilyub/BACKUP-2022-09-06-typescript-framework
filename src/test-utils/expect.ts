@@ -4,27 +4,6 @@ import $ from "jquery";
 import { DateTime } from "../facade-implementations/datetime/date-fns-wrapper/DateTime";
 import { progressReporter } from "@skylib/facades";
 
-declare global {
-  namespace jest {
-    interface Matchers<R> {
-      /**
-       * Checks that datetime equals expected value.
-       *
-       * @param expected - Expected value.
-       * @returns Result object.
-       */
-      readonly datetimeToBe: (expected: string) => R;
-      /**
-       * Checks that progress equals expected value.
-       *
-       * @param expected - Expected value.
-       * @returns Result object.
-       */
-      readonly progressToBe: (expected: number) => R;
-    }
-  }
-}
-
 export const datetimeToBe: testUtils.ExpectFromMatcher<"datetimeToBe"> = (
   got: unknown,
   expected: string
@@ -73,3 +52,24 @@ export const progressToBe: testUtils.ExpectFromMatcher<"progressToBe"> = (
 };
 
 export const matchers = { datetimeToBe, progressToBe } as const;
+
+declare global {
+  namespace jest {
+    interface Matchers<R> {
+      /**
+       * Checks that datetime equals expected value.
+       *
+       * @param expected - Expected value.
+       * @returns Result object.
+       */
+      readonly datetimeToBe: (expected: string) => R;
+      /**
+       * Checks that progress equals expected value.
+       *
+       * @param expected - Expected value.
+       * @returns Result object.
+       */
+      readonly progressToBe: (expected: number) => R;
+    }
+  }
+}

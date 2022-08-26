@@ -10,6 +10,16 @@ import { evaluate, fn, wait } from "@skylib/functions";
 import { PromiseType } from "@skylib/facades";
 import { implementations } from "@";
 
+async function failure(): Promise<void> {
+  await wait(2000);
+
+  throw new Error("Sample error");
+}
+
+async function success(): Promise<void> {
+  await wait(2000);
+}
+
 const alertFn = evaluate(() => {
   const result = jest.fn();
 
@@ -23,16 +33,6 @@ const errorFn = jest.spyOn(handleError, "handleError");
 const { promiseHandler } = implementations.handlePromise;
 
 testUtils.installFakeTimer();
-
-async function failure(): Promise<void> {
-  await wait(2000);
-
-  throw new Error("Sample error");
-}
-
-async function success(): Promise<void> {
-  await wait(2000);
-}
 
 test.each([
   {

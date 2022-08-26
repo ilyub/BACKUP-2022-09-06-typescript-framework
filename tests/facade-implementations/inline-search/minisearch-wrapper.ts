@@ -1,7 +1,5 @@
 import { implementations } from "@";
 
-const minisearch = implementations.inlineSearch.minisearchWrapper;
-
 interface Item {
   readonly description: string;
   readonly id: string;
@@ -9,6 +7,8 @@ interface Item {
 }
 
 type Items = readonly Item[];
+
+const minisearch = implementations.inlineSearch.minisearchWrapper;
 
 test.each([
   { ids: ["a"], searchString: "n1" },

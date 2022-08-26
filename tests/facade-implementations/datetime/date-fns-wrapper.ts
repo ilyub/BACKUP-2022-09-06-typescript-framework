@@ -8,15 +8,15 @@ import enUs from "date-fns/locale/en-US";
 import { implementations } from "@";
 import ru from "date-fns/locale/ru";
 
-const dateFns = implementations.datetime.dateFnsWrapper;
-
-testUtils.installFakeTimer();
-
 function d(
   date: Date | datetime.DateTime | NumStr = "1950-06-15 14:30:30"
 ): datetime.DateTime {
   return dateFns.create(date);
 }
+
+const dateFns = implementations.datetime.dateFnsWrapper;
+
+testUtils.installFakeTimer();
 
 test.each([
   { expected: "1950-06-15 14:31:30", unit: TimeUnit.minute },

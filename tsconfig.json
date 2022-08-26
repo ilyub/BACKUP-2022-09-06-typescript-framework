@@ -17,6 +17,7 @@
     "types": [
       "facebook-js-sdk",
       "gapi.auth2",
+      "jest",
       "typescript-types"
     ]
   },

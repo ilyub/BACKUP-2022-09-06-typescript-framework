@@ -14,7 +14,6 @@ export const moduleConfig: Writable<Configuration> = {
 export enum State {
   auto = "auto",
   done = "done",
-  // eslint-disable-next-line @typescript-eslint/no-shadow -- Ok
   finalEasing = "finalEasing",
   manual = "manual"
 }

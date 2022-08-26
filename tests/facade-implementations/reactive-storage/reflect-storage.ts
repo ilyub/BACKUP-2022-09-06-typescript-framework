@@ -4,8 +4,6 @@
 import { implementations } from "@";
 import type { reactiveStorage } from "@skylib/facades";
 
-const { reflectStorage } = implementations.reactiveStorage;
-
 interface TestObject {
   x: number;
   y: TestSubObject;
@@ -14,6 +12,8 @@ interface TestObject {
 interface TestSubObject {
   z: number;
 }
+
+const { reflectStorage } = implementations.reactiveStorage;
 
 test.each([
   {
