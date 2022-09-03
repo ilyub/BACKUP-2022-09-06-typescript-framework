@@ -69,7 +69,7 @@
     "typescript.updateImportsOnFileMove.enabled": "always",
     "volar.codeLens.references": false,
     "workbench.colorCustomizations": {
-      "editor.foldBackground": "#fff"
+      "editor.foldBackground": "#0000"
     },
     "workbench.startupEditor": "none",
     "workbench.tree.indent": 30
