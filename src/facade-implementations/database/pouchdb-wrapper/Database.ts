@@ -1,3 +1,6 @@
+/* eslint-disable @skylib/class-only-export -- Ok */
+/* eslint-disable @skylib/export-matching-filename-only -- Ok */
+
 import * as _ from "@skylib/lodash-commonjs-es";
 import {
   Accumulator,
@@ -49,12 +52,8 @@ import { database, handlePromise, reactiveStorage } from "@skylib/facades";
 import { PouchProxy } from "./PouchProxy";
 import { collate } from "pouchdb-collate";
 
-// eslint-disable-next-line no-warning-comments -- Wait for @skylib/functions update
-// fixme
-// eslint-disable-next-line @skylib/class-only-export -- Wait for @skylib/functions update
 export const asyncNoop = _.noop.bind(_) as types.fn.Async<void>;
 
-// eslint-disable-next-line @skylib/class-only-export -- Wait for @skylib/functions update
 export class Database implements database.Database {
   /**
    * Creates class instance.

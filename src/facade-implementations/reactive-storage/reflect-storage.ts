@@ -10,6 +10,16 @@ import {
 } from "@skylib/functions";
 import type { reactiveStorage } from "@skylib/facades";
 
+declare global {
+  namespace facades {
+    namespace reactiveStorage {
+      interface Observer {
+        readonly symbol?: symbol;
+      }
+    }
+  }
+}
+
 export const reflectStorage: reactiveStorage.Facade = defineFn(
   <T extends object>(obj: T): T => {
     if (reflect.hasMetadata(MetadataKey, obj)) return obj;
@@ -120,16 +130,6 @@ export const reflectStorage: reactiveStorage.Facade = defineFn(
     }
   }
 );
-
-declare global {
-  namespace facades {
-    namespace reactiveStorage {
-      interface Observer {
-        readonly symbol?: symbol;
-      }
-    }
-  }
-}
 
 const MetadataKey = Symbol("reflect-storage__callbacks");
 

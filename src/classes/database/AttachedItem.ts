@@ -103,7 +103,7 @@ export namespace AttachedItem {
   export interface Content {
     readonly createdAt?: string;
     readonly deletedAt?: string;
-    // eslint-disable-next-line @skylib/typescript/no-true-type -- Ok
+    // eslint-disable-next-line @skylib/typescript/no-boolean-literal-type -- Ok
     readonly softDeleted?: true;
     readonly updatedAt?: string;
   }
