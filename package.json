@@ -63,8 +63,8 @@
     "upgrade": "npm run update-package-force && npm run npm:install"
   },
   "devDependencies": {
-    "@skylib/config": "^3.38.0",
-    "@skylib/eslint-plugin": "^0.1.50",
+    "@skylib/config": "^3.40.2",
+    "@skylib/eslint-plugin": "^0.1.53",
     "jest-mock-axios": "^4.6.1"
   },
   "peerDependencies": {
@@ -95,7 +95,7 @@
     "pouchdb-collate": ">=7",
     "sha256": ">=0",
     "stringify-object": ">=4",
-    "uuid": ">=8"
+    "uuid": ">=9"
   },
   "engines": {
     "node": ">=14.0.0",
