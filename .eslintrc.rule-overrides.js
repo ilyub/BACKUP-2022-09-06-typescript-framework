@@ -8,7 +8,6 @@ module.exports = {
       "warn",
       {
         sources: [
-          ...consistentImport.sources,
           {
             _id: "classes",
             source: "@skylib/framework/src/classes",
@@ -119,37 +118,38 @@ module.exports = {
             _id: "implementations/unique-id",
             source: "@skylib/framework/src/facade-implementations/unique-id",
             wildcard: true
-          }
+          },
+          ...consistentImport.sources
         ]
       }
     ],
     "@skylib/no-sibling-import": [
       "warn",
       {
-        folders: [
-          {
-            filesToLint: ["./*"],
-            levels: [["./jest.config"], ["./jest.config.fast"]]
-          },
-          {
-            filesToLint: ["./src/classes/database/*"],
-            levels: [["./Item"], ["./AttachedItem"]]
-          },
+        rules: [
           {
             filesToLint: [
               "./src/facade-implementations/database/pouchdb-wrapper/*"
             ],
-            levels: [["./PouchProxy"], ["./Database"], ["./PouchWrapper"]]
-          },
-          {
-            filesToLint: ["./src/facade-implementations/lang/dictionary/*"],
-            levels: [["./Definition"], ["./Definitions"], ["./Dictionary"]]
+            hierarchy: [["./PouchProxy"], ["./Database"], ["./PouchWrapper"]]
           },
           {
             filesToLint: [
               "./src/facade-implementations/database/pouchdb-wrapper/core/*"
             ],
-            levels: [["./guards"], ["./misc"]]
+            hierarchy: [["./guards"], ["./misc"]]
+          },
+          {
+            filesToLint: ["./*"],
+            hierarchy: [["./jest.config"], ["./jest.config.fast"]]
+          },
+          {
+            filesToLint: ["./src/classes/database/*"],
+            hierarchy: [["./Item"], ["./AttachedItem"]]
+          },
+          {
+            filesToLint: ["./src/facade-implementations/lang/dictionary/*"],
+            hierarchy: [["./Definition"], ["./Definitions"], ["./Dictionary"]]
           }
         ]
       }
